@@ -6,6 +6,7 @@ agent:
     os_image: ubuntu1804
 blocks:
   - name: Install dependencies
+    dependencies: []
     task:
       jobs:
         - name: composer install
