@@ -1,0 +1,53 @@
+version: v1.0
+name: workos-php
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Install dependencies
+    dependencies: []
+    task:
+      jobs:
+        - name: composer install
+          commands:
+            - checkout
+            - KEY="composer-$(checksum composer.json)"
+            - composer install
+            - cache store $KEY ./vendor
+  - name: Format Check
+    dependencies: ['Install dependencies']
+    task:
+      jobs:
+        - name: php-cs-fixer
+          commands:
+            - checkout
+            - KEY="composer-$(checksum composer.json)"
+            - cache restore $KEY
+            - php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .
+  - name: Tests
+    dependencies: ['Install dependencies']
+    task:
+      prologue:
+        commands:
+          - checkout
+          - KEY="composer-$(checksum composer.json)"
+          - cache restore $KEY
+      jobs:
+        - name: php 5.6
+          commands:
+            - phpbrew --no-progress install 5.6.40
+            - phpbrew use php-5.6.40
+            - php vendor/bin/phpunit tests
+        - name: php 7.0
+          commands:
+            - phpbrew use php-7.0
+            - php vendor/bin/phpunit tests
+        - name: php 7.2
+          commands:
+            - phpbrew use php-7.2
+            - php vendor/bin/phpunit tests
+        - name: php 7.4
+          commands:
+            - phpbrew use php-7.4
+            - php vendor/bin/phpunit tests

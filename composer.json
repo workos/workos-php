@@ -1,0 +1,24 @@
+{
+  "name": "workos/workos-php",
+  "description": "WorkOS PHP Library",
+  "homepage": "https://workos.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "WorkOS",
+      "email": "eng@workos.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.15",
+    "phpunit/phpunit": "^5.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "WorkOS\\": "lib/"
+    }
+  }
+}
