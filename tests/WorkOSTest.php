@@ -6,12 +6,12 @@ use PHPUnit\Framework\TestCase;
 
 class WorkOSTest extends TestCase
 {
-  public function testApiKeySet()
-  {
-    $apiKey = "key";
+    public function testApiKeySet()
+    {
+        $apiKey = "key";
 
-    WorkOS::setApiKey($apiKey);
+        WorkOS::setApiKey($apiKey);
 
-    $this->assertEquals(WorkOS::getApiKey(), $apiKey);
-  }
+        $this->assertEquals(WorkOS::getApiKey(), $apiKey);
+    }
 }
