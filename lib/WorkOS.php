@@ -17,7 +17,7 @@ class WorkOS
     public static $apiBaseUrl = 'https://api.workos.com/';
 
     /**
-     * @return string | null WorkOs API key
+     * @return string | null WorkOS API key
      */
     public static function getApiKey()
     {
