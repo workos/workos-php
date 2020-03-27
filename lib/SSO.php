@@ -11,9 +11,20 @@ class SSO
     const PROVIDER_GOOGLE_OAUTH = "GoogleOAuth";
     const PROVIDER_OKTA_SAML = "OktaSAML";
 
-    public function __construct()
+    private static $instance;
+
+    private function __construct()
     {
         \WorkOS\Util\Validator::validateSettings(\WorkOS\Util\Validator::MODULE_SSO);
+    }
+
+    public function instance()
+    {
+        if (!self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     public function getAuthorizationUrl($domain, $redirectUri, $state, $provider)
@@ -49,7 +60,7 @@ class SSO
         return \WorkOS\WorkOS::getApiBaseURL() . self::PATH_AUTHORIZATION . "?${queryParams}";
     }
 
-    public function getProfile()
+    public function getProfile($token)
     {
     }
 }
