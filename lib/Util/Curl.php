@@ -4,8 +4,8 @@ namespace WorkOS\Util;
 
 class Curl
 {
-    const METHOD_TYPE_GET = "get";
-    const METHOD_TYPE_POST = "post";
+    const METHOD_GET = "get";
+    const METHOD_POST = "post";
 
     const VERSION = "dev";
 
@@ -18,12 +18,12 @@ class Curl
         ];
 
         switch ($method) {
-            case self::METHOD_TYPE_GET:
+            case self::METHOD_GET:
                 $url = self::generateUrl($path, $data);
 
                 break;
 
-            case self::METHOD_TYPE_POST:
+            case self::METHOD_POST:
                 $headers['Content-Type'] = 'application/x-www-form-urlencoded';
                 $url = self::generateUrl($path);
 

@@ -16,7 +16,7 @@ class SSO
 
     private function __construct()
     {
-        \WorkOS\Util\Validator::validateSettings(\WorkOS\Util\Validator::MODULE_SSO);
+        Util\Validator::validateSettings(Util\Validator::MODULE_SSO);
     }
 
     public static function instance()
@@ -37,7 +37,7 @@ class SSO
         }
 
         $params = [
-            "client_id" => \WorkOS\WorkOS::getProjectId(),
+            "client_id" => WorkOS::getProjectId(),
             "response_type" => "code"
         ];
 
@@ -57,18 +57,18 @@ class SSO
             $params["provider"] = $provider;
         }
 
-        return \WorkOS\Util\Curl::generateUrl(self::PATH_AUTHORIZATION, $params);
+        return Util\Curl::generateUrl(self::PATH_AUTHORIZATION, $params);
     }
 
     public function getProfile($code)
     {
         $params = [
-            "client_id" => \WorkOS\WorkOS::getProjectId(),
-            "client_secret" => \WorkOS\WorkOS::getApikey(),
+            "client_id" => WorkOS::getProjectId(),
+            "client_secret" => WorkOS::getApikey(),
             "code" => $code,
             "grant_type" => "authorization_code"
         ];
 
-        return \WorkOS\Util\Curl::request(\WorkOS\Util\Curl::METHOD_TYPE_POST, self::PATH_PROFILE, $params);
+        return Util\Curl::request(Util\Curl::METHOD_POST, self::PATH_PROFILE, $params);
     }
 }

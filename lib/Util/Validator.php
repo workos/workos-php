@@ -18,7 +18,7 @@ class Validator
         } else {
             $msg = "Invalid \$module specified";
 
-            throw new Exception\UnexpectedValueException($msg);
+            throw new \WorkOS\Exception\UnexpectedValueException($msg);
         }
 
         $missingSettings = array();
