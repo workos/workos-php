@@ -43,7 +43,8 @@ class Curl
         $result = curl_exec($curl);
         
         curl_close($curl);
-        return $result;
+
+        return json_decode($result, true);
     }
 
     public static function generateUrl($path, $params = null)
