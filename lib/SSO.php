@@ -68,7 +68,8 @@ class SSO
             "code" => $code,
             "grant_type" => "authorization_code"
         ];
+        $response = Util\Curl::request(Util\Curl::METHOD_POST, self::PATH_PROFILE, $params);
 
-        return Util\Curl::request(Util\Curl::METHOD_POST, self::PATH_PROFILE, $params);
+        return Resource\Profile::constructFromResponse($response);
     }
 }
