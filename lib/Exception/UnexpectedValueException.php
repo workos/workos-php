@@ -1,6 +1,6 @@
 <?php
 
-namespace Workos\Exception;
+namespace WorkOS\Exception;
 
 class UnexpectedValueException extends \Exception
 {

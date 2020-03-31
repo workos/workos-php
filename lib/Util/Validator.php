@@ -4,7 +4,7 @@ namespace WorkOS\Util;
 
 class Validator
 {
-    const MODULE_SSO = 'SSO';
+    const MODULE_SSO = "SSO";
 
     const SETTING_API_KEY = "apiKey";
     const SETTING_PROJECT_ID = "projectId";
@@ -24,7 +24,7 @@ class Validator
         $missingSettings = array();
         foreach ($requiredSettings as $setting) {
             if (null === self::getSetting($setting)) {
-                array_push($missingSettings, $setting);
+                \array_push($missingSettings, $setting);
             }
         }
 

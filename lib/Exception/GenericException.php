@@ -4,7 +4,7 @@ namespace WorkOS\Exception;
 
 class GenericException extends \Exception
 {
-    private $data;
+    public $data;
 
     public function __construct($message, $data = null)
     {

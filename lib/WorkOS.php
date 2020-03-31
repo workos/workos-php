@@ -14,7 +14,9 @@ class WorkOS
     public static $projectId;
 
     /** @var string WorkOS base API URL. */
-    public static $apiBaseUrl = 'https://api.workos.com/';
+    public static $apiBaseUrl = "https://api.workos.com/";
+
+    const VERSION = "dev";
 
     /**
      * @return string | null WorkOS API key

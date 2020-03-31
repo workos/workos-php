@@ -7,12 +7,10 @@ class Curl
     const METHOD_GET = "get";
     const METHOD_POST = "post";
 
-    const VERSION = "dev";
-
     public static function request($method, $path, $data = null)
     {
         $headers = [
-            "User-Agent" => "WorkOS PHP/" . self::VERSION
+            "User-Agent" => "WorkOS PHP/" . \WorkOS\WorkOS::VERSION
         ];
 
         $opts = array();
@@ -23,7 +21,7 @@ class Curl
                 break;
 
             case self::METHOD_POST:
-                $headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                $headers["Content-Type"] = "application/x-www-form-urlencoded";
                 $url = self::generateUrl($path);
 
                 $opts[\CURLOPT_POST] = 1;
@@ -62,11 +60,11 @@ class Curl
 
         $headers = array();
         $headerCallback = function ($curl, $header_line) use (&$headers) {
-            if (false === \strpos($header_line, ':')) {
+            if (false === \strpos($header_line, ":")) {
                 return \strlen($header_line);
             }
 
-            list($key, $value) = \explode(':', \trim($header_line), 2);
+            list($key, $value) = \explode(":", \trim($header_line), 2);
             $headers[\trim($key)] = \trim($value);
 
             return \strlen($header_line);
@@ -77,7 +75,7 @@ class Curl
         $result = \curl_exec($curl);
 
         // I think this is for some sort of internal error
-        // Any kind of response that returns a status code won't hit this block
+        // Any kind of response that returns a status code won"t hit this block
         if ($result === false) {
             $errno = \curl_errno($curl);
             $msg = \curl_error($curl);
@@ -103,6 +101,7 @@ class Curl
 
                 throw new \WorkOS\Exception\BadRequestException($response);
             }
+
             return $response;
         }
     }

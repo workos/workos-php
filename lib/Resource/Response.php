@@ -19,7 +19,7 @@ class Response
     public function json()
     {
         if (!isset($json)) {
-            $this->json = json_decode($this->body, true);
+            $this->json = \json_decode($this->body, true);
         }
 
         return $this->json;

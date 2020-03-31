@@ -16,7 +16,7 @@ class Profile
 
     public $idpId;
 
-    private const RESOURCE_ATTRIBUTES = [
+    const RESOURCE_ATTRIBUTES = [
         "id",
         "email",
         "firstName",
@@ -25,9 +25,9 @@ class Profile
         "idpId"
     ];
 
-    private const RESOURCE_TYPE = 'profile';
+    const RESOURCE_TYPE = "profile";
 
-    private const RESPONSE_TO_RESOURCE_KEY = [
+    const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "email" => "email",
         "first_name" => "firstName",
@@ -35,8 +35,6 @@ class Profile
         "connection_type" => "connectionType",
         "idp_id" => "idpId"
     ];
-
-    private $values;
 
     private function __construct()
     {

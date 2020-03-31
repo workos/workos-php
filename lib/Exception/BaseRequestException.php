@@ -10,7 +10,7 @@ class BaseRequestException extends \Exception
     {
         $this->filterResponseForException($response);
 
-        if (null !== $message) {
+        if (isset($message)) {
             $this->message = $message;
         }
     }
