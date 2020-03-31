@@ -2,23 +2,35 @@
 
 namespace WorkOS;
 
+/**
+ * Class SSO
+ * 
+ * This class facilitates the use of WorkOS SSO.
+ * 
+ * $piKey and $projectId must be configured for the package to use SSO.
+ */
 class SSO
 {
     const PATH_AUTHORIZATION = "sso/authorize";
     const PATH_PROFILE = "sso/token";
 
-    const PROVIDER_ADFS_SAML = "ADFSSAML";
-    const PROVIDER_AZURE_SAML = "AzureSAML";
-    const PROVIDER_GOOGLE_OAUTH = "GoogleOAuth";
-    const PROVIDER_OKTA_SAML = "OktaSAML";
-
     private static $instance;
 
+    /**
+     * SSO constructor.
+     * 
+     * Verifies that $apiKey and $projectId are configured.
+     * 
+     * @throws \WorkOS\Exception\ConfigurationException if the required settings are not configured
+     */
     private function __construct()
     {
         Util\Validator::validateSettings(Util\Validator::MODULE_SSO);
     }
 
+    /**
+     * @return \WorkOS\SSO
+     */
     public static function instance()
     {
         if (!self::$instance) {
@@ -28,6 +40,16 @@ class SSO
         return self::$instance;
     }
 
+    /**
+     * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
+     * 
+     * @param null|string $domain Domain of the user that will be going through SSO
+     * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
+     * @param null|array $state Associative array containing state that will be returned to the server
+     * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
+     * 
+     * @return string
+     */
     public function getAuthorizationUrl($domain, $redirectUri, $state, $provider)
     {
         if (!isset($domain) && !isset($provider)) {
@@ -60,6 +82,13 @@ class SSO
         return Util\Curl::generateUrl(self::PATH_AUTHORIZATION, $params);
     }
 
+    /**
+     * Verify that SSO has been completed successfully and retrieve the identity of the user.
+     * 
+     * @param string $code Code returned by WorkOS on completion of OAuth 2.0 flow
+     * 
+     * @return \WorkOS\Resource\Profile
+     */
     public function getProfile($code)
     {
         $params = [

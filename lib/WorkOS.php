@@ -4,22 +4,30 @@ namespace WorkOS;
 
 /**
  * Class WorkOS.
+ * 
+ * This class allows users to get and set configuration for the package.
  */
 class WorkOS
 {
-    /** @var string WorkOS API key */
-    public static $apiKey;
+    /**
+     * @var null|string WorkOS API key
+     */
+    public static $apiKey = null;
 
-    /** @var string WorkOS Project ID */
-    public static $projectId;
+    /**
+     * @var null|string WorkOS Project ID
+     */
+    public static $projectId = null;
 
-    /** @var string WorkOS base API URL. */
+    /**
+     * @var string WorkOS base API URL.
+     */
     public static $apiBaseUrl = "https://api.workos.com/";
 
     const VERSION = "dev";
 
     /**
-     * @return string | null WorkOS API key
+     * @return null|string WorkOS API key
      */
     public static function getApiKey()
     {
@@ -27,7 +35,7 @@ class WorkOS
     }
 
     /**
-     * @param string $apiKey WorkOS API key
+     * @param null|string $apiKey WorkOS API key
      */
     public static function setApiKey($apiKey)
     {
@@ -35,7 +43,7 @@ class WorkOS
     }
 
     /**
-     * @return string | null WorkOS Project ID
+     * @return null|string WorkOS Project ID
      */
     public static function getProjectId()
     {

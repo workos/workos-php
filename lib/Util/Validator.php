@@ -2,6 +2,11 @@
 
 namespace WorkOS\Util;
 
+/**
+ * Class Validator.
+ * 
+ * Helper class to validate that required settings are configured for WorkOS modules.
+ */
 class Validator
 {
     const MODULE_SSO = "SSO";
@@ -9,8 +14,17 @@ class Validator
     const SETTING_API_KEY = "apiKey";
     const SETTING_PROJECT_ID = "projectId";
 
+    /**
+     * Array of required settings for the SSO module.
+     */
     const REQUIRED_SETTINGS_SSO = [self::SETTING_API_KEY, self::SETTING_PROJECT_ID];
 
+    /**
+     * @param string $module name of module to validate settings for
+     * 
+     * @throws \WorkOS\Exception\UnexpectedValueException if an unsupported module is passed in
+     * @throws \WorkOS\Exception\ConfigurationException if a module fails validation
+     */
     public static function validateSettings($module)
     {
         if ($module === self::MODULE_SSO) {

@@ -2,11 +2,29 @@
 
 namespace WorkOS\Util;
 
+/**
+ * Class Curl.
+ * 
+ * Helper class for making requests to the WorkOS API.
+ */
 class Curl
 {
     const METHOD_GET = "get";
     const METHOD_POST = "post";
 
+    /**
+     * @param string $method Curl method
+     * @param string $path Path to the WorkOS resource
+     * @param null|array $data Associative array that'll be passed as query parameters or form data
+     * 
+     * @throws \WorkOS\Exception\GenericException if a non-status code related Curl error occurs
+     * @throws \WorkOS\Exception\ServerException if a 5xx status code is returned
+     * @throws \WorkOS\Exception\AuthenticationException if a 401 status code is returned
+     * @throws \WorkOS\Exception\AuthorizationException if a 403 status code is returned
+     * @throws \WorkOS\Exception\BadRequestException if a 400 status code is returned
+     * 
+     * @return \WorkOS\Resource\Response
+     */
     public static function request($method, $path, $data = null)
     {
         $headers = [
@@ -42,6 +60,13 @@ class Curl
         return $response;
     }
 
+    /** Generates a URL to the WorkOS API.
+     * 
+     * @param string $path Path to the WorkOS resource
+     * @param null|array $params Associative arrray to be passed as query parameters
+     * 
+     * @return string
+     */
     public static function generateUrl($path, $params = null)
     {
         $url = \WorkOS\WorkOS::getApiBaseUrl() . $path;
@@ -85,7 +110,7 @@ class Curl
         } else {
             // Unsure how versions of cURL and PHP correlate so using the legacy
             // reference for getting the last response code
-            $statusCode = \curl_getinfo($curl, \CURLINFO_HTTP_CODE);
+            $statusCode = \curl_getinfo($curl, \CURLINFO_RESPONSE_CODE);
             \curl_close($curl);
 
             $response = new \WorkOS\Resource\Response($result, $headers, $statusCode);

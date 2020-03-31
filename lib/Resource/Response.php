@@ -2,11 +2,31 @@
 
 namespace WorkOS\Resource;
 
+/**
+ * Class Response.
+ * 
+ * Representation of response resulting from a Curl request.
+ */
 class Response
 {
+    /**
+     * @var string $body
+     */
     public $body;
+
+    /**
+     * @var array $headers
+     */
     public $headers;
+
+    /**
+     * @var array $json
+     */
     public $json;
+
+    /**
+     * @var int @statusCode
+     */
     public $statusCode;
 
     public function __construct($body, $headers, $statusCode)

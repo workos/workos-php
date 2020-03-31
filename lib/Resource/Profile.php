@@ -2,18 +2,41 @@
 
 namespace WorkOS\Resource;
 
+/**
+ * Class Profile.
+ * 
+ * Representation of a WorkOS Profile.
+ */
 class Profile
 {
+    /**
+     * @var string $id
+     */
     public $id;
 
+    /**
+     * @var string $email
+     */
     public $email;
 
+    /**
+     * @var string $firstName
+     */
     public $firstName;
 
+    /**
+     * @var string $lastName
+     */
     public $lastName;
 
+    /**
+     * @var \WorkOS\Resource\ConnectionType $connectionType
+     */
     public $connectionType;
 
+    /**
+     * @var string $idpId
+     */
     public $idpId;
 
     const RESOURCE_ATTRIBUTES = [
@@ -40,6 +63,13 @@ class Profile
     {
     }
 
+    /**
+     * Creates a Profile from a Rseponse.
+     * 
+     * @param \WorkOS\Resource\Response $response
+     * 
+     * @return \WorkOS\Resource\Profile
+     */
     public static function constructFromResponse($response)
     {
         $instance = new self();

@@ -2,10 +2,21 @@
 
 namespace WorkOS\Exception;
 
+/**
+ * Class GenericException
+ * 
+ * Generic WorkOS Exception.
+ */
 class GenericException extends \Exception
 {
     public $data;
 
+    /**
+     * GenericException constructor.
+     * 
+     * @param string $message Exception message
+     * @param null|array $data Blob
+     */
     public function __construct($message, $data = null)
     {
         $this->message = $message;
