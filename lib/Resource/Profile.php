@@ -45,7 +45,8 @@ class Profile
     public static function constructFromResponse($response)
     {
         $instance = new self();
-        $profileJson = $response[self::RESOURCE_TYPE];
+        $responseJson = $response->json();
+        $profileJson = $responseJson[self::RESOURCE_TYPE];
 
         foreach (self::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
             $instance->{$resourceKey} = $profileJson[$responseKey];
