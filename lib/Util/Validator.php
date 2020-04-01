@@ -4,7 +4,7 @@ namespace WorkOS\Util;
 
 /**
  * Class Validator.
- * 
+ *
  * Helper class to validate that required settings are configured for WorkOS modules.
  */
 class Validator
@@ -21,7 +21,7 @@ class Validator
 
     /**
      * @param string $module name of module to validate settings for
-     * 
+     *
      * @throws \WorkOS\Exception\UnexpectedValueException if an unsupported module is passed in
      * @throws \WorkOS\Exception\ConfigurationException if a module fails validation
      */

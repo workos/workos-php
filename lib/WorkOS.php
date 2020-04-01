@@ -4,7 +4,7 @@ namespace WorkOS;
 
 /**
  * Class WorkOS.
- * 
+ *
  * This class allows users to get and set configuration for the package.
  */
 class WorkOS

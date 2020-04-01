@@ -4,7 +4,7 @@ namespace WorkOS\Exception;
 
 /**
  * Class BaseRequestException.
- * 
+ *
  * Base Exception for use in filtering a response for information.
  */
 class BaseRequestException extends \Exception
@@ -13,7 +13,7 @@ class BaseRequestException extends \Exception
 
     /**
      * BaseRequestException constructor.
-     * 
+     *
      * @param \WorkOS\Resource\Response $response
      * @param null|string $message Exception message
      */

@@ -4,7 +4,7 @@ namespace WorkOS\Resource;
 
 /**
  * Class Profile.
- * 
+ *
  * Representation of a WorkOS Profile.
  */
 class Profile
@@ -65,9 +65,9 @@ class Profile
 
     /**
      * Creates a Profile from a Rseponse.
-     * 
+     *
      * @param \WorkOS\Resource\Response $response
-     * 
+     *
      * @return \WorkOS\Resource\Profile
      */
     public static function constructFromResponse($response)

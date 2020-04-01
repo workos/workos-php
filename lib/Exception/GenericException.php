@@ -4,7 +4,7 @@ namespace WorkOS\Exception;
 
 /**
  * Class GenericException
- * 
+ *
  * Generic WorkOS Exception.
  */
 class GenericException extends \Exception
@@ -13,7 +13,7 @@ class GenericException extends \Exception
 
     /**
      * GenericException constructor.
-     * 
+     *
      * @param string $message Exception message
      * @param null|array $data Blob
      */

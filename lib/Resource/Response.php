@@ -4,8 +4,8 @@ namespace WorkOS\Resource;
 
 /**
  * Class Response.
- * 
- * Representation of response resulting from a Curl request.
+ *
+ * Representation of response resulting from a Client request.
  */
 class Response
 {
