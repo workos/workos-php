@@ -17,7 +17,7 @@ class Client
     public static function requestClient()
     {
         if (!self::$_requestClient) {
-            self::$_requestClient = RequestClient\CurlRequestClient::class;
+            self::$_requestClient = new RequestClient\CurlRequestClient();
         }
 
         return self::$_requestClient;
@@ -46,7 +46,7 @@ class Client
         $headers = ["User-Agent" => "WorkOS PHP/" . WorkOS::VERSION];
         $url = self::generateUrl($path);
         
-        list($result, $headers, $statusCode) = self::requestClient()::request($method, $url, $headers, $params);
+        list($result, $headers, $statusCode) = self::requestClient()->request($method, $url, $headers, $params);
         $response = new Resource\Response($result, $headers, $statusCode);
 
         if ($statusCode >= 400) {

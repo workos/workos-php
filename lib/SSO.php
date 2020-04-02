@@ -63,19 +63,19 @@ class SSO
             "response_type" => "code"
         ];
 
-        if (isset($domain)) {
+        if ($domain) {
             $params["domain"] = $domain;
         }
 
-        if (isset($redirectUri)) {
+        if ($redirectUri) {
             $params["redirect_uri"] = $redirectUri;
         }
 
-        if (isset($state) and !empty($state)) {
+        if (null !== $state && !empty($state)) {
             $params["state"] = $state;
         }
 
-        if (isset($provider)) {
+        if ($provider) {
             $params["provider"] = $provider;
         }
 

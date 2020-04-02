@@ -17,5 +17,5 @@ interface RequestClientInterface
      *
      * @return array An array composed of the result string, response headers and status code
      */
-    public static function request($method, $url, $headers, $params);
+    public function request($method, $url, $headers, $params);
 }

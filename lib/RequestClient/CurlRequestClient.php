@@ -17,7 +17,7 @@ class CurlRequestClient implements RequestClientInterface
      *
      * @return array An array composed of the result string, response headers and status code
      */
-    public static function request($method, $url, $headers = null, $params = null)
+    public function request($method, $url, $headers = null, $params = null)
     {
         $opts = [
          \CURLOPT_URL => $url,
@@ -45,7 +45,7 @@ class CurlRequestClient implements RequestClientInterface
         return self::execute($opts);
     }
 
-    private static function execute($opts)
+    private function execute($opts)
     {
         $curl = \curl_init();
 
