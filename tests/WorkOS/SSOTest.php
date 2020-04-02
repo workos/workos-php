@@ -28,7 +28,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
         SSO::instance();
 
-        $this->assertTrue(True);
+        $this->assertTrue(true);
     }
 
     /**

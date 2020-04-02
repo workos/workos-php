@@ -56,6 +56,8 @@ class Client
                 throw new Exception\AuthenticationException($response);
             } elseif ($statusCode === 403) {
                 throw new Exception\AuthorizationException($response);
+            } elseif ($statusCode === 404) {
+                throw new Exception\NotFoundException($response);
             }
 
             throw new Exception\BadRequestException($response);
