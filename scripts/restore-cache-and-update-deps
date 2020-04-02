@@ -1,0 +1,17 @@
+#!/bin/bash
+
+KEY="composer-${1}-$(checksum composer.json)"
+cache restore $KEY
+
+if [[ ! `command -v composer 2>/dev/null` ]]
+then
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php composer-setup.php
+  php -r "unlink('composer-setup.php');"
+
+  php composer.phar u
+else
+  composer u
+fi
+
+cache store $KEY ./vendor

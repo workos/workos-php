@@ -21,5 +21,13 @@
     "psr-4": {
       "WorkOS\\": "lib/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WorkOS\\": [
+        "tests/",
+        "tests/WorkOS/"
+      ]
+    }
   }
 }
