@@ -45,7 +45,7 @@ class SSO
      *
      * @param null|string $domain Domain of the user that will be going through SSO
      * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
-     * @param null|array $state Associative array containing state that will be returned to the server
+     * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
      *
      * @return string
@@ -72,7 +72,7 @@ class SSO
         }
 
         if (null !== $state && !empty($state)) {
-            $params["state"] = $state;
+            $params["state"] = \json_encode($state);
         }
 
         if ($provider) {

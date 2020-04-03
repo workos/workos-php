@@ -52,7 +52,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         }
 
         if (null !== $state && !empty($state)) {
-            $expectedParams["state"] = $state;
+            $expectedParams["state"] = \json_encode($state);
         }
 
         if ($provider) {
