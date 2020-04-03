@@ -1,4 +1,4 @@
- # workos-php
+# workos-php
 
 PHP SDK to conveniently access the [WorkOS API](https://workos.com).
 
@@ -21,7 +21,7 @@ The package will need to be configured with your [api key](https://dashboard.wor
 ### SSO
 The package offers the following convenience functions to utilize WorkOS SSO.
 
-First we'll want to generate an OAuth 2.0 authorization URL to initiate the SSO workflow with:
+First we'll want to generate an OAuth 2.0 Authorization URL to initiate the SSO workflow with:
 
 ```php
 $url = \WorkOS\SSO::instance()->getAuthorizationUrl(
@@ -32,7 +32,7 @@ $url = \WorkOS\SSO::instance()->getAuthorizationUrl(
 );
 ```
 
-After directing the user to the authorization url and successfully completing the SSO workflow, use 
+After directing the user to the Authorization URL and successfully completing the SSO workflow, use 
 the code passed back from WorkOS to grab the profile of the authenticated user to verify all is good:
 
 ```php
