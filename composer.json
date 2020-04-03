@@ -10,7 +10,8 @@
     }
   ],
   "require": {
-    "php": ">=5.6.0"
+    "php": ">=5.6.0",
+    "ext-curl": "*"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.15",
@@ -19,6 +20,14 @@
   "autoload": {
     "psr-4": {
       "WorkOS\\": "lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WorkOS\\": [
+        "tests/",
+        "tests/WorkOS/"
+      ]
     }
   }
 }
