@@ -11,7 +11,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->expectException(Exception\ConfigurationException::class);
 
         $this->withApiKey();
-        SSO::instance();
+        new SSO();
     }
 
     public function testConfigurationExceptionWithProjectId()
@@ -19,14 +19,14 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->expectException(Exception\ConfigurationException::class);
 
         $this->withProjectId();
-        SSO::instance();
+        new SSO();
     }
 
     public function testNoExceptionWithApiKeyAndProjectId()
     {
         $this->withApiKeyAndProjectId();
 
-        SSO::instance();
+        new SSO();
 
         $this->assertTrue(true);
     }
@@ -59,7 +59,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["provider"] = $provider;
         }
 
-        $authorizationUrl = SSO::instance()->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
+        $authorizationUrl = (new SSO())->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -75,7 +75,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->withApiKeyAndProjectId();
         $this->mockResponse($body, $headers, $statusCode);
 
-        $profile = SSO::instance()->getProfile('code');
+        $profile = (new SSO())->getProfile('code');
 
         $expected = [
             "id" => "prof_hen",

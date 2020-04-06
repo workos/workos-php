@@ -24,7 +24,7 @@ The package offers the following convenience functions to utilize WorkOS SSO.
 First we'll want to generate an OAuth 2.0 Authorization URL to initiate the SSO workflow with:
 
 ```php
-$url = \WorkOS\SSO::instance()->getAuthorizationUrl(
+$url = (new \WorkOS\SSO())->getAuthorizationUrl(
     'foo-corp.com',
     'http://my.cool.co/auth/callback',
     ['things' => 'gonna get this back'],
@@ -36,5 +36,5 @@ After directing the user to the Authorization URL and successfully completing th
 the code passed back from WorkOS to grab the profile of the authenticated user to verify all is good:
 
 ```php
-$profile = \WorkOS\SSO::instance()->getProfile($code);
+$profile = (new \WorkOS\SSO())->getProfile($code);
 ```

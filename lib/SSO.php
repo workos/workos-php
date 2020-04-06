@@ -14,8 +14,6 @@ class SSO
     const PATH_AUTHORIZATION = "sso/authorize";
     const PATH_PROFILE = "sso/token";
 
-    private static $_instance;
-
     /**
      * SSO constructor.
      *
@@ -23,21 +21,9 @@ class SSO
      *
      * @throws \WorkOS\Exception\ConfigurationException if the required settings are not configured
      */
-    private function __construct()
+    public function __construct()
     {
         Util\Validator::validateSettings(Util\Validator::MODULE_SSO);
-    }
-
-    /**
-     * @return \WorkOS\SSO
-     */
-    public static function instance()
-    {
-        if (!self::$_instance) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
     }
 
     /**
