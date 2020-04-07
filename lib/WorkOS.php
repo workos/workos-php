@@ -24,7 +24,7 @@ class WorkOS
      */
     public static $apiBaseUrl = "https://api.workos.com/";
 
-    const VERSION = "v0.0.1.a";
+    const VERSION = "v0.0.1";
 
     /**
      * @return null|string WorkOS API key
