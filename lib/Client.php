@@ -43,7 +43,7 @@ class Client
      */
     public static function request($method, $path, $params = null)
     {
-        $headers = ["User-Agent" => "WorkOS PHP/" . WorkOS::VERSION];
+        $headers = ["User-Agent" => WorkOS::getIdentifier() . "/" . WorkOS::getVersion()];
         $url = self::generateUrl($path);
         
         list($result, $headers, $statusCode) = self::requestClient()->request($method, $url, $headers, $params);

@@ -24,7 +24,15 @@ class WorkOS
      */
     public static $apiBaseUrl = "https://api.workos.com/";
 
-    const VERSION = "v0.0.1";
+    /**
+     * @var string SDK identifier
+     */
+    private static $identifier = "";
+
+    /**
+     * @var string SDK version
+     */
+    private static $version = "";
 
     /**
      * @return null|string WorkOS API key
@@ -72,5 +80,45 @@ class WorkOS
     public static function setApiBaseUrl($apiBaseUrl)
     {
         self::$apiBaseUrl = $apiBaseUrl;
+    }
+
+    /**
+     * @param string $identifier SDK identifier
+     */
+    public static function setIdentifier($identifier)
+    {
+        self::$identifier = $identifier;
+    }
+
+    /**
+     * @return string SDK identifier
+     */
+    public static function getIdentifier()
+    {
+        if (self::$identifier) {
+            return self::$identifier;
+        }
+
+        return Version::SDK_IDENTIFIER;
+    }
+
+    /**
+     * @param string $version SDK version
+     */
+    public static function setVersion($version)
+    {
+        self::$version = $version;
+    }
+
+    /**
+     * @return string SDK version
+     */
+    public static function getVersion()
+    {
+        if (self::$version) {
+            return self::$version;
+        }
+
+        return Version::SDK_VERSION;
     }
 }
