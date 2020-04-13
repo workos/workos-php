@@ -19,28 +19,33 @@ class CurlRequestClient implements RequestClientInterface
      */
     public function request($method, $url, $headers = null, $params = null)
     {
+        if (empty($headers)) {
+            $headers = array();
+        }
+
         $opts = [
-         \CURLOPT_URL => $url,
-         \CURLOPT_HTTPHEADER => $headers,
-         \CURLOPT_RETURNTRANSFER => 1
+            \CURLOPT_URL => $url,
+            \CURLOPT_RETURNTRANSFER => 1
         ];
 
         switch ($method) {
             case \WorkOS\Client::METHOD_GET:
-                if ($params) {
+                if (!empty($params)) {
                     $url .= "?" . http_build_query($params);
                 }
 
                 break;
 
             case \WorkOS\CLIENT::METHOD_POST:
-                $headers["Content-Type"] = "application/x-www-form-urlencoded";
+                \array_push($headers, "Content-Type: application/x-www-form-urlencoded");
                 
                 $opts[\CURLOPT_POST] = 1;
                 $opts[\CURLOPT_POSTFIELDS] = \http_build_query($params);
                 
                 break;
         }
+
+        $opts[\CURLOPT_HTTPHEADER] = $headers;
 
         return self::execute($opts);
     }
