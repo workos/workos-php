@@ -21,7 +21,7 @@ class GenericException extends \Exception
     {
         $this->message = $message;
 
-        if (isset($data) && $data->length) {
+        if (!empty($data)) {
             $this->data = $data;
         } else {
             $this->data = array();

@@ -43,20 +43,20 @@ class Client
      */
     public static function request($method, $path, $params = null)
     {
-        $headers = ["User-Agent" => WorkOS::getIdentifier() . "/" . WorkOS::getVersion()];
+        $headers = ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
         $url = self::generateUrl($path);
         
-        list($result, $headers, $statusCode) = self::requestClient()->request($method, $url, $headers, $params);
-        $response = new Resource\Response($result, $headers, $statusCode);
+        list($result, $responseHeadesr, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
+        $response = new Resource\Response($result, $responseHeadesr, $responseCode);
 
-        if ($statusCode >= 400) {
-            if ($statusCode >= 500) {
+        if ($responseCode >= 400) {
+            if ($responseCode >= 500) {
                 throw new Exception\ServerException($response);
-            } elseif ($statusCode === 401) {
+            } elseif ($responseCode === 401) {
                 throw new Exception\AuthenticationException($response);
-            } elseif ($statusCode === 403) {
+            } elseif ($responseCode === 403) {
                 throw new Exception\AuthorizationException($response);
-            } elseif ($statusCode === 404) {
+            } elseif ($responseCode === 404) {
                 throw new Exception\NotFoundException($response);
             }
 
