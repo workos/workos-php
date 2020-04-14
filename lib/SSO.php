@@ -11,9 +11,6 @@ namespace WorkOS;
  */
 class SSO
 {
-    const PATH_AUTHORIZATION = "sso/authorize";
-    const PATH_PROFILE = "sso/token";
-
     /**
      * SSO constructor.
      *
@@ -38,6 +35,8 @@ class SSO
      */
     public function getAuthorizationUrl($domain, $redirectUri, $state, $provider)
     {
+        $authorizationPath = "sso/authorize";
+
         if (!isset($domain) && !isset($provider)) {
             $msg = "Either \$domain or \$provider is required";
 
@@ -65,7 +64,7 @@ class SSO
             $params["provider"] = $provider;
         }
 
-        return Client::generateUrl(self::PATH_AUTHORIZATION, $params);
+        return Client::generateUrl($authorizationPath, $params);
     }
 
     /**
@@ -77,14 +76,37 @@ class SSO
      */
     public function getProfile($code)
     {
+        $profilePath = "sso/token";
+
         $params = [
             "client_id" => WorkOS::getProjectId(),
             "client_secret" => WorkOS::getApikey(),
             "code" => $code,
             "grant_type" => "authorization_code"
         ];
-        $response = Client::request(Client::METHOD_POST, self::PATH_PROFILE, $params);
+        $response = Client::request(Client::METHOD_POST, $profilePath, $params);
 
         return Resource\Profile::constructFromResponse($response);
+    }
+
+    /**
+     * Promote a Draft Connection created through the WorkOS.js embed.
+     *
+     * @param string $token Token returned by WorkOS when a Draft Connection is
+     * created in the WorkOS.js.embed
+     *
+     * @throws \WorkOS\Exception\GenericException if an error internal to the SDK is encountered
+     * @throws \WorkOS\Exception\ServerException if an error internal to WorkOS is encountered
+     * @throws \WorkOS\Exception\NotFoundException if a Draft Connection could not be found
+     *
+     * @return TRUE if a Draft Connection has been promoted
+     */
+    public function promoteDraftConnection($token)
+    {
+        $promoteDraftConnectionPath = "draft_connections/${token}/activate";
+
+        Client::request(Client::METHOD_POST, $promoteDraftConnectionPath, null, WorkOS::getApiKey());
+
+        return true;
     }
 }

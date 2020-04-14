@@ -102,6 +102,24 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $profile->toArray());
     }
 
+    public function testPromoteDraftConnectionExpectedReturnWhenSuccessful()
+    {
+        $this->withApiKeyAndProjectId();
+
+        $token = 'token';
+        $path = "draft_connections/${token}/activate";
+        $headers = Client::generateBaseHeaders();
+        \array_push($headers, "Authorization: Bearer " . WorkOS::getApiKey());
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            $headers
+        );
+
+        $this->assertTrue((new SSO())->promoteDraftConnection($token));
+    }
+
     // Providers
 
     public function authorizationUrlTestProvider()

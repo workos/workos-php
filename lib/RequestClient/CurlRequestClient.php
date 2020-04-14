@@ -40,7 +40,10 @@ class CurlRequestClient implements RequestClientInterface
                 \array_push($headers, "Content-Type: application/x-www-form-urlencoded");
                 
                 $opts[\CURLOPT_POST] = 1;
-                $opts[\CURLOPT_POSTFIELDS] = \http_build_query($params);
+
+                if ($params) {
+                    $opts[\CURLOPT_POSTFIELDS] = \http_build_query($params);
+                }
                 
                 break;
         }
