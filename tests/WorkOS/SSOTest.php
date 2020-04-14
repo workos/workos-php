@@ -66,7 +66,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedParams, $paramsArray);
     }
 
-    public function testGetProfile()
+    public function testGetProfileReturnsProfileWithExpectedValues()
     {
         $body = "{\"profile\":{\"id\":\"prof_hen\",\"email\":\"hen@papagenos.com\",\"first_name\":\"hen\",\"last_name\":\"cha\",\"connection_type\":\"GoogleOAuth\",\"idp_id\":\"randomalphanum\"}}";
         $headers = [];
