@@ -19,7 +19,7 @@ blocks:
           commands:
             - checkout
             - bash scripts/restore-cache-and-update-deps default
-            - php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .
+            - composer run-script format-check
   - name: Tests
     dependencies: []
     task:
@@ -32,19 +32,19 @@ blocks:
             - phpbrew --no-progress install 5.6.40
             - phpbrew use php-5.6.40
             - bash scripts/restore-cache-and-update-deps 56
-            - php vendor/bin/phpunit tests
+            - php composer.phar run-script test
         - name: php 7.0
           commands:
             - phpbrew use php-7.0
             - bash scripts/restore-cache-and-update-deps 70
-            - php vendor/bin/phpunit tests
+            - composer run-script test
         - name: php 7.2
           commands:
             - phpbrew use php-7.2
             - bash scripts/restore-cache-and-update-deps 72
-            - php vendor/bin/phpunit tests
+            - composer run-script test
         - name: php 7.4
           commands:
             - phpbrew use php-7.4
             - bash scripts/restore-cache-and-update-deps 74
-            - php vendor/bin/phpunit tests
+            - composer run-script test
