@@ -37,14 +37,19 @@ class Client
      * @throws \WorkOS\Exception\ServerException if a 5xx status code is returned
      * @throws \WorkOS\Exception\AuthenticationException if a 401 status code is returned
      * @throws \WorkOS\Exception\AuthorizationException if a 403 status code is returned
+     * @throws \WorkOS\Exception\NotFoundException if a 404 status code is returned
      * @throws \WorkOS\Exception\BadRequestException if a 400 status code is returned
      *
      * @return \WorkOS\Resource\Response
      */
-    public static function request($method, $path, $params = null)
+    public static function request($method, $path, $params = null, $token = null)
     {
-        $headers = ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
         $url = self::generateUrl($path);
+
+        $headers = self::generateBaseHeaders();
+        if ($token) {
+            array_push($headers, "Authorization: Bearer ${token}");
+        }
         
         list($result, $responseHeadesr, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
         $response = new Resource\Response($result, $responseHeadesr, $responseCode);
@@ -64,6 +69,11 @@ class Client
         }
 
         return $response;
+    }
+
+    public static function generateBaseHeaders()
+    {
+        return ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
     }
 
     /** Generates a URL to the WorkOS API.

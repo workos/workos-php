@@ -11,52 +11,76 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testClientThrowsRequestExceptions($statusCode, $exceptionClass)
     {
-        $body = "{\"message\":\"uh-oh\"}";
-        $headers = [
-            "x-request-id" => "123yocheckme"
-        ];
-        
+        $this->withApiKeyAndProjectId();
+
+        $path = "some/place";
+
         $this->expectException($exceptionClass);
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            null,
+            null,
+            $statusCode
+        );
 
-        $this->withApiKeyAndProjectId();
-        $this->mockResponse($body, $headers, $statusCode);
-
-        Client::request(Client::METHOD_GET, "\some\place");
+        Client::request(Client::METHOD_GET, $path);
     }
 
     /**
      * @dataProvider requestExceptionTestProvider
      */
-    public function testClientThrowsRequestExceptionsWithRequestId($statusCode, $exceptionClass)
+    public function testClientThrowsRequestExceptionsIncludeRequestId($statusCode, $exceptionClass)
     {
-        $body = "{\"message\":\"uh-oh\"}";
-        $headers = [
-            "x-request-id" => "123yocheckme"
-        ];
+        $this->withApiKeyAndProjectId();
+
+        $path = "some/place";
+        $responseHeaders = ["x-request-id" => "123yocheckme"];
         
-        $this->withApiKeyAndProjectId();
-        $this->mockResponse($body, $headers, $statusCode);
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            null,
+            $responseHeaders,
+            $statusCode
+        );
 
         try {
-            Client::request(Client::METHOD_GET, "\some\place");
+            Client::request(Client::METHOD_GET, $path);
         } catch (Exception\BaseRequestException $e) {
-            $this->assertEquals($e->requestId, $headers["x-request-id"]);
+            $this->assertEquals($e->requestId, $responseHeaders["x-request-id"]);
+            return;
         }
+
+        $this->fail("Expected exception of type " . $exceptionClass . " not thrown.");
     }
 
     /**
      * @dataProvider requestExceptionTestProvider
      */
-    public function testClientThrowsRequestExceptionsWithBadMessageAndNoRequestId($statusCode, $exceptionClass)
+    public function testClientThrowsRequestExceptionsWithBadMessage($statusCode, $exceptionClass)
     {
-        $body = "thisaintjson";
-        $headers = [];
-
         $this->withApiKeyAndProjectId();
-        $this->mockResponse($body, $headers, $statusCode);
+
+        $path = "some/place";
+        $result = "thisaintjson";
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            $result,
+            null,
+            $statusCode
+        );
 
         try {
-            Client::request(Client::METHOD_GET, "\some\place");
+            Client::request(Client::METHOD_GET, $path);
         } catch (Exception\BaseRequestException $e) {
             $this->assertEquals($e->getMessage(), "");
         }

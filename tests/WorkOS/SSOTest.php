@@ -68,12 +68,26 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProfileReturnsProfileWithExpectedValues()
     {
-        $body = "{\"profile\":{\"id\":\"prof_hen\",\"email\":\"hen@papagenos.com\",\"first_name\":\"hen\",\"last_name\":\"cha\",\"connection_type\":\"GoogleOAuth\",\"idp_id\":\"randomalphanum\"}}";
-        $headers = [];
-        $statusCode = 200;
-
         $this->withApiKeyAndProjectId();
-        $this->mockResponse($body, $headers, $statusCode);
+
+        $code = 'code';
+        $path = "sso/token";
+        $params = [
+            "client_id" => WorkOS::getProjectId(),
+            "client_secret" => WorkOS::getApikey(),
+            "code" => $code,
+            "grant_type" => "authorization_code"
+        ];
+
+        $result = "{\"profile\":{\"id\":\"prof_hen\",\"email\":\"hen@papagenos.com\",\"first_name\":\"hen\",\"last_name\":\"cha\",\"connection_type\":\"GoogleOAuth\",\"idp_id\":\"randomalphanum\"}}";
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            $result
+        );
 
         $profile = (new SSO())->getProfile('code');
 

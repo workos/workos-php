@@ -13,12 +13,7 @@ trait TestHelper
         $this->requestClientMock = $this->createMock("\WorkOS\RequestClient\RequestClientInterface");
     }
 
-    protected function mockResponse($body, $headers, $statusCode)
-    {
-        Client::setRequestClient($this->requestClientMock);
-
-        $this->requestClientMock->method("request")->willReturn([$body, $headers, $statusCode]);
-    }
+    // Configuration
 
     protected function withApiKey($apiKey = "pk_secretsauce")
     {
@@ -34,6 +29,45 @@ trait TestHelper
     {
         WorkOS::setApiKey($apiKey);
         WorkOS::setProjectId($projectId);
+    }
+
+    // Requests
+
+    protected function mockRequest(
+        $method,
+        $path,
+        $headers = null,
+        $params = null,
+        $result = null,
+        $responseHeaders = null,
+        $responseCode = 200
+    ) {
+        Client::setRequestClient($this->requestClientMock);
+
+        $url = Client::generateUrl($path);
+        if (!$headers) {
+            $headers = Client::generateBaseHeaders();
+        }
+        if (!$result) {
+            $result = "{}";
+        }
+        if (!$responseHeaders) {
+            $responseHeaders = [];
+        }
+
+        $this->prepareRequestMock($method, $url, $headers, $params)->willReturn([$result, $responseHeaders, $responseCode]);
+    }
+
+    private function prepareRequestMock($method, $url, $headers, $params)
+    {
+        return $this->requestClientMock
+            ->expects(static::once())->method('request')
+            ->with(
+                static::identicalTo($method),
+                static::identicalTo($url),
+                static::identicalTo($headers),
+                static::identicalTo($params)
+            );
     }
 
     protected function tearDown()
