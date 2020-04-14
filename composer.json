@@ -29,5 +29,11 @@
         "tests/WorkOS/"
       ]
     }
+  },
+  "scripts": {
+    "clean": "rm -rf composer.lock vendor/",
+    "format": "php vendor/bin/php-cs-fixer fix -v --using-cache=no .",
+    "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .",
+    "test": "php vendor/bin/phpunit tests"
   }
 }
