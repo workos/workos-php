@@ -12,33 +12,41 @@ class WorkOS
     /**
      * @var null|string WorkOS API key
      */
-    public static $apiKey = null;
+    private static $apiKey = null;
 
     /**
      * @var null|string WorkOS Project ID
      */
-    public static $projectId = null;
+    private static $projectId = null;
 
     /**
      * @var string WorkOS base API URL.
      */
-    public static $apiBaseUrl = "https://api.workos.com/";
+    private static $apiBaseUrl = "https://api.workos.com/";
 
     /**
      * @var string SDK identifier
      */
-    private static $identifier = "";
+    private static $identifier = Version::SDK_IDENTIFIER;
 
     /**
      * @var string SDK version
      */
-    private static $version = "";
+    private static $version = Version::SDK_VERSION;
 
     /**
      * @return null|string WorkOS API key
      */
     public static function getApiKey()
     {
+        if (isset(self::$apikKey)) {
+            return self::$apiKey;
+        }
+
+        if (getenv("WORKOS_API_KEY")) {
+            self::$apiKey = getenv("WORKOS_API_KEY");
+        }
+
         return self::$apiKey;
     }
 
@@ -55,6 +63,14 @@ class WorkOS
      */
     public static function getProjectId()
     {
+        if (isset(self::$projectId)) {
+            return self::$projectId;
+        }
+
+        if (getenv("WORKOS_PROJECT_ID")) {
+            self::$projectId = getenv("WORKOS_PROJECT_ID");
+        }
+
         return self::$projectId;
     }
 
@@ -95,11 +111,7 @@ class WorkOS
      */
     public static function getIdentifier()
     {
-        if (self::$identifier) {
-            return self::$identifier;
-        }
-
-        return Version::SDK_IDENTIFIER;
+        return self::$identifier;
     }
 
     /**
@@ -115,10 +127,6 @@ class WorkOS
      */
     public static function getVersion()
     {
-        if (self::$version) {
-            return self::$version;
-        }
-
-        return Version::SDK_VERSION;
+        return self::$version;
     }
 }

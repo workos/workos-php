@@ -48,7 +48,7 @@ class Client
 
         $headers = self::generateBaseHeaders();
         if ($token) {
-            array_push($headers, "Authorization: Bearer ${token}");
+            \array_push($headers, "Authorization: Bearer ${token}");
         }
         
         list($result, $responseHeadesr, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
@@ -71,12 +71,18 @@ class Client
         return $response;
     }
 
+    /**
+     * Generate base headers for request.
+     *
+     * @return array
+     */
     public static function generateBaseHeaders()
     {
         return ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
     }
 
-    /** Generates a URL to the WorkOS API.
+    /**
+     * Generates a URL to the WorkOS API.
      *
      * @param string $path Path to the WorkOS resource
      * @param null|array $params Associative arrray to be passed as query parameters

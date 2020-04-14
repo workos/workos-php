@@ -55,7 +55,8 @@ trait TestHelper
             $responseHeaders = [];
         }
 
-        $this->prepareRequestMock($method, $url, $headers, $params)->willReturn([$result, $responseHeaders, $responseCode]);
+        $this->prepareRequestMock($method, $url, $headers, $params)
+            ->willReturn([$result, $responseHeaders, $responseCode]);
     }
 
     private function prepareRequestMock($method, $url, $headers, $params)
