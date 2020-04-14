@@ -51,8 +51,8 @@ class Client
             \array_push($headers, "Authorization: Bearer ${token}");
         }
         
-        list($result, $responseHeadesr, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
-        $response = new Resource\Response($result, $responseHeadesr, $responseCode);
+        list($result, $responseHeaders, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
+        $response = new Resource\Response($result, $responseHeaders, $responseCode);
 
         if ($responseCode >= 400) {
             if ($responseCode >= 500) {

@@ -41,7 +41,7 @@ class CurlRequestClient implements RequestClientInterface
                 
                 $opts[\CURLOPT_POST] = 1;
 
-                if ($params) {
+                if (!empty($params)) {
                     $opts[\CURLOPT_POSTFIELDS] = \http_build_query($params);
                 }
                 
