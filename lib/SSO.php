@@ -99,7 +99,7 @@ class SSO
      * @throws \WorkOS\Exception\ServerException if an error internal to WorkOS is encountered
      * @throws \WorkOS\Exception\NotFoundException if a Draft Connection could not be found
      *
-     * @return TRUE if a Draft Connection has been promoted
+     * @return true if a Draft Connection has been promoted
      */
     public function promoteDraftConnection($token)
     {
