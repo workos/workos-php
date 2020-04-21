@@ -5,7 +5,7 @@ namespace WorkOS\Resource;
 /**
  * Class ConnectionType
  *
- * Connection Types currently supported through the WorkOS API.
+ * Connection Types supported through the WorkOS API.
  */
 class ConnectionType
 {

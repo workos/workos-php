@@ -39,15 +39,17 @@ class WorkOS
      */
     public static function getApiKey()
     {
-        if (isset(self::$apikKey)) {
+        if (isset(self::$apiKey)) {
             return self::$apiKey;
         }
 
         if (getenv("WORKOS_API_KEY")) {
             self::$apiKey = getenv("WORKOS_API_KEY");
+            return self::$apiKey;
         }
 
-        return self::$apiKey;
+        $msg = "\$apiKey is required";
+        throw new \WorkOS\Exception\ConfigurationException($msg);
     }
 
     /**
@@ -69,9 +71,11 @@ class WorkOS
 
         if (getenv("WORKOS_PROJECT_ID")) {
             self::$projectId = getenv("WORKOS_PROJECT_ID");
+            return self::$projectId;
         }
 
-        return self::$projectId;
+        $msg = "\$projectId is required";
+        throw new \WorkOS\Exception\ConfigurationException($msg);
     }
 
     /**

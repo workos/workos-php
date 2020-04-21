@@ -46,8 +46,11 @@ trait TestHelper
 
         $url = Client::generateUrl($path);
         if (!$headers) {
-            $headers = Client::generateBaseHeaders();
+            $requestHeaders = Client::generateBaseHeaders();
+        } else {
+            $requestHeaders = \array_merge(Client::generateBaseHeaders(), $headers);
         }
+
         if (!$result) {
             $result = "{}";
         }
@@ -55,7 +58,7 @@ trait TestHelper
             $responseHeaders = [];
         }
 
-        $this->prepareRequestMock($method, $url, $headers, $params)
+        $this->prepareRequestMock($method, $url, $requestHeaders, $params)
             ->willReturn([$result, $responseHeaders, $responseCode]);
     }
 

@@ -14,8 +14,8 @@ composer require workos/workos-php
 The package will need to be configured with your [api key](https://dashboard.workos.com/api-keys) and [project id](https://dashboard.workos.com/sso/configuration):
 
 ```php
-\WorkOS\WorkOS::setApiKey('sk_123secret456');
-\WorkOS\WorkOS::setProjectId('project_456demo789');
+\WorkOS\WorkOS::setApiKey("sk_123secret456");
+\WorkOS\WorkOS::setProjectId("project_456demo789");
 ```
 
 ### SSO
@@ -25,10 +25,10 @@ First we'll want to generate an OAuth 2.0 Authorization URL to initiate the SSO 
 
 ```php
 $url = (new \WorkOS\SSO())->getAuthorizationUrl(
-    'foo-corp.com',
-    'http://my.cool.co/auth/callback',
-    ['things' => 'gonna get this back'],
-    null // Pass along provider if we don't have a domain
+    "foo-corp.com",
+    "http://my.cool.co/auth/callback",
+    ["things" => "gonna get this back"],
+    null
 );
 ```
 
@@ -37,4 +37,27 @@ the code passed back from WorkOS to grab the profile of the authenticated user t
 
 ```php
 $profile = (new \WorkOS\SSO())->getProfile($code);
+```
+
+### Audit Trail
+Creating an Audit Trail event requires a descriptive action name and annotating the event with its CRUD identifier. The action name must contain an action category and an action name separated by a period, for example, user.login.
+
+Creating an Audit Trail event in WorkOS is as simple as running the following:
+
+```php
+$now = (new \DateTime())->format(\DateTime::ISO8601);
+
+$event = [
+    "group" => "organization_1",
+    "action" => "user.login",
+    "action_type" => "C",
+    "actor_name" => "user@email.com",
+    "actor_id" => "user_1",
+    "target_name" => "user@email.com",
+    "target_id" => "user_1",
+    "location" =>  "1.1.1.1",
+    "occurred_at" => $now,
+];
+
+(new \WorkOS\AuditTrail())->createEvent($event);
 ```

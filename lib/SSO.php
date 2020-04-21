@@ -6,23 +6,9 @@ namespace WorkOS;
  * Class SSO
  *
  * This class facilitates the use of WorkOS SSO.
- *
- * $piKey and $projectId must be configured for the package to use SSO.
  */
 class SSO
 {
-    /**
-     * SSO constructor.
-     *
-     * Verifies that $apiKey and $projectId are configured.
-     *
-     * @throws \WorkOS\Exception\ConfigurationException if the required settings are not configured
-     */
-    public function __construct()
-    {
-        Util\Validator::validateSettings(Util\Validator::MODULE_SSO);
-    }
-
     /**
      * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
      *
@@ -84,7 +70,7 @@ class SSO
             "code" => $code,
             "grant_type" => "authorization_code"
         ];
-        $response = Client::request(Client::METHOD_POST, $profilePath, $params);
+        $response = Client::request(Client::METHOD_POST, $profilePath, null, $params);
 
         return Resource\Profile::constructFromResponse($response);
     }
@@ -99,13 +85,13 @@ class SSO
      * @throws \WorkOS\Exception\ServerException if an error internal to WorkOS is encountered
      * @throws \WorkOS\Exception\NotFoundException if a Draft Connection could not be found
      *
-     * @return true if a Draft Connection has been promoted
+     * @return boolean true if a Draft Connection has been promoted
      */
     public function promoteDraftConnection($token)
     {
         $promoteDraftConnectionPath = "draft_connections/${token}/activate";
 
-        Client::request(Client::METHOD_POST, $promoteDraftConnectionPath, null, WorkOS::getApiKey());
+        Client::request(Client::METHOD_POST, $promoteDraftConnectionPath, null, null, true);
 
         return true;
     }
