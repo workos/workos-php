@@ -5,32 +5,7 @@ namespace WorkOS;
 class SSOTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper;
-
-    public function testConfiguratiponExceptionWithApiKey()
-    {
-        $this->expectException(Exception\ConfigurationException::class);
-
-        $this->withApiKey();
-        new SSO();
-    }
-
-    public function testConfigurationExceptionWithProjectId()
-    {
-        $this->expectException(Exception\ConfigurationException::class);
-
-        $this->withProjectId();
-        new SSO();
-    }
-
-    public function testNoExceptionWithApiKeyAndProjectId()
-    {
-        $this->withApiKeyAndProjectId();
-
-        new SSO();
-
-        $this->assertTrue(true);
-    }
-
+    
     /**
      * @dataProvider authorizationUrlTestProvider
      */
@@ -108,8 +83,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
         $token = 'token';
         $path = "draft_connections/${token}/activate";
-        $headers = Client::generateBaseHeaders();
-        \array_push($headers, "Authorization: Bearer " . WorkOS::getApiKey());
+        $headers = ["Authorization: Bearer " . WorkOS::getApiKey()];
 
         $this->mockRequest(
             Client::METHOD_POST,

@@ -31,7 +31,9 @@ class Client
     /**
      * @param string $method Client method
      * @param string $path Path to the WorkOS resource
+     * @param null|array $headers Associative array containing headers
      * @param null|array $params Associative array that'll be passed as query parameters or form data
+     * @param null|string $token Token to be included in request for authorization
      *
      * @throws \WorkOS\Exception\GenericException if a client level exception is encountered
      * @throws \WorkOS\Exception\ServerException if a 5xx status code is returned
@@ -42,16 +44,21 @@ class Client
      *
      * @return \WorkOS\Resource\Response
      */
-    public static function request($method, $path, $params = null, $token = null)
+    public static function request($method, $path, $headers = null, $params = null, $withAuth = false)
     {
         $url = self::generateUrl($path);
 
-        $headers = self::generateBaseHeaders();
-        if ($token) {
-            \array_push($headers, "Authorization: Bearer ${token}");
+        $requestHeaders = self::generateBaseHeaders($withAuth);
+        if ($headers) {
+            $requestHeaders = \array_merge($requestHeaders, $headers);
         }
         
-        list($result, $responseHeaders, $responseCode) = self::requestClient()->request($method, $url, $headers, $params);
+        list($result, $responseHeaders, $responseCode) = self::requestClient()->request(
+            $method,
+            $url,
+            $requestHeaders,
+            $params
+        );
         $response = new Resource\Response($result, $responseHeaders, $responseCode);
 
         if ($responseCode >= 400) {
@@ -74,11 +81,18 @@ class Client
     /**
      * Generate base headers for request.
      *
+     * @param boolean $withAuth return with authorization header if true
+     *
      * @return array
      */
-    public static function generateBaseHeaders()
+    public static function generateBaseHeaders($withAuth = false)
     {
-        return ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
+        $baseHeaders = ["User-Agent: " . WorkOS::getIdentifier() . "/" . WORKOS::getVersion()];
+        if ($withAuth) {
+            \array_push($baseHeaders, "Authorization: Bearer " . WorkOS::getApikey());
+        }
+
+        return $baseHeaders;
     }
 
     /**

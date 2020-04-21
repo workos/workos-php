@@ -39,6 +39,11 @@ class Profile
      */
     public $idpId;
 
+    /**
+     * @var string $responseJson
+     */
+    public $responseJson;
+
     const RESOURCE_ATTRIBUTES = [
         "id",
         "email",
@@ -73,8 +78,9 @@ class Profile
     public static function constructFromResponse($response)
     {
         $instance = new self();
-        $responseJson = $response->json();
-        $profileJson = $responseJson[self::RESOURCE_TYPE];
+
+        $instance->responseJson = $response->json();
+        $profileJson = $instance->responseJson[self::RESOURCE_TYPE];
 
         foreach (self::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
             $instance->{$resourceKey} = $profileJson[$responseKey];
