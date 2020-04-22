@@ -11,12 +11,7 @@ composer require workos/workos-php
 
 ## Getting Started
 
-The package will need to be configured with your [api key](https://dashboard.workos.com/api-keys) and [project id](https://dashboard.workos.com/sso/configuration):
-
-```php
-\WorkOS\WorkOS::setApiKey("sk_123secret456");
-\WorkOS\WorkOS::setProjectId("project_456demo789");
-```
+The package will need to be configured with your [api key](https://dashboard.workos.com/api-keys) and [project id](https://dashboard.workos.com/sso/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_PROJECT_ID` environment variable.
 
 ### SSO
 The package offers the following convenience functions to utilize WorkOS SSO.
