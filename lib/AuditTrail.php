@@ -49,7 +49,7 @@ class AuditTrail
 
         $headers = null;
         if ($idempotencyKey) {
-            $headers = ["idempotency_key" => $idempotencyKey];
+            $headers = ["idempotency-key: ${idempotencyKey}"];
         }
 
         Client::request(Client::METHOD_POST, $eventsPath, $headers, $event, true);
