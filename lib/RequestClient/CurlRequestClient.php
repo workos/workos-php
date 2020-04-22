@@ -37,12 +37,12 @@ class CurlRequestClient implements RequestClientInterface
                 break;
 
             case \WorkOS\CLIENT::METHOD_POST:
-                \array_push($headers, "Content-Type: application/x-www-form-urlencoded");
+                \array_push($headers, "Content-Type: application/json");
                 
                 $opts[\CURLOPT_POST] = 1;
 
                 if (!empty($params)) {
-                    $opts[\CURLOPT_POSTFIELDS] = \http_build_query($params);
+                    $opts[\CURLOPT_POSTFIELDS] = \json_encode($params);
                 }
                 
                 break;
