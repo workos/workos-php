@@ -2,6 +2,8 @@
 
 PHP SDK to conveniently access the [WorkOS API](https://workos.com).
 
+For more information on our API and WorkOS, check out our docs [here](https://docs.workos.com).
+
 ## Installation
 
 To install via composer, run the following:
@@ -11,7 +13,7 @@ composer require workos/workos-php
 
 ## Getting Started
 
-The package will need to be configured with your [api key](https://dashboard.workos.com/api-keys) and [project id](https://dashboard.workos.com/sso/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_PROJECT_ID` environment variable.
+The package will need to be configured with your [API Key](https://dashboard.workos.com/api-keys) and [Project ID](https://dashboard.workos.com/sso/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_PROJECT_ID` environment variable.
 
 ### SSO
 The package offers the following convenience functions to utilize WorkOS SSO.
@@ -35,8 +37,6 @@ $profile = (new \WorkOS\SSO())->getProfile($code);
 ```
 
 ### Audit Trail
-Creating an Audit Trail event requires a descriptive action name and annotating the event with its CRUD identifier. The action name must contain an action category and an action name separated by a period, for example, user.login.
-
 Creating an Audit Trail event in WorkOS is as simple as running the following:
 
 ```php
