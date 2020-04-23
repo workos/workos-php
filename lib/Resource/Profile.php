@@ -7,43 +7,10 @@ namespace WorkOS\Resource;
  *
  * Representation of a WorkOS Profile.
  */
-class Profile
+class Profile extends BaseWorkOSResource
 {
-    /**
-     * @var string $id
-     */
-    public $id;
-
-    /**
-     * @var string $email
-     */
-    public $email;
-
-    /**
-     * @var string $firstName
-     */
-    public $firstName;
-
-    /**
-     * @var string $lastName
-     */
-    public $lastName;
-
-    /**
-     * @var \WorkOS\Resource\ConnectionType $connectionType
-     */
-    public $connectionType;
-
-    /**
-     * @var string $idpId
-     */
-    public $idpId;
-
-    /**
-     * @var array $raw
-     */
-    public $raw;
-
+    const RESOURCE_TYPE = "profile";
+    
     const RESOURCE_ATTRIBUTES = [
         "id",
         "email",
@@ -53,8 +20,6 @@ class Profile
         "idpId"
     ];
 
-    const RESOURCE_TYPE = "profile";
-
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "email" => "email",
@@ -63,37 +28,4 @@ class Profile
         "connection_type" => "connectionType",
         "idp_id" => "idpId"
     ];
-
-    private function __construct()
-    {
-    }
-
-    /**
-     * Creates a Profile from a Response.
-     *
-     * @param \WorkOS\Resource\Response $response
-     *
-     * @return \WorkOS\Resource\Profile
-     */
-    public static function constructFromResponse($response)
-    {
-        $instance = new self();
-
-        $instance->raw = $response;
-        $profileJson = $instance->raw[self::RESOURCE_TYPE];
-
-        foreach (self::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
-            $instance->{$resourceKey} = $profileJson[$responseKey];
-        }
-
-        return $instance;
-    }
-
-    public function toArray()
-    {
-        return array_reduce(self::RESOURCE_ATTRIBUTES, function ($arr, $key) {
-            $arr[$key] = $this->{$key};
-            return $arr;
-        }, []);
-    }
 }
