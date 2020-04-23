@@ -75,7 +75,7 @@ class Client
             throw new Exception\BadRequestException($response);
         }
 
-        return $response;
+        return $response->json();
     }
 
     /**
