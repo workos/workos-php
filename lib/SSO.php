@@ -3,7 +3,7 @@
 namespace WorkOS;
 
 /**
- * Class SSO
+ * Class SSO.
  *
  * This class facilitates the use of WorkOS SSO.
  */
