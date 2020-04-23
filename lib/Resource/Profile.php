@@ -40,9 +40,9 @@ class Profile
     public $idpId;
 
     /**
-     * @var string $responseJson
+     * @var array $raw
      */
-    public $responseJson;
+    public $raw;
 
     const RESOURCE_ATTRIBUTES = [
         "id",
@@ -69,7 +69,7 @@ class Profile
     }
 
     /**
-     * Creates a Profile from a Rseponse.
+     * Creates a Profile from a Response.
      *
      * @param \WorkOS\Resource\Response $response
      *
@@ -79,8 +79,8 @@ class Profile
     {
         $instance = new self();
 
-        $instance->responseJson = $response->json();
-        $profileJson = $instance->responseJson[self::RESOURCE_TYPE];
+        $instance->raw = $response;
+        $profileJson = $instance->raw[self::RESOURCE_TYPE];
 
         foreach (self::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
             $instance->{$resourceKey} = $profileJson[$responseKey];

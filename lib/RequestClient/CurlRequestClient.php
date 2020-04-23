@@ -23,10 +23,7 @@ class CurlRequestClient implements RequestClientInterface
             $headers = array();
         }
 
-        $opts = [
-            \CURLOPT_URL => $url,
-            \CURLOPT_RETURNTRANSFER => 1
-        ];
+        $opts = [\CURLOPT_RETURNTRANSFER => 1];
 
         switch ($method) {
             case \WorkOS\Client::METHOD_GET:
@@ -49,6 +46,7 @@ class CurlRequestClient implements RequestClientInterface
         }
 
         $opts[\CURLOPT_HTTPHEADER] = $headers;
+        $opts[\CURLOPT_URL] = $url;
 
         return self::execute($opts);
     }
