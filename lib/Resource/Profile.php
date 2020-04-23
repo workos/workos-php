@@ -4,13 +4,11 @@ namespace WorkOS\Resource;
 
 /**
  * Class Profile.
- *
- * Representation of a WorkOS Profile.
  */
 class Profile extends BaseWorkOSResource
 {
     const RESOURCE_TYPE = "profile";
-    
+
     const RESOURCE_ATTRIBUTES = [
         "id",
         "email",

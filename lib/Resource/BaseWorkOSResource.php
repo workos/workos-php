@@ -4,6 +4,8 @@ namespace WorkOS\Resource;
 
 class BaseWorkOSResource
 {
+    const IS_NESTED = false;
+
     /**
      * @var array $values;
      */
@@ -32,9 +34,8 @@ class BaseWorkOSResource
         $instance->raw = $response;
         $instance->values = [];
 
-        $resouceJson = $instance->raw[static::RESOURCE_TYPE];
         foreach (static::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
-            $instance->values[$resourceKey] = $resouceJson[$responseKey];
+            $instance->values[$resourceKey] = $instance->raw[$responseKey];
         }
 
         return $instance;

@@ -14,7 +14,6 @@ class DirectorySync
         $after = null
     ) {
         $directoriesPath = "directories";
-
         $params = [
             "limit" => $limit,
             "before" => $before,
@@ -31,11 +30,13 @@ class DirectorySync
             true
         );
 
-        return [
-            $response["listMetadata"]["before"],
-            $response["listMetadata"]["after"],
-            $response["data"]
-        ];
+        $directories = [];
+        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $response) {
+            \array_push($directories, Resource\Directory::constructFromResponse($response));
+        }
+
+        return [$before, $after, $directories];
     }
 
     public function listGroups(
@@ -67,11 +68,13 @@ class DirectorySync
             true
         );
 
-        return [
-            $response["listMetadata"]["before"],
-            $response["listMetadata"]["after"],
-            $response["data"]
-        ];
+        $groups = [];
+        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $response) {
+            \array_push($groups, Resource\DirectoryGroup::constructFromResponse($response));
+        }
+
+        return [$before, $after, $groups];
     }
 
     public function listUsers(
@@ -103,11 +106,13 @@ class DirectorySync
             true
         );
 
-        return [
-            $response["listMetadata"]["before"],
-            $response["listMetadata"]["after"],
-            $response["data"]
-        ];
+        $users = [];
+        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $response) {
+            \array_push($users, Resource\DirectoryUser::constructFromResponse($response));
+        }
+
+        return [$before, $after, $users];
     }
 
     public function getUser($directory, $directoryUser)
@@ -122,6 +127,6 @@ class DirectorySync
             true
         );
 
-        return $response;
+        return Resource\DirectoryUser::constructFromResponse($response);
     }
 }

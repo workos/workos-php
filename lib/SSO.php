@@ -72,7 +72,7 @@ class SSO
         ];
         $response = Client::request(Client::METHOD_POST, $profilePath, null, $params);
 
-        return Resource\Profile::constructFromResponse($response);
+        return Resource\Profile::constructFromResponse($response[Resource\Profile::RESOURCE_TYPE]);
     }
 
     /**
