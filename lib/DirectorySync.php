@@ -2,10 +2,29 @@
 
 namespace WorkOS;
 
+/**
+ * Class DirectorySync.
+ *
+ * This class facilitates the user of WorkOS Directory Sync.
+ */
 class DirectorySync
 {
     const DEFAULT_PAGE_SIZE = 10;
-
+    
+    /**
+     * List Directories.
+     *
+     * @param null|string $domain Domain of a Directory
+     * @param null|string $search Searchable text for a Directory
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Pagination cursor to receive records before a provided ID
+     * @param null|string $after Pagination cursor to receive records after a provided ID
+     *
+     * @return array An array containing the following:
+     *      null|string Before pagination cursor
+     *      null|string After pagination cursor
+     *      array \WorkOS\Resource\Directory instances
+     */
     public function listDirectories(
         $domain = null,
         $search = null,
@@ -39,6 +58,20 @@ class DirectorySync
         return [$before, $after, $directories];
     }
 
+    /**
+     * List Directory Groups.
+     *
+     * @param null|string $directory Directory ID
+     * @param null|string $user Directory User ID
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Pagination cursor to receive records before a provided ID
+     * @param null|string $after Pagination cursor to receive records after a provided ID
+     *
+     * @return array An array containing the following:
+     *      null|string Before pagination cursor
+     *      null|string After pagination cursor
+     *      array \WorkOS\Resource\DirectoryGroup instances
+     */
     public function listGroups(
         $directory = null,
         $user = null,
@@ -77,6 +110,20 @@ class DirectorySync
         return [$before, $after, $groups];
     }
 
+    /**
+     * List Directory Users.
+     *
+     * @param null|string $directory Directory ID
+     * @param null|string $group Directory Group ID
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Pagination cursor to receive records before a provided ID
+     * @param null|string $after Pagination cursor to receive records after a provided ID
+     *
+     * @return array An array containing the following:
+     *      null|string Before pagination cursor
+     *      null|string After pagination cursor
+     *      array \WorkOS\Resource\DirectoryUser instances
+     */
     public function listUsers(
         $directory = null,
         $group = null,
@@ -115,6 +162,14 @@ class DirectorySync
         return [$before, $after, $users];
     }
 
+    /**
+     * Get a Directory User from a Directory.
+     *
+     * @param string $directory Directory ID
+     * @param string $directoryUser Directory User ID
+     *
+     * @return \WorkOS\Resource\DirectoryUser
+     */
     public function getUser($directory, $directoryUser)
     {
         $userPath = "directories/${directory}/users/${directoryUser}";
