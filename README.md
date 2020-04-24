@@ -56,3 +56,26 @@ $event = [
 
 (new \WorkOS\AuditTrail())->createEvent($event);
 ```
+
+### Directory Sync
+The WorkOS PHP SDK allow you to list configured Directories, Directory Groups and Directory Users.
+
+To list Directories:
+```php
+list($before, $after, $directories) = (new \WorkOS\DirectorySync())->listDirectories();
+```
+
+To list Directory Groups:
+```php
+list($before, $after, $groups) = (new \WorkOS\DirectorySync())->listGroups();
+```
+
+To list Directory Users:
+```php
+list($before, $after, $users) = (new \WorkOS\DirectorySync())->listUsers();
+```
+
+To get a Directory User:
+```php
+$user = (new \WorkOS\DirectorySync())->getUser("directory_id", "directory_user_id");
+```
