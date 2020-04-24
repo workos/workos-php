@@ -40,7 +40,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
         $directory = $this->directoryFixture();
 
-        [$before, $after, $directories] = $this->ds->listDirectories();
+        list($before, $after, $directories) = $this->ds->listDirectories();
         $this->assertSame($directory, $directories[0]->toArray());
     }
 
@@ -66,7 +66,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
         $group = $this->groupFixture();
 
-        [$before, $after, $groups] = $this->ds->listGroups();
+        list($before, $after, $groups) = $this->ds->listGroups();
         $this->assertSame($group, $groups[0]->toArray());
     }
 
@@ -115,7 +115,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        [$before, $after, $users] = $this->ds->listUsers();
+        list($before, $after, $users) = $this->ds->listUsers();
         $this->assertSame($user, $users[0]->toArray());
     }
 
