@@ -21,6 +21,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $path,
             null,
             null,
+            false,
             null,
             null,
             $statusCode
@@ -44,6 +45,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $path,
             null,
             null,
+            false,
             null,
             $responseHeaders,
             $statusCode
@@ -74,6 +76,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $path,
             null,
             null,
+            false,
             $result,
             null,
             $statusCode

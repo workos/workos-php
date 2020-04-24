@@ -12,19 +12,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
         
-        $now = (new \DateTime())->format(\DateTime::ISO8601);
-
-        $this->event = [
-            "group" => "organization_1",
-            "action" => "user.login",
-            "action_type" => "C",
-            "actor_name" => "user@email.com",
-            "actor_id" => "user_1",
-            "target_name" => "user@email.com",
-            "target_id" => "user_1",
-            "location" =>  "1.1.1.1",
-            "occurred_at" => $now,
-        ];
+        $this->event = $this->eventFixture();
     }
     
     public function testCreateAuditTrailEvent()
@@ -32,13 +20,13 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $this->withApiKeyAndProjectId();
 
         $path = "events";
-        $headers = ["Authorization: Bearer " . WorkOS::getApiKey()];
 
         $this->mockRequest(
             Client::METHOD_POST,
             $path,
-            $headers,
-            $this->event
+            null,
+            $this->event,
+            true
         );
 
         $this->assertTrue((new AuditTrail())->createEvent($this->event));
@@ -56,5 +44,22 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
         $this->expectException(Exception\UnexpectedValueException::class);
         (new AuditTrail())->createEvent($this->event);
+    }
+
+    // Fixtures
+
+    private function eventFixture()
+    {
+        return [
+            "group" => "organization_1",
+            "action" => "user.login",
+            "action_type" => "C",
+            "actor_name" => "user@email.com",
+            "actor_id" => "user_1",
+            "target_name" => "user@email.com",
+            "target_id" => "user_1",
+            "location" =>  "1.1.1.1",
+            "occurred_at" => (new \DateTime())->format(\DateTime::ISO8601)
+        ];
     }
 }

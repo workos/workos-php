@@ -13,6 +13,14 @@ trait TestHelper
         $this->requestClientMock = $this->createMock("\WorkOS\RequestClient\RequestClientInterface");
     }
 
+    protected function tearDown()
+    {
+        WorkOS::setApiKey(null);
+        WorkOS::setProjectId(null);
+
+        Client::setRequestClient($this->defaultRequestClient);
+    }
+
     // Configuration
 
     protected function withApiKey($apiKey = "pk_secretsauce")
@@ -38,6 +46,7 @@ trait TestHelper
         $path,
         $headers = null,
         $params = null,
+        $withAuth = false,
         $result = null,
         $responseHeaders = null,
         $responseCode = 200
@@ -46,7 +55,7 @@ trait TestHelper
 
         $url = Client::generateUrl($path);
         if (!$headers) {
-            $requestHeaders = Client::generateBaseHeaders();
+            $requestHeaders = Client::generateBaseHeaders($withAuth);
         } else {
             $requestHeaders = \array_merge(Client::generateBaseHeaders(), $headers);
         }
@@ -72,13 +81,5 @@ trait TestHelper
                 static::identicalTo($headers),
                 static::identicalTo($params)
             );
-    }
-
-    protected function tearDown()
-    {
-        WorkOS::setApiKey(null);
-        WorkOS::setProjectId(null);
-
-        Client::setRequestClient($this->defaultRequestClient);
     }
 }
