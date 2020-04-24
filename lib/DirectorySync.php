@@ -50,7 +50,7 @@ class DirectorySync
         );
 
         $directories = [];
-        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
         foreach ($response["data"] as $response) {
             \array_push($directories, Resource\Directory::constructFromResponse($response));
         }
@@ -102,7 +102,7 @@ class DirectorySync
         );
 
         $groups = [];
-        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
         foreach ($response["data"] as $response) {
             \array_push($groups, Resource\DirectoryGroup::constructFromResponse($response));
         }
@@ -154,7 +154,7 @@ class DirectorySync
         );
 
         $users = [];
-        [$before, $after] = Util\Request::parsePaginationArgs($response);
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
         foreach ($response["data"] as $response) {
             \array_push($users, Resource\DirectoryUser::constructFromResponse($response));
         }
