@@ -4,15 +4,23 @@ namespace WorkOS;
 
 class SSOTest extends \PHPUnit\Framework\TestCase
 {
-    use TestHelper;
+    use TestHelper {
+        setUp as traitSetUp;
+    }
     
+    protected function setUp()
+    {
+        $this->traitSetUp();
+
+        $this->withApiKeyAndProjectId();
+        $this->sso = new SSO();
+    }
+
     /**
      * @dataProvider authorizationUrlTestProvider
      */
     public function testAuthorizationURLExpectedParams($domain, $redirectUri, $state, $provider)
     {
-        $this->withApiKeyAndProjectId();
-
         $expectedParams = [
             "client_id" => WorkOS::getProjectId(),
             "response_type" => "code"
@@ -34,7 +42,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["provider"] = $provider;
         }
 
-        $authorizationUrl = (new SSO())->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
+        $authorizationUrl = $this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -43,8 +51,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProfileReturnsProfileWithExpectedValues()
     {
-        $this->withApiKeyAndProjectId();
-
         $code = 'code';
         $path = "sso/token";
         $params = [
@@ -54,44 +60,37 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "grant_type" => "authorization_code"
         ];
 
-        $result = "{\"profile\":{\"id\":\"prof_hen\",\"email\":\"hen@papagenos.com\",\"first_name\":\"hen\",\"last_name\":\"cha\",\"connection_type\":\"GoogleOAuth\",\"idp_id\":\"randomalphanum\"}}";
+        $result = $this->profileResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
             $path,
             null,
             $params,
+            false,
             $result
         );
 
-        $profile = (new SSO())->getProfile('code');
+        $profile = $this->sso->getProfile('code');
+        $profileFixture = $this->profileFixture();
 
-        $expected = [
-            "id" => "prof_hen",
-            "email" => "hen@papagenos.com",
-            "firstName" => "hen",
-            "lastName" => "cha",
-            "connectionType" => "GoogleOAuth",
-            "idpId" => "randomalphanum"
-        ];
-        $this->assertSame($expected, $profile->toArray());
+        $this->assertSame($profileFixture, $profile->toArray());
     }
 
     public function testPromoteDraftConnectionExpectedReturnWhenSuccessful()
     {
-        $this->withApiKeyAndProjectId();
-
         $token = 'token';
         $path = "draft_connections/${token}/activate";
-        $headers = ["Authorization: Bearer " . WorkOS::getApiKey()];
 
         $this->mockRequest(
             Client::METHOD_POST,
             $path,
-            $headers
+            null,
+            null,
+            true
         );
 
-        $this->assertTrue((new SSO())->promoteDraftConnection($token));
+        $this->assertTrue($this->sso->promoteDraftConnection($token));
     }
 
     // Providers
@@ -103,6 +102,34 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             [null, null, null, Resource\ConnectionType::GoogleOAuth],
             ["papagenos.com", "https://papagenos.com/auth/callback", null, null],
             ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null],
+        ];
+    }
+
+    // Fixtures
+
+    private function profileResponseFixture()
+    {
+        return json_encode([
+            "profile" => [
+                "id" => "prof_hen",
+                "email" => "hen@papagenos.com",
+                "first_name" => "hen",
+                "last_name" => "cha",
+                "connection_type" => "GoogleOAuth",
+                "idp_id" => "randomalphanum"
+            ]
+        ]);
+    }
+
+    private function profileFixture()
+    {
+        return [
+            "id" => "prof_hen",
+            "email" => "hen@papagenos.com",
+            "firstName" => "hen",
+            "lastName" => "cha",
+            "connectionType" => "GoogleOAuth",
+            "idpId" => "randomalphanum"
         ];
     }
 }
