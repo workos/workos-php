@@ -111,6 +111,28 @@ class DirectorySync
     }
 
     /**
+     * Get a Directory Group.
+     *
+     * @param string $directoryGroup Directory Group ID
+     *
+     * @return \WorkOS\Resource\DirectoryGroup
+     */
+    public function getGroup($directoryGroup)
+    {
+        $groupPath = "directory_groups/${directoryGroup}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $groupPath,
+            null,
+            null,
+            true
+        );
+
+        return Resource\DirectoryGroup::constructFromResponse($response);
+    }
+
+    /**
      * List Directory Users.
      *
      * @param null|string $directory Directory ID
@@ -163,7 +185,7 @@ class DirectorySync
     }
 
     /**
-     * Get a Directory User from a Directory.
+     * Get a Directory User.
      *
      * @param string $directoryUser Directory User ID
      *

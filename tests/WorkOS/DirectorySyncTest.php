@@ -44,6 +44,28 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($directory, $directories[0]->toArray());
     }
 
+    public function testGetGroup()
+    {
+        $directoryGroup = "directory_grp_id";
+        $groupPath = "directory_groups/${directoryGroup}";
+
+        $result = $this->groupResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $groupPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $group = $this->ds->getGroup($directoryGroup);
+        $groupFixture = $this->groupFixture();
+
+        $this->assertSame($groupFixture, $group->toArray());
+    }
+
     public function testListGroups()
     {
         $usersPath = "directory_groups";
@@ -169,6 +191,14 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                 "before" => null,
                 "after" => null
             ],
+        ]);
+    }
+
+    private function groupResponseFixture()
+    {
+        return json_encode([
+            "id" => "directory_grp_id",
+            "name" => "Developers"
         ]);
     }
 
