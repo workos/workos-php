@@ -165,14 +165,13 @@ class DirectorySync
     /**
      * Get a Directory User from a Directory.
      *
-     * @param string $directory Directory ID
      * @param string $directoryUser Directory User ID
      *
      * @return \WorkOS\Resource\DirectoryUser
      */
-    public function getUser($directory, $directoryUser)
+    public function getUser($directoryUser)
     {
-        $userPath = "directories/${directory}/users/${directoryUser}";
+        $userPath = "directory_users/${directoryUser}";
 
         $response = Client::request(
             Client::METHOD_GET,
