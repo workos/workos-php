@@ -72,9 +72,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUser()
     {
-        $directory = "directory_id";
         $directoryUser = "directory_usr_id";
-        $userPath = "directories/${directory}/users/${directoryUser}";
+        $userPath = "directory_users/${directoryUser}";
 
         $result = $this->userResponseFixture();
 
@@ -87,7 +86,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $user = $this->ds->getUser($directory, $directoryUser);
+        $user = $this->ds->getUser($directoryUser);
         $userFixture = $this->userFixture();
 
         $this->assertSame($userFixture, $user->toArray());
