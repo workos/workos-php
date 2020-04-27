@@ -70,6 +70,11 @@ To list Directory Groups:
 list($before, $after, $groups) = (new \WorkOS\DirectorySync())->listGroups();
 ```
 
+To get a Directory Group:
+```php
+$user = (new \WorkOS\DirectorySync())->getGroup("directory_grp_id");
+```
+
 To list Directory Users:
 ```php
 list($before, $after, $users) = (new \WorkOS\DirectorySync())->listUsers();
@@ -77,5 +82,5 @@ list($before, $after, $users) = (new \WorkOS\DirectorySync())->listUsers();
 
 To get a Directory User:
 ```php
-$user = (new \WorkOS\DirectorySync())->getUser("directory_id", "directory_user_id");
+$user = (new \WorkOS\DirectorySync())->getUser("directory_user_id");
 ```
