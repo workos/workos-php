@@ -16,9 +16,7 @@ composer require workos/workos-php
 The package will need to be configured with your [API Key](https://dashboard.workos.com/api-keys) and [Project ID](https://dashboard.workos.com/sso/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_PROJECT_ID` environment variable.
 
 ### SSO
-The package offers the following convenience functions to utilize WorkOS SSO.
-
-First we'll want to generate an OAuth 2.0 Authorization URL to initiate the SSO workflow with:
+To generate an OAuth 2.0 Authorization URL to initiate the SSO workflow with:
 
 ```php
 $url = (new \WorkOS\SSO())->getAuthorizationUrl(
@@ -29,15 +27,21 @@ $url = (new \WorkOS\SSO())->getAuthorizationUrl(
 );
 ```
 
-After directing the user to the Authorization URL and successfully completing the SSO workflow, use 
-the code passed back from WorkOS to grab the profile of the authenticated user to verify all is good:
+Using the code provided by WorkOS after going through the OAuth 2.0 workflow, grab the profile of the
+authenticated user to verify all is good:
 
 ```php
 $profile = (new \WorkOS\SSO())->getProfile($code);
 ```
 
+To create a connection using the token passed back from the WorkOS.js embed.
+
+```php
+$connection = $sso->createConnection($token);
+```
+
 ### Audit Trail
-Creating an Audit Trail event in WorkOS is as simple as running the following:
+To create an Audit Trail event in WorkOS:
 
 ```php
 $now = (new \DateTime())->format(\DateTime::ISO8601);

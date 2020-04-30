@@ -76,7 +76,7 @@ class SSO
     }
 
     /**
-     * Promote a Draft Connection created through the WorkOS.js embed.
+     * @deprecated Promote a Draft Connection created through the WorkOS.js embed.
      *
      * @param string $token Token returned by WorkOS when a Draft Connection is
      * created in the WorkOS.js.embed
@@ -89,10 +89,36 @@ class SSO
      */
     public function promoteDraftConnection($token)
     {
+        $msg = "[DEPRECATED] SSO->promoteDraftConnection is deprecated. Use SSO->createConnection instead.";
+        \trigger_error($msg, E_USER_WARNING);
+        
         $promoteDraftConnectionPath = "draft_connections/${token}/activate";
 
         Client::request(Client::METHOD_POST, $promoteDraftConnectionPath, null, null, true);
 
         return true;
+    }
+
+    /**
+     * Create a Connection.
+     *
+     * @param string $source Token returned by WorkOS as a result of the WorkOS.js embed workflow.
+     *
+     * @throws \WorkOS\Exception\GenericException if an error internal to the SDK is encountered
+     * @throws \WorkOS\Exception\ServerException if an error internal to WorkOS is encountered
+     * @throws \WorkOS\Exception\NotFoundException if a Draft Connection could not be found
+     *
+     * @return \WorkOS\Resource\Connection
+     */
+    public function createConnection($source)
+    {
+        $connectionPath = "connections";
+        $params = [
+            "source" => $source
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $connectionPath, null, $params, true);
+
+        return Resource\Connection::constructFromResponse($response);
     }
 }
