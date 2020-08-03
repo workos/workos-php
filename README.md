@@ -61,6 +61,12 @@ $event = [
 (new \WorkOS\AuditTrail())->createEvent($event);
 ```
 
+To get Audit Trail events:
+
+```php
+list($before, $after, $events) = (new \WorkOS\AuditTrail())->getEvents());
+```
+
 ### Directory Sync
 The WorkOS PHP SDK allow you to list configured Directories, Directory Groups and Directory Users.
 

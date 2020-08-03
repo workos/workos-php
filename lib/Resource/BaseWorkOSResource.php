@@ -4,8 +4,6 @@ namespace WorkOS\Resource;
 
 class BaseWorkOSResource
 {
-    const IS_NESTED = false;
-
     /**
      * @var array $values;
      */
