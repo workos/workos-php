@@ -17,12 +17,12 @@ class DirectorySync
      * @param null|string $domain Domain of a Directory
      * @param null|string $search Searchable text for a Directory
      * @param int $limit Maximum number of records to return
-     * @param null|string $before Pagination cursor to receive records before a provided ID
-     * @param null|string $after Pagination cursor to receive records after a provided ID
+     * @param null|string $before Directory ID to look before
+     * @param null|string $after Directory ID to look after
      *
      * @return array An array containing the following:
-     *      null|string Before pagination cursor
-     *      null|string After pagination cursor
+     *      null|string Directory ID to use as before cursor
+     *      null|string Directory ID to use as after cursor
      *      array \WorkOS\Resource\Directory instances
      */
     public function listDirectories(
@@ -51,8 +51,8 @@ class DirectorySync
 
         $directories = [];
         list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $response) {
-            \array_push($directories, Resource\Directory::constructFromResponse($response));
+        foreach ($response["data"] as $responseData) {
+            \array_push($directories, Resource\Directory::constructFromResponse($responseData));
         }
 
         return [$before, $after, $directories];
@@ -64,12 +64,12 @@ class DirectorySync
      * @param null|string $directory Directory ID
      * @param null|string $user Directory User ID
      * @param int $limit Maximum number of records to return
-     * @param null|string $before Pagination cursor to receive records before a provided ID
-     * @param null|string $after Pagination cursor to receive records after a provided ID
+     * @param null|string $before Directory Group ID to look before
+     * @param null|string $after Directory Group ID to look after
      *
      * @return array An array containing the following:
-     *      null|string Before pagination cursor
-     *      null|string After pagination cursor
+     *      null|string Directory Group ID to use as before cursor
+     *      null|string Directory Group ID to use as after cursor
      *      array \WorkOS\Resource\DirectoryGroup instances
      */
     public function listGroups(
@@ -138,12 +138,12 @@ class DirectorySync
      * @param null|string $directory Directory ID
      * @param null|string $group Directory Group ID
      * @param int $limit Maximum number of records to return
-     * @param null|string $before Pagination cursor to receive records before a provided ID
-     * @param null|string $after Pagination cursor to receive records after a provided ID
+     * @param null|string $before Directory User ID to look before
+     * @param null|string $after Directory User ID to look after
      *
      * @return array An array containing the following:
-     *      null|string Before pagination cursor
-     *      null|string After pagination cursor
+     *      null|string Directory User ID to use as before cursor
+     *      null|string Directory User ID to use as after cursor
      *      array \WorkOS\Resource\DirectoryUser instances
      */
     public function listUsers(
