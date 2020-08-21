@@ -7,7 +7,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     use TestHelper {
         setUp as traitSetUp;
     }
-    
+
     protected function setUp()
     {
         $this->traitSetUp();
@@ -140,7 +140,13 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "first_name" => "hen",
                 "last_name" => "cha",
                 "connection_type" => "GoogleOAuth",
-                "idp_id" => "randomalphanum"
+                "idp_id" => "randomalphanum",
+                "raw_attributes" => array(
+                    "email" => "hen@papagenos.com",
+                    "first_name" => "hen",
+                    "last_name" => "cha",
+                    "ipd_id" => "randomalphanum"
+                )
             ]
         ]);
     }
@@ -153,7 +159,13 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "firstName" => "hen",
             "lastName" => "cha",
             "connectionType" => "GoogleOAuth",
-            "idpId" => "randomalphanum"
+            "idpId" => "randomalphanum",
+            "rawAttributes" => array(
+                "email" => "hen@papagenos.com",
+                "first_name" => "hen",
+                "last_name" => "cha",
+                "ipd_id" => "randomalphanum"
+            )
         ];
     }
 
