@@ -15,7 +15,8 @@ class Profile extends BaseWorkOSResource
         "firstName",
         "lastName",
         "connectionType",
-        "idpId"
+        "idpId",
+        "rawAttributes"
     ];
 
     const RESPONSE_TO_RESOURCE_KEY = [
@@ -24,6 +25,7 @@ class Profile extends BaseWorkOSResource
         "first_name" => "firstName",
         "last_name" => "lastName",
         "connection_type" => "connectionType",
-        "idp_id" => "idpId"
+        "idp_id" => "idpId",
+        "raw_attributes" => "rawAttributes"
     ];
 }
