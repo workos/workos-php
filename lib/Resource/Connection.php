@@ -15,13 +15,19 @@ class Connection extends BaseWorkOSResource
         "status",
         "name",
         "connectionType",
-        "oauthUid",
-        "oauthSecret",
-        "oauthRedirectUri",
+        "oidcClientId",
+        "oidcClientSecret",
+        "oidcDiscoveryEndpoint",
+        "oidcRedirectUri",
         "samlEntityId",
         "samlIdpUrl",
-        "samlRelyingPartyTrustCert",
-        "samlX509Certs"
+        "samlRelyingPartyPrivateKey",
+        "samlRelyingPartyPublicKey",
+        "samlX509Certs",
+        "organizationId",
+        "oauthUid",
+        "oauthSecret",
+        "oauthRedirectUri"
     ];
 
     const RESPONSE_TO_RESOURCE_KEY = [
@@ -29,13 +35,19 @@ class Connection extends BaseWorkOSResource
         "status" => "status",
         "name" => "name",
         "connection_type" => "connectionType",
-        "oauth_uid" => "oauthUid",
-        "oauth_secret" => "oauthSecret",
-        "oauth_redirect_uri" => "oauthRedirectUri",
+        "oidc_client_id" => "oidcClientId",
+        "oidc_client_secret" => "oidcClientSecret",
+        "oidc_discovery_endpoint" => "oidcDiscoveryEndpoint",
+        "oidc_redirect_uri" => "oidcRedirectUri",
         "saml_entity_id" => "samlEntityId",
         "saml_idp_url" => "samlIdpUrl",
-        "saml_relying_party_trust_cert" => "samlRelyingPartyTrustCert",
-        "saml_x509_certs" => "samlX509Certs"
+        "saml_relying_party_private_key" => "samlRelyingPartyPrivateKey",
+        "saml_relying_party_public_key" => "samlRelyingPartyPublicKey",
+        "saml_x509_certs" => "samlX509Certs",
+        "organization_id" => "organizationId",
+        "oauth_uid" => "oauthUid",
+        "oauth_secret" => "oauthSecret",
+        "oauth_redirect_uri" => "oauthRedirectUri"
     ];
 
     public static function constructFromResponse($response)
