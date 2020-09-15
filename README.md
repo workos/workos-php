@@ -94,3 +94,11 @@ To get a Directory User:
 ```php
 $user = (new \WorkOS\DirectorySync())->getUser("directory_user_id");
 ```
+
+### Admin Portal
+The WorkOS PHP SDK allows you to list configured Organizations.
+
+To list Organizations:
+```php
+list($before, $after, $organizations) = (new \WorkOS\Portal())->listOrganizations();
+```
