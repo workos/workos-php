@@ -12,8 +12,34 @@ class PortalTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
 
-        $this->withApiKeyAndProjectId();
+        $this->withApiKey();
         $this->ap = new Portal();
+    }
+
+    public function testCreateOrganization()
+    {
+        $organizationsPath = "organizations";
+
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "name" => "Organization Name",
+            "domains" => array("example.com")
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organization = $this->organizationFixture();
+
+        $response = $this->ap->createOrganization("Organization Name", array("example.com"));
+        $this->assertSame($organization, $response->toArray());
     }
 
     public function testListOrganizations()
@@ -45,6 +71,22 @@ class PortalTest extends \PHPUnit\Framework\TestCase
 
     // Fixtures
 
+    private function createOrganizationResponseFixture()
+    {
+        return json_encode([
+            "name" => "Organization Name",
+            "object" => "organization",
+            "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "domains" => [
+                [
+                    "object" => "organization_domain",
+                    "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
+                    "domain" => "example.com"
+                ]
+            ]
+        ]);
+    }
+
     private function organizationsResponseFixture()
     {
         return json_encode([
@@ -53,12 +95,12 @@ class PortalTest extends \PHPUnit\Framework\TestCase
                 [
                 "object" => "organization",
                 "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-                "name" => "example.com",
+                "name" => "Organization Name",
                 "domains" => [
                     [
-                    "object" => "organization_domain",
-                    "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
-                    "domain" => "example.com"
+                        "object" => "organization_domain",
+                        "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
+                        "domain" => "example.com"
                     ]
                 ]
                 ],
@@ -68,9 +110,9 @@ class PortalTest extends \PHPUnit\Framework\TestCase
                 "name" => "example2.com",
                 "domains" => [
                     [
-                    "object" => "organization_domain",
-                    "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
-                    "domain" => "example2.com"
+                        "object" => "organization_domain",
+                        "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
+                        "domain" => "example2.com"
                     ]
                 ]
                 ],
@@ -80,9 +122,9 @@ class PortalTest extends \PHPUnit\Framework\TestCase
                 "name" => "example5.com",
                 "domains" => [
                     [
-                    "object" => "organization_domain",
-                    "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
-                    "domain" => "example5.com"
+                        "object" => "organization_domain",
+                        "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
+                        "domain" => "example5.com"
                     ]
                 ]
                 ]
@@ -98,12 +140,12 @@ class PortalTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-            "name" => "example.com",
+            "name" => "Organization Name",
             "domains" => [
                 [
-                "object" => "organization_domain",
-                "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
-                "domain" => "example.com"
+                    "object" => "organization_domain",
+                    "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
+                    "domain" => "example.com"
                 ]
             ]
         ];

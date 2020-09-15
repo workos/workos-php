@@ -96,9 +96,14 @@ $user = (new \WorkOS\DirectorySync())->getUser("directory_user_id");
 ```
 
 ### Admin Portal
-The WorkOS PHP SDK allows you to list configured Organizations.
+The WorkOS PHP SDK allows you to create and list configured Organizations.
 
 To list Organizations:
 ```php
 list($before, $after, $organizations) = (new \WorkOS\Portal())->listOrganizations();
+```
+
+To create an Organization:
+```php
+$organization = (new \WorkOS\Portal())->createOrganization("Organization Name", array("example.com"));
 ```

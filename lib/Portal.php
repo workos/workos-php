@@ -12,6 +12,27 @@ class Portal
     const DEFAULT_PAGE_SIZE = 10;
 
     /**
+     * Create Organization.
+     *
+     * @param string $name The name of the Organization.
+     * @param array $domains The domains of the Organization.
+     *
+     * @return \WorkOS\Resource\Organization
+     */
+    public function createOrganization($name, $domains)
+    {
+        $organizationsPath = "organizations";
+        $params = [
+            "name" => $name,
+            "domains" => $domains
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $organizationsPath, null, $params, true);
+
+        return Resource\Organization::constructFromResponse($response);
+    }
+
+    /**
      * List Organizations.
      *
      * @param null|array $domain Filter organizations to only return those that are associated with
