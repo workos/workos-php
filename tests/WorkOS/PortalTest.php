@@ -42,6 +42,33 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $response->toArray());
     }
 
+    public function testGenerateLink()
+    {
+        $generateLinkPath = "portal/generate_link";
+
+        $result = $this->generatePortalLinkFixture();
+
+        $params = [
+            "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
+            "intent" => "sso",
+            "return_url" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $generateLinkPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $expectation = "https://id.workos.com/portal/launch?secret=secret";
+
+        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "sso");
+        $this->assertSame($expectation, $response->link);
+    }
+
     public function testListOrganizations()
     {
         $organizationsPath = "organizations";
@@ -84,6 +111,13 @@ class PortalTest extends \PHPUnit\Framework\TestCase
                     "domain" => "example.com"
                 ]
             ]
+        ]);
+    }
+
+    private function generatePortalLinkFixture()
+    {
+        return json_encode([
+            "link" => "https://id.workos.com/portal/launch?secret=secret"
         ]);
     }
 
