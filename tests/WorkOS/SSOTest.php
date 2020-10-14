@@ -159,7 +159,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "email" => "hen@papagenos.com",
             "firstName" => "hen",
             "lastName" => "cha",
-            "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
+            "connectionId" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
             "connectionType" => "GoogleOAuth",
             "idpId" => "randomalphanum",
             "rawAttributes" => array(
