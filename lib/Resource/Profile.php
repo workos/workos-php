@@ -14,6 +14,7 @@ class Profile extends BaseWorkOSResource
         "email",
         "firstName",
         "lastName",
+        "connectionId",
         "connectionType",
         "idpId",
         "rawAttributes"
@@ -24,6 +25,7 @@ class Profile extends BaseWorkOSResource
         "email" => "email",
         "first_name" => "firstName",
         "last_name" => "lastName",
+        "connection_id" => "connectionId",
         "connection_type" => "connectionType",
         "idp_id" => "idpId",
         "raw_attributes" => "rawAttributes"
