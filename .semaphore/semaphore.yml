@@ -35,9 +35,10 @@ blocks:
             - php composer.phar run-script test
         - name: php 7.0
           commands:
-            - phpbrew use php-7.0
+            - phpbrew --no-progress install 7.0.33
+            - phpbrew use php-7.0.33
             - bash scripts/restore-cache-and-update-deps 70
-            - composer run-script test
+            - php composer.phar run-script test
         - name: php 7.2
           commands:
             - phpbrew use php-7.2
@@ -45,6 +46,7 @@ blocks:
             - composer run-script test
         - name: php 7.4
           commands:
-            - phpbrew use php-7.4
+            - phpbrew --no-progress install 7.4.12
+            - phpbrew use php-7.4.12
             - bash scripts/restore-cache-and-update-deps 74
-            - composer run-script test
+            - php composer.phar run-script test
