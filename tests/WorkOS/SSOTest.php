@@ -77,22 +77,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($profileFixture, $profile->toArray());
     }
 
-    public function testPromoteDraftConnectionExpectedReturnWhenSuccessful()
-    {
-        $token = 'token';
-        $path = "draft_connections/${token}/activate";
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $path,
-            null,
-            null,
-            true
-        );
-
-        $this->assertTrue(@$this->sso->promoteDraftConnection($token));
-    }
-
     public function testCreateConnectionReturnsConnectionWithExpectedValues()
     {
         $source = "source";
