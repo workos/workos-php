@@ -221,8 +221,8 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
             "id" => "evt_123",
             "action" => [
                 "id" => "evt_action_123",
+                "environmentId" => "environment_123",
                 "name" => "user.login",
-                "projectId" => "project_123",
             ],
             "group" => "organization_1",
             "location" => "1.1.1.1",
@@ -252,8 +252,8 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
                     "longitude" => null,
                     "action" => [
                         "id" => "evt_action_123",
+                        "environment_id" => "environment_123",
                         "name" => "user.login",
-                        "project_id" => "project_123",
                     ],
                     "type" => "C",
                     "actor_name" => "user@email.com",

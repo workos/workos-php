@@ -11,13 +11,13 @@ class EventAction extends BaseWorkOSResource
 
     const RESOURCE_ATTRIBUTES = [
         "id",
-        "name",
-        "projectId"
+        "environmentId",
+        "name"
     ];
 
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
-        "name" => "name",
-        "project_id" => "projectId"
+        "environment_id" => "environmentId",
+        "name" => "name"
     ];
 }
