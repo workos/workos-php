@@ -22,7 +22,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testAuthorizationURLExpectedParams($domain, $redirectUri, $state, $provider)
     {
         $expectedParams = [
-            "client_id" => WorkOS::getProjectId(),
+            "client_id" => @WorkOS::getProjectId(),
             "response_type" => "code"
         ];
 
@@ -42,7 +42,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["provider"] = $provider;
         }
 
-        $authorizationUrl = $this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
+        $authorizationUrl = @$this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -54,7 +54,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $code = 'code';
         $path = "sso/token";
         $params = [
-            "client_id" => WorkOS::getProjectId(),
+            "client_id" => @WorkOS::getProjectId(),
             "client_secret" => WorkOS::getApikey(),
             "code" => $code,
             "grant_type" => "authorization_code"
@@ -71,7 +71,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profile = $this->sso->getProfile('code');
+        $profile = @$this->sso->getProfile('code');
         $profileFixture = $this->profileFixture();
 
         $this->assertSame($profileFixture, $profile->toArray());

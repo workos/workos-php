@@ -16,7 +16,8 @@ trait TestHelper
     protected function tearDown()
     {
         WorkOS::setApiKey(null);
-        WorkOS::setProjectId(null);
+        WorkOS::setClientId(null);
+        @WorkOS::setProjectId(null);
 
         Client::setRequestClient($this->defaultRequestClient);
     }
@@ -28,15 +29,16 @@ trait TestHelper
         WorkOS::setApiKey($apiKey);
     }
 
-    protected function withProjectId($projectId = "project_pizza")
+    protected function withApiKeyAndClientId($apiKey = "pk_secretsauce", $projectId = "client_pizza")
     {
-        WorkOS::setProjectId($projectId);
+        WorkOS::setApiKey($apiKey);
+        WorkOS::setClientId($projectId);
     }
 
     protected function withApiKeyAndProjectId($apiKey = "pk_secretsauce", $projectId = "project_pizza")
     {
         WorkOS::setApiKey($apiKey);
-        WorkOS::setProjectId($projectId);
+        @WorkOS::setProjectId($projectId);
     }
 
     // Requests
