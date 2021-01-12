@@ -15,6 +15,11 @@ class WorkOS
     private static $apiKey = null;
 
     /**
+     * @var null|string WorkOS Client ID
+     */
+    private static $clientId = null;
+
+    /**
      * @var null|string WorkOS Project ID
      */
     private static $projectId = null;
@@ -61,20 +66,55 @@ class WorkOS
     }
 
     /**
+     * @return null|string WorkOS Client ID
+     */
+    public static function getClientId()
+    {
+        if (isset(self::$clientId)) {
+            return self::$clientId;
+        }
+
+        if (getenv("WORKOS_CLIENT_ID")) {
+            self::$clientId = getenv("WORKOS_CLIENT_ID");
+            return self::$clientId;
+        }
+
+        $msg = "\$clientId is required";
+        throw new \WorkOS\Exception\ConfigurationException($msg);
+    }
+
+    /**
+     * @param string $clientId WorkOS Client ID
+     */
+    public static function setClientId($clientId)
+    {
+        self::$clientId = $clientId;
+    }
+
+    /**
+     * @deprecated
+     * 
      * @return null|string WorkOS Project ID
      */
     public static function getProjectId()
     {
         if (isset(self::$projectId)) {
+            $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
+            \trigger_error($msg, E_USER_WARNING);
+
             return self::$projectId;
         }
 
         if (getenv("WORKOS_PROJECT_ID")) {
+            $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
+            \trigger_error($msg, E_USER_WARNING);
+
             self::$projectId = getenv("WORKOS_PROJECT_ID");
+
             return self::$projectId;
         }
 
-        $msg = "\$projectId is required";
+        $msg = "\$clientId is required";
         throw new \WorkOS\Exception\ConfigurationException($msg);
     }
 
@@ -83,6 +123,9 @@ class WorkOS
      */
     public static function setProjectId($projectId)
     {
+        $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
+        \trigger_error($msg, E_USER_WARNING);
+
         self::$projectId = $projectId;
     }
 
