@@ -11,23 +11,23 @@ class Directory extends BaseWorkOSResource
 
     const RESOURCE_ATTRIBUTES = [
         "id",
+        "environmentId",
         "externalKey",
         "state",
         "type",
         "name",
         "bearerToken",
-        "projectId",
         "domain"
     ];
 
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
+        "environment_id" => "environmentId",
         "external_key" => "externalKey",
         "state" => "state",
         "type" => "type",
         "name" => "name",
         "bearer_token" => "bearerToken",
-        "project_id" => "projectId",
         "domain" => "domain"
     ];
 }
