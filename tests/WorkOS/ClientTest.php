@@ -11,7 +11,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testClientThrowsRequestExceptions($statusCode, $exceptionClass)
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $path = "some/place";
 
@@ -35,7 +35,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testClientThrowsRequestExceptionsIncludeRequestId($statusCode, $exceptionClass)
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $path = "some/place";
         $responseHeaders = ["x-request-id" => "123yocheckme"];
@@ -66,7 +66,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testClientThrowsRequestExceptionsWithBadMessage($statusCode, $exceptionClass)
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $path = "some/place";
         $result = "thisaintjson";

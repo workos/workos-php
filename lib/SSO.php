@@ -29,10 +29,17 @@ class SSO
             throw new Exception\UnexpectedValueException($msg);
         }
 
-        $params = [
-            "client_id" => WorkOS::getProjectId(),
-            "response_type" => "code"
-        ];
+        try {
+            $params = [
+                "client_id" => WorkOS::getClientId(),
+                "response_type" => "code"
+            ];
+        } catch (\WorkOS\Exception\ConfigurationException $e) {
+            $params = [
+                "client_id" => WorkOS::getProjectId(),
+                "response_type" => "code"
+            ];
+        }
 
         if ($domain) {
             $params["domain"] = $domain;
@@ -64,12 +71,22 @@ class SSO
     {
         $profilePath = "sso/token";
 
-        $params = [
-            "client_id" => WorkOS::getProjectId(),
-            "client_secret" => WorkOS::getApikey(),
-            "code" => $code,
-            "grant_type" => "authorization_code"
-        ];
+        try {
+            $params = [
+                "client_id" => WorkOS::getClientId(),
+                "client_secret" => WorkOS::getApikey(),
+                "code" => $code,
+                "grant_type" => "authorization_code"
+            ];
+        } catch (\WorkOS\Exception\ConfigurationException $e) {
+            $params = [
+                "client_id" => WorkOS::getProjectId(),
+                "client_secret" => WorkOS::getApikey(),
+                "code" => $code,
+                "grant_type" => "authorization_code"
+            ];
+        }
+        
         $response = Client::request(Client::METHOD_POST, $profilePath, null, $params);
 
         return Resource\Profile::constructFromResponse($response[Resource\Profile::RESOURCE_TYPE]);

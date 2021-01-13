@@ -17,7 +17,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
     
     public function testCreateAuditTrailEvent()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $path = "events";
         
@@ -36,7 +36,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateAuditTrailEventFailsWithTooMuchMetadata()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $eventFixture = $this->eventFixture();
         $eventFixture["metadata"] = \array_pad(
@@ -51,7 +51,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEvents()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $eventsPath = "events";
 
@@ -79,7 +79,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEventsCorrectlyIncludesOccurredAtFilter()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $eventsPath = "events";
 
@@ -120,7 +120,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEventsCorrectlyIncludesOccurredAtGte()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $eventsPath = "events";
 
@@ -159,7 +159,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEventsCorrectlyIncludesOccurredAtLte()
     {
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
 
         $eventsPath = "events";
 
