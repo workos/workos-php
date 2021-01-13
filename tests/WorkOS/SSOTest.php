@@ -42,7 +42,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["provider"] = $provider;
         }
 
-        $authorizationUrl = @$this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
+        $authorizationUrl = $this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -71,7 +71,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profile = @$this->sso->getProfile('code');
+        $profile = $this->sso->getProfile('code');
         $profileFixture = $this->profileFixture();
 
         $this->assertSame($profileFixture, $profile->toArray());

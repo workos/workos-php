@@ -93,7 +93,7 @@ class WorkOS
 
     /**
      * @deprecated
-     * 
+     *
      * @return null|string WorkOS Project ID
      */
     public static function getProjectId()
