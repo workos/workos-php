@@ -12,7 +12,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
 
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
         $this->ds = new DirectorySync();
     }
 

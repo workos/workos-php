@@ -12,7 +12,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
 
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
         $this->sso = new SSO();
     }
 
@@ -22,7 +22,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testAuthorizationURLExpectedParams($domain, $redirectUri, $state, $provider)
     {
         $expectedParams = [
-            "client_id" => @WorkOS::getProjectId(),
+            "client_id" => WorkOS::getClientId(),
             "response_type" => "code"
         ];
 
@@ -54,7 +54,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $code = 'code';
         $path = "sso/token";
         $params = [
-            "client_id" => @WorkOS::getProjectId(),
+            "client_id" => WorkOS::getClientId(),
             "client_secret" => WorkOS::getApikey(),
             "code" => $code,
             "grant_type" => "authorization_code"

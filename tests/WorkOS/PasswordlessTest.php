@@ -12,7 +12,7 @@ class PasswordlessTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
 
-        $this->withApiKeyAndProjectId();
+        $this->withApiKeyAndClientId();
         $this->passwordless = new Passwordless();
     }
 

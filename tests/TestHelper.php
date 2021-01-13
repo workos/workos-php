@@ -35,12 +35,6 @@ trait TestHelper
         WorkOS::setClientId($projectId);
     }
 
-    protected function withApiKeyAndProjectId($apiKey = "pk_secretsauce", $projectId = "project_pizza")
-    {
-        WorkOS::setApiKey($apiKey);
-        @WorkOS::setProjectId($projectId);
-    }
-
     // Requests
 
     protected function mockRequest(
