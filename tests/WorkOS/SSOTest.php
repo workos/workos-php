@@ -101,6 +101,34 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($connectionFixture, $connection->toArray());
     }
 
+    public function testListConnections()
+    {
+        $connectionsPath = "connections";
+        $params = [
+            "limit" => SSO::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domain" => null,
+            "connection_type" => null
+        ];
+
+        $result = $this->connectionsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $connectionsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $connection = $this->connectionFixture();
+
+        list($before, $after, $connections) = $this->sso->listConnections();
+        $this->assertSame($connection, $connections[0]->toArray());
+    }
+
     // Providers
 
     public function authorizationUrlTestProvider()
@@ -211,7 +239,44 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "organizationId" => "org_1234",
             "oauthUid" => "oauthuid",
             "oauthSecret" => "oauthsecret",
-            "oauthRedirectUri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
+            "oauthRedirectUri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback"
         ];
+    }
+
+    private function connectionsResponseFixture()
+    {
+        return json_encode([
+            "data" => [
+                [
+                    "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+                    "domains" => [
+                        [
+                          "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
+                          "domain" => "workos.com"
+                        ]
+                    ],
+                    "status" => "linked",
+                    "name" => "Google OAuth 2.0",
+                    "connection_type" => "GoogleOAuth",
+                    "oidc_client_id" => null,
+                    "oidc_client_secret" => null,
+                    "oidc_discovery_endpoint" => null,
+                    "oidc_redirect_uri" => null,
+                    "saml_entity_id" => null,
+                    "saml_idp_url" => null,
+                    "saml_relying_party_private_key" => null,
+                    "saml_relying_party_public_key" => null,
+                    "saml_x509_certs" => null,
+                    "organization_id" => "org_1234",
+                    "oauth_uid" => "oauthuid",
+                    "oauth_secret" => "oauthsecret",
+                    "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
+                ]
+            ],
+            "listMetadata" => [
+                "before" => null,
+                "after" => null
+            ],
+        ]);
     }
 }
