@@ -264,7 +264,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "oauthRedirectUri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback"
         ];
     }
-<<<<<<< HEAD
 
     private function connectionResponseFixture()
     {
@@ -295,8 +294,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
     }
-||||||| ce6ca7f
-=======
 
     private function connectionsResponseFixture()
     {
@@ -334,5 +331,4 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             ],
         ]);
     }
->>>>>>> master
 }
