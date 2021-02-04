@@ -136,4 +136,53 @@ class SSO
 
         return Resource\Connection::constructFromResponse($response);
     }
+
+    const DEFAULT_PAGE_SIZE = 10;
+
+    /**
+     * List Connections.
+     *
+     * @param null|string $domain Domain of a Connection
+     * @param null|\WorkOS\Resource\ConnectionType $connectionType Authentication service provider descriptor
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Connection ID to look before
+     * @param null|string $after Connection ID to look after
+     *
+     * @return array An array containing the following:
+     *      null|string Connection ID to use as before cursor
+     *      null|string Connection ID to use as after cursor
+     *      array \WorkOS\Resource\Connection instances
+     */
+    public function listConnections(
+        $domain = null,
+        $connectionType = null,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null
+    ) {
+        $connectionsPath = "connections";
+        $params = [
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "domain" => $domain,
+            "connection_type" => $connectionType
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $connectionsPath,
+            null,
+            $params,
+            true
+        );
+
+        $connections = [];
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $responseData) {
+            \array_push($connections, Resource\Connection::constructFromResponse($responseData));
+        }
+
+        return [$before, $after, $connections];
+    }
 }
