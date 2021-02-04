@@ -101,6 +101,28 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($connectionFixture, $connection->toArray());
     }
 
+    public function testGetConnection()
+    {
+        $connection = "connection_id";
+        $connectionPath = "connections/${connection}";
+
+        $result = $this->connectionResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $connectionPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $connection = $this->sso->getConnection($connection);
+        $connectionFixture = $this->connectionFixture();
+
+        $this->assertSame($connectionFixture, $connection->toArray());
+    }
+
     public function testListConnections()
     {
         $connectionsPath = "connections";
@@ -241,6 +263,36 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "oauthSecret" => "oauthsecret",
             "oauthRedirectUri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback"
         ];
+    }
+
+    private function connectionResponseFixture()
+    {
+        return json_encode([
+            "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+            "status" => "linked",
+            "name" => "Google OAuth 2.0",
+            "connection_type" => "GoogleOAuth",
+            "oidc_client_id" => null,
+            "oidc_client_secret" => null,
+            "oidc_discovery_endpoint" => null,
+            "oidc_redirect_uri" => null,
+            "saml_entity_id" => null,
+            "saml_idp_url" => null,
+            "saml_relying_party_private_key" => null,
+            "saml_relying_party_public_key" => null,
+            "saml_x509_certs" => null,
+            "organization_id" => "org_1234",
+            "oauth_uid" => "oauthuid",
+            "oauth_secret" => "oauthsecret",
+            "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
+            "domains" => [
+                [
+                    "object" => "connection_domain",
+                    "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
+                    "domain" => "workos.com"
+                ]
+            ]
+        ]);
     }
 
     private function connectionsResponseFixture()

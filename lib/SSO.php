@@ -115,6 +115,28 @@ class SSO
         return Resource\Connection::constructFromResponse($response);
     }
 
+    /**
+     * Get a Connection.
+     *
+     * @param string $connection Connection ID
+     *
+     * @return \WorkOS\Resource\Connection
+     */
+    public function getConnection($connection)
+    {
+        $connectionPath = "connections/${connection}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $connectionPath,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Connection::constructFromResponse($response);
+    }
+
     const DEFAULT_PAGE_SIZE = 10;
 
     /**
