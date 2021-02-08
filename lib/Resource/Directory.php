@@ -16,7 +16,6 @@ class Directory extends BaseWorkOSResource
         "state",
         "type",
         "name",
-        "bearerToken",
         "domain"
     ];
 
@@ -27,7 +26,6 @@ class Directory extends BaseWorkOSResource
         "state" => "state",
         "type" => "type",
         "name" => "name",
-        "bearer_token" => "bearerToken",
         "domain" => "domain"
     ];
 }
