@@ -173,7 +173,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "state" => "linked",
             "type" => "gsuite directory",
             "name" => "Ri Jeong Hyeok",
-            "bearerToken" => null,
             "domain" => "crashlandingonyou.com",
         ];
     }
