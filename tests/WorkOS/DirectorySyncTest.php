@@ -219,6 +219,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "data" => [
                 [
                     "username" => "yoon@seri.com",
+                    "state" => "active",
                     "last_name" => "Seri",
                     "first_name" => "Yoon",
                     "emails" => [
@@ -264,6 +265,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "username" => "yoon@seri.com",
+            "state" => "active",
             "last_name" => "Seri",
             "first_name" => "Yoon",
             "emails" => [
@@ -342,7 +344,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
             "username" => "yoon@seri.com",
-            "lastName" => "Seri"
+            "lastName" => "Seri",
+            "state" => "active"
         ];
     }
 }
