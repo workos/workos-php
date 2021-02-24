@@ -11,6 +11,7 @@ class Client
 {
     const METHOD_GET = "get";
     const METHOD_POST = "post";
+    const METHOD_DELETE = "delete";
 
     private static $_requestClient;
 

@@ -151,6 +151,27 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($connection, $connections[0]->toArray());
     }
 
+    public function testDeleteConnection()
+    {
+        $connection = "connection_id";
+        $connectionPath = "connections/${connection}";
+        $responseCode = 204;
+
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $connectionPath,
+            null,
+            null,
+            true,
+            null,
+            null,
+            $responseCode
+        );
+
+        $response = $this->sso->deleteConnection($connection);
+        $this->assertSame(204, $responseCode);
+    }
+
     // Providers
 
     public function authorizationUrlTestProvider()

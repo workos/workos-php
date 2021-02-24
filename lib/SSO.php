@@ -120,7 +120,7 @@ class SSO
      *
      * @param string $connection Connection ID
      *
-     * @return \WorkOS\Resource\Connection
+     * @return \WorkOS\Resource\Response
      */
     public function deleteConnection($connection)
     {
@@ -134,7 +134,7 @@ class SSO
             true
         );
 
-        return Resource\Connection::constructFromResponse($response);
+        return $response;
     }
 
     /**
