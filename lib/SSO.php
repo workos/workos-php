@@ -144,6 +144,7 @@ class SSO
      *
      * @param null|string $domain Domain of a Connection
      * @param null|\WorkOS\Resource\ConnectionType $connectionType Authentication service provider descriptor
+     * @param null|string $organizationId Organization ID of the Connection(s)
      * @param int $limit Maximum number of records to return
      * @param null|string $before Connection ID to look before
      * @param null|string $after Connection ID to look after
@@ -156,6 +157,7 @@ class SSO
     public function listConnections(
         $domain = null,
         $connectionType = null,
+        $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
         $after = null
