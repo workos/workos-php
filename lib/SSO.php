@@ -116,6 +116,28 @@ class SSO
     }
 
     /**
+     * Delete a Connection.
+     *
+     * @param string $connection Connection ID
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteConnection($connection)
+    {
+        $connectionPath = "connections/${connection}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $connectionPath,
+            null,
+            null,
+            true
+        );
+
+        return $response;
+    }
+
+    /**
      * Get a Connection.
      *
      * @param string $connection Connection ID
