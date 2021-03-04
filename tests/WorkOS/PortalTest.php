@@ -42,7 +42,7 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $response->toArray());
     }
 
-    public function testGenerateLink()
+    public function testGenerateLinkSSO()
     {
         $generateLinkPath = "portal/generate_link";
 
@@ -66,6 +66,33 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $expectation = "https://id.workos.com/portal/launch?secret=secret";
 
         $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "sso");
+        $this->assertSame($expectation, $response->link);
+    }
+
+    public function testGenerateLinkDSync()
+    {
+        $generateLinkPath = "portal/generate_link";
+
+        $result = $this->generatePortalLinkFixture();
+
+        $params = [
+            "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
+            "intent" => "dsync",
+            "return_url" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $generateLinkPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $expectation = "https://id.workos.com/portal/launch?secret=secret";
+
+        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "dsync");
         $this->assertSame($expectation, $response->link);
     }
 
