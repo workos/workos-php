@@ -36,7 +36,7 @@ class Portal
      * Generate a Portal Link scoped to an Organization.
      *
      * @param string $organization An Organization identifier.
-     * @param string $intent The intent of the Admin Portal. Possible values are ["sso"].
+     * @param string $intent The intent of the Admin Portal. Possible values are ["sso", "dsync"].
      * @param null|string $returnUrl The URL to which WorkOS should send users when they click on
      *      the link to return to your website. (Optional).
      *
