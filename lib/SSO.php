@@ -16,15 +16,16 @@ class SSO
      * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
+     * @param null|string $connection Unique identifier for a WorkOS Connection
      *
      * @return string
      */
-    public function getAuthorizationUrl($domain, $redirectUri, $state, $provider)
+    public function getAuthorizationUrl($domain, $redirectUri, $state, $provider, $connection)
     {
         $authorizationPath = "sso/authorize";
 
-        if (!isset($domain) && !isset($provider)) {
-            $msg = "Either \$domain or \$provider is required";
+        if (!isset($domain) && !isset($provider) && !isset($connection)) {
+            $msg = "Either \$domain, \$provider, or \$connection is required";
 
             throw new Exception\UnexpectedValueException($msg);
         }
@@ -55,6 +56,10 @@ class SSO
 
         if ($provider) {
             $params["provider"] = $provider;
+        }
+
+        if ($connection) {
+            $params["connection"] = $connection;
         }
 
         return Client::generateUrl($authorizationPath, $params);
