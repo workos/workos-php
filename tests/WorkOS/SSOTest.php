@@ -19,7 +19,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider authorizationUrlTestProvider
      */
-    public function testAuthorizationURLExpectedParams($domain, $redirectUri, $state, $provider)
+    public function testAuthorizationURLExpectedParams($domain, $redirectUri, $state, $provider, $connection)
     {
         $expectedParams = [
             "client_id" => WorkOS::getClientId(),
@@ -42,7 +42,11 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["provider"] = $provider;
         }
 
-        $authorizationUrl = $this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider);
+        if ($connection) {
+            $expectedParams["connection"] = $connection;
+        }
+
+        $authorizationUrl = $this->sso->getAuthorizationUrl($domain, $redirectUri, $state, $provider, $connection);
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -177,10 +181,11 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function authorizationUrlTestProvider()
     {
         return [
-            ["papagenos.com", null, null, null],
-            [null, null, null, Resource\ConnectionType::GoogleOAuth],
-            ["papagenos.com", "https://papagenos.com/auth/callback", null, null],
-            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null],
+            ["papagenos.com", null, null, null, null],
+            [null, null, null, Resource\ConnectionType::GoogleOAuth, null],
+            ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
+            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null],
+            [null, null, null, null, "connection_123"],
         ];
     }
 
