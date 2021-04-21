@@ -157,7 +157,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             $responseCode
         );
 
-        $response = $this->sso->deleteConnection($connection);
+        $response = $this->ds->deleteDirectory($directory);
         $this->assertSame(204, $responseCode);
     }
 
