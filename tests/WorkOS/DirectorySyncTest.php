@@ -140,6 +140,28 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $users[0]->toArray());
     }
 
+    public function testDeleteDirectory()
+    {
+        $directory = "directory_id";
+        $directoryPath = "directories/${directory}";
+        $responseCode = 204;
+
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $directoryPath,
+            null,
+            null,
+            true,
+            null,
+            null,
+            $responseCode
+        );
+
+        $response = $this->sso->deleteConnection($connection);
+        $this->assertSame(204, $responseCode);
+    }
+
+
     // Fixtures
 
     private function directoriesResponseFixture()
@@ -176,7 +198,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "domain" => "crashlandingonyou.com",
         ];
     }
-    
+
     private function groupsResponseFixture()
     {
         return json_encode([
@@ -260,7 +282,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
     }
-    
+
     private function userResponseFixture()
     {
         return json_encode([
