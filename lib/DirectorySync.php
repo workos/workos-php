@@ -10,7 +10,7 @@ namespace WorkOS;
 class DirectorySync
 {
     const DEFAULT_PAGE_SIZE = 10;
-    
+
     /**
      * List Directories.
      *
@@ -204,5 +204,27 @@ class DirectorySync
         );
 
         return Resource\DirectoryUser::constructFromResponse($response);
+    }
+
+    /**
+     * Delete a Connection.
+     *
+     * @param string $directory Connection ID
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteDirectory($directory)
+    {
+        $directoryPath = "directories/${directory}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $directoryPath,
+            null,
+            null,
+            true
+        );
+
+        return $response;
     }
 }
