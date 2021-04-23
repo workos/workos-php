@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkOs\Util;
+namespace WorkOS\Util;
 
 class Request
 {
