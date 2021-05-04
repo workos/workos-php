@@ -46,14 +46,14 @@ class CurlRequestClient implements RequestClientInterface
 
             case \WorkOS\CLIENT::METHOD_DELETE:
 
-              $opts[\CURLOPT_CUSTOMREQUEST] = 'DELETE';
+                $opts[\CURLOPT_CUSTOMREQUEST] = 'DELETE';
 
-              if (\count($params) > 0) {
-                $encoded = Util\Util::encodeParameters($params);
-                $absUrl = "{$absUrl}?{$encoded}";
-              }
+                if (\count($params) > 0) {
+                    $encoded = Util\Util::encodeParameters($params);
+                    $absUrl = "{$absUrl}?{$encoded}";
+                }
+
                 break;
-
 
         }
 
