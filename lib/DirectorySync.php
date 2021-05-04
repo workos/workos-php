@@ -225,6 +225,6 @@ class DirectorySync
             true
         );
 
-        return $response;
+            return $response;
     }
 }
