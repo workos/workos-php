@@ -35,14 +35,26 @@ class CurlRequestClient implements RequestClientInterface
 
             case \WorkOS\CLIENT::METHOD_POST:
                 \array_push($headers, "Content-Type: application/json");
-                
+
                 $opts[\CURLOPT_POST] = 1;
 
                 if (!empty($params)) {
                     $opts[\CURLOPT_POSTFIELDS] = \json_encode($params);
                 }
-                
+
                 break;
+
+            case \WorkOS\CLIENT::METHOD_DELETE:
+
+                $opts[\CURLOPT_CUSTOMREQUEST] = 'DELETE';
+
+                if (\count($params) > 0) {
+                    $encoded = Util\Util::encodeParameters($params);
+                    $absUrl = "{$absUrl}?{$encoded}";
+                }
+
+                break;
+
         }
 
         $opts[\CURLOPT_HTTPHEADER] = $headers;
@@ -68,7 +80,7 @@ class CurlRequestClient implements RequestClientInterface
         };
         $opts[\CURLOPT_HEADERFUNCTION] = $headerCallback;
         \curl_setopt_array($curl, $opts);
-            
+
         $result = \curl_exec($curl);
 
         // I think this is for some sort of internal error
