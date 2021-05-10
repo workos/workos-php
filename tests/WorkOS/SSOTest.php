@@ -236,7 +236,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "connection",
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
-            "state" => "active"
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connection_type" => "GoogleOAuth",
