@@ -236,10 +236,23 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "connection",
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+            "state" => "active"
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connection_type" => "GoogleOAuth",
+            "oidc_client_id" => null,
+            "oidc_client_secret" => null,
+            "oidc_discovery_endpoint" => null,
+            "oidc_redirect_uri" => null,
+            "saml_entity_id" => null,
+            "saml_idp_url" => null,
+            "saml_relying_party_private_key" => null,
+            "saml_relying_party_public_key" => null,
+            "saml_x509_certs" => null,
             "organization_id" => "org_1234",
+            "oauth_uid" => "oauthuid",
+            "oauth_secret" => "oauthsecret",
+            "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
             "domains" => [
                 [
                     "object" => "connection_domain",
@@ -260,10 +273,23 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "domain" => "workos.com"
               ]
             ],
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connectionType" => "GoogleOAuth",
+            "oidcClientId" => null,
+            "oidcClientSecret" => null,
+            "oidcDiscoveryEndpoint" => null,
+            "oidcRedirectUri" => null,
+            "samlEntityId" => null,
+            "samlIdpUrl" => null,
+            "samlRelyingPartyPrivateKey" => null,
+            "samlRelyingPartyPublicKey" => null,
+            "samlX509Certs" => null,
             "organizationId" => "org_1234",
+            "oauthUid" => "oauthuid",
+            "oauthSecret" => "oauthsecret",
+            "oauthRedirectUri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback"
         ];
     }
 
@@ -271,10 +297,23 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connection_type" => "GoogleOAuth",
+            "oidc_client_id" => null,
+            "oidc_client_secret" => null,
+            "oidc_discovery_endpoint" => null,
+            "oidc_redirect_uri" => null,
+            "saml_entity_id" => null,
+            "saml_idp_url" => null,
+            "saml_relying_party_private_key" => null,
+            "saml_relying_party_public_key" => null,
+            "saml_x509_certs" => null,
             "organization_id" => "org_1234",
+            "oauth_uid" => "oauthuid",
+            "oauth_secret" => "oauthsecret",
+            "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
             "domains" => [
                 [
                     "object" => "connection_domain",
@@ -297,6 +336,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                           "domain" => "workos.com"
                         ]
                     ],
+                    "state" => "active",
                     "status" => "linked",
                     "name" => "Google OAuth 2.0",
                     "connection_type" => "GoogleOAuth",

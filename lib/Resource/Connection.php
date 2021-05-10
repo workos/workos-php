@@ -12,6 +12,7 @@ class Connection extends BaseWorkOSResource
     const RESOURCE_ATTRIBUTES = [
         "id",
         "domains",
+        "state",
         "status",
         "name",
         "connectionType",
@@ -20,6 +21,7 @@ class Connection extends BaseWorkOSResource
 
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
+        "state" => "state",
         "status" => "status",
         "name" => "name",
         "connection_type" => "connectionType",
