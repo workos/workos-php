@@ -12,6 +12,7 @@ class Client
     const METHOD_GET = "get";
     const METHOD_POST = "post";
     const METHOD_DELETE = "delete";
+    const METHOD_PUT = "put";
 
     private static $_requestClient;
 
@@ -53,7 +54,7 @@ class Client
         if ($headers) {
             $requestHeaders = \array_merge($requestHeaders, $headers);
         }
-        
+
         list($result, $responseHeaders, $responseCode) = self::requestClient()->request(
             $method,
             $url,

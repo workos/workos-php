@@ -100,4 +100,26 @@ class Portal
 
         return [$before, $after, $organizations];
     }
+
+    /**
+     * Update Organization.
+     *
+     * @param string $organization An Organization identifier.
+     * @param array $domains The domains of the Organization.
+     * @param string $name The name of the Organization.
+     */
+
+    public function updateOrganization($organization, $domains, $name)
+    {
+        $organizationsPath = "organizations/{$organization}";
+        $params = [
+          "organization" => $organization,
+          "domains" => $domains,
+          "name" => $name
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
+
+        return Resource\Organization::constructFromResponse($response);
+    }
 }

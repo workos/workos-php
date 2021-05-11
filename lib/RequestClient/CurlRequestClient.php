@@ -55,6 +55,19 @@ class CurlRequestClient implements RequestClientInterface
 
                 break;
 
+              case \WorkOS\CLIENT::METHOD_PUT:
+
+                \array_push($headers, "Content-Type: application/json");
+
+                $opts[\CURLOPT_CUSTOMREQUEST] = 'PUT';
+
+                $opts[\CURLOPT_POST] = 1;
+
+                if (!empty($params)) {
+                    $opts[\CURLOPT_POSTFIELDS] = \json_encode($params);
+                }
+
+                break;
         }
 
         $opts[\CURLOPT_HTTPHEADER] = $headers;
