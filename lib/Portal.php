@@ -111,17 +111,15 @@ class Portal
 
     public function updateOrganization($organization, $domains, $name)
     {
-
-      $organizationsPath = "organizations/{$organization}";
-      $params = [
+        $organizationsPath = "organizations/{$organization}";
+        $params = [
           "organization" => $organization,
           "domains" => $domains,
           "name" => $name
         ];
 
+        $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
 
-      $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
-
-      return Resource\Organization::constructFromResponse($response);
+        return Resource\Organization::constructFromResponse($response);
     }
 }
