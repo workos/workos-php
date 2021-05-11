@@ -236,6 +236,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "connection",
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connection_type" => "GoogleOAuth",
@@ -260,6 +261,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "domain" => "workos.com"
               ]
             ],
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connectionType" => "GoogleOAuth",
@@ -271,6 +273,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
+            "state" => "active",
             "status" => "linked",
             "name" => "Google OAuth 2.0",
             "connection_type" => "GoogleOAuth",
@@ -297,6 +300,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                           "domain" => "workos.com"
                         ]
                     ],
+                    "state" => "active",
                     "status" => "linked",
                     "name" => "Google OAuth 2.0",
                     "connection_type" => "GoogleOAuth",
