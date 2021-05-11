@@ -48,7 +48,7 @@ class CurlRequestClient implements RequestClientInterface
 
                 $opts[\CURLOPT_CUSTOMREQUEST] = 'DELETE';
 
-                if (\count($params) > 0) {
+                if (!empty($params)) {
                     $encoded = Util\Util::encodeParameters($params);
                     $absUrl = "{$absUrl}?{$encoded}";
                 }
