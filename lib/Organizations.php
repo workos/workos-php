@@ -3,7 +3,7 @@
 namespace WorkOS;
 
 /**
- * Class Portal.
+ * Class Organizations.
  *
  * This class facilitates the use of operations on WorkOS Organizations.
  */
