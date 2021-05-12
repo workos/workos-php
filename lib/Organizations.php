@@ -98,4 +98,21 @@ class Organizations
 
         return Resource\Organization::constructFromResponse($response);
     }
+
+    /**
+     * Get a Directory Group.
+     *
+     * @param string $organization WorkOS organization ID
+     *
+     * @return \WorkOS\Resource\Organization
+     */
+
+    public function getOrganization($organization)
+    {
+        $organizationsPath = "organizations/${organization}";
+
+        $response = Client::request(Client::METHOD_GET, $organizationsPath, null, null, true);
+
+        return Resource\Organization::constructFromResponse($response);
+    }
 }
