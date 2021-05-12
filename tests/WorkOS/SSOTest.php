@@ -64,7 +64,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "grant_type" => "authorization_code"
         ];
 
-        $result = $this->profileResponseFixture();
+        $result = $this->profileAndTokenResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -78,6 +78,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $profileAndToken = $this->sso->getProfileAndToken('code');
         $profileFixture = $this->profileFixture();
 
+        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
         $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
     }
 
@@ -191,9 +192,10 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     // Fixtures
 
-    private function profileResponseFixture()
+    private function profileAndTokenResponseFixture()
     {
         return json_encode([
+            "access_token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
             "profile" => [
                 "id" => "prof_hen",
                 "email" => "hen@papagenos.com",
