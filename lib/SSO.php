@@ -63,9 +63,9 @@ class SSO
      *
      * @param string $code Code returned by WorkOS on completion of OAuth 2.0 flow
      *
-     * @return \WorkOS\Resource\Profile
+     * @return \WorkOS\Resource\ProfileAndToken
      */
-    public function getProfile($code)
+    public function getProfileAndToken($code)
     {
         $profilePath = "sso/token";
 
@@ -78,7 +78,7 @@ class SSO
         
         $response = Client::request(Client::METHOD_POST, $profilePath, null, $params);
 
-        return Resource\Profile::constructFromResponse($response[Resource\Profile::RESOURCE_TYPE]);
+        return Resource\ProfileAndToken::constructFromResponse($response);
     }
 
     /**

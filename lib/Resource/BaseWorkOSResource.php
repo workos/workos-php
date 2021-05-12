@@ -61,7 +61,7 @@ class BaseWorkOSResource
         }
 
         $msg = "${key} does not exist on " . static::class;
-        throw new UnexpectedValueException($msg);
+        throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 
     public function __isset($key)
@@ -81,6 +81,6 @@ class BaseWorkOSResource
         }
 
         $msg = "${key} does not exist on " . static::class;
-        throw new UnexpectedValueException($msg);
+        throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 }

@@ -53,7 +53,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedParams, $paramsArray);
     }
 
-    public function testGetProfileReturnsProfileWithExpectedValues()
+    public function testGetProfileAndTokenReturnsProfileWithExpectedValues()
     {
         $code = 'code';
         $path = "sso/token";
@@ -64,7 +64,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "grant_type" => "authorization_code"
         ];
 
-        $result = $this->profileResponseFixture();
+        $result = $this->profileAndTokenResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -75,10 +75,11 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profile = $this->sso->getProfile('code');
+        $profileAndToken = $this->sso->getProfileAndToken('code');
         $profileFixture = $this->profileFixture();
 
-        $this->assertSame($profileFixture, $profile->toArray());
+        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
+        $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
     }
 
     public function testCreateConnectionReturnsConnectionWithExpectedValues()
@@ -191,9 +192,10 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     // Fixtures
 
-    private function profileResponseFixture()
+    private function profileAndTokenResponseFixture()
     {
         return json_encode([
+            "access_token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
             "profile" => [
                 "id" => "prof_hen",
                 "email" => "hen@papagenos.com",
