@@ -82,30 +82,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
     }
 
-    public function testCreateConnectionReturnsConnectionWithExpectedValues()
-    {
-        $source = "source";
-
-        $path = "connections";
-        $params = ["source" => $source];
-
-        $result = $this->createConnectionResponseFixture();
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $path,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $connection = $this->sso->createConnection($source);
-        $connectionFixture = $this->connectionFixture();
-
-        $this->assertSame($connectionFixture, $connection->toArray());
-    }
-
     public function testGetConnection()
     {
         $connection = "connection_id";
@@ -231,26 +207,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "ipd_id" => "randomalphanum"
             )
         ];
-    }
-
-    private function createConnectionResponseFixture()
-    {
-        return json_encode([
-            "object" => "connection",
-            "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
-            "state" => "active",
-            "status" => "linked",
-            "name" => "Google OAuth 2.0",
-            "connection_type" => "GoogleOAuth",
-            "organization_id" => "org_1234",
-            "domains" => [
-                [
-                    "object" => "connection_domain",
-                    "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
-                    "domain" => "workos.com"
-                ]
-            ]
-        ]);
     }
 
     private function connectionFixture()

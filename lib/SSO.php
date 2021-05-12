@@ -82,29 +82,6 @@ class SSO
     }
 
     /**
-     * Create a Connection.
-     *
-     * @param string $source Token returned by WorkOS as a result of the WorkOS.js embed workflow.
-     *
-     * @throws \WorkOS\Exception\GenericException if an error internal to the SDK is encountered
-     * @throws \WorkOS\Exception\ServerException if an error internal to WorkOS is encountered
-     * @throws \WorkOS\Exception\NotFoundException if a Draft Connection could not be found
-     *
-     * @return \WorkOS\Resource\Connection
-     */
-    public function createConnection($source)
-    {
-        $connectionPath = "connections";
-        $params = [
-            "source" => $source
-        ];
-
-        $response = Client::request(Client::METHOD_POST, $connectionPath, null, $params, true);
-
-        return Resource\Connection::constructFromResponse($response);
-    }
-
-    /**
      * Delete a Connection.
      *
      * @param string $connection Connection ID
