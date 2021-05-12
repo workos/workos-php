@@ -17,7 +17,6 @@ trait TestHelper
     {
         WorkOS::setApiKey(null);
         WorkOS::setClientId(null);
-        @WorkOS::setProjectId(null);
 
         Client::setRequestClient($this->defaultRequestClient);
     }
@@ -29,10 +28,10 @@ trait TestHelper
         WorkOS::setApiKey($apiKey);
     }
 
-    protected function withApiKeyAndClientId($apiKey = "pk_secretsauce", $projectId = "client_pizza")
+    protected function withApiKeyAndClientId($apiKey = "pk_secretsauce", $clientId = "client_pizza")
     {
         WorkOS::setApiKey($apiKey);
-        WorkOS::setClientId($projectId);
+        WorkOS::setClientId($clientId);
     }
 
     // Requests
