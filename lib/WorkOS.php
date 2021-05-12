@@ -20,11 +20,6 @@ class WorkOS
     private static $clientId = null;
 
     /**
-     * @var null|string WorkOS Project ID
-     */
-    private static $projectId = null;
-
-    /**
      * @var string WorkOS base API URL.
      */
     private static $apiBaseUrl = "https://api.workos.com/";
@@ -89,44 +84,6 @@ class WorkOS
     public static function setClientId($clientId)
     {
         self::$clientId = $clientId;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return null|string WorkOS Project ID
-     */
-    public static function getProjectId()
-    {
-        if (isset(self::$projectId)) {
-            $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
-            \trigger_error($msg, E_USER_WARNING);
-
-            return self::$projectId;
-        }
-
-        if (getenv("WORKOS_PROJECT_ID")) {
-            $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
-            \trigger_error($msg, E_USER_WARNING);
-
-            self::$projectId = getenv("WORKOS_PROJECT_ID");
-
-            return self::$projectId;
-        }
-
-        $msg = "\$clientId is required";
-        throw new \WorkOS\Exception\ConfigurationException($msg);
-    }
-
-    /**
-     * @param string $projectId WorkOS Project ID
-     */
-    public static function setProjectId($projectId)
-    {
-        $msg = "[DEPRECATED] Project ID is deprecated. Use Client ID instead.";
-        \trigger_error($msg, E_USER_WARNING);
-
-        self::$projectId = $projectId;
     }
 
     /**
