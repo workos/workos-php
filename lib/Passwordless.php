@@ -16,13 +16,14 @@ class Passwordless
      * @param null|string $redirectURI URI to direct the user to user to upon authenticating through the passwordless link
      * @param null|string $state Encoded string used to manage application state
      * @param \WorkOS\Resource\ConnectionType $type The only supported ConnectionType at the time of this writing is MagicLink
+     * @param $connection the unique WorkOS connection_ID
      *
      * @return  \WorkOS\Resource\PasswordlessSession
      */
-    public function createSession($email, $redirectUri, $state, $type)
+    public function createSession($email, $redirectUri, $state, $type, $connection)
     {
         $createSessionPath = "passwordless/sessions";
-    
+
         $params = [
             "email" => $email,
             "type" => $type
@@ -34,6 +35,10 @@ class Passwordless
 
         if ($state) {
             $params["state"] = $state;
+        }
+
+        if ($connection) {
+            $params["connection"] = $connection;
         }
 
         $response = Client::request(Client::METHOD_POST, $createSessionPath, null, $params, true);
