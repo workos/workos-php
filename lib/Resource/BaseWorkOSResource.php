@@ -1,6 +1,7 @@
 <?php
 
 namespace WorkOS\Resource;
+use WorkOS\Exception;
 
 class BaseWorkOSResource
 {
@@ -61,7 +62,7 @@ class BaseWorkOSResource
         }
 
         $msg = "${key} does not exist on " . static::class;
-        throw new WorkOS\Exception\UnexpectedValueException($msg);
+        throw new UnexpectedValueException($msg);
     }
 
     public function __isset($key)
@@ -81,6 +82,6 @@ class BaseWorkOSResource
         }
 
         $msg = "${key} does not exist on " . static::class;
-        throw new WorkOS\Exception\UnexpectedValueException($msg);
+        throw new UnexpectedValueException($msg);
     }
 }
