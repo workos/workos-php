@@ -53,7 +53,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedParams, $paramsArray);
     }
 
-    public function testGetProfileReturnsProfileWithExpectedValues()
+    public function testGetProfileAndTokenReturnsProfileWithExpectedValues()
     {
         $code = 'code';
         $path = "sso/token";
@@ -75,10 +75,10 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profile = $this->sso->getProfile('code');
+        $profileAndToken = $this->sso->getProfileAndToken('code');
         $profileFixture = $this->profileFixture();
 
-        $this->assertSame($profileFixture, $profile->toArray());
+        $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
     }
 
     public function testCreateConnectionReturnsConnectionWithExpectedValues()
