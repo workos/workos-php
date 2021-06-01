@@ -115,4 +115,26 @@ class Organizations
 
         return Resource\Organization::constructFromResponse($response);
     }
+
+    /**
+     * Delete an Organization.
+     *
+     * @param string $Organization WorkOS organizationID
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteOrganization($organization)
+    {
+        $organizationsPath = "organizations/${organization}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $organizationsPath,
+            null,
+            null,
+            true
+        );
+
+        return $response;
+    }
 }
