@@ -119,7 +119,7 @@ class Organizations
     /**
      * Delete an Organization.
      *
-     * @param string $Organization WorkOS organizationID
+     * @param string $organization WorkOS organization ID
      *
      * @return \WorkOS\Resource\Response
      */
