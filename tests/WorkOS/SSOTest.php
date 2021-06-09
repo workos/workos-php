@@ -55,6 +55,29 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProfileAndTokenReturnsProfileWithExpectedValues()
     {
+        $getProfilePath = "sso/profile";
+        $params = [
+            "access_token" => $accessToken
+        ];
+
+        $result = $this->profileFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $getProfilePath,
+            null,
+            $params,
+            false,
+            $result
+        );
+
+        $profile = $this->sso->getProfile('access_token');
+
+        $this->assertSame($profileFixture, $profile->toArray());
+    }
+
+    public function testGetProfile()
+    {
         $code = 'code';
         $path = "sso/token";
         $params = [
