@@ -55,29 +55,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProfileAndTokenReturnsProfileWithExpectedValues()
     {
-        $getProfilePath = "sso/profile";
-        $params = [
-            "access_token" => $accessToken
-        ];
-
-        $result = $this->profileFixture();
-
-        $this->mockRequest(
-            Client::METHOD_GET,
-            $getProfilePath,
-            null,
-            $params,
-            false,
-            $result
-        );
-
-        $profile = $this->sso->getProfile('access_token');
-
-        $this->assertSame($profileFixture, $profile->toArray());
-    }
-
-    public function testGetProfile()
-    {
         $code = 'code';
         $path = "sso/token";
         $params = [
@@ -103,6 +80,30 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
         $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
+    }
+
+    public function testGetProfile()
+    {
+        $accessToken = 'access_token';
+        $getProfilePath = "sso/profile";
+        $params = [
+            "access_token" => $accessToken
+        ];
+
+        $result = $this->profileFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $getProfilePath,
+            null,
+            $params,
+            false,
+            $result
+        );
+
+        $profile = $this->sso->getProfile('access_token');
+
+        $this->assertSame($profileFixture, $profile->toArray());
     }
 
     public function testGetConnection()
