@@ -82,30 +82,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
     }
 
-    public function testGetProfile()
-    {
-        $accessToken = 'access_token';
-        $getProfilePath = "sso/profile";
-        $params = [
-            "access_token" => $accessToken
-        ];
-
-        $result = $this->profileFixture();
-
-        $this->mockRequest(
-            Client::METHOD_GET,
-            $getProfilePath,
-            null,
-            $params,
-            false,
-            $result
-        );
-
-        $profile = $this->sso->getProfile('access_token');
-
-        $this->assertSame($profileFixture, $profile->toArray());
-    }
-
     public function testGetConnection()
     {
         $connection = "connection_id";

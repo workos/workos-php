@@ -92,7 +92,7 @@ class SSO
         $getProfilePath = "sso/profile";
 
         $params = [
-            "accessToken" => $accessToken
+            "access_token" => $accessToken
         ];
 
         $method = Client::METHOD_GET;
@@ -105,7 +105,7 @@ class SSO
             $method,
             $url,
             $requestHeaders,
-            $params
+            null
         );
 
         $response = new Resource\Response($result, $responseHeaders, $responseCode);
