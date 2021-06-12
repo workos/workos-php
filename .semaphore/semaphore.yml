@@ -27,12 +27,6 @@ blocks:
         commands:
           - checkout
       jobs:
-        - name: php 5.6
-          commands:
-            - phpbrew --no-progress install 5.6.40
-            - phpbrew use php-5.6.40
-            - bash scripts/restore-cache-and-update-deps 56
-            - php composer.phar run-script test
         - name: php 7.0
           commands:
             - phpbrew --no-progress install 7.0.33
