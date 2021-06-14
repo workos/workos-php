@@ -13,6 +13,7 @@ class PasswordlessSession extends BaseWorkOSResource
         "id",
         "email",
         "expiresAt",
+        "expiresIn",
         "link",
         "object"
     ];
@@ -21,6 +22,7 @@ class PasswordlessSession extends BaseWorkOSResource
         "id" => "id",
         "email" => "email",
         "expires_at" => "expiresAt",
+        "expires_in" => "expiresIn",
         "link" => "link",
         "object" => "object"
     ];

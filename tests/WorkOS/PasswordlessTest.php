@@ -77,6 +77,7 @@ class PasswordlessTest extends \PHPUnit\Framework\TestCase
             "id" => "passwordless_session_abc123",
             "email" => "demo@foo-corp.com",
             "expiresAt" => "2021-01-01T01:00:00.000Z",
+            "expiresIn" => null,
             "link" => "https://auth.workos.com/passwordless/alphanum123/confirm",
             "object" => "passwordless_session"
         ];
