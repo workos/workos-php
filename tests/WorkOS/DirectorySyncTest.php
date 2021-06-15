@@ -173,6 +173,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "id" => "directory_id",
                     "environment_id" => "environment_123",
                     "external_key" => "fried-chicken",
+                    "organization_id" => null,
                     "state" => "linked",
                     "type" => "gsuite directory",
                     "name" => "Ri Jeong Hyeok",
