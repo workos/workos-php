@@ -19,6 +19,7 @@ class DirectorySync
      * @param int $limit Maximum number of records to return
      * @param null|string $before Directory ID to look before
      * @param null|string $after Directory ID to look after
+     * @param null|string $organizationId Unique ID for an organization
      *
      * @return array An array containing the following:
      *      null|string Directory ID to use as before cursor
@@ -30,7 +31,8 @@ class DirectorySync
         $search = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
-        $after = null
+        $after = null,
+        $organizationId = null
     ) {
         $directoriesPath = "directories";
         $params = [
@@ -38,7 +40,8 @@ class DirectorySync
             "before" => $before,
             "after" => $after,
             "domain" => $domain,
-            "search" => $search
+            "search" => $search,
+            "organization_id" => $organizationId
         ];
 
         $response = Client::request(
