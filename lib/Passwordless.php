@@ -17,10 +17,10 @@ class Passwordless
      * @param null|string $state Encoded string used to manage application state
      * @param \WorkOS\Resource\ConnectionType $type The only supported ConnectionType at the time of this writing is MagicLink
      * @param $connection the unique WorkOS connection_ID
-     *
+     * @param $expiresIn The number of seconds the Passwordless Session should live before expiring.
      * @return  \WorkOS\Resource\PasswordlessSession
      */
-    public function createSession($email, $redirectUri, $state, $type, $connection)
+    public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
     {
         $createSessionPath = "passwordless/sessions";
 
@@ -39,6 +39,10 @@ class Passwordless
 
         if ($connection) {
             $params["connection"] = $connection;
+        }
+
+        if ($expiresIn) {
+            $params["expires_in"] = $expiresIn;
         }
 
         $response = Client::request(Client::METHOD_POST, $createSessionPath, null, $params, true);

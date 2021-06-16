@@ -35,7 +35,7 @@ class PasswordlessTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $session = $this->passwordless->createSession("demo@foo-corp.com", null, null, Resource\ConnectionType::MagicLink, null);
+        $session = $this->passwordless->createSession("demo@foo-corp.com", null, null, Resource\ConnectionType::MagicLink, null, null);
         $sessionFixture = $this->sessionFixture();
 
         $this->assertSame($sessionFixture, $session->toArray());
