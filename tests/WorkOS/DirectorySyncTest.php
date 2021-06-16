@@ -327,7 +327,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
             ],
-            "id" => "directory_usr_id",
+            "id" => "directory_usr_id"
         ]);
     }
 
