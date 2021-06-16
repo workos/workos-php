@@ -277,7 +277,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                             ]
                         ],
                     ],
-                    "id" => "directory_usr_id"
+                    "id" => "directory_usr_id",
                 ]
             ]
         ]);
@@ -323,7 +323,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
             ],
-            "id" => "directory_usr_id"
+            "id" => "directory_usr_id",
         ]);
     }
 
@@ -367,7 +367,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             ],
             "username" => "yoon@seri.com",
             "lastName" => "Seri",
-            "state" => "active"
+            "state" => "active",
+            "idpId" => null, 
+            "groups" => null
         ];
     }
 }
