@@ -244,6 +244,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "state" => "active",
                     "last_name" => "Seri",
                     "first_name" => "Yoon",
+                    "idp_id" => null,
+                    "groups" => null,
                     "emails" => [
                         [
                             "primary" => true,
