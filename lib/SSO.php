@@ -82,6 +82,38 @@ class SSO
     }
 
     /**
+     * Verify that SSO has been completed successfully and retrieve the identity of the user.
+     *
+     * @param string $accessToken, the token used to authenticate the API call
+     * @return \WorkOS\Resource\Profile
+     */
+    public function getProfile($accessToken)
+    {
+        $getProfilePath = "sso/profile";
+
+        $params = [
+            "access_token" => $accessToken
+        ];
+
+        $method = Client::METHOD_GET;
+
+        $url = "https://api.workos.com/sso/profile";
+            
+        $requestHeaders = ["Authorization: Bearer " . $accessToken];
+
+        list($result) = Client::requestClient()->request(
+            $method,
+            $url,
+            $requestHeaders,
+            null
+        );
+
+        $response = new Resource\Response($result, $responseHeaders, $responseCode);
+
+        return $response->json();
+    }
+
+    /**
      * Delete a Connection.
      *
      * @param string $connection Connection ID
