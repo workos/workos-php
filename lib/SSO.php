@@ -110,7 +110,7 @@ class SSO
 
         $response = new Resource\Response($result, $responseHeaders, $responseCode);
 
-        return $response -> json();
+        return $response->json();
     }
 
     /**
