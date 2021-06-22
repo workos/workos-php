@@ -24,7 +24,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "before" => null,
             "after" => null,
             "domain" => null,
-            "search" => null
+            "search" => null,
+            "organization_id" => null
         ];
 
         $result = $this->directoriesResponseFixture();
@@ -172,6 +173,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "id" => "directory_id",
                     "environment_id" => "environment_123",
                     "external_key" => "fried-chicken",
+                    "organization_id" => null,
                     "state" => "linked",
                     "type" => "gsuite directory",
                     "name" => "Ri Jeong Hyeok",
@@ -192,10 +194,11 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "id" => "directory_id",
             "environmentId" => "environment_123",
             "externalKey" => "fried-chicken",
+            "organizationId" => null,
             "state" => "linked",
             "type" => "gsuite directory",
             "name" => "Ri Jeong Hyeok",
-            "domain" => "crashlandingonyou.com",
+            "domain" => "crashlandingonyou.com"
         ];
     }
 
