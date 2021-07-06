@@ -79,7 +79,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $profileFixture = $this->profileFixture();
 
         $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
-        $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
+        $this->assertSame($profileFixture, $profileAndToken->profile);
     }
 
     public function testGetConnection()
@@ -195,12 +195,12 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         return [
             "id" => "prof_hen",
             "email" => "hen@papagenos.com",
-            "firstName" => "hen",
-            "lastName" => "cha",
-            "connectionId" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
-            "connectionType" => "GoogleOAuth",
-            "idpId" => "randomalphanum",
-            "rawAttributes" => array(
+            "first_name" => "hen",
+            "last_name" => "cha",
+            "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
+            "connection_type" => "GoogleOAuth",
+            "idp_id" => "randomalphanum",
+            "raw_attributes" => array(
                 "email" => "hen@papagenos.com",
                 "first_name" => "hen",
                 "last_name" => "cha",
