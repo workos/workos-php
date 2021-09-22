@@ -61,15 +61,18 @@ class Organizations
      *
      * @param string $name The name of the Organization.
      * @param array $domains The domains of the Organization.
+     * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
+     *      that are outside of the Organization's configured User Email Domains.
      *
      * @return \WorkOS\Resource\Organization
      */
-    public function createOrganization($name, $domains)
+    public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null)
     {
         $organizationsPath = "organizations";
         $params = [
             "name" => $name,
-            "domains" => $domains
+            "domains" => $domains,
+            "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
 
         $response = Client::request(Client::METHOD_POST, $organizationsPath, null, $params, true);
@@ -83,15 +86,18 @@ class Organizations
      * @param string $organization An Organization identifier.
      * @param array $domains The domains of the Organization.
      * @param string $name The name of the Organization.
+     * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
+     *      that are outside of the Organization's configured User Email Domains.
      */
 
-    public function updateOrganization($organization, $domains, $name)
+    public function updateOrganization($organization, $domains, $name, $allowProfilesOutsideOrganization = null)
     {
         $organizationsPath = "organizations/{$organization}";
         $params = [
           "organization" => $organization,
           "domains" => $domains,
-          "name" => $name
+          "name" => $name,
+          "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
 
         $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
