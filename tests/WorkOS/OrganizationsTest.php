@@ -145,7 +145,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         return [
             "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "name" => "Organization Name",
-            "allowProfilesOutsideOrganization" => false,
+            "allow_profiles_outside_organization" => false,
             "domains" => [
                 [
                     "object" => "organization_domain",
