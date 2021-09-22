@@ -24,7 +24,8 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             "name" => "Organization Name",
-            "domains" => array("example.com")
+            "domains" => array("example.com"),
+            "allow_profiles_outside_organization" => null
         ];
 
         $this->mockRequest(
