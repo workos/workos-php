@@ -36,7 +36,7 @@ blocks:
         - name: php 7.2
           commands:
             - phpbrew --no-progress install 7.2.34
-            - phpbrew use php-7.2
+            - phpbrew use php-7.2.34
             - bash scripts/restore-cache-and-update-deps 72
             - php composer.phar run-script test
         - name: php 7.4
