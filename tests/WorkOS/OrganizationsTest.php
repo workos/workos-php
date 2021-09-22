@@ -24,7 +24,8 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             "name" => "Organization Name",
-            "domains" => array("example.com")
+            "domains" => array("example.com"),
+            "allow_profiles_outside_organization" => null
         ];
 
         $this->mockRequest(
@@ -77,6 +78,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             "name" => "Organization Name",
             "object" => "organization",
             "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "allow_profiles_outside_organization" => false,
             "domains" => [
                 [
                     "object" => "organization_domain",
@@ -96,6 +98,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                 "object" => "organization",
                 "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
                 "name" => "Organization Name",
+                "allow_profiles_outside_organization" => false,
                 "domains" => [
                     [
                         "object" => "organization_domain",
@@ -108,6 +111,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                 "object" => "organization",
                 "id" => "org_01EHQMVDTC2GRAHFCCRNTSKH46",
                 "name" => "example2.com",
+                "allow_profiles_outside_organization" => false,
                 "domains" => [
                     [
                         "object" => "organization_domain",
@@ -120,6 +124,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                 "object" => "organization",
                 "id" => "org_01EGP9Z6RY2J6YE0ZV57CGEXV2",
                 "name" => "example5.com",
+                "allow_profiles_outside_organization" => false,
                 "domains" => [
                     [
                         "object" => "organization_domain",
@@ -141,6 +146,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         return [
             "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "name" => "Organization Name",
+            "allowProfilesOutsideOrganization" => false,
             "domains" => [
                 [
                     "object" => "organization_domain",
