@@ -13,7 +13,7 @@ class Organization extends BaseWorkOSResource
     const RESOURCE_ATTRIBUTES = [
         "id",
         "name",
-        "allow_profiles_outside_organization",
+        "allowProfilesOutsideOrganization",
         "domains"
     ];
 
