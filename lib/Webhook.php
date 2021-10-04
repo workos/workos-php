@@ -3,19 +3,22 @@
 namespace WorkOS;
 
 /**
- * Class Passwordless.
+ * Class Webhook.
  *
- * This class will include functions
+ * This class includes functions for users to pass in a webhook header/body and receive
+ * the webhook ID, body, and event type if the webhook is valid/secure otherwise an error
+ * indictating the issue.
  */
+
 class Webhook
 {
    
     /** Initializes an Event object from a JSON payload
-     *  Splits WorkOS Signature Header into timestamp and signature, and returns event type.
-     * @param \WorkOS\Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
+     * @param \WorkOS\Resource\Webhook
      *
      * @return boolean true
      */
+
     public function constructEvent($sigHeader, $payload, $secret, $tolerance)
     {
         $eventResult = $this->verifyHeader($sigHeader, $payload, $secret, $tolerance);
@@ -30,8 +33,10 @@ class Webhook
     /**
      *  verifyHeader verifies the header returned from WorkOS contains a valid timestamp
      *  no older than 3 minutes, and computes the signature.
-     * @param \WorkOS\Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
-     *
+     * @param $sigheader is the WorkOS header containing v1 signature and timestamp
+     * @param $payload is the body of the webhook
+     * @param $secret is the webhook secret from the WorkOS dashboard
+     * @param $tolerance is the number of seconds old the webhook can be before it's invalid
      * @return boolean true
      */
 
@@ -41,7 +46,6 @@ class Webhook
         $signature = $this->getSignature($sigHeader);
 
         $currentTime = time();
-        $SECONDS_SINCE_ISSUED = ($timestamp - $currentTime);
         $decodedBody = utf8_decode($payload);
         $signedPayload = $timestamp . "." . $decodedBody;
         $expectedSignature = hash_hmac("sha256", $signedPayload, $secret, false);
@@ -56,17 +60,23 @@ class Webhook
     }
 
     /**
-    *  Splits WorkOS Signature Header into timestamp and signature, and returns event type.
-    * @param \WorkOS\Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
-    *
-    * @return boolean true
+    *  Splits workOS header's two values and pulls out timestamp value and returns it
+    * @param $sigheader is the WorkOS header containing v1 signature and timestamp
+    * @return $timestamp
     */
+
     private function getTimeStamp($sigHeader)
     {
         $workosHeadersSplit = explode(',', $sigHeader, 2);
         $timestamp = substr($workosHeadersSplit[0], 2);
         return $timestamp;
     }
+    
+    /**
+    * splits workOS headers two values and pulls out the signature value and returns it
+    * @param $sigheader is the WorkOS header containing v1 signature and timestamp
+    * @return $signature
+    */
 
     private function getSignature($sigHeader)
     {
