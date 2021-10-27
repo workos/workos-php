@@ -282,6 +282,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                             ]
                         ],
                     ],
+                    "custom_attributes" => [
+                        "fullName" => "Yoon Seri"
+                    ],
                     "id" => "directory_usr_id"
                 ]
             ]
@@ -330,6 +333,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
             ],
+            "custom_attributes" => [
+                "fullName" => "Yoon Seri"
+            ],
             "id" => "directory_usr_id"
         ]);
     }
@@ -363,6 +369,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                         "primary" => true
                     ]
                 ],
+            ],
+            "customAttributes" => [
+                "fullName" => "Yoon Seri"
             ],
             "firstName" => "Yoon",
             "emails" => [

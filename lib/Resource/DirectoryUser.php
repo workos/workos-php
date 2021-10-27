@@ -12,6 +12,7 @@ class DirectoryUser extends BaseWorkOSResource
     const RESOURCE_ATTRIBUTES = [
         "id",
         "rawAttributes",
+        "customAttributes",
         "firstName",
         "emails",
         "username",
@@ -24,6 +25,7 @@ class DirectoryUser extends BaseWorkOSResource
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "raw_attributes" => "rawAttributes",
+        "custom_attributes" => "customAttributes",
         "first_name" => "firstName",
         "emails" => "emails",
         "username" => "username",
