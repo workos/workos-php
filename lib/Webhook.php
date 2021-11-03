@@ -72,7 +72,7 @@ class Webhook
     }
     
     /**
-    * splits workOS headers two values and pulls out the signature value and returns it
+    * splits WorkOS headers two values and pulls out the signature value and returns it
     * @param $sigheader is the WorkOS header containing v1 signature and timestamp
     * @return $signature
     */
