@@ -45,6 +45,27 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($directory, $directories[0]->toArray());
     }
 
+    public function testGetDirectory()
+    {
+        $directory = "directory_id";
+        $directoryPath = "directories/${directory}";
+
+        $result = $this->directoryResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoryPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $directory = $this->getDirectory();
+
+        $this->assertSame($directoryFixture, $directory);
+    }
+
     public function testGetGroup()
     {
         $directoryGroup = "directory_grp_id";
