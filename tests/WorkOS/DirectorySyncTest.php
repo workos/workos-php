@@ -47,10 +47,10 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDirectory()
     {
-        $directory = "directory_id";
-        $directoryPath = "directories/${directory}";
+        $directoryId = "directory_id";
+        $directoryPath = "directories/${directoryId}";
 
-        $result = $this->directoryResponseFixture();
+        $result = $this->getDirectoryResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_GET,
@@ -61,9 +61,10 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $directory = $this->getDirectory();
+        $directory = $this->ds->getDirectory($directoryId);
+        $directoryFixture = $this->getDirectoryFixture();
 
-        $this->assertSame($directoryFixture, $directory);
+        $this->assertSame($directoryFixture, $directory->toArray());
     }
 
     public function testGetGroup()
@@ -221,6 +222,34 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "name" => "Ri Jeong Hyeok",
             "domain" => "crashlandingonyou.com"
         ];
+    }
+
+    private function getDirectoryFixture()
+    {
+        return [
+            "id" => "directory_id",
+            "environmentId" => null,
+            "externalKey" => null,
+            "organizationId" => null,
+            "state" => "linked",
+            "type" => "gsuite directory",
+            "name" => "Ri Jeong Hyeok",
+            "domain" => "crashlandingonyou.com"
+        ];
+    }
+
+    private function getDirectoryResponseFixture()
+    {
+        return json_encode([
+            "id" => "directory_id",
+            "environmentId" => null,
+            "externalKey" => null,
+            "organizationId" => null,
+            "state" => "linked",
+            "type" => "gsuite directory",
+            "name" => "Ri Jeong Hyeok",
+            "domain" => "crashlandingonyou.com"
+        ]);
     }
 
     private function groupsResponseFixture()
