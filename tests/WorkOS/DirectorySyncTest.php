@@ -228,8 +228,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "id" => "directory_id",
-            "environmentId" => null,
-            "externalKey" => null,
+            "environmentId" => "environment_123",
+            "externalKey" => "fried-chicken",
             "organizationId" => null,
             "state" => "linked",
             "type" => "gsuite directory",
@@ -242,13 +242,14 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "id" => "directory_id",
-            "environmentId" => null,
-            "externalKey" => null,
-            "organizationId" => null,
+            "environment_id" => "environment_123",
+            "external_key" => "fried-chicken",
+            "organization_id" => null,
             "state" => "linked",
             "type" => "gsuite directory",
             "name" => "Ri Jeong Hyeok",
-            "domain" => "crashlandingonyou.com"
+            "bearer_token" => null,
+            "domain" => "crashlandingonyou.com",
         ]);
     }
 
