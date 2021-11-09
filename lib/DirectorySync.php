@@ -210,9 +210,9 @@ class DirectorySync
     }
 
     /**
-     * Delete a Connection.
+     * Delete a Directory.
      *
-     * @param string $directory Connection ID
+     * @param string $directory Directory ID
      *
      * @return \WorkOS\Resource\Response
      */
@@ -229,5 +229,22 @@ class DirectorySync
         );
 
         return $response;
+    }
+
+    /**
+     * Get a Directory.
+     *
+     * @param string $directory WorkOS directory ID
+     *
+     * @return \WorkOS\Resource\Directory
+     */
+
+    public function getDirectory($directory)
+    {
+        $directoriesPath = "directories/${directory}";
+
+        $response = Client::request(Client::METHOD_GET, $directoriesPath, null, null, true);
+
+        return Resource\Directory::constructFromResponse($response);
     }
 }
