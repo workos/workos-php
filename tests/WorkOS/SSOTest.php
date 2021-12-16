@@ -25,6 +25,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $state,
         $provider,
         $connection,
+        $organization,
         $domainHint = null,
         $loginHint = null
     ) {
@@ -67,6 +68,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $state,
             $provider,
             $connection,
+            $organization,
             $domainHint,
             $loginHint
         );
@@ -186,6 +188,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
             ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null],
             [null, null, null, null, "connection_123"],
+            [null, null, null, null, null, "org_01FG7HGMY2CZZR2FWHTEE94VF0"],
             [null, "https://papagenos.com/auth/callback", null, null, "connection_123", "foo.com", null],
             [null, "https://papagenos.com/auth/callback", null, null, "connection_123", null, "foo@workos.com"],
         ];
