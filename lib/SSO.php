@@ -44,7 +44,7 @@ class SSO
         if (isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
             $msg = "Domain is being deprecated, please switch to using Connection or Organization ID";
 
-            trigger_error($msg, E_USER_NOTICE);
+            error_log($msg);
         }
 
         $params = [
@@ -70,6 +70,10 @@ class SSO
 
         if ($connection) {
             $params["connection"] = $connection;
+        }
+
+        if ($organization) {
+            $params["organization"] = $organization;
         }
 
         if ($domainHint) {
