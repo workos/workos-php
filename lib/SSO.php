@@ -17,6 +17,7 @@ class SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
      * @param null|string $connection Unique identifier for a WorkOS Connection
+     * @param null|string $organization Unique identifier for a WorkOS Organization
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      *
@@ -28,15 +29,22 @@ class SSO
         $state,
         $provider,
         $connection,
+        $organization = null,
         $domainHint = null,
         $loginHint = null
     ) {
         $authorizationPath = "sso/authorize";
 
-        if (!isset($domain) && !isset($provider) && !isset($connection)) {
-            $msg = "Either \$domain, \$provider, or \$connection is required";
+        if (!isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
+            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required";
 
             throw new Exception\UnexpectedValueException($msg);
+        }
+
+        if (isset($domain)) {
+            $msg = "Domain is being deprecated, please switch to using Connection or Organization ID";
+
+            error_log($msg);
         }
 
         $params = [
@@ -62,6 +70,10 @@ class SSO
 
         if ($connection) {
             $params["connection"] = $connection;
+        }
+
+        if ($organization) {
+            $params["organization"] = $organization;
         }
 
         if ($domainHint) {

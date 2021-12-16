@@ -25,6 +25,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $state,
         $provider,
         $connection,
+        $organization = null,
         $domainHint = null,
         $loginHint = null
     ) {
@@ -53,6 +54,10 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $expectedParams["connection"] = $connection;
         }
 
+        if ($organization) {
+            $expectedParams["organization"] = $organization;
+        }
+
         if ($domainHint) {
             $expectedParams["domain_hint"] = $domainHint;
         }
@@ -67,6 +72,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             $state,
             $provider,
             $connection,
+            $organization,
             $domainHint,
             $loginHint
         );
@@ -181,13 +187,14 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function authorizationUrlTestProvider()
     {
         return [
-            ["papagenos.com", null, null, null, null],
             [null, null, null, Resource\ConnectionType::GoogleOAuth, null],
-            ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
-            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null],
             [null, null, null, null, "connection_123"],
-            [null, "https://papagenos.com/auth/callback", null, null, "connection_123", "foo.com", null],
-            [null, "https://papagenos.com/auth/callback", null, null, "connection_123", null, "foo@workos.com"],
+            [null, null, null, null, null, "org_01FG7HGMY2CZZR2FWHTEE94VF0"],
+            [null, "https://papagenos.com/auth/callback", null, null, "connection_123", null, "foo.com", null],
+            [null, "https://papagenos.com/auth/callback", null, null, "connection_123", null, null, "foo@workos.com"],
+            ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
+            ["papagenos.com", null, null, null, null],
+            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null]
         ];
     }
 
