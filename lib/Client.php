@@ -101,7 +101,7 @@ class Client
      * Generates a URL to the WorkOS API.
      *
      * @param string $path Path to the WorkOS resource
-     * @param null|array $params Associative arrray to be passed as query parameters
+     * @param null|array $params Associative array to be passed as query parameters
      *
      * @return string
      */

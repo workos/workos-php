@@ -17,11 +17,20 @@ class SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
      * @param null|string $connection Unique identifier for a WorkOS Connection
+     * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
+     * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      *
      * @return string
      */
-    public function getAuthorizationUrl($domain, $redirectUri, $state, $provider, $connection)
-    {
+    public function getAuthorizationUrl(
+        $domain,
+        $redirectUri,
+        $state,
+        $provider,
+        $connection,
+        $domainHint = null,
+        $loginHint = null
+    ) {
         $authorizationPath = "sso/authorize";
 
         if (!isset($domain) && !isset($provider) && !isset($connection)) {
@@ -55,6 +64,14 @@ class SSO
             $params["connection"] = $connection;
         }
 
+        if ($domainHint) {
+            $params["domain_hint"] = $domainHint;
+        }
+
+        if ($loginHint) {
+            $params["login_hint"] = $loginHint;
+        }
+
         return Client::generateUrl($authorizationPath, $params);
     }
 
@@ -75,7 +92,7 @@ class SSO
             "code" => $code,
             "grant_type" => "authorization_code"
         ];
-        
+
         $response = Client::request(Client::METHOD_POST, $profilePath, null, $params);
 
         return Resource\ProfileAndToken::constructFromResponse($response);
@@ -98,7 +115,7 @@ class SSO
         $method = Client::METHOD_GET;
 
         $url = "https://api.workos.com/sso/profile";
-            
+
         $requestHeaders = ["Authorization: Bearer " . $accessToken];
 
         list($result) = Client::requestClient()->request(
