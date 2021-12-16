@@ -41,7 +41,7 @@ class SSO
             throw new Exception\UnexpectedValueException($msg);
         }
 
-        if (isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
+        if (isset($domain)) {
             $msg = "Domain is being deprecated, please switch to using Connection or Organization ID";
 
             error_log($msg);
