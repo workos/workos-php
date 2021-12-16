@@ -25,7 +25,70 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $state,
         $provider,
         $connection,
-        $organization,
+        $organization = null,
+        $domainHint = null,
+        $loginHint = null
+    ) {
+        $expectedParams = [
+            "client_id" => WorkOS::getClientId(),
+            "response_type" => "code"
+        ];
+
+        if ($domain) {
+            $expectedParams["domain"] = $domain;
+        }
+
+        if ($redirectUri) {
+            $expectedParams["redirect_uri"] = $redirectUri;
+        }
+
+        if (null !== $state && !empty($state)) {
+            $expectedParams["state"] = \json_encode($state);
+        }
+
+        if ($provider) {
+            $expectedParams["provider"] = $provider;
+        }
+
+        if ($connection) {
+            $expectedParams["connection"] = $connection;
+        }
+
+        if ($domainHint) {
+            $expectedParams["domain_hint"] = $domainHint;
+        }
+
+        if ($loginHint) {
+            $expectedParams["login_hint"] = $loginHint;
+        }
+
+        $authorizationUrl = $this->sso->getAuthorizationUrl(
+            $domain,
+            $redirectUri,
+            $state,
+            $provider,
+            $connection,
+            $organization,
+            $domainHint,
+            $loginHint
+        );
+        $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
+        \parse_str($paramsString, $paramsArray);
+
+        $this->assertSame($expectedParams, $paramsArray);
+    }
+
+    /**
+     * @dataProvider authorizationUrlTestProviderDomainWarning
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testAuthorizationURLDomainWarning(
+        $domain,
+        $redirectUri,
+        $state,
+        $provider,
+        $connection,
+        $organization = null,
         $domainHint = null,
         $loginHint = null
     ) {
@@ -183,10 +246,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function authorizationUrlTestProvider()
     {
         return [
-            ["papagenos.com", null, null, null, null],
             [null, null, null, Resource\ConnectionType::GoogleOAuth, null],
-            ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
-            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null],
             [null, null, null, null, "connection_123"],
             [null, null, null, null, null, "org_01FG7HGMY2CZZR2FWHTEE94VF0"],
             [null, "https://papagenos.com/auth/callback", null, null, "connection_123", "foo.com", null],
@@ -194,6 +254,14 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    public function authorizationUrlTestProviderDomainWarning()
+    {
+        return [
+            ["papagenos.com", "https://papagenos.com/auth/callback", null, null, null],
+            ["papagenos.com", null, null, null, null],
+            ["papagenos.com", "https://papagenos.com/auth/callback", ["toppings" => "ham"], null, null]
+        ];
+    }
     // Fixtures
 
     private function profileAndTokenResponseFixture()

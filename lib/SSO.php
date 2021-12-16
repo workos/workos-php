@@ -29,14 +29,14 @@ class SSO
         $state,
         $provider,
         $connection,
-        $organization,
+        $organization = null,
         $domainHint = null,
         $loginHint = null
     ) {
         $authorizationPath = "sso/authorize";
 
-        if (!isset($domain) && !isset($provider) && !isset($connection)) {
-            $msg = "Either \$domain, \$provider, or \$connection is required";
+        if (!isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
+            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required";
 
             throw new Exception\UnexpectedValueException($msg);
         }
