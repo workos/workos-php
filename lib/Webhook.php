@@ -45,8 +45,7 @@ class Webhook
         $signature = $this->getSignature($sigHeader);
 
         $currentTime = time();
-        $decodedBody = utf8_decode($payload);
-        $signedPayload = $timestamp . "." . $decodedBody;
+        $signedPayload = $timestamp . "." . $payload;
         $expectedSignature = hash_hmac("sha256", $signedPayload, $secret, false);
 
         if (empty($timestamp)):
