@@ -27,7 +27,7 @@ class SSO
         $domain = null,
         $redirectUri,
         $state,
-        $provider,
+        $provider = null,
         $connection = null,
         $organization = null,
         $domainHint = null,
