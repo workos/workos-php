@@ -39,7 +39,8 @@
   },
   "config": {
     "allow-plugins": {
-        "workos-php/*": true
+        "workos-php/*": true,
+        "kylekatarnls/update-helper": true
     }
   }
 }
