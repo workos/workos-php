@@ -24,11 +24,11 @@ class SSO
      * @return string
      */
     public function getAuthorizationUrl(
-        $domain,
+        $domain = null,
         $redirectUri,
         $state,
-        $provider,
-        $connection,
+        $provider = null,
+        $connection = null,
         $organization = null,
         $domainHint = null,
         $loginHint = null
