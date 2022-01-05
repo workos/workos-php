@@ -36,5 +36,10 @@
     "format": "php vendor/bin/php-cs-fixer fix -v --using-cache=no .",
     "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .",
     "test": "php vendor/bin/phpunit tests"
+  },
+  "config": {
+    "allow-plugins": {
+        "workos-php/*": true
+    }
   }
 }
