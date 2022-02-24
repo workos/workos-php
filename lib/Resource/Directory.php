@@ -11,7 +11,6 @@ class Directory extends BaseWorkOSResource
 
     const RESOURCE_ATTRIBUTES = [
         "id",
-        "environmentId",
         "externalKey",
         "organizationId",
         "state",
@@ -22,7 +21,6 @@ class Directory extends BaseWorkOSResource
 
     const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
-        "environment_id" => "environmentId",
         "external_key" => "externalKey",
         "organization_id" => "organizationId",
         "state" => "state",
