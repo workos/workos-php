@@ -193,7 +193,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "data" => [
                 [
                     "id" => "directory_id",
-                    "environment_id" => "environment_123",
                     "external_key" => "fried-chicken",
                     "organization_id" => null,
                     "state" => "linked",
@@ -214,7 +213,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "id" => "directory_id",
-            "environmentId" => "environment_123",
             "externalKey" => "fried-chicken",
             "organizationId" => null,
             "state" => "linked",
@@ -228,7 +226,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "id" => "directory_id",
-            "environmentId" => "environment_123",
             "externalKey" => "fried-chicken",
             "organizationId" => null,
             "state" => "linked",
@@ -242,7 +239,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "id" => "directory_id",
-            "environment_id" => "environment_123",
             "external_key" => "fried-chicken",
             "organization_id" => null,
             "state" => "linked",
