@@ -5,5 +5,5 @@ namespace WorkOS;
 final class Version
 {
     const SDK_IDENTIFIER = "WorkOS PHP";
-    const SDK_VERSION = '1.6.0';
+    const SDK_VERSION = '1.7.0';
 }
