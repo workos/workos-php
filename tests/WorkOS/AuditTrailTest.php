@@ -266,7 +266,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ],
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => null,
                 "after" => null
             ],

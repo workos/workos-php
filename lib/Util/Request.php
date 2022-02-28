@@ -7,8 +7,8 @@ class Request
     public static function parsePaginationArgs($response)
     {
         return [
-            $response["listMetadata"]["before"],
-            $response["listMetadata"]["after"]
+            $response["list_metadata"]["before"],
+            $response["list_metadata"]["after"]
         ];
     }
 }

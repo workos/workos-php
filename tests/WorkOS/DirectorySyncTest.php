@@ -202,7 +202,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "domain" => "crashlandingonyou.com",
                 ]
             ],
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => null,
                 "after" => null
             ],
@@ -258,7 +258,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "id" => "directory_grp_id"
                 ]
             ],
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => null,
                 "after" => null
             ],
@@ -284,7 +284,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     private function usersResponseFixture()
     {
         return json_encode([
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => null,
                 "after" => null
             ],

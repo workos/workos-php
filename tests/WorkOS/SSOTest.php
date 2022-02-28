@@ -311,7 +311,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                     "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",
                 ]
             ],
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => null,
                 "after" => null
             ],
