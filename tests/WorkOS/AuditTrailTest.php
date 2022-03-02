@@ -12,6 +12,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
     {
         $this->traitSetUp();
         
+        $this->withApiKeyAndClientId();
         $this->at = new AuditTrail();
     }
     
