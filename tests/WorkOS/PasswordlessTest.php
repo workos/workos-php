@@ -8,7 +8,7 @@ class PasswordlessTest extends \PHPUnit\Framework\TestCase
         setUp as traitSetUp;
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->traitSetUp();
 

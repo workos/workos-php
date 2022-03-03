@@ -8,7 +8,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         setUp as protected traitSetUp;
     }
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->traitSetUp();
 
