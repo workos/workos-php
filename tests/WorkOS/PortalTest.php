@@ -8,7 +8,7 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         setUp as protected traitSetUp;
     }
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->traitSetUp();
 
