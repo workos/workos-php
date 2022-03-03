@@ -186,7 +186,7 @@ class SSO
         return Resource\Connection::constructFromResponse($response);
     }
 
-    const DEFAULT_PAGE_SIZE = 10;
+    public const DEFAULT_PAGE_SIZE = 10;
 
     /**
      * List Connections.

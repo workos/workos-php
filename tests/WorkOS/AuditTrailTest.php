@@ -11,16 +11,16 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->traitSetUp();
-        
+
         $this->at = new AuditTrail();
     }
-    
+
     public function testCreateAuditTrailEvent()
     {
         $this->withApiKeyAndClientId();
 
         $path = "events";
-        
+
         $eventFixture = $this->eventFixture();
 
         $this->mockRequest(

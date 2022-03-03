@@ -9,8 +9,8 @@ namespace WorkOS;
  */
 class AuditTrail
 {
-    const DEFAULT_EVENT_LIMIT = 10;
-    const METADATA_SIZE_LIMIT = 50;
+    public const DEFAULT_EVENT_LIMIT = 10;
+    public const METADATA_SIZE_LIMIT = 50;
 
     /**
      * Create an Audit Trail event. An event consists of the following fields:
@@ -166,7 +166,7 @@ class AuditTrail
             } elseif ($occurredAtGt) {
                 $params["occurred_at_gt"] = $occurredAtGt;
             }
-    
+
             if ($occurredAtLte) {
                 $params["occurred_at_lte"] = $occurredAtLte;
             } elseif ($occurredAtLt) {

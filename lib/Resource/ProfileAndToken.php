@@ -7,12 +7,12 @@ namespace WorkOS\Resource;
  */
 class ProfileAndToken extends BaseWorkOSResource
 {
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "accessToken",
         "profile"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "access_token" => "accessToken"
     ];
 

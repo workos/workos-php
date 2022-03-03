@@ -29,7 +29,7 @@ class WebhookTest extends \PHPUnit\Framework\TestCase
         $result = $this->generateConnectionFixture();
 
         $expectation = '{"id":"wh_01FGCG6SDYCT5XWZT9CDW0XEB8","data":{"id":"conn_01EHWNC0FCBHZ3BJ7EGKYXK0E6","name":"Foo Corp\'s Connection","state":"active","object":"connection","domains":[{"id":"conn_domain_01EHWNFTAFCF3CQAE5A9Q0P1YB","domain":"foo-corp.com","object":"connection_domain"}],"connection_type":"OktaSAML","organization_id":"org_01EHWNCE74X7JSDV0X3SZ3KJNY"},"event":"connection.activated"}';
-        
+
         $response = $this->ap->constructEvent($headers, $payload, $secret, $tolerance);
         $this->assertSame($expectation, json_encode($response));
     }

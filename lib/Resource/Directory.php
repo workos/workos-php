@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class Directory extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "directory";
+    public const RESOURCE_TYPE = "directory";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "externalKey",
         "organizationId",
@@ -19,7 +19,7 @@ class Directory extends BaseWorkOSResource
         "domain"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "external_key" => "externalKey",
         "organization_id" => "organizationId",

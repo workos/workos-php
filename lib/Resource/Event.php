@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class Event extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "event";
+    public const RESOURCE_TYPE = "event";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "action",
         "group",
@@ -25,7 +25,7 @@ class Event extends BaseWorkOSResource
         "occurredAt",
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "group" => "group",
         "location" => "location",
@@ -56,7 +56,7 @@ class Event extends BaseWorkOSResource
 
         $eventAction = $eventArray["action"];
         $eventArray["action"] = $eventAction->toArray();
-        
+
         return $eventArray;
     }
 }

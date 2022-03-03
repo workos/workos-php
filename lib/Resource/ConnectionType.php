@@ -9,17 +9,17 @@ namespace WorkOS\Resource;
  */
 class ConnectionType
 {
-    const ADFSSAML = "ADFSSAML";
-    const AzureSAML = "AzureSAML";
-    const GenericOIDC = "GenericOIDC";
-    const GenericSAML = "GenericSAML";
-    const GoogleOAuth = "GoogleOAuth";
-    const GoogleSAML = "GoogleSAML";
-    const MagicLink = "MagicLink";
-    const OneLoginSAML = "OneLoginSAML";
-    const OktaSAML = "OktaSAML";
-    const PingFederateSAML = "PingFederateSAML";
-    const PingOneSAML = "PingOneSAML";
-    const SalesforceSAML = "SalesforceSAML";
-    const VMwareSAML = "VMwareSAML";
+    public const ADFSSAML = "ADFSSAML";
+    public const AzureSAML = "AzureSAML";
+    public const GenericOIDC = "GenericOIDC";
+    public const GenericSAML = "GenericSAML";
+    public const GoogleOAuth = "GoogleOAuth";
+    public const GoogleSAML = "GoogleSAML";
+    public const MagicLink = "MagicLink";
+    public const OneLoginSAML = "OneLoginSAML";
+    public const OktaSAML = "OktaSAML";
+    public const PingFederateSAML = "PingFederateSAML";
+    public const PingOneSAML = "PingOneSAML";
+    public const SalesforceSAML = "SalesforceSAML";
+    public const VMwareSAML = "VMwareSAML";
 }

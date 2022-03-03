@@ -9,7 +9,7 @@ namespace WorkOS;
  */
 class Organizations
 {
-    const DEFAULT_PAGE_SIZE = 10;
+    public const DEFAULT_PAGE_SIZE = 10;
 
     /**
      * List Organizations.
