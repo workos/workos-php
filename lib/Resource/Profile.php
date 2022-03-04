@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class Profile extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "profile";
+    public const RESOURCE_TYPE = "profile";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "email",
         "firstName",
@@ -21,7 +21,7 @@ class Profile extends BaseWorkOSResource
         "rawAttributes"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "email" => "email",
         "first_name" => "firstName",

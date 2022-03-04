@@ -7,13 +7,13 @@ trait TestHelper
     protected $defaultRequestClient;
     protected $requestClientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultRequestClient = Client::requestClient();
         $this->requestClientMock = $this->createMock("\WorkOS\RequestClient\RequestClientInterface");
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         WorkOS::setApiKey(null);
         WorkOS::setClientId(null);

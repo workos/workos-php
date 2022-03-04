@@ -39,7 +39,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $path = "some/place";
         $responseHeaders = ["x-request-id" => "123yocheckme"];
-        
+
         $this->mockRequest(
             Client::METHOD_GET,
             $path,

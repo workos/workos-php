@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class PasswordlessSession extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "passwordless_session";
+    public const RESOURCE_TYPE = "passwordless_session";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "email",
         "expiresAt",
@@ -17,7 +17,7 @@ class PasswordlessSession extends BaseWorkOSResource
         "object"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "email" => "email",
         "expires_at" => "expiresAt",

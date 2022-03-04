@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class DirectoryUser extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "directory_usr";
+    public const RESOURCE_TYPE = "directory_usr";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "rawAttributes",
         "customAttributes",
@@ -22,7 +22,7 @@ class DirectoryUser extends BaseWorkOSResource
         "groups"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "raw_attributes" => "rawAttributes",
         "custom_attributes" => "customAttributes",

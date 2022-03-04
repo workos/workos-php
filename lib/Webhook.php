@@ -12,7 +12,6 @@ namespace WorkOS;
 
 class Webhook
 {
-   
     /** Initializes an Event object from a JSON payload
      * @param \WorkOS\Resource\Webhook
      *
@@ -69,7 +68,7 @@ class Webhook
         $timestamp = substr($workosHeadersSplit[0], 2);
         return $timestamp;
     }
-    
+
     /**
     * splits WorkOS headers two values and pulls out the signature value and returns it
     * @param $sigheader is the WorkOS header containing v1 signature and timestamp

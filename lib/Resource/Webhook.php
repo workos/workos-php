@@ -9,8 +9,6 @@ namespace WorkOS\Resource;
  */
 class Webhook
 {
-    
-    
     /**
      * Creates a webhook object from a payload.
      *

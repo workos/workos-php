@@ -7,15 +7,15 @@ namespace WorkOS\Resource;
  */
 class EventAction extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "event_action";
+    public const RESOURCE_TYPE = "event_action";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "environmentId",
         "name"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "environment_id" => "environmentId",
         "name" => "name"

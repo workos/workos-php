@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class Connection extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "connection";
+    public const RESOURCE_TYPE = "connection";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "id",
         "domains",
         "state",
@@ -19,7 +19,7 @@ class Connection extends BaseWorkOSResource
         "organizationId",
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "state" => "state",
         "status" => "status",

@@ -7,13 +7,13 @@ namespace WorkOS\Resource;
  */
 class PortalLink extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "portal_link";
+    public const RESOURCE_TYPE = "portal_link";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "link"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "link" => "link"
     ];
 }
