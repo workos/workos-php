@@ -134,7 +134,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                 ]
                 ]
             ],
-            "listMetadata" => [
+            "list_metadata" => [
                 "before" => "before-id",
                 "after" => null
             ]
