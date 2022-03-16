@@ -3,7 +3,7 @@
 namespace WorkOS\Resource;
 
 /**
- * Class AuthenticationFactor.
+ * Class AuthenticationFactorSms.
  */
 class AuthenticationFactorSms extends BaseWorkOSResource
 {
