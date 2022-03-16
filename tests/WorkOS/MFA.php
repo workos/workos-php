@@ -40,7 +40,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890" );
+        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890");
         $enrollFactorTotpFixture = $this->enrollFactorTotpResponseFixture();
 
         $this->assertSame($enrollFactorTotpFixture, $enrollFactorTotp);
@@ -70,7 +70,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890" );
+        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890");
         $enrollFactorTotpFixture = $this->enrollFactorTotpResponseFixture();
 
         $this->assertSame($enrollFactorTotpFixture, $enrollFactorTotp);
@@ -163,7 +163,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             "type" => "sms",
             "environment_id" => "environment_01EQ1FTYTAZCVYSV4SYSRWRR3A",
             "sms" => [
-                    "phone_number" => "+7208675309"            
+                    "phone_number" => "+7208675309"
                     ]
         ]);
     }
@@ -212,5 +212,4 @@ class MFATest extends \PHPUnit\Framework\TestCase
             )
         ];
     }
-
 }

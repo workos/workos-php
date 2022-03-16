@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class AuthenticationFactorSms extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "authentication_factor";
+    public const RESOURCE_TYPE = "authentication_factor";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "object",
         "id",
         "createdAt",
@@ -19,7 +19,7 @@ class AuthenticationFactorSms extends BaseWorkOSResource
         "sms"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "object" => "object",
         "id" => "id",
         "created_at" => "createdAt",

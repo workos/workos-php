@@ -7,14 +7,14 @@ namespace WorkOS\Resource;
  */
 class VerificationChallenge extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "authentication_challenge";
+    public const RESOURCE_TYPE = "authentication_challenge";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "challenge",
         "valid"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "challenge" => "challenge",
         "valid" => "valid"
     ];

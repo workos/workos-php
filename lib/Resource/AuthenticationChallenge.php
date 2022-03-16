@@ -7,9 +7,9 @@ namespace WorkOS\Resource;
  */
 class AuthenticationChallenge extends BaseWorkOSResource
 {
-    const RESOURCE_TYPE = "authentication_challenge";
+    public const RESOURCE_TYPE = "authentication_challenge";
 
-    const RESOURCE_ATTRIBUTES = [
+    public const RESOURCE_ATTRIBUTES = [
         "object",
         "id",
         "createdAt",
@@ -18,7 +18,7 @@ class AuthenticationChallenge extends BaseWorkOSResource
         "authenticationFactorId"
     ];
 
-    const RESPONSE_TO_RESOURCE_KEY = [
+    public const RESPONSE_TO_RESOURCE_KEY = [
         "object" => "object",
         "id" => "id",
         "created_at" => "createdAt",
