@@ -86,7 +86,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             "sms_template" => $smsTemplate
         ];
 
-        $result = $this->profileAndTokenResponseFixture();
+        $result = $this->challengeFactorResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -97,26 +97,23 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profileAndToken = $this->sso->getProfileAndToken('code');
-        $profileFixture = $this->profileFixture();
+        $challengeFactor = $this->mfa->challengeFactor("auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM", "test");
+        $challengeFactorResponseFixture = $this->challengeFactorResponseFicture();
 
-        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
-        $this->assertSame($profileFixture, $profileAndToken->profile);
+        $this->assertSame($challengeFactorResponseFixture, $challengeFactor);
     }
 
     public function testVerifyFactor()
     {
-        $path = "auth/factors/Verify";
+        $path = "auth/factors/verify";
         $params = [
             "client_id" => WorkOS::getClientId(),
             "client_secret" => WorkOS::getApikey(),
-            "type" => $type,
-            "totp_issuer" => $totpIssuer,
-            "totp_user" => $totpUser,
-            "phone_number" => $phoneNumber
+            "authentication_challenge_id" => $authenticationChallengeId,
+            "code" => $code
         ];
 
-        $result = $this->profileAndTokenResponseFixture();
+        $result = $this->verifyFactorResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -127,11 +124,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $profileAndToken = $this->sso->getProfileAndToken('code');
-        $profileFixture = $this->profileFixture();
+        $verifyFactor = $this->mfa->verifyFactor("auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ", "123456");
+        $verifyFactorResponseFixture = $this->verifyFactorResponseFixture();
 
-        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
-        $this->assertSame($profileFixture, $profileAndToken->profile);
+        $this->assertSame($verifyFactorResponseFixture, $verifyFactor);
     }
 
     // Fixtures
@@ -191,25 +187,5 @@ class MFATest extends \PHPUnit\Framework\TestCase
                 "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM"
         ]
             ]);
-    }
-
-    private function profileFixture()
-    {
-        return [
-            "id" => "prof_hen",
-            "email" => "hen@papagenos.com",
-            "first_name" => "hen",
-            "last_name" => "cha",
-            "organization_id" => "org_01FG7HGMY2CZZR2FWHTEE94VF0",
-            "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
-            "connection_type" => "GoogleOAuth",
-            "idp_id" => "randomalphanum",
-            "raw_attributes" => array(
-                "email" => "hen@papagenos.com",
-                "first_name" => "hen",
-                "last_name" => "cha",
-                "ipd_id" => "randomalphanum"
-            )
-        ];
     }
 }

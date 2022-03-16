@@ -3,7 +3,7 @@
 namespace WorkOS;
 
 /**
- * Class MMFA.
+ * Class MFA.
  *
  * This class facilitates the use of WorkOS MFA.
  */
