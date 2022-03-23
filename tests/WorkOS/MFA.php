@@ -40,7 +40,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890");
+        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", null);
         $enrollFactorTotpFixture = $this->enrollFactorTotpResponseFixture();
 
         $this->assertSame($enrollFactorTotpFixture, $enrollFactorTotp);
@@ -70,8 +70,8 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $enrollFactorTotp = $this->mfa->enrollFactor($type, "test", "ricksanchez", "1234567890");
-        $enrollFactorTotpFixture = $this->enrollFactorTotpResponseFixture();
+        $enrollFactorSms = $this->mfa->enrollFactor($type, null, null, "1234567890");
+        $enrollFactorSms = $this->enrollFactorTotpResponseFixture();
 
         $this->assertSame($enrollFactorTotpFixture, $enrollFactorTotp);
     }

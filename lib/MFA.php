@@ -13,13 +13,13 @@ class MFA
      * Enrolls a new Authentication Factor
      *
      * @param string $type - Type of factor to be enrolled (sms or totp)
-     * @param string $totpIssuer - Name of the Organization
+     * @param null|string $totpIssuer - Name of the Organization
      * @param null|string $totpUser - Email of user
      * @param null|string $phoneNumber - Phone number of user
      */
 
     public function enrollFactor(
-        $type = null,
+        $type,
         $totpIssuer = null,
         $totpUser = null,
         $phoneNumber = null
@@ -33,6 +33,16 @@ class MFA
 
         if ($type != "sms" && $type != "totp") {
             $msg = "Type Parameter must either be 'sms' or 'totp'";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        if ($type == "sms" && !isset($phoneNumber)) {
+            $msg = "Incomplete arguments: phoneNumber needs to be specified when using 'sms' as type.";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        if ($type == "totp" && (!isset($totpIssuer) || !isset($totpUser))) {
+            $msg = "Incomplete arguments: totpIssuer and totpUser need to be specified when using 'totp' as type.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -62,12 +72,12 @@ class MFA
      * Initiates the authentication process (a challenge) for an authentication factor
      *
      * @param string $authenticationFactorId - ID of the authentication factor
-     * @param string $smsTemplate - Optional parameter to customize the message for sms type factors. Must include "{{code}}" if used.
+     * @param string|null $smsTemplate - Optional parameter to customize the message for sms type factors. Must include "{{code}}" if used.
     */
 
     public function challengeFactor(
         $authenticationFactorId,
-        $smsTemplate
+        $smsTemplate = null
     ) {
         $challengePath = "auth/factors/challenge";
 
