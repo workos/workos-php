@@ -14,13 +14,17 @@ class Organization extends BaseWorkOSResource
         "id",
         "name",
         "allowProfilesOutsideOrganization",
-        "domains"
+        "domains",
+        "createdAt",
+        "updatedAt"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "name" => "name",
         "allow_profiles_outside_organization" => "allowProfilesOutsideOrganization",
-        "domains" => "domains"
+        "domains" => "domains",
+        "created_at" => "createdAt",
+        "updated_at" => "updatedAt"
     ];
 }

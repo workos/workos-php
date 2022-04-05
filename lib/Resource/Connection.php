@@ -17,6 +17,8 @@ class Connection extends BaseWorkOSResource
         "name",
         "connectionType",
         "organizationId",
+        "createdAt",
+        "updatedAt"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
@@ -26,6 +28,8 @@ class Connection extends BaseWorkOSResource
         "name" => "name",
         "connection_type" => "connectionType",
         "organization_id" => "organizationId",
+        "created_at" => "createdAt",
+        "updated_at" => "updatedAt"
     ];
 
     public static function constructFromResponse($response)

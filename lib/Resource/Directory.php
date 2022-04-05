@@ -16,7 +16,9 @@ class Directory extends BaseWorkOSResource
         "state",
         "type",
         "name",
-        "domain"
+        "domain",
+        "createdAt",
+        "updatedAt"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
@@ -26,6 +28,8 @@ class Directory extends BaseWorkOSResource
         "state" => "state",
         "type" => "type",
         "name" => "name",
-        "domain" => "domain"
+        "domain" => "domain",
+        "created_at" => "createdAt",
+        "updated_at" => "updatedAt"
     ];
 }
