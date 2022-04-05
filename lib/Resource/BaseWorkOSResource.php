@@ -80,6 +80,10 @@ class BaseWorkOSResource
             return $this->values[$key];
         }
 
+        if ($this->raw[$key]) {
+            return $this->raw[$key];
+        }
+
         $msg = "${key} does not exist on " . static::class;
         throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }

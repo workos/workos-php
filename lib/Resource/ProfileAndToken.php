@@ -20,7 +20,7 @@ class ProfileAndToken extends BaseWorkOSResource
     {
         $instance = parent::constructFromResponse($response);
 
-        $instance->values["profile"] = $response["profile"];
+        $instance->values["profile"] = Profile::constructFromResponse($response["profile"]);
 
         return $instance;
     }
