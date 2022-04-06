@@ -21,6 +21,10 @@ composer require workos/workos-php
 
 The package will need to be configured with your [API Key](https://dashboard.workos.com/api-keys) and [Client ID](https://dashboard.workos.com/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_CLIENT_ID` environment variable.
 
+## SDK Versioning
+
+For our SDKs WorkOS follows a Semantic Versioning ([SemVer](https://semver.org/)) process where all releases will have a version X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any breaking changes to only be released in major versions and strongly recommend reading changelogs before making any major version upgrades.
+
 ## More Information
 
 - [Single Sign-On Guide](https://workos.com/docs/sso/guide)
