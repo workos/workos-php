@@ -19,6 +19,8 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
     public function testCreateOrganization()
     {
         $organizationsPath = "organizations";
+        $createdDate = "2021-07-26T18:55:16.072Z";
+        $updatedDate = "2021-07-26T18:55:16.072Z";
 
         $result = $this->createOrganizationResponseFixture();
 
@@ -34,7 +36,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result
+            $result,
+            $createdDate,
+            $updatedDate
         );
 
         $organization = $this->organizationFixture();
@@ -46,6 +50,8 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
     public function testListOrganizations()
     {
         $organizationsPath = "organizations";
+        $createdDate = "2021-07-26T18:55:16.072Z";
+        $updatedDate = "2021-07-26T18:55:16.072Z";
         $params = [
             "limit" => Organizations::DEFAULT_PAGE_SIZE,
             "before" => null,
@@ -61,7 +67,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result
+            $result,
+            $createdDate,
+            $updatedDate
         );
 
         $organization = $this->organizationFixture();
@@ -85,7 +93,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                     "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                     "domain" => "example.com"
                 ]
-            ]
+            ],
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
         ]);
     }
 
@@ -105,7 +115,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                         "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                         "domain" => "example.com"
                     ]
-                ]
+                ],
+                "created_at" => "2021-07-26T18:55:16.072Z",
+                "updated_at" => "2021-07-26T18:55:16.072Z",
                 ],
                 [
                 "object" => "organization",
@@ -118,7 +130,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                         "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
                         "domain" => "example2.com"
                     ]
-                ]
+                ],
+                "created_at" => "2021-07-26T18:55:16.072Z",
+                "updated_at" => "2021-07-26T18:55:16.072Z",
                 ],
                 [
                 "object" => "organization",
@@ -131,7 +145,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                         "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
                         "domain" => "example5.com"
                     ]
-                ]
+                ],
+                "created_at" => "2021-07-26T18:55:16.072Z",
+                "updated_at" => "2021-07-26T18:55:16.072Z",
                 ]
             ],
             "list_metadata" => [
@@ -152,7 +168,9 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                     "object" => "organization_domain",
                     "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                     "domain" => "example.com"
-                ]
+                ],
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
             ]
         ];
     }
