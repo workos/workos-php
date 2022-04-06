@@ -19,6 +19,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testListDirectories()
     {
         $directoriesPath = "directories";
+        $createdDate = "2021-07-26T18:55:16.072Z";
+        $updatedDate = "2021-07-26T18:55:16.072Z";
         $params = [
             "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
             "before" => null,
@@ -36,7 +38,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result
+            $result,
+            $createdDate,
+            $updatedDate
         );
 
         $directory = $this->directoryFixture();
@@ -58,7 +62,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             null,
             null,
             true,
-            $result
+            $result,
+            $createdDate,
+            $updatedDate
         );
 
         $directory = $this->ds->getDirectory($directoryId);
@@ -218,7 +224,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "state" => "linked",
             "type" => "gsuite directory",
             "name" => "Ri Jeong Hyeok",
-            "domain" => "crashlandingonyou.com"
+            "domain" => "crashlandingonyou.com",
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
         ];
     }
 
@@ -231,7 +239,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "state" => "linked",
             "type" => "gsuite directory",
             "name" => "Ri Jeong Hyeok",
-            "domain" => "crashlandingonyou.com"
+            "domain" => "crashlandingonyou.com",
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
         ];
     }
 
@@ -246,6 +256,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "name" => "Ri Jeong Hyeok",
             "bearer_token" => null,
             "domain" => "crashlandingonyou.com",
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
         ]);
     }
 
