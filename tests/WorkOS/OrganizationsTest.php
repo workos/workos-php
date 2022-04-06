@@ -34,7 +34,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result,
+            $result
         );
 
         $organization = $this->organizationFixture();
@@ -61,7 +61,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result,
+            $result
         );
 
         $organization = $this->organizationFixture();
