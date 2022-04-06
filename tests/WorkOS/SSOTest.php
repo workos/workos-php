@@ -258,6 +258,8 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "name" => "Google OAuth 2.0",
             "connectionType" => "GoogleOAuth",
             "organizationId" => "org_1234",
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
         ];
     }
 
@@ -275,7 +277,9 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                     "object" => "connection_domain",
                     "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
                     "domain" => "workos.com"
-                ]
+                ],
+            "created_at" => "2021-07-26T18:55:16.072Z",
+            "updated_at" => "2021-07-26T18:55:16.072Z"
             ]
         ]);
     }
@@ -306,6 +310,8 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                     "saml_relying_party_public_key" => null,
                     "saml_x509_certs" => null,
                     "organization_id" => "org_1234",
+                    "created_at" => "2021-07-26T18:55:16.072Z",
+                    "updated_at" => "2021-07-26T18:55:16.072Z",
                     "oauth_uid" => "oauthuid",
                     "oauth_secret" => "oauthsecret",
                     "oauth_redirect_uri" => "http://localhost:7000/sso/oauth/google/GbQX1B6LWUYcsGiq6k20iCUMA/callback",

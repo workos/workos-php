@@ -19,8 +19,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testListDirectories()
     {
         $directoriesPath = "directories";
-        $createdDate = "2021-07-26T18:55:16.072Z";
-        $updatedDate = "2021-07-26T18:55:16.072Z";
         $params = [
             "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
             "before" => null,
@@ -38,9 +36,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result,
-            $createdDate,
-            $updatedDate
+            $result
         );
 
         $directory = $this->directoryFixture();
@@ -62,9 +58,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             null,
             null,
             true,
-            $result,
-            $createdDate,
-            $updatedDate
+            $result
         );
 
         $directory = $this->ds->getDirectory($directoryId);

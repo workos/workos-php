@@ -19,8 +19,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
     public function testCreateOrganization()
     {
         $organizationsPath = "organizations";
-        $createdDate = "2021-07-26T18:55:16.072Z";
-        $updatedDate = "2021-07-26T18:55:16.072Z";
 
         $result = $this->createOrganizationResponseFixture();
 
@@ -37,8 +35,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             $params,
             true,
             $result,
-            $createdDate,
-            $updatedDate
         );
 
         $organization = $this->organizationFixture();
@@ -50,8 +46,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
     public function testListOrganizations()
     {
         $organizationsPath = "organizations";
-        $createdDate = "2021-07-26T18:55:16.072Z";
-        $updatedDate = "2021-07-26T18:55:16.072Z";
         $params = [
             "limit" => Organizations::DEFAULT_PAGE_SIZE,
             "before" => null,
@@ -68,8 +62,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
             $params,
             true,
             $result,
-            $createdDate,
-            $updatedDate
         );
 
         $organization = $this->organizationFixture();
