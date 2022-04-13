@@ -98,8 +98,11 @@ class MFA
             $params,
             true
         );
-
-        return Resource\AuthenticationChallenge::constructFromResponse($response);
+        if (isset($response['expires_at'])) {
+            return Resource\AuthenticationChallengeSms::constructFromResponse($response);
+        } else {
+            return Resource\AuthenticationChallengeTotp::constructFromResponse($response);
+        }
     }
 
     /**

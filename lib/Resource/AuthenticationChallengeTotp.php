@@ -3,9 +3,9 @@
 namespace WorkOS\Resource;
 
 /**
- * Class AuthenticationChallenge.
+ * Class AuthenticationChallengeTotp.
  */
-class AuthenticationChallenge extends BaseWorkOSResource
+class AuthenticationChallengeTotp extends BaseWorkOSResource
 {
     public const RESOURCE_TYPE = "authentication_challenge";
 
@@ -14,7 +14,6 @@ class AuthenticationChallenge extends BaseWorkOSResource
         "id",
         "createdAt",
         "updatedAt",
-        "expiresAt",
         "authenticationFactorId"
     ];
 
@@ -23,7 +22,6 @@ class AuthenticationChallenge extends BaseWorkOSResource
         "id" => "id",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt",
-        "expires_at" => "expiresAt",
         "authentication_factor_id" => "authenticationFactorId"
     ];
 }
