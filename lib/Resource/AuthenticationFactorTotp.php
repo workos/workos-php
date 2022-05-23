@@ -15,7 +15,6 @@ class AuthenticationFactorTotp extends BaseWorkOSResource
         "createdAt",
         "updatedAt",
         "type",
-        "environmentId",
         "totp"
     ];
 
@@ -25,7 +24,6 @@ class AuthenticationFactorTotp extends BaseWorkOSResource
         "created_at" => "createdAt",
         "updated_at" => "updatedAt",
         "type" => "type",
-        "environment_id" => "environmentId",
         "totp" => "totp"
     ];
 }
