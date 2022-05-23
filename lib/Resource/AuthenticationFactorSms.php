@@ -15,7 +15,6 @@ class AuthenticationFactorSms extends BaseWorkOSResource
         "createdAt",
         "updatedAt",
         "type",
-        "environmentId",
         "sms"
     ];
 
@@ -25,7 +24,6 @@ class AuthenticationFactorSms extends BaseWorkOSResource
         "created_at" => "createdAt",
         "updated_at" => "updatedAt",
         "type" => "type",
-        "environment_id" => "environmentId",
         "sms" => "sms"
     ];
 }
