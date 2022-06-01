@@ -17,6 +17,7 @@ class DirectorySync
      * @param null|string $domain Domain of a Directory
      * @param null|string $search Searchable text for a Directory
      * @param int $limit Maximum number of records to return
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param null|string $before Directory ID to look before
      * @param null|string $after Directory ID to look after
      * @param null|string $organizationId Unique ID for an organization
@@ -30,6 +31,7 @@ class DirectorySync
         $domain = null,
         $search = null,
         $limit = self::DEFAULT_PAGE_SIZE,
+        $order = null,
         $before = null,
         $after = null,
         $organizationId = null
@@ -37,6 +39,7 @@ class DirectorySync
         $directoriesPath = "directories";
         $params = [
             "limit" => $limit,
+            "order" => $order,
             "before" => $before,
             "after" => $after,
             "domain" => $domain,
@@ -67,6 +70,7 @@ class DirectorySync
      * @param null|string $directory Directory ID
      * @param null|string $user Directory User ID
      * @param int $limit Maximum number of records to return
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param null|string $before Directory Group ID to look before
      * @param null|string $after Directory Group ID to look after
      *
@@ -79,6 +83,7 @@ class DirectorySync
         $directory = null,
         $user = null,
         $limit = self::DEFAULT_PAGE_SIZE,
+        $order = null,
         $before = null,
         $after = null
     ) {
@@ -86,6 +91,7 @@ class DirectorySync
 
         $params = [
             "limit" => $limit,
+            "order" => $order,
             "before" => $before,
             "after" => $after
         ];
@@ -141,6 +147,7 @@ class DirectorySync
      * @param null|string $directory Directory ID
      * @param null|string $group Directory Group ID
      * @param int $limit Maximum number of records to return
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param null|string $before Directory User ID to look before
      * @param null|string $after Directory User ID to look after
      *
@@ -153,6 +160,7 @@ class DirectorySync
         $directory = null,
         $group = null,
         $limit = self::DEFAULT_PAGE_SIZE,
+        $order = null,
         $before = null,
         $after = null
     ) {
@@ -160,6 +168,7 @@ class DirectorySync
 
         $params = [
             "limit" => $limit,
+            "order" => $order,
             "before" => $before,
             "after" => $after
         ];

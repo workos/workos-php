@@ -17,6 +17,7 @@ class Organizations
      * @param null|array $domain Filter organizations to only return those that are associated with
      *      the provided domain.
      * @param int $limit Maximum number of records to return
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param null|string $before Organization ID to look before
      * @param null|string $after Organization ID to look after
      *
@@ -28,12 +29,14 @@ class Organizations
     public function listOrganizations(
         $domains = null,
         $limit = self::DEFAULT_PAGE_SIZE,
+        $order = null,
         $before = null,
         $after = null
     ) {
         $organizationsPath = "organizations";
         $params = [
           "limit" => $limit,
+          "order" => $order,
           "before" => $before,
           "after" => $after,
           "domains" => $domains
