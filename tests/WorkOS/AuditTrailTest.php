@@ -171,7 +171,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
             "before" => null,
             "after" => null,
-            "occurred_at_lte" => "2020-02-21T00:32:14.443Z"
+            "occurred_at_lte" => "2020-02-21T00:32:14.443Z",
             "order" => null
         ];
 

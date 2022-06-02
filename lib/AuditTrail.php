@@ -100,8 +100,8 @@ class AuditTrail
         $search = null,
         $limit = self::DEFAULT_EVENT_LIMIT,
         $before = null,
-        $after = null
-        $order = null,
+        $after = null,
+        $order = null
     ) {
         $eventsPath = "events";
 

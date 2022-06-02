@@ -38,7 +38,7 @@ class Organizations
           "limit" => $limit,
           "before" => $before,
           "after" => $after,
-          "domains" => $domains
+          "domains" => $domains,
           "order" => $order
         ];
 
