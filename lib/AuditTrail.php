@@ -75,9 +75,9 @@ class AuditTrail
      * @param string $occurredAtLte ISO-8601 datetime of when an event occured at or before
      * @param string $search Keyword search
      * @param int $limit Number of Events to return
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param string $before Event ID to look before
      * @param string $after Event ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @return array An array containing the following:
      *      null|string Event ID to use as before cursor
@@ -99,17 +99,17 @@ class AuditTrail
         $occurredAtLte = null,
         $search = null,
         $limit = self::DEFAULT_EVENT_LIMIT,
-        $order = null,
         $before = null,
         $after = null
+        $order = null,
     ) {
         $eventsPath = "events";
 
         $params = [
             "limit" => $limit,
-            "order" => $order,
             "before" => $before,
-            "after" => $after
+            "after" => $after,
+            "order" => $order
         ];
 
         if ($group) {

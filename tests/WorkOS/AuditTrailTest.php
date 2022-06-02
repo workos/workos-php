@@ -58,9 +58,9 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
-            "order" => null,
             "before" => null,
-            "after" => null
+            "after" => null,
+            "order" => null
         ];
 
         $this->mockRequest(
@@ -87,10 +87,10 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
-            "order" => null,
             "before" => null,
             "after" => null,
-            "occurred_at" => "2020-02-21T00:32:14.443Z"
+            "occurred_at" => "2020-02-21T00:32:14.443Z",
+            "order" => null
         ];
 
         $this->mockRequest(
@@ -129,10 +129,10 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
-            "order" => null,
             "before" => null,
             "after" => null,
-            "occurred_at_gte" => "2020-02-21T00:32:14.443Z"
+            "occurred_at_gte" => "2020-02-21T00:32:14.443Z",
+            "order" => null
         ];
 
         $this->mockRequest(
@@ -169,10 +169,10 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
-            "order" => null,
             "before" => null,
             "after" => null,
             "occurred_at_lte" => "2020-02-21T00:32:14.443Z"
+            "order" => null
         ];
 
         $this->mockRequest(

@@ -48,10 +48,10 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $organizationsPath = "organizations";
         $params = [
             "limit" => Organizations::DEFAULT_PAGE_SIZE,
-            "order" => null,
             "before" => null,
             "after" => null,
-            "domains" => null
+            "domains" => null,
+            "order" => null
         ];
 
         $result = $this->organizationsResponseFixture();

@@ -195,9 +195,9 @@ class SSO
      * @param null|\WorkOS\Resource\ConnectionType $connectionType Authentication service provider descriptor
      * @param null|string $organizationId Organization ID of the Connection(s)
      * @param int $limit Maximum number of records to return
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      * @param null|string $before Connection ID to look before
      * @param null|string $after Connection ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @return array An array containing the following:
      *      null|string Connection ID to use as before cursor
@@ -209,18 +209,18 @@ class SSO
         $connectionType = null,
         $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $order = null,
         $before = null,
-        $after = null
+        $after = null,
+        $order = null
     ) {
         $connectionsPath = "connections";
         $params = [
             "limit" => $limit,
-            "order" => $order,
             "before" => $before,
             "after" => $after,
             "domain" => $domain,
-            "connection_type" => $connectionType
+            "connection_type" => $connectionType,
+            "order" => $order
         ];
 
         $response = Client::request(
