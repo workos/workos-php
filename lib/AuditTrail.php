@@ -77,6 +77,7 @@ class AuditTrail
      * @param int $limit Number of Events to return
      * @param string $before Event ID to look before
      * @param string $after Event ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @return array An array containing the following:
      *      null|string Event ID to use as before cursor
@@ -99,14 +100,16 @@ class AuditTrail
         $search = null,
         $limit = self::DEFAULT_EVENT_LIMIT,
         $before = null,
-        $after = null
+        $after = null,
+        $order = null
     ) {
         $eventsPath = "events";
 
         $params = [
             "limit" => $limit,
             "before" => $before,
-            "after" => $after
+            "after" => $after,
+            "order" => $order
         ];
 
         if ($group) {

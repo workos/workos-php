@@ -19,6 +19,7 @@ class Organizations
      * @param int $limit Maximum number of records to return
      * @param null|string $before Organization ID to look before
      * @param null|string $after Organization ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @return array An array containing the following:
      *      null|string Organization ID to use as before cursor
@@ -29,14 +30,16 @@ class Organizations
         $domains = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
-        $after = null
+        $after = null,
+        $order = null
     ) {
         $organizationsPath = "organizations";
         $params = [
           "limit" => $limit,
           "before" => $before,
           "after" => $after,
-          "domains" => $domains
+          "domains" => $domains,
+          "order" => $order
         ];
 
         $response = Client::request(

@@ -141,7 +141,8 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "before" => null,
             "after" => null,
             "domain" => null,
-            "connection_type" => null
+            "connection_type" => null,
+            "order" => null
         ];
 
         $result = $this->connectionsResponseFixture();

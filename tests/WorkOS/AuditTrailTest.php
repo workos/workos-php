@@ -59,7 +59,8 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
             "before" => null,
-            "after" => null
+            "after" => null,
+            "order" => null
         ];
 
         $this->mockRequest(
@@ -88,6 +89,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
             "before" => null,
             "after" => null,
+            "order" => null,
             "occurred_at" => "2020-02-21T00:32:14.443Z"
         ];
 
@@ -129,6 +131,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
             "before" => null,
             "after" => null,
+            "order" => null,
             "occurred_at_gte" => "2020-02-21T00:32:14.443Z"
         ];
 
@@ -168,6 +171,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
             "before" => null,
             "after" => null,
+            "order" => null,
             "occurred_at_lte" => "2020-02-21T00:32:14.443Z"
         ];
 

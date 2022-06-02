@@ -25,7 +25,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "after" => null,
             "domain" => null,
             "search" => null,
-            "organization_id" => null
+            "organization_id" => null,
+            "order" => null
         ];
 
         $result = $this->directoriesResponseFixture();
@@ -95,7 +96,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $params = [
             "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
             "before" => null,
-            "after" => null
+            "after" => null,
+            "order" => null
         ];
 
         $result = $this->groupsResponseFixture();
@@ -143,7 +145,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $params = [
             "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
             "before" => null,
-            "after" => null
+            "after" => null,
+            "order" => null
         ];
 
         $result = $this->usersResponseFixture();
