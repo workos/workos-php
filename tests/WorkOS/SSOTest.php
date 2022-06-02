@@ -138,11 +138,11 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $connectionsPath = "connections";
         $params = [
             "limit" => SSO::DEFAULT_PAGE_SIZE,
-            "order" => null,
             "before" => null,
             "after" => null,
             "domain" => null,
-            "connection_type" => null
+            "connection_type" => null,
+            "order" => null
         ];
 
         $result = $this->connectionsResponseFixture();
