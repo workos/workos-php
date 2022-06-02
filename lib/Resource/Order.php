@@ -3,9 +3,9 @@
 namespace WorkOS\Resource;
 
 /**
- * Class ConnectionType
+ * Class Order
  *
- * Connection Types supported through the WorkOS API.
+ * Orders supported through the WorkOS API.
  */
 class Order
 {
