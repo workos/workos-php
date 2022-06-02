@@ -58,6 +58,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
+            "order" => null,
             "before" => null,
             "after" => null
         ];
@@ -86,6 +87,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
+            "order" => null,
             "before" => null,
             "after" => null,
             "occurred_at" => "2020-02-21T00:32:14.443Z"
@@ -127,6 +129,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
+            "order" => null,
             "before" => null,
             "after" => null,
             "occurred_at_gte" => "2020-02-21T00:32:14.443Z"
@@ -166,6 +169,7 @@ class AuditTrailTest extends \PHPUnit\Framework\TestCase
         $result = $this->getEventsResponseFixture();
         $params = [
             "limit" => AuditTrail::DEFAULT_EVENT_LIMIT,
+            "order" => null,
             "before" => null,
             "after" => null,
             "occurred_at_lte" => "2020-02-21T00:32:14.443Z"
