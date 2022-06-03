@@ -220,6 +220,7 @@ class SSO
             "after" => $after,
             "domain" => $domain,
             "connection_type" => $connectionType,
+            "organization_id" => $organizationId,
             "order" => $order
         ];
 
