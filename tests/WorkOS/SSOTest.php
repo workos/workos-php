@@ -142,6 +142,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "after" => null,
             "domain" => null,
             "connection_type" => null,
+            "organization_id" => null,
             "order" => null
         ];
 
