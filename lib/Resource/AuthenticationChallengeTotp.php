@@ -14,6 +14,7 @@ class AuthenticationChallengeTotp extends BaseWorkOSResource
         "id",
         "createdAt",
         "updatedAt",
+        "expiresAt",
         "authenticationFactorId"
     ];
 
@@ -22,6 +23,7 @@ class AuthenticationChallengeTotp extends BaseWorkOSResource
         "id" => "id",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt",
+        "expires_at" => "expiresAt",
         "authentication_factor_id" => "authenticationFactorId"
     ];
 }
