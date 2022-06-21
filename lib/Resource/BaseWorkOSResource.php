@@ -34,7 +34,7 @@ class BaseWorkOSResource
 
         foreach (static::RESPONSE_TO_RESOURCE_KEY as $responseKey => $resourceKey) {
             try {
-                $instance->values[$resourceKey] = $instance->raw[$responseKey];
+                $instance->values[$resourceKey] = $instance->raw[$responseKey] ?? null;
             } catch (\OutOfBoundsException $e) {
                 $instance->values[$resourceKey] = null;
             }
