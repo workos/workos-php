@@ -80,8 +80,8 @@ class MFATest extends \PHPUnit\Framework\TestCase
 
     public function testChallengeFactor()
     {
-        $path = "auth/factors/challenge";
         $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
+        $path = "auth/factors/{$authenticationFactorId}/challenge";
         $smsTemplate = "test";
         $params = [
             "authentication_factor_id" => $authenticationFactorId,
@@ -105,17 +105,17 @@ class MFATest extends \PHPUnit\Framework\TestCase
         $this->assertSame($challengeFactorResponseFixture, $challengeFactor->toArray());
     }
 
-    public function testVerifyFactor()
+    public function testVerifyChallenge()
     {
-        $path = "auth/factors/verify";
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
+        $path = "auth/challenges/{$authenticationChallengeId}/verify";      
         $code ="123456";
         $params = [
             "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code
         ];
 
-        $result = $this->verifyFactorResponseFixture();
+        $result = $this->verifyChallengeResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -126,10 +126,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $verifyFactor = $this->mfa->verifyFactor($authenticationChallengeId, $code);
-        $verifyFactorResponseFixture = $this->verifyFactorFixture();
+        $verifyFactor = $this->mfa->verifyChallenge($authenticationChallengeId, $code);
+        $verifyChallengeResponseFixture = $this->verifyChallengeFixture();
 
-        $this->assertSame($verifyFactorResponseFixture, $verifyFactor->toArray());
+        $this->assertSame($verifyChallengeResponseFixture, $verifyFactor->toArray());
     }
 
     // Fixtures
@@ -218,7 +218,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    private function verifyFactorResponseFixture()
+    private function verifyChallengeResponseFixture()
     {
         return json_encode([
             "challenge" => [
@@ -233,7 +233,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
             ]);
     }
 
-    private function verifyFactorFixture()
+    private function verifyChallengeFixture()
     {
         return [
             "challenge" => [

@@ -79,7 +79,7 @@ class MFA
         $authenticationFactorId,
         $smsTemplate = null
     ) {
-        $challengePath = "auth/factors/challenge";
+        $challengePath = "auth/factors/{$authenticationFactorId}/challenge";
 
         if (!isset($authenticationFactorId)) {
             $msg = "Incomplete arguments: 'authentication_factor_id' is a required parameter";
@@ -112,11 +112,11 @@ class MFA
      * @param string $code - The verification code sent to and provided by the end user.
     */
 
-    public function verifyFactor(
+    public function verifyChallenge(
         $authenticationChallengeId,
         $code
     ) {
-        $verifyPath = "auth/factors/verify";
+        $verifyPath = "auth/challenges/{$authenticationChallengeId}/verify";
 
         if (!isset($authenticationChallengeId) || !isset($code)) {
             $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
