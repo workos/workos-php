@@ -108,7 +108,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     public function testVerifyChallenge()
     {
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
-        $path = "auth/challenges/{$authenticationChallengeId}/verify";      
+        $path = "auth/challenges/{$authenticationChallengeId}/verify";
         $code ="123456";
         $params = [
             "authentication_challenge_id" => $authenticationChallengeId,
