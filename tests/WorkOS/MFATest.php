@@ -84,7 +84,6 @@ class MFATest extends \PHPUnit\Framework\TestCase
         $path = "auth/factors/{$authenticationFactorId}/challenge";
         $smsTemplate = "test";
         $params = [
-            "authentication_factor_id" => $authenticationFactorId,
             "sms_template" => $smsTemplate
         ];
 
@@ -105,13 +104,39 @@ class MFATest extends \PHPUnit\Framework\TestCase
         $this->assertSame($challengeFactorResponseFixture, $challengeFactor->toArray());
     }
 
+    public function testVerifyFactor()
+    {
+        $path = "auth/factors/verify";
+        $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
+        $code ="123456";
+        $params = [
+            "authentication_challenge_id" => $authenticationChallengeId,
+            "code" => $code
+        ];
+
+        $result = $this->verifyFactorResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $verifyFactor = $this->mfa->verifyFactor($authenticationChallengeId, $code);
+        $verifyFactorResponseFixture = $this->verifyFactorFixture();
+
+        $this->assertSame($verifyFactorResponseFixture, $verifyFactor->toArray());
+    }
+
     public function testVerifyChallenge()
     {
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
         $path = "auth/challenges/{$authenticationChallengeId}/verify";
         $code ="123456";
         $params = [
-            "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code
         ];
 
@@ -216,6 +241,36 @@ class MFATest extends \PHPUnit\Framework\TestCase
             "expiresAt" => "2022-03-08T23:16:18.532Z",
             "authenticationFactorId" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM"
         ];
+    }
+
+    private function verifyFactorResponseFixture()
+    {
+        return json_encode([
+            "challenge" => [
+                "object" => "authentication_challenge",
+                "id" => "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ",
+                "created_at" => "2022-03-08T23:16:18.532Z",
+                "updated_at" => "2022-03-08T23:16:18.532Z",
+                "expires_at" => "2022-02-15T15:36:53.279Z",
+                "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            ],
+                "valid" => "true"
+            ]);
+    }
+
+    private function verifyFactorFixture()
+    {
+        return [
+            "challenge" => [
+                "object" => "authentication_challenge",
+                "id" => "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ",
+                "created_at" => "2022-03-08T23:16:18.532Z",
+                "updated_at" => "2022-03-08T23:16:18.532Z",
+                "expires_at" => "2022-02-15T15:36:53.279Z",
+                "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            ],
+                "valid" => "true"
+            ];
     }
 
     private function verifyChallengeResponseFixture()
