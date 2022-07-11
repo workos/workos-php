@@ -79,15 +79,14 @@ class MFA
         $authenticationFactorId,
         $smsTemplate = null
     ) {
-        $challengePath = "auth/factors/{$authenticationFactorId}/challenge";
-
         if (!isset($authenticationFactorId)) {
             $msg = "Incomplete arguments: 'authentication_factor_id' is a required parameter";
             throw new Exception\UnexpectedValueException($msg);
         }
 
+        $challengePath = "auth/factors/{$authenticationFactorId}/challenge";
+
         $params = [
-        "authentication_factor_id" => $authenticationFactorId,
         "sms_template" => $smsTemplate
     ];
 
@@ -112,11 +111,11 @@ class MFA
      * @param string $code - The verification code sent to and provided by the end user.
     */
 
-    public function verifyChallenge(
+    public function verifyFactor(
         $authenticationChallengeId,
         $code
     ) {
-        $verifyPath = "auth/challenges/{$authenticationChallengeId}/verify";
+        $verifyPath = "auth/factors/verify";
 
         if (!isset($authenticationChallengeId) || !isset($code)) {
             $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
@@ -125,6 +124,40 @@ class MFA
 
         $params = [
         "authentication_challenge_id" => $authenticationChallengeId,
+        "code" => $code
+    ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $verifyPath,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\VerificationChallenge::constructFromResponse($response);
+    }
+
+
+    /**
+     * Verifies the one time password provided by the end-user.
+     *
+     * @param string $authenticationChallengeId - The ID of the authentication challenge that provided the user the verification code.
+     * @param string $code - The verification code sent to and provided by the end user.
+    */
+
+    public function verifyChallenge(
+        $authenticationChallengeId,
+        $code
+    ) {
+        if (!isset($authenticationChallengeId) || !isset($code)) {
+            $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        $verifyPath = "auth/challenges/{$authenticationChallengeId}/verify";
+
+        $params = [
         "code" => $code
     ];
 
