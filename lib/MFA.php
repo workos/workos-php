@@ -115,27 +115,22 @@ class MFA
         $authenticationChallengeId,
         $code
     ) {
-        $verifyPath = "auth/factors/verify";
-
         if (!isset($authenticationChallengeId) || !isset($code)) {
             $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
             throw new Exception\UnexpectedValueException($msg);
         }
 
-        $params = [
-        "authentication_challenge_id" => $authenticationChallengeId,
-        "code" => $code
-    ];
+        $msg = "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead";
 
-        $response = Client::request(
-            Client::METHOD_POST,
-            $verifyPath,
-            null,
-            $params,
-            true
-        );
+        error_log($msg);
 
-        return Resource\VerificationChallenge::constructFromResponse($response);
+        $response = (new \WorkOS\MFA())
+    ->verifyChallenge(
+        $authenticationChallengeId,
+        $code
+    );
+
+        return $response;
     }
 
 

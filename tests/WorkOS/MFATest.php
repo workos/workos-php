@@ -106,11 +106,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
 
     public function testVerifyFactor()
     {
-        $path = "auth/factors/verify";
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
+        $path = "auth/challenges/{$authenticationChallengeId}/verify";
         $code ="123456";
         $params = [
-            "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code
         ];
 
@@ -151,10 +150,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $verifyFactor = $this->mfa->verifyChallenge($authenticationChallengeId, $code);
+        $verifyChallenge = $this->mfa->verifyChallenge($authenticationChallengeId, $code);
         $verifyChallengeResponseFixture = $this->verifyChallengeFixture();
 
-        $this->assertSame($verifyChallengeResponseFixture, $verifyFactor->toArray());
+        $this->assertSame($verifyChallengeResponseFixture, $verifyChallenge->toArray());
     }
 
     // Fixtures
