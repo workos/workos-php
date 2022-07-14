@@ -80,11 +80,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
 
     public function testChallengeFactor()
     {
-        $path = "auth/factors/challenge";
         $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
+        $path = "auth/factors/{$authenticationFactorId}/challenge";
         $smsTemplate = "test";
         $params = [
-            "authentication_factor_id" => $authenticationFactorId,
             "sms_template" => $smsTemplate
         ];
 
@@ -107,11 +106,10 @@ class MFATest extends \PHPUnit\Framework\TestCase
 
     public function testVerifyFactor()
     {
-        $path = "auth/factors/verify";
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
+        $path = "auth/challenges/{$authenticationChallengeId}/verify";
         $code ="123456";
         $params = [
-            "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code
         ];
 
@@ -130,6 +128,32 @@ class MFATest extends \PHPUnit\Framework\TestCase
         $verifyFactorResponseFixture = $this->verifyFactorFixture();
 
         $this->assertSame($verifyFactorResponseFixture, $verifyFactor->toArray());
+    }
+
+    public function testVerifyChallenge()
+    {
+        $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
+        $path = "auth/challenges/{$authenticationChallengeId}/verify";
+        $code ="123456";
+        $params = [
+            "code" => $code
+        ];
+
+        $result = $this->verifyChallengeResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $verifyChallenge = $this->mfa->verifyChallenge($authenticationChallengeId, $code);
+        $verifyChallengeResponseFixture = $this->verifyChallengeFixture();
+
+        $this->assertSame($verifyChallengeResponseFixture, $verifyChallenge->toArray());
     }
 
     // Fixtures
@@ -234,6 +258,36 @@ class MFATest extends \PHPUnit\Framework\TestCase
     }
 
     private function verifyFactorFixture()
+    {
+        return [
+            "challenge" => [
+                "object" => "authentication_challenge",
+                "id" => "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ",
+                "created_at" => "2022-03-08T23:16:18.532Z",
+                "updated_at" => "2022-03-08T23:16:18.532Z",
+                "expires_at" => "2022-02-15T15:36:53.279Z",
+                "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            ],
+                "valid" => "true"
+            ];
+    }
+
+    private function verifyChallengeResponseFixture()
+    {
+        return json_encode([
+            "challenge" => [
+                "object" => "authentication_challenge",
+                "id" => "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ",
+                "created_at" => "2022-03-08T23:16:18.532Z",
+                "updated_at" => "2022-03-08T23:16:18.532Z",
+                "expires_at" => "2022-02-15T15:36:53.279Z",
+                "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            ],
+                "valid" => "true"
+            ]);
+    }
+
+    private function verifyChallengeFixture()
     {
         return [
             "challenge" => [

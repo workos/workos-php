@@ -24,8 +24,8 @@ class Webhook
 
         if ($eventResult == "pass"):
             return Resource\Webhook::constructFromPayload($payload); else:
-            return $eventResult;
-        endif;
+                return $eventResult;
+            endif;
     }
 
     /**
@@ -49,11 +49,11 @@ class Webhook
 
         if (empty($timestamp)):
             return "No Timestamp available"; elseif (empty($signature)):
-            return "No signature hash found with expected scheme v1"; elseif ($timestamp < $currentTime - $tolerance):
-            return "Timestamp outside of tolerance"; elseif ($signature != $expectedSignature):
-            return "Constructed signature " . $expectedSignature . "Does not match WorkOS Header Signature " . $signature; else:
-            return "pass";
-        endif;
+                return "No signature hash found with expected scheme v1"; elseif ($timestamp < $currentTime - $tolerance):
+                    return "Timestamp outside of tolerance"; elseif ($signature != $expectedSignature):
+                        return "Constructed signature " . $expectedSignature . "Does not match WorkOS Header Signature " . $signature; else:
+                            return "pass";
+                        endif;
     }
 
     /**
