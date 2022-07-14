@@ -55,7 +55,7 @@ class CurlRequestClient implements RequestClientInterface
 
                 break;
 
-              case \WorkOS\CLIENT::METHOD_PUT:
+            case \WorkOS\CLIENT::METHOD_PUT:
 
                 \array_push($headers, "Content-Type: application/json");
 
