@@ -258,7 +258,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "data" => [
                 [
                     "name" => "Developers",
-                    "id" => "directory_grp_id"
+                    "id" => "directory_grp_id",
+                    "directory_id" => "dir_123",
+                    "organization_id" => "org_123"
                 ]
             ],
             "list_metadata" => [
@@ -272,7 +274,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode([
             "id" => "directory_grp_id",
-            "name" => "Developers"
+            "name" => "Developers",
+            "directory_id" => "dir_123",
+            "organization_id" => "org_123"
         ]);
     }
 
@@ -280,7 +284,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "id" => "directory_grp_id",
-            "name" => "Developers"
+            "name" => "Developers",
+            "directoryId" => "dir_123",
+            "organizationId" => "org_123"
         ];
     }
 
@@ -297,6 +303,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "state" => "active",
                     "last_name" => "Seri",
                     "first_name" => "Yoon",
+                    "directory_id" => "dir_123",
+                    "organization_id" => "org_123",
                     "idp_id" => null,
                     "groups" => null,
                     "emails" => [
@@ -348,6 +356,8 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "state" => "active",
             "last_name" => "Seri",
             "first_name" => "Yoon",
+            "directory_id" => "dir_123",
+            "organization_id" => "org_123",
             "idp_id" => null,
             "groups" => null,
             "emails" => [
@@ -435,7 +445,9 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "lastName" => "Seri",
             "state" => "active",
             "idpId" => null,
-            "groups" => null
+            "groups" => null,
+            "directoryId" => "dir_123",
+            "organizationId" => "org_123",
         ];
     }
 }

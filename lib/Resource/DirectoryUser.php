@@ -19,7 +19,9 @@ class DirectoryUser extends BaseWorkOSResource
         "lastName",
         "state",
         "idpId",
-        "groups"
+        "groups",
+        "directoryId",
+        "organizationId"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
@@ -32,6 +34,8 @@ class DirectoryUser extends BaseWorkOSResource
         "last_name" => "lastName",
         "state" => "state",
         "idp_id" => "idpId",
-        "groups" => "groups"
+        "groups" => "groups",
+        "directory_id" => "directoryId",
+        "organization_id" => "organizationId"
     ];
 }
