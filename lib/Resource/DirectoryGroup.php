@@ -11,11 +11,15 @@ class DirectoryGroup extends BaseWorkOSResource
 
     public const RESOURCE_ATTRIBUTES = [
         "id",
-        "name"
+        "name",
+        "directoryId",
+        "organizationId"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
-        "name" => "name"
+        "name" => "name",
+        "directory_id" => "directoryId",
+        "organization_id" => "organizationId"
     ];
 }
