@@ -38,7 +38,7 @@ class Webhook
      * @return boolean true
      */
 
-    private function verifyHeader($sigHeader, $payload, $secret, $tolerance)
+    public function verifyHeader($sigHeader, $payload, $secret, $tolerance)
     {
         $timestamp = (int)$this->getTimeStamp($sigHeader);
         $signature = $this->getSignature($sigHeader);
@@ -62,7 +62,7 @@ class Webhook
     * @return $timestamp
     */
 
-    private function getTimeStamp($sigHeader)
+    public function getTimeStamp($sigHeader)
     {
         $workosHeadersSplit = explode(',', $sigHeader, 2);
         $timestamp = substr($workosHeadersSplit[0], 2);
@@ -75,7 +75,7 @@ class Webhook
     * @return $signature
     */
 
-    private function getSignature($sigHeader)
+    public function getSignature($sigHeader)
     {
         $workosHeadersSplit = explode(',', $sigHeader, 2);
         $signature = substr($workosHeadersSplit[1], 4);
