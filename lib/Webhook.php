@@ -23,9 +23,10 @@ class Webhook
         $eventResult = $this->verifyHeader($sigHeader, $payload, $secret, $tolerance);
 
         if ($eventResult == "pass"):
-            return Resource\Webhook::constructFromPayload($payload); else:
-                return $eventResult;
-            endif;
+            return Resource\Webhook::constructFromPayload($payload);
+        else:
+            return $eventResult;
+        endif;
     }
 
     /**
@@ -38,7 +39,7 @@ class Webhook
      * @return boolean true
      */
 
-    private function verifyHeader($sigHeader, $payload, $secret, $tolerance)
+    public function verifyHeader($sigHeader, $payload, $secret, $tolerance)
     {
         $timestamp = (int)$this->getTimeStamp($sigHeader);
         $signature = $this->getSignature($sigHeader);
@@ -48,12 +49,16 @@ class Webhook
         $expectedSignature = hash_hmac("sha256", $signedPayload, $secret, false);
 
         if (empty($timestamp)):
-            return "No Timestamp available"; elseif (empty($signature)):
-                return "No signature hash found with expected scheme v1"; elseif ($timestamp < $currentTime - $tolerance):
-                    return "Timestamp outside of tolerance"; elseif ($signature != $expectedSignature):
-                        return "Constructed signature " . $expectedSignature . "Does not match WorkOS Header Signature " . $signature; else:
-                            return "pass";
-                        endif;
+            return "No Timestamp available";
+        elseif (empty($signature)):
+            return "No signature hash found with expected scheme v1";
+        elseif ($timestamp < $currentTime - $tolerance):
+            return "Timestamp outside of tolerance";
+        elseif ($signature != $expectedSignature):
+            return "Constructed signature " . $expectedSignature . "Does not match WorkOS Header Signature " . $signature;
+        else:
+            return "pass";
+        endif;
     }
 
     /**
@@ -62,9 +67,9 @@ class Webhook
     * @return $timestamp
     */
 
-    private function getTimeStamp($sigHeader)
+    public function getTimeStamp($sigHeader)
     {
-        $workosHeadersSplit = explode(',', $sigHeader, 2);
+        $workosHeadersSplit = explode(",", $sigHeader, 2);
         $timestamp = substr($workosHeadersSplit[0], 2);
         return $timestamp;
     }
@@ -75,9 +80,9 @@ class Webhook
     * @return $signature
     */
 
-    private function getSignature($sigHeader)
+    public function getSignature($sigHeader)
     {
-        $workosHeadersSplit = explode(',', $sigHeader, 2);
+        $workosHeadersSplit = explode(",", $sigHeader, 2);
         $signature = substr($workosHeadersSplit[1], 4);
         return $signature;
     }
