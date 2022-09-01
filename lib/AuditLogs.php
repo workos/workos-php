@@ -45,11 +45,14 @@ class AuditLogs
 
         $params = [
             "organization_id" => $organizationId,
-            "event" => $event,
+            "event" => $event
+        ];
+
+        $headers = [
             "idempotency_key" => $idempotencyKey
         ];
 
-        $response = Client::request(Client::METHOD_POST, $eventsPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $eventsPath, $headers, $params, true);
 
         return Resource\AuditLogCreateEventStatus::constructFromResponse($response);
     }
