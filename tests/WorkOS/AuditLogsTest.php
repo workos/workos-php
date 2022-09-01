@@ -6,7 +6,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper {
         setUp as protected traitSetUp;
-        
+
     }
 
     protected function setUp(): void
@@ -17,16 +17,17 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $this->al = new AuditLogs();
     }
 
-    public function testCreateEvent(){
+    public function testCreateEvent()
+    {
         $path = "audit_logs/events";
 
         $organizationId = "org_123";
-        $auditLogEvent = 
+        $auditLogEvent =
         [
             "action" => "document.updated",
             "occurred_at" => time(),
             "version" => 1,
-            "actor" => 
+            "actor" =>
             [
                 "Id" => "user_123",
                 "Type" => "user",
@@ -55,7 +56,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        
+
 
         $eventStatus = $this->al->createEvent($organizationId, $auditLogEvent);
         $eventFixture = $this->createEventFixture();
@@ -63,7 +64,8 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($eventFixture, $eventStatus->toArray());
     }
 
-    public function testCreateExport(){
+    public function testCreateExport()
+    {
         $path = "audit_logs/exports";
 
         $organizationId = "org_123";
@@ -96,7 +98,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        
+
 
         $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets);
         $exportFixture = $this->createExportFixture();
@@ -104,7 +106,8 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($exportFixture, $auditLogExport->toArray());
     }
 
-    public function testGetExport(){
+    public function testGetExport()
+    {
         $auditLogExportId = "123";
 
         $path = "audit_logs/exports/${auditLogExportId}";
@@ -120,32 +123,32 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        
+
 
         $auditLogGetExport = $this->al->getExport($auditLogExportId);
         $getExportFixture = $this->getExportFixture();
 
         $this->assertSame($getExportFixture, $auditLogGetExport->toArray());
     }
-// Fixtures
+    // Fixtures
 
-private function createEventFixture()
-{
-    return [
-        "success" => TRUE
+    private function createEventFixture()
+    {
+        return [
+        "success" => true
     ];
-}
+    }
 
-private function createEventResponseFixture()
-{
-    return json_encode([
-        "success" => TRUE
+    private function createEventResponseFixture()
+    {
+        return json_encode([
+        "success" => true
     ]);
-}
+    }
 
-private function createExportFixture()
-{
-    return [
+    private function createExportFixture()
+    {
+        return [
         "object" => "audit_log_export",
         "id" => "audit_log_export_123",
         "state" => "ready",
@@ -153,11 +156,11 @@ private function createExportFixture()
         "createdAt" => "2022-08-18T18:07:10.822Z",
         "updatedAt" => "2022-08-18T18:07:10.822Z",
     ];
-}
+    }
 
-private function createExportResponseFixture()
-{
-    return json_encode([
+    private function createExportResponseFixture()
+    {
+        return json_encode([
         "object" => "audit_log_export",
         "id" => "audit_log_export_123",
         "state" => "ready",
@@ -165,11 +168,11 @@ private function createExportResponseFixture()
         "created_at" => "2022-08-18T18:07:10.822Z",
         "updated_at" => "2022-08-18T18:07:10.822Z",
     ]);
-}
+    }
 
-private function getExportFixture()
-{
-    return [
+    private function getExportFixture()
+    {
+        return [
         "object" => "audit_log_export",
         "id" => "audit_log_export_123",
         "state" => "ready",
@@ -177,11 +180,11 @@ private function getExportFixture()
         "createdAt" => "2022-08-18T18:07:10.822Z",
         "updatedAt" => "2022-08-18T18:07:10.822Z",
     ];
-}
+    }
 
-private function getExportResponseFixture()
-{
-    return json_encode([
+    private function getExportResponseFixture()
+    {
+        return json_encode([
         "object" => "audit_log_export",
         "id" => "audit_log_export_123",
         "state" => "ready",
@@ -189,5 +192,5 @@ private function getExportResponseFixture()
         "created_at" => "2022-08-18T18:07:10.822Z",
         "updated_at" => "2022-08-18T18:07:10.822Z",
     ]);
-}
+    }
 }
