@@ -13,27 +13,26 @@ class AuditLogs
      *
      * @param string $organizationId the unique identifier for the organization.
      * @param array $event Associative array containing the keys detailed below
-            * @var string "action" Specific activity performed by the actor. REQUIRED.
-            * @var string "occurred_at" ISO-8601 datetime at which the event happened. REQUIRED.
-            * @var array "actor" Associative array describing Actor of the event. REQUIRED.
+            * string "action" Specific activity performed by the actor. REQUIRED.
+            * string "occurred_at" ISO-8601 datetime at which the event happened. REQUIRED.
+            * array "actor" Associative array describing Actor of the event. REQUIRED.
                 * KEYS:
-                * "id" - string - REQUIRED
-                * "name" - string - NOT REQUIRED
-                * "type" - string - REQUIRED
-                * "metadata" - associative array ["Any Key" => "Any Value] - NOT REQUIRED
-            * @var array "targets" Targets of the event. REQUIRED.
-            * Nested array as there can be multiple targets.
+                * string "id" - REQUIRED
+                * string "name" - NOT REQUIRED
+                * string "type" - REQUIRED
+                * array "metadata" - Associative array ["Any Key" => "Any Value] - NOT REQUIRED
+            * array "targets" Targets of the event. Nested array as there can be multiple targets. REQUIRED
                 * KEYS:
-                * "id" - string - REQUIRED
-                * "name" - string - NOT REQUIRED
-                * "type" - string - REQUIRED
-                * "metadata" - associative array ["Any Key" => "Any Value] - NOT REQUIRED
-            * @var array "context" Context of the event. REQUIRED.
+                * string "id" - REQUIRED
+                * string "name" - NOT REQUIRED
+                * string "type" - REQUIRED
+                * array "metadata" - Associative array ["Any Key" => "Any Value] - NOT REQUIRED
+            * array "context" Context of the event. REQUIRED.
                 * KEYS:
-                * "location" - string - REQUIRED
-                * "user_agent" - string - NOT REQUIRED
-            * @var int "version" Version of the event. Required if version is anything other than 1. NOT REQUIRED.
-            * @var array "metadata" Arbitrary key-value data containing information associated with the event. NOT REQUIRED
+                * string "location" -  REQUIRED
+                * string "user_agent" -  NOT REQUIRED
+            * int "version" Version of the event. Required if version is anything other than 1. NOT REQUIRED.
+            * array "metadata" Arbitrary key-value data containing information associated with the event. NOT REQUIRED
      * @param string $idempotencyKey Unique key guaranteeing idempotency of events for 24 hours.
      *
      * @return  \WorkOS\Resource\AuditLogCreateEventStatus

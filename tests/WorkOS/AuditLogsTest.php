@@ -20,6 +20,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
     {
         $path = "audit_logs/events";
 
+        $idempotencyKey = null;
         $organizationId = "org_123";
         $auditLogEvent =
         [
@@ -40,8 +41,11 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             ]];
         $params = [
             "organization_id" => $organizationId,
-            "event" => $auditLogEvent,
-            "idempotency_key" => null
+            "event" => $auditLogEvent
+        ];
+
+        $headers = [
+            "idempotency_key" => $idempotencyKey
         ];
 
         $result = $this->createEventResponseFixture();
@@ -49,7 +53,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $this->mockRequest(
             Client::METHOD_POST,
             $path,
-            null,
+            $headers,
             $params,
             true,
             $result
