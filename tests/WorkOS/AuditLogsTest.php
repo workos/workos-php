@@ -6,7 +6,6 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper {
         setUp as protected traitSetUp;
-
     }
 
     protected function setUp(): void
@@ -56,8 +55,6 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-
-
         $eventStatus = $this->al->createEvent($organizationId, $auditLogEvent);
         $eventFixture = $this->createEventFixture();
 
@@ -98,8 +95,6 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-
-
         $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets);
         $exportFixture = $this->createExportFixture();
 
@@ -122,8 +117,6 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             true,
             $result
         );
-
-
 
         $auditLogGetExport = $this->al->getExport($auditLogExportId);
         $getExportFixture = $this->getExportFixture();
