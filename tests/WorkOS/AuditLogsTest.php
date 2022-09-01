@@ -66,8 +66,8 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $path = "audit_logs/exports";
 
         $organizationId = "org_123";
-        $rangeStart = "";
-        $rangeEnd = "";
+        $rangeStart = "2022-08-18T18:07:10.822Z";
+        $rangeEnd = "2022-08-18T18:07:10.822Z";
         $targets = [
             "id" => "team_123",
             "type" => "team",
