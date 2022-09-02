@@ -6,10 +6,10 @@ agent:
     os_image: ubuntu1804
 auto_cancel:
   running:
-    when: "branch != 'master'"
+    when: "branch != 'main'"
 fail_fast:
   cancel:
-    when: "branch != 'master'"
+    when: "branch != 'main'"
 blocks:
   - name: Format Check
     dependencies: []

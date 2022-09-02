@@ -1,7 +1,7 @@
 # WorkOS PHP Library
 
 ![Packagist Version](https://img.shields.io/packagist/v/workos/workos-php)
-[![Build Status](https://workos.semaphoreci.com/badges/workos-php/branches/master.svg?style=shields)](https://workos.semaphoreci.com/projects/workos-php)
+[![Build Status](https://workos.semaphoreci.com/badges/workos-php/branches/main.svg?style=shields)](https://workos.semaphoreci.com/projects/workos-php)
 
 The WorkOS library for PHP provides convenient access to the WorkOS API from applications written in PHP.
 
