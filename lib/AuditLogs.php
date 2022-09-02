@@ -73,13 +73,22 @@ class AuditLogs
         $createExportPath = "audit_logs/exports";
 
         $params = [
-         "actions" => $actions,
-         "actors" => $actors,
          "organization_id" => $organizationId,
          "range_end" => $rangeEnd,
-         "range_start" => $rangeStart,
-         "targets" => $targets
+         "range_start" => $rangeStart
         ];
+
+        if (!is_null($actions)) {
+            $params += ["actions" => $actions];
+        };
+
+        if (!is_null($actors)) {
+            $params += ["actors" => $actors];
+        };
+
+        if (!is_null($targets)) {
+            $params += ["targets" => $targets];
+        };
 
         $response = Client::request(Client::METHOD_POST, $createExportPath, null, $params, true);
         return Resource\AuditLogExport::constructFromResponse($response);
