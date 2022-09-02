@@ -80,11 +80,11 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
         $actions = ["document.updated"];
         $actors = ["user_123"];
         $params = [
-            "actions" => $actions,
-            "actors" => $actors,
             "organization_id" => $organizationId,
             "range_end" => $rangeEnd,
             "range_start" => $rangeStart,
+            "actions" => $actions,
+            "actors" => $actors,
             "targets" => $targets
         ];
 
@@ -132,62 +132,62 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
     private function createEventFixture()
     {
         return [
-        "success" => true
-    ];
+            "success" => true
+        ];
     }
 
     private function createEventResponseFixture()
     {
         return json_encode([
-        "success" => true
-    ]);
+            "success" => true
+        ]);
     }
 
     private function createExportFixture()
     {
         return [
-        "object" => "audit_log_export",
-        "id" => "audit_log_export_123",
-        "state" => "ready",
-        "url" => "https://audit-logs.com/download.csv",
-        "createdAt" => "2022-08-18T18:07:10.822Z",
-        "updatedAt" => "2022-08-18T18:07:10.822Z",
-    ];
+            "object" => "audit_log_export",
+            "id" => "audit_log_export_123",
+            "state" => "ready",
+            "url" => "https://audit-logs.com/download.csv",
+            "createdAt" => "2022-08-18T18:07:10.822Z",
+            "updatedAt" => "2022-08-18T18:07:10.822Z",
+        ];
     }
 
     private function createExportResponseFixture()
     {
         return json_encode([
-        "object" => "audit_log_export",
-        "id" => "audit_log_export_123",
-        "state" => "ready",
-        "url" => "https://audit-logs.com/download.csv",
-        "created_at" => "2022-08-18T18:07:10.822Z",
-        "updated_at" => "2022-08-18T18:07:10.822Z",
-    ]);
+            "object" => "audit_log_export",
+            "id" => "audit_log_export_123",
+            "state" => "ready",
+            "url" => "https://audit-logs.com/download.csv",
+            "created_at" => "2022-08-18T18:07:10.822Z",
+            "updated_at" => "2022-08-18T18:07:10.822Z",
+        ]);
     }
 
     private function getExportFixture()
     {
         return [
-        "object" => "audit_log_export",
-        "id" => "audit_log_export_123",
-        "state" => "ready",
-        "url" => "https://audit-logs.com/download.csv",
-        "createdAt" => "2022-08-18T18:07:10.822Z",
-        "updatedAt" => "2022-08-18T18:07:10.822Z",
-    ];
+            "object" => "audit_log_export",
+            "id" => "audit_log_export_123",
+            "state" => "ready",
+            "url" => "https://audit-logs.com/download.csv",
+            "createdAt" => "2022-08-18T18:07:10.822Z",
+            "updatedAt" => "2022-08-18T18:07:10.822Z",
+        ];
     }
 
     private function getExportResponseFixture()
     {
         return json_encode([
-        "object" => "audit_log_export",
-        "id" => "audit_log_export_123",
-        "state" => "ready",
-        "url" => "https://audit-logs.com/download.csv",
-        "created_at" => "2022-08-18T18:07:10.822Z",
-        "updated_at" => "2022-08-18T18:07:10.822Z",
-    ]);
+            "object" => "audit_log_export",
+            "id" => "audit_log_export_123",
+            "state" => "ready",
+            "url" => "https://audit-logs.com/download.csv",
+            "created_at" => "2022-08-18T18:07:10.822Z",
+            "updated_at" => "2022-08-18T18:07:10.822Z",
+        ]);
     }
 }
