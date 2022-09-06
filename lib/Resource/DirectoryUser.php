@@ -39,15 +39,16 @@ class DirectoryUser extends BaseWorkOSResource
         "organization_id" => "organizationId"
     ];
 
-    public function primaryEmail() {
+    public function primaryEmail()
+    {
         $response = $this;
 
-        if (count($response->raw["emails"]) == 0){
+        if (count($response->raw["emails"]) == 0) {
             return;
         };
 
-        foreach ($response->raw["emails"] as $value){
-            if ($value["primary"] == true){
+        foreach ($response->raw["emails"] as $value) {
+            if ($value["primary"] == true) {
                 return $value["value"];
             };
         };

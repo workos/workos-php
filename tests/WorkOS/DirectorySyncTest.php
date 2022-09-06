@@ -138,7 +138,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($userFixture, $user->toArray());
     }
-    
+
     public function testGetUserPrimaryEmail()
     {
         $directoryUser = "directory_usr_id";
@@ -160,12 +160,12 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($userEmail, $expectedEmail);
     }
-    
+
     public function testGetUserPrimaryEmailNoPrimaryEmail()
     {
         $directoryUser = "directory_usr_id";
         $userPath = "directory_users/${directoryUser}";
-        $expectedEmail = Null;
+        $expectedEmail = null;
         $result = $this->userResponseFixtureNoEmail();
 
         $this->mockRequest(
