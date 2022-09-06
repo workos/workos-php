@@ -79,7 +79,7 @@ class AuditLogs
         ];
 
         if (!is_null($actions)) {
-            $params += ["actions" => $actions];
+            $params["actions"] = $actions;
         };
 
         if (!is_null($actors)) {
