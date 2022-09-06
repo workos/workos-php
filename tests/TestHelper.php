@@ -52,7 +52,7 @@ trait TestHelper
         if (!$headers) {
             $requestHeaders = Client::generateBaseHeaders($withAuth);
         } else {
-            $requestHeaders = \array_merge(Client::generateBaseHeaders(), $headers);
+            $requestHeaders = \array_merge(Client::generateBaseHeaders($withAuth), $headers);
         }
 
         if (!$result) {
