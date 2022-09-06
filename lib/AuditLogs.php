@@ -87,7 +87,7 @@ class AuditLogs
         };
 
         if (!is_null($targets)) {
-            $params += ["targets" => $targets];
+            $params["targets"] = $targets;
         };
 
         $response = Client::request(Client::METHOD_POST, $createExportPath, null, $params, true);
