@@ -65,12 +65,41 @@ trait TestHelper
         $this->prepareRequestMock($method, $url, $requestHeaders, $params)
             ->willReturn([$result, $responseHeaders, $responseCode]);
     }
+    
+    protected function secondMockRequest(
+        $method,
+        $path,
+        $headers = null,
+        $params = null,
+        $withAuth = false,
+        $result = null,
+        $responseHeaders = null,
+        $responseCode = 200
+    ) {
+        Client::setRequestClient($this->requestClientMock);
+        $url = Client::generateUrl($path);
+        if (!$headers) {
+            $requestHeaders = Client::generateBaseHeaders($withAuth);
+        } else {
+            $requestHeaders = \array_merge(Client::generateBaseHeaders(), $headers);
+        }
+
+        if (!$result) {
+            $result = "{}";
+        }
+        if (!$responseHeaders) {
+            $responseHeaders = [];
+        }
+
+        $this->prepareRequestMock($method, $url, $requestHeaders, $params)
+            ->willReturn([$result, $responseHeaders, $responseCode]);
+    }
 
     private function prepareRequestMock($method, $url, $headers, $params)
     {
         return $this->requestClientMock
-            ->expects(static::once())->method('request')
-            ->with(
+            ->expects(static::atLeastOnce())->method('request')
+            ->with(                
                 static::identicalTo($method),
                 static::identicalTo($url),
                 static::identicalTo($headers),
