@@ -71,7 +71,7 @@ class Organizations
      * @return \WorkOS\Resource\Organization
      */
     public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null, $idempotencyKey = null)
-    {   
+    {
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
         $params = [

@@ -42,7 +42,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $response = $this->organizations->createOrganization("Organization Name", array("example.com"));
         $this->assertSame($organization, $response->toArray());
     }
-    
+
     public function testCreateOrganizationSendsIdempotencyKey()
     {
         $organizationsPath = "organizations";
@@ -69,8 +69,8 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($response2->toArray()["id"], $response->toArray()["id"]);
     }
-    
-    
+
+
     public function testListOrganizations()
     {
         $organizationsPath = "organizations";

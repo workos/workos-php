@@ -65,7 +65,7 @@ trait TestHelper
         $this->prepareRequestMock($method, $url, $requestHeaders, $params)
             ->willReturn([$result, $responseHeaders, $responseCode]);
     }
-    
+
     protected function secondMockRequest(
         $method,
         $path,
@@ -99,7 +99,7 @@ trait TestHelper
     {
         return $this->requestClientMock
             ->expects(static::atLeastOnce())->method('request')
-            ->with(                
+            ->with(
                 static::identicalTo($method),
                 static::identicalTo($url),
                 static::identicalTo($headers),
