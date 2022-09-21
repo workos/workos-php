@@ -85,7 +85,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         try {
             Client::request(Client::METHOD_GET, $path);
         } catch (Exception\BaseRequestException $e) {
-            $this->assertEquals($e->getMessage(), "");
+            $this->assertEquals($e->getMessage(), $result);
         }
     }
 
