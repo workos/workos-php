@@ -30,7 +30,7 @@ class BaseRequestException extends \Exception
     {
         try {
             $responseJson = $response->json();
-            $this->message = $responseJson["message"];
+            $this->message = $responseJson["error"] . ": " . $responseJson["error_description"];
         } catch (\Exception $e) {
             $this->message = "";
         }
