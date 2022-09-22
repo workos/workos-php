@@ -36,10 +36,10 @@ class BaseRequestException extends \Exception
             $this->responseErrors = $responseJson["errors"];
         }
         if (!empty($responseJson["code"])) {
-            $this->responseErrors = $responseJson["code"];
+            $this->responseCode = $responseJson["code"];
         }
         if (!empty($responseJson["message"])) {
-            $this->responseErrors = $responseJson["message"];
+            $this->responseMessage = $responseJson["message"];
         }
 
         $this->filterResponseForException($response);
