@@ -92,7 +92,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
       /**
      * @dataProvider requestExceptionTestProvider
      */
-    public function testClientThrowsRequestExceptionsWithBadMessageAndCode($statusCode, $exceptionClass)
+    public function testClientThrowsRequestExceptionsWithMessageAndCode($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
 
@@ -157,7 +157,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->withApiKeyAndClientId();
 
         $path = "some/place";
-        $result = $this->errorsDescriptionFixture();
+        $result = $this->errorsArrayFixture();
 
         $this->mockRequest(
             Client::METHOD_GET,
@@ -208,7 +208,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    private function errorsDescriptionFixture()
+    private function errorsArrayFixture()
     {
         return json_encode([
             "errors" => ["invalid_grant", "ambiguous_connection_selector"]
