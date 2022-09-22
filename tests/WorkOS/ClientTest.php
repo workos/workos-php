@@ -89,6 +89,95 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+      /**
+     * @dataProvider requestExceptionTestProvider
+     */
+    public function testClientThrowsRequestExceptionsWithBadMessageAndCode($statusCode, $exceptionClass)
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "some/place";
+        $result = $this->messageAndCodeFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            false,
+            $result,
+            null,
+            $statusCode
+        );
+
+        try {
+            Client::request(Client::METHOD_GET, $path);
+        } catch (Exception\BaseRequestException $e) {
+            // var_dump($e);
+            $this->assertEquals($e->responseMessage, "Start date cannot be before 2022-06-22T00:00:00.000Z.");
+            $this->assertEquals($e->responseCode, "invalid_date_range_exception");
+        }
+    }
+
+     /**
+     * @dataProvider requestExceptionTestProvider
+     */
+    public function testClientThrowsRequestExceptionsWithErrorAndErrorDescription($statusCode, $exceptionClass)
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "some/place";
+        $result = $this->errorAndErrorDescriptionFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            false,
+            $result,
+            null,
+            $statusCode
+        );
+
+        try {
+            Client::request(Client::METHOD_GET, $path);
+        } catch (Exception\BaseRequestException $e) {
+            // var_dump($e);
+            $this->assertEquals($e->responseError, "invalid_grant");
+            $this->assertEquals($e->responseErrorDescription, "The code '01GDK892VGKGVF2QNWVTABG8MX' has expired or is invalid.");
+        }
+    }
+
+       /**
+     * @dataProvider requestExceptionTestProvider
+     */
+    public function testClientThrowsRequestExceptionsWithErrors($statusCode, $exceptionClass)
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "some/place";
+        $result = $this->errorsDescriptionFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            false,
+            $result,
+            null,
+            $statusCode
+        );
+
+        try {
+            Client::request(Client::METHOD_GET, $path);
+        } catch (Exception\BaseRequestException $e) {
+            // var_dump($e);
+            $this->assertEquals($e->responseErrors, ["invalid_grant", "ambiguous_connection_selector"]);
+        }
+    }
+
     // Providers
     public function requestExceptionTestProvider()
     {
@@ -101,5 +190,28 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             [503, Exception\ServerException::class],
             [504, Exception\ServerException::class]
         ];
+    }
+
+    private function messageAndCodeFixture()
+    {
+        return json_encode([
+            "message" => "Start date cannot be before 2022-06-22T00:00:00.000Z.",
+            "code" => "invalid_date_range_exception"
+        ]);
+    }
+
+    private function errorAndErrorDescriptionFixture()
+    {
+        return json_encode([
+            "error" => "invalid_grant",
+            "error_description" => "The code '01GDK892VGKGVF2QNWVTABG8MX' has expired or is invalid."
+        ]);
+    }
+
+    private function errorsDescriptionFixture()
+    {
+        return json_encode([
+            "errors" => ["invalid_grant", "ambiguous_connection_selector"]
+        ]);
     }
 }
