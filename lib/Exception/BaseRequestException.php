@@ -10,6 +10,11 @@ namespace WorkOS\Exception;
 class BaseRequestException extends \Exception
 {
     public $requestId = "";
+    public $responseError;
+    public $responseErrorDescription;
+    public $responseErrors;
+    public $responseCode;
+    public $responseMessage;
 
     /**
      * BaseRequestException constructor.
@@ -19,6 +24,24 @@ class BaseRequestException extends \Exception
      */
     public function __construct($response, $message = null)
     {
+        $responseJson = $response->json();
+
+        if (!empty($responseJson["error"])) {
+            $this->responseError = $responseJson["error"];
+        }
+        if (!empty($responseJson["error_description"])) {
+            $this->responseErrorDescription = $responseJson["error_description"];
+        }
+        if (!empty($responseJson["errors"])) {
+            $this->responseErrors = $responseJson["errors"];
+        }
+        if (!empty($responseJson["code"])) {
+            $this->responseCode = $responseJson["code"];
+        }
+        if (!empty($responseJson["message"])) {
+            $this->responseMessage = $responseJson["message"];
+        }
+
         $this->filterResponseForException($response);
 
         if (isset($message)) {
@@ -29,8 +52,9 @@ class BaseRequestException extends \Exception
     private function filterResponseForException($response)
     {
         try {
-            $responseJson = $response->json();
-            $this->message = $responseJson["message"];
+            $responseBody = $response->body;
+
+            $this->message = $responseBody;
         } catch (\Exception $e) {
             $this->message = "";
         }
