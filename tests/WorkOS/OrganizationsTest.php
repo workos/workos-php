@@ -43,6 +43,34 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $response->toArray());
     }
 
+    public function testCreateOrganizationSendsIdempotencyKey()
+    {
+        $organizationsPath = "organizations";
+        $idempotencyKey = "idempotencyKey123";
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "name" => "Organization Name",
+            "domains" => array("example.com"),
+            "allow_profiles_outside_organization" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $organizationsPath,
+            array("Authorization: Bearer pk_secretsauce", 'Idempotency-Key: idempotencyKey123'),
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey);
+        $response2 = $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey);
+
+        $this->assertSame($response2->toArray()["id"], $response->toArray()["id"]);
+    }
+
+
     public function testListOrganizations()
     {
         $organizationsPath = "organizations";

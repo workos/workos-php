@@ -66,11 +66,13 @@ class Organizations
      * @param array $domains The domains of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
      *      that are outside of the Organization's configured User Email Domains.
+     * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
      *
      * @return \WorkOS\Resource\Organization
      */
-    public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null)
+    public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null, $idempotencyKey = null)
     {
+        $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
         $params = [
             "name" => $name,
@@ -78,7 +80,7 @@ class Organizations
             "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
 
-        $response = Client::request(Client::METHOD_POST, $organizationsPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $organizationsPath, $headers, $params, true);
 
         return Resource\Organization::constructFromResponse($response);
     }
