@@ -139,6 +139,50 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userFixture, $user->toArray());
     }
 
+    public function testGetUserPrimaryEmail()
+    {
+        $directoryUser = "directory_usr_id";
+        $userPath = "directory_users/${directoryUser}";
+        $expectedEmail = "yoon@seri.com";
+        $result = $this->userResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $userPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $user = $this->ds->getUser($directoryUser);
+        $userEmail = $user->primaryEmail();
+
+        $this->assertSame($userEmail, $expectedEmail);
+    }
+
+    public function testGetUserPrimaryEmailNoPrimaryEmail()
+    {
+        $directoryUser = "directory_usr_id";
+        $userPath = "directory_users/${directoryUser}";
+        $expectedEmail = null;
+        $result = $this->userResponseFixtureNoEmail();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $userPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $user = $this->ds->getUser($directoryUser);
+        $userEmail = $user->primaryEmail();
+
+        $this->assertSame($userEmail, $expectedEmail);
+    }
+
     public function testListUsers()
     {
         $usersPath = "directory_users";
@@ -367,6 +411,51 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "value" => "yoon@seri.com"
                 ]
             ],
+            "raw_attributes" => [
+                "schemas" => ["urn:scim:schemas:core:1.0"],
+                "name"=> [
+                    "familyName" => "Seri",
+                    "givenName" => "Yoon"
+                ],
+                "externalId" => "external-id",
+                "locale" => "en_US",
+                "userName" => "yoon@seri.com",
+                "id" => "directory_usr_id",
+                "displayName" => "Yoon Seri",
+                "active" => true,
+                "groups" => [],
+                "meta" => [
+                    "created" => "2020-02-21T00:32:14.443Z",
+                    "version" => "7ff066f75718e21a521c269ae7eafce474ae07c1",
+                    "lastModified" => "2020-02-21T00:36:44.638Z",
+                ],
+                "emails" => [
+                    [
+                        "value" => "yoon@seri.com",
+                        "type" => "work",
+                        "primary" => true
+                    ]
+                ],
+            ],
+            "custom_attributes" => [
+                "fullName" => "Yoon Seri"
+            ],
+            "id" => "directory_usr_id"
+        ]);
+    }
+
+    private function userResponseFixtureNoEmail()
+    {
+        return json_encode([
+            "username" => "yoon@seri.com",
+            "state" => "active",
+            "last_name" => "Seri",
+            "first_name" => "Yoon",
+            "directory_id" => "dir_123",
+            "organization_id" => "org_123",
+            "idp_id" => null,
+            "groups" => null,
+            "emails" => [],
             "raw_attributes" => [
                 "schemas" => ["urn:scim:schemas:core:1.0"],
                 "name"=> [
