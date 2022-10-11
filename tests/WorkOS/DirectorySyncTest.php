@@ -539,7 +539,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             ],
             "username" => "yoon@seri.com",
             "lastName" => "Seri",
-            "job_title" => "Software Engineer",
+            "jobTitle" => "Software Engineer",
             "state" => "active",
             "idpId" => null,
             "groups" => null,
