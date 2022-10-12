@@ -182,7 +182,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     {
         $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
         $deleteFactorPath = "auth/factors/${authenticationFactorId}";
-        $responseCode = 204;
+        $responseCode = 200;
 
         $this->mockRequest(
             Client::METHOD_DELETE,
@@ -196,7 +196,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
         );
 
         $response = $this->mfa->deleteFactor($authenticationFactorId);
-        $this->assertSame(204, $responseCode);
+        $this->assertSame(200, $responseCode);
     }
 
     // Fixtures
