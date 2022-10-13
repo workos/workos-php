@@ -16,7 +16,7 @@ class MFA
      * @param null|string $totpIssuer - Name of the Organization
      * @param null|string $totpUser - Email of user
      * @param null|string $phoneNumber - Phone number of user
-     */
+    */
 
     public function enrollFactor(
         $type,
@@ -104,6 +104,7 @@ class MFA
         }
     }
 
+
     /**
      * Verifies the one time password provided by the end-user.
      *
@@ -165,5 +166,49 @@ class MFA
         );
 
         return Resource\VerificationChallenge::constructFromResponse($response);
+    }
+
+
+    /**
+     * Returns a Factor.
+     *
+     * @param string $authenticationFactorId - WorkOS Factor ID
+    */
+
+    public function getFactor($authenticationFactorId)
+    {
+        $getFactorPath = "auth/factors/${authenticationFactorId}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $getFactorPath,
+            null,
+            null,
+            true
+        );
+
+        return Resource\AuthenticationFactorTotp::constructFromResponse($response);
+    }
+
+
+    /**
+     * Deletes a Factor.
+     *
+     * @param string $authenticationFactorId - WorkOS Factor ID
+    */
+
+    public function deleteFactor($authenticationFactorId)
+    {
+        $deleteFactorPath = "auth/factors/${authenticationFactorId}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $deleteFactorPath,
+            null,
+            null,
+            true
+        );
+
+        return $response;
     }
 }

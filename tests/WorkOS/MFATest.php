@@ -156,6 +156,49 @@ class MFATest extends \PHPUnit\Framework\TestCase
         $this->assertSame($verifyChallengeResponseFixture, $verifyChallenge->toArray());
     }
 
+    public function testGetFactor()
+    {
+        $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
+        $getFactorPath = "auth/factors/${authenticationFactorId}";
+
+        $result = $this->getFactorResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $getFactorPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $factor = $this->mfa->getFactor($authenticationFactorId);
+        $factorFixture = $this->getfactorFixture();
+
+        $this->assertSame($factorFixture, $factor->toArray());
+    }
+
+    public function testDeleteFactor()
+    {
+        $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
+        $deleteFactorPath = "auth/factors/${authenticationFactorId}";
+        $responseCode = 200;
+
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $deleteFactorPath,
+            null,
+            null,
+            true,
+            null,
+            null,
+            $responseCode
+        );
+
+        $response = $this->mfa->deleteFactor($authenticationFactorId);
+        $this->assertSame(200, $responseCode);
+    }
+
     // Fixtures
 
     private function enrollFactorTotpResponseFixture()
@@ -300,5 +343,35 @@ class MFATest extends \PHPUnit\Framework\TestCase
             ],
                 "valid" => "true"
             ];
+    }
+
+    private function getFactorResponseFixture()
+    {
+        return json_encode([
+            "object" => "authentication_factor",
+            "id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            "created_at" => "2022-03-08T23:12:20.157Z",
+            "updated_at" => "2022-03-08T23:12:20.157Z",
+            "type" => "totp",
+            "totp" => [
+                "issuer" => "authentication_factor_issuer",
+                "user" => "user@test.com"
+            ]
+        ]);
+    }
+
+    private function getFactorFixture()
+    {
+        return [
+            "object" => "authentication_factor",
+            "id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            "createdAt" => "2022-03-08T23:12:20.157Z",
+            "updatedAt" => "2022-03-08T23:12:20.157Z",
+            "type" => "totp",
+            "totp" => [
+                "issuer" => "authentication_factor_issuer",
+                "user" => "user@test.com"
+            ]
+        ];
     }
 }
