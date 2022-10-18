@@ -79,7 +79,8 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $params = [
             "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
             "intent" => "audit_logs",
-            "return_url" => null
+            "return_url" => null,
+            "success_url" => null,
         ];
 
         $this->mockRequest(
