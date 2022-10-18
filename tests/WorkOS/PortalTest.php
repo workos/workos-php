@@ -25,7 +25,8 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $params = [
             "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
             "intent" => "sso",
-            "return_url" => null
+            "return_url" => null,
+            "success_url" => null
         ];
 
         $this->mockRequest(
@@ -52,7 +53,8 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $params = [
             "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
             "intent" => "dsync",
-            "return_url" => null
+            "return_url" => null,
+            "success_url" => null
         ];
 
         $this->mockRequest(
@@ -80,7 +82,7 @@ class PortalTest extends \PHPUnit\Framework\TestCase
             "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
             "intent" => "audit_logs",
             "return_url" => null,
-            "success_url" => null,
+            "success_url" => null
         ];
 
         $this->mockRequest(
