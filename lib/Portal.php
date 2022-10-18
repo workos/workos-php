@@ -16,16 +16,19 @@ class Portal
      * @param string $intent The intent of the Admin Portal. Possible values are ["sso", "dsync", "audit_logs"].
      * @param null|string $returnUrl The URL to which WorkOS should send users when they click on
      *      the link to return to your website. (Optional).
+     * @param null|string $successUrl The URL to which WorkOS will redirect users to
+     *      upon successfully setting up Single Sign On or Directory Sync. (Optional).
      *
      * @return \WorkOS\Resource\PortalLink
      */
-    public function generateLink($organization, $intent, $returnUrl = null)
+    public function generateLink($organization, $intent, $returnUrl = null, $successUrl = null)
     {
         $generateLinkPath = "portal/generate_link";
         $params = [
             "organization" => $organization,
             "intent" => $intent,
-            "return_url" => $returnUrl
+            "return_url" => $returnUrl,
+            "success_url" => $successUrl
         ];
 
         $response = Client::request(Client::METHOD_POST, $generateLinkPath, null, $params, true);
