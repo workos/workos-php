@@ -24,7 +24,7 @@ class SSO
      * @return string
      */
     public function getAuthorizationUrl(
-        $domain = null,
+        $domain,
         $redirectUri,
         $state,
         $provider = null,
