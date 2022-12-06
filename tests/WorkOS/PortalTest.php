@@ -100,6 +100,34 @@ class PortalTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectation, $response->link);
     }
 
+    public function testGenerateLinkLogStreams()
+    {
+        $generateLinkPath = "portal/generate_link";
+
+        $result = $this->generatePortalLinkFixture();
+
+        $params = [
+            "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
+            "intent" => "log_streams",
+            "return_url" => null,
+            "success_url" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $generateLinkPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $expectation = "https://id.workos.com/portal/launch?secret=secret";
+
+        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "log_streams");
+        $this->assertSame($expectation, $response->link);
+    }
+
     // Fixtures
 
     private function generatePortalLinkFixture()
