@@ -4,6 +4,9 @@ namespace WorkOS\Resource;
 
 /**
  * Class ProfileAndToken.
+ *
+ * @property string  $accessToken
+ * @property Profile $profile
  */
 class ProfileAndToken extends BaseWorkOSResource
 {
