@@ -120,7 +120,7 @@ class Organizations
 
     public function getOrganization($organization)
     {
-        $organizationsPath = "organizations/${organization}";
+        $organizationsPath = "organizations/{$organization}";
 
         $response = Client::request(Client::METHOD_GET, $organizationsPath, null, null, true);
 
@@ -136,7 +136,7 @@ class Organizations
      */
     public function deleteOrganization($organization)
     {
-        $organizationsPath = "organizations/${organization}";
+        $organizationsPath = "organizations/{$organization}";
 
         $response = Client::request(
             Client::METHOD_DELETE,

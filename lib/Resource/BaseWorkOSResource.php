@@ -60,7 +60,7 @@ class BaseWorkOSResource
             $this->values[$key] = $value;
         }
 
-        $msg = "${key} does not exist on " . static::class;
+        $msg = "{$key} does not exist on " . static::class;
         throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 
@@ -84,7 +84,7 @@ class BaseWorkOSResource
             return $this->raw[$key];
         }
 
-        $msg = "${key} does not exist on " . static::class;
+        $msg = "{$key} does not exist on " . static::class;
         throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 }
