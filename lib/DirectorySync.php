@@ -128,7 +128,7 @@ class DirectorySync
      */
     public function getGroup($directoryGroup)
     {
-        $groupPath = "directory_groups/${directoryGroup}";
+        $groupPath = "directory_groups/{$directoryGroup}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -205,7 +205,7 @@ class DirectorySync
      */
     public function getUser($directoryUser)
     {
-        $userPath = "directory_users/${directoryUser}";
+        $userPath = "directory_users/{$directoryUser}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -227,7 +227,7 @@ class DirectorySync
      */
     public function deleteDirectory($directory)
     {
-        $directoryPath = "directories/${directory}";
+        $directoryPath = "directories/{$directory}";
 
         $response = Client::request(
             Client::METHOD_DELETE,
@@ -250,7 +250,7 @@ class DirectorySync
 
     public function getDirectory($directory)
     {
-        $directoriesPath = "directories/${directory}";
+        $directoriesPath = "directories/{$directory}";
 
         $response = Client::request(Client::METHOD_GET, $directoriesPath, null, null, true);
 
