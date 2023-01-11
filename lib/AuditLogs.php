@@ -102,7 +102,7 @@ class AuditLogs
 
     public function getExport($auditLogExportId)
     {
-        $getExportPath = "audit_logs/exports/${auditLogExportId}";
+        $getExportPath = "audit_logs/exports/{$auditLogExportId}";
 
         $response = Client::request(Client::METHOD_GET, $getExportPath, null, null, true);
 

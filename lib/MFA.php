@@ -177,7 +177,7 @@ class MFA
 
     public function getFactor($authenticationFactorId)
     {
-        $getFactorPath = "auth/factors/${authenticationFactorId}";
+        $getFactorPath = "auth/factors/{$authenticationFactorId}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -199,7 +199,7 @@ class MFA
 
     public function deleteFactor($authenticationFactorId)
     {
-        $deleteFactorPath = "auth/factors/${authenticationFactorId}";
+        $deleteFactorPath = "auth/factors/{$authenticationFactorId}";
 
         $response = Client::request(
             Client::METHOD_DELETE,

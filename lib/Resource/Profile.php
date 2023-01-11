@@ -4,6 +4,16 @@ namespace WorkOS\Resource;
 
 /**
  * Class Profile.
+ *
+ * @property string $id
+ * @property string $email
+ * @property string $firstName
+ * @property string $lastName
+ * @property string $organizationId
+ * @property string $connectionId
+ * @property string $connectionType
+ * @property string $idpId
+ * @property array  $rawAttributes
  */
 class Profile extends BaseWorkOSResource
 {
