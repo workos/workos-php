@@ -27,7 +27,7 @@ blocks:
         commands:
           - checkout
       jobs:
-        - name: php 7.4
+         - name: php 7.4
           commands:
             - phpbrew --no-progress install 7.4.12
             - phpbrew use php-7.4.12
@@ -37,5 +37,19 @@ blocks:
           commands:
             - phpbrew --no-progress install 8.0.7
             - phpbrew use php-8.0.7
+            - bash scripts/restore-cache-and-update-deps 80
+            - php composer.phar run-script test
+        - name: php 8.1
+          commands:
+            - phpbrew update
+            - phpbrew --no-progress install 8.1.14
+            - phpbrew use php-8.1.14
+            - bash scripts/restore-cache-and-update-deps 80
+            - php composer.phar run-script test
+        - name: php 8.2
+          commands:
+            - phpbrew update
+            - phpbrew --no-progress install 8.2.1
+            - phpbrew use php-8.2.1
             - bash scripts/restore-cache-and-update-deps 80
             - php composer.phar run-script test
