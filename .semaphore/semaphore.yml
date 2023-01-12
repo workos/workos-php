@@ -27,7 +27,7 @@ blocks:
         commands:
           - checkout
       jobs:
-         - name: php 7.4
+        - name: php 7.4
           commands:
             - phpbrew --no-progress install 7.4.12
             - phpbrew use php-7.4.12
