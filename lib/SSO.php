@@ -151,7 +151,7 @@ class SSO
      */
     public function deleteConnection($connection)
     {
-        $connectionPath = "connections/${connection}";
+        $connectionPath = "connections/{$connection}";
 
         $response = Client::request(
             Client::METHOD_DELETE,
@@ -173,7 +173,7 @@ class SSO
      */
     public function getConnection($connection)
     {
-        $connectionPath = "connections/${connection}";
+        $connectionPath = "connections/{$connection}";
 
         $response = Client::request(
             Client::METHOD_GET,
