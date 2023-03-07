@@ -243,7 +243,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "email" => "hen@papagenos.com",
                 "first_name" => "hen",
                 "last_name" => "cha",
-                "ipd_id" => "randomalphanum"
+                "ipd_id" => "randomalphanum",
                 "groups" => array("Admins", "Developers")
             )
         ];
