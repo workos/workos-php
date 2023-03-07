@@ -13,6 +13,7 @@ namespace WorkOS\Resource;
  * @property string $connectionId
  * @property string $connectionType
  * @property string $idpId
+ * @property array  $groups
  * @property array  $rawAttributes
  */
 class Profile extends BaseWorkOSResource
@@ -28,6 +29,7 @@ class Profile extends BaseWorkOSResource
         "connectionId",
         "connectionType",
         "idpId",
+        "groups",
         "rawAttributes"
     ];
 
@@ -40,6 +42,7 @@ class Profile extends BaseWorkOSResource
         "connection_id" => "connectionId",
         "connection_type" => "connectionType",
         "idp_id" => "idpId",
+        "groups" => "groups",
         "raw_attributes" => "rawAttributes"
     ];
 }

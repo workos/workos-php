@@ -215,11 +215,13 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
                 "connection_type" => "GoogleOAuth",
                 "idp_id" => "randomalphanum",
+                "groups" => array("Admins", "Developers"),
                 "raw_attributes" => array(
                     "email" => "hen@papagenos.com",
                     "first_name" => "hen",
                     "last_name" => "cha",
-                    "ipd_id" => "randomalphanum"
+                    "ipd_id" => "randomalphanum",
+                    "groups" => array("Admins", "Developers")
                 )
             ]
         ]);
@@ -236,11 +238,13 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "connectionId" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
             "connectionType" => "GoogleOAuth",
             "idpId" => "randomalphanum",
+            "groups" => array("Admins", "Developers"),
             "rawAttributes" => array(
                 "email" => "hen@papagenos.com",
                 "first_name" => "hen",
                 "last_name" => "cha",
                 "ipd_id" => "randomalphanum"
+                "groups" => array("Admins", "Developers")
             )
         ];
     }
