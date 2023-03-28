@@ -15,13 +15,15 @@ class SSO
      * @param null|string $domain Domain of the user that will be going through SSO
      * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
-     * @param null|\WorkOS\Resource\ConnectionType $provider Service provider that handles the identity of the user
+     * @param null|string $provider Service provider that handles the identity of the user
      * @param null|string $connection Unique identifier for a WorkOS Connection
      * @param null|string $organization Unique identifier for a WorkOS Organization
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      *
      * @return string
+     *
+     * @phpstan-param null|\WorkOS\Resource\ConnectionType::* $provider
      */
     public function getAuthorizationUrl(
         $domain,
@@ -192,7 +194,7 @@ class SSO
      * List Connections.
      *
      * @param null|string $domain Domain of a Connection
-     * @param null|\WorkOS\Resource\ConnectionType $connectionType Authentication service provider descriptor
+     * @param null|string $connectionType Authentication service provider descriptor
      * @param null|string $organizationId Organization ID of the Connection(s)
      * @param int $limit Maximum number of records to return
      * @param null|string $before Connection ID to look before
@@ -203,6 +205,8 @@ class SSO
      *      null|string Connection ID to use as before cursor
      *      null|string Connection ID to use as after cursor
      *      array \WorkOS\Resource\Connection instances
+     *
+     * @phpstan-param null|\WorkOS\Resource\ConnectionType::* $connectionType
      */
     public function listConnections(
         $domain = null,
