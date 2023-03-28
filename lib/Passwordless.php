@@ -15,10 +15,12 @@ class Passwordless
      * @param string $email Email address of the user that the session is to be created for
      * @param null|string $redirectURI URI to direct the user to user to upon authenticating through the passwordless link
      * @param null|string $state Encoded string used to manage application state
-     * @param \WorkOS\Resource\ConnectionType $type The only supported ConnectionType at the time of this writing is MagicLink
+     * @param string $type The only supported ConnectionType at the time of this writing is MagicLink
      * @param $connection the unique WorkOS connection_ID
      * @param $expiresIn The number of seconds the Passwordless Session should live before expiring.
      * @return  \WorkOS\Resource\PasswordlessSession
+     *
+     * @phpstan-param \WorkOS\Resource\ConnectionType::* $type
      */
     public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
     {
