@@ -22,8 +22,6 @@ class SSO
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      *
      * @return string
-     *
-     * @phpstan-param null|\WorkOS\Resource\ConnectionType::* $provider
      */
     public function getAuthorizationUrl(
         $domain,
@@ -205,8 +203,6 @@ class SSO
      *      null|string Connection ID to use as before cursor
      *      null|string Connection ID to use as after cursor
      *      array \WorkOS\Resource\Connection instances
-     *
-     * @phpstan-param null|\WorkOS\Resource\ConnectionType::* $connectionType
      */
     public function listConnections(
         $domain = null,

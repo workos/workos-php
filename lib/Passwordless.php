@@ -19,8 +19,6 @@ class Passwordless
      * @param $connection the unique WorkOS connection_ID
      * @param $expiresIn The number of seconds the Passwordless Session should live before expiring.
      * @return  \WorkOS\Resource\PasswordlessSession
-     *
-     * @phpstan-param \WorkOS\Resource\ConnectionType::* $type
      */
     public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
     {
