@@ -5,6 +5,6 @@ namespace WorkOS\Exception;
 /**
  * Class BadRequestException.
  */
-class BadRequestException extends BaseRequestException
+class BadRequestException extends BaseRequestException implements WorkOSException
 {
 }

@@ -18,6 +18,9 @@ class Passwordless
      * @param string $type The only supported ConnectionType at the time of this writing is MagicLink
      * @param $connection the unique WorkOS connection_ID
      * @param $expiresIn The number of seconds the Passwordless Session should live before expiring.
+     *
+     * @throws Exception\WorkOSException
+     *
      * @return  \WorkOS\Resource\PasswordlessSession
      */
     public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
@@ -50,10 +53,12 @@ class Passwordless
         return Resource\PasswordlessSession::constructFromResponse($response);
     }
 
-
-    /** Send a passwordless link via email from WorkOS.
+    /**
+     * Send a passwordless link via email from WorkOS.
      *
      * @param \WorkOS\Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
+     *
+     * @throws Exception\WorkOSException
      *
      * @return boolean true
      */

@@ -35,6 +35,8 @@ class AuditLogs
             * array "metadata" Arbitrary key-value data containing information associated with the event. NOT REQUIRED
      * @param string $idempotencyKey Unique key guaranteeing idempotency of events for 24 hours.
      *
+     * @throws Exception\WorkOSException
+     *
      * @return  \WorkOS\Resource\AuditLogCreateEventStatus
      */
 
@@ -58,14 +60,16 @@ class AuditLogs
 
     /**
      * @param array $auditLogExportOptions Associative array containing the keys detailed below
-        * @var null|string $organizationId Description of the record.
-        * @var null|string $rangeStart ISO-8601 Timestamp of the start of Export's the date range.
-        * @var null|string $rangeEnd ISO-8601 Timestamp  of the end of Export's the date range.
-        * @var null|array $actions Actions that Audit Log Events will be filtered by.
-        * @var null|array $actors Actor names that Audit Log Events will be filtered by.
-        * @var null|array $targets Target types that Audit Log Events will be filtered by.
-        *
-        * @return Resource\AuditLogExport
+     * @var null|string $organizationId Description of the record.
+     * @var null|string $rangeStart ISO-8601 Timestamp of the start of Export's the date range.
+     * @var null|string $rangeEnd ISO-8601 Timestamp  of the end of Export's the date range.
+     * @var null|array $actions Actions that Audit Log Events will be filtered by.
+     * @var null|array $actors Actor names that Audit Log Events will be filtered by.
+     * @var null|array $targets Target types that Audit Log Events will be filtered by.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\AuditLogExport
      */
 
     public function createExport($organizationId, $rangeStart, $rangeEnd, $actions = null, $actors = null, $targets = null)
@@ -95,11 +99,12 @@ class AuditLogs
     }
 
     /**
-       * @param string $auditLogExportId Unique identifier of the Audit Log Export
-       *
-       * @return Resource\AuditLogExport
-    */
-
+     * @param string $auditLogExportId Unique identifier of the Audit Log Export
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\AuditLogExport
+     */
     public function getExport($auditLogExportId)
     {
         $getExportPath = "audit_logs/exports/{$auditLogExportId}";

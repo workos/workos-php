@@ -2,9 +2,10 @@
 
 namespace WorkOS;
 
+use WorkOS\Exception;
+
 /**
  * Class SSO.
- *
  * This class facilitates the use of WorkOS SSO.
  */
 class SSO
@@ -20,6 +21,9 @@ class SSO
      * @param null|string $organization Unique identifier for a WorkOS Organization
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
+     *
+     * @throws Exception\UnexpectedValueException
+     * @throws Exception\ConfigurationException
      *
      * @return string
      */
@@ -92,6 +96,8 @@ class SSO
      *
      * @param string $code Code returned by WorkOS on completion of OAuth 2.0 flow
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\ProfileAndToken
      */
     public function getProfileAndToken($code)
@@ -114,6 +120,9 @@ class SSO
      * Verify that SSO has been completed successfully and retrieve the identity of the user.
      *
      * @param string $accessToken, the token used to authenticate the API call
+     *
+     * @throws Exception\GenericException
+     *
      * @return \WorkOS\Resource\Profile
      */
     public function getProfile($accessToken)
@@ -147,6 +156,8 @@ class SSO
      *
      * @param string $connection Connection ID
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\Response
      */
     public function deleteConnection($connection)
@@ -168,6 +179,8 @@ class SSO
      * Get a Connection.
      *
      * @param string $connection Connection ID
+     *
+     * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\Connection
      */
@@ -198,6 +211,8 @@ class SSO
      * @param null|string $before Connection ID to look before
      * @param null|string $after Connection ID to look after
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
      *
      * @return array An array containing the following:
      *      null|string Connection ID to use as before cursor

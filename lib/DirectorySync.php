@@ -22,6 +22,8 @@ class DirectorySync
      * @param null|string $organizationId Unique ID for an organization
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
+     * @throws Exception\WorkOSException
+     *
      * @return array An array containing the following:
      *      null|string Directory ID to use as before cursor
      *      null|string Directory ID to use as after cursor
@@ -74,6 +76,8 @@ class DirectorySync
      * @param null|string $after Directory Group ID to look after
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
+     * @throws Exception\WorkOSException
+     *
      * @return array An array containing the following:
      *      null|string Directory Group ID to use as before cursor
      *      null|string Directory Group ID to use as after cursor
@@ -124,6 +128,8 @@ class DirectorySync
      *
      * @param string $directoryGroup Directory Group ID
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\DirectoryGroup
      */
     public function getGroup($directoryGroup)
@@ -150,6 +156,8 @@ class DirectorySync
      * @param null|string $before Directory User ID to look before
      * @param null|string $after Directory User ID to look after
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
      *
      * @return array An array containing the following:
      *      null|string Directory User ID to use as before cursor
@@ -201,6 +209,8 @@ class DirectorySync
      *
      * @param string $directoryUser Directory User ID
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\DirectoryUser
      */
     public function getUser($directoryUser)
@@ -222,6 +232,8 @@ class DirectorySync
      * Delete a Directory.
      *
      * @param string $directory Directory ID
+     *
+     * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\Response
      */
@@ -245,9 +257,10 @@ class DirectorySync
      *
      * @param string $directory WorkOS directory ID
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\Directory
      */
-
     public function getDirectory($directory)
     {
         $directoriesPath = "directories/{$directory}";

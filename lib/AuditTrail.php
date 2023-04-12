@@ -35,6 +35,8 @@ class AuditTrail
      * @param array $event Associative array containing the keys detailed above
      * @param string $idempotencyKey Unique key guaranteeing idempotency of events for 24 hours
      *
+     * @throws Exception\WorkOSException
+     *
      * @return boolean true if an event was successfully created
      */
     public function createEvent($event, $idempotencyKey = null)
@@ -78,6 +80,8 @@ class AuditTrail
      * @param string $before Event ID to look before
      * @param string $after Event ID to look after
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
      *
      * @return array An array containing the following:
      *      null|string Event ID to use as before cursor

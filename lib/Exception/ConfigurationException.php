@@ -7,6 +7,6 @@ namespace WorkOS\Exception;
  *
  * Thrown when a WorkOS package configuration related issue is encountered.
  */
-class ConfigurationException extends \Exception
+class ConfigurationException extends \Exception implements WorkOSException
 {
 }
