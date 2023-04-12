@@ -5,6 +5,6 @@ namespace WorkOS\Exception;
 /**
  * Class NotFoundException.
  */
-class NotFoundException extends BaseRequestException
+class NotFoundException extends BaseRequestException implements WorkOSException
 {
 }

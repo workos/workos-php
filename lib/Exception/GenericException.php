@@ -7,7 +7,7 @@ namespace WorkOS\Exception;
  *
  * Generic WorkOS Exception.
  */
-class GenericException extends \Exception
+class GenericException extends \Exception implements WorkOSException
 {
     public $data;
 

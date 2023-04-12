@@ -5,6 +5,6 @@ namespace WorkOS\Exception;
 /**
  * class UnexpectedValueException.
  */
-class UnexpectedValueException extends \Exception
+class UnexpectedValueException extends \Exception implements WorkOSException
 {
 }
