@@ -61,6 +61,8 @@ class WorkOS
     }
 
     /**
+     * @throws \WorkOS\Exception\ConfigurationException
+     *
      * @return null|string WorkOS Client ID
      */
     public static function getClientId()

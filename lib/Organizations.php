@@ -21,6 +21,8 @@ class Organizations
      * @param null|string $after Organization ID to look after
      * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
+     * @throws Exception\WorkOSException
+     *
      * @return array An array containing the following:
      *      null|string Organization ID to use as before cursor
      *      null|string Organization ID to use as after cursor
@@ -68,6 +70,8 @@ class Organizations
      *      that are outside of the Organization's configured User Email Domains.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\Organization
      */
     public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null, $idempotencyKey = null)
@@ -93,8 +97,9 @@ class Organizations
      * @param string $name The name of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
      *      that are outside of the Organization's configured User Email Domains.
+     *
+     * @throws Exception\WorkOSException
      */
-
     public function updateOrganization($organization, $domains, $name, $allowProfilesOutsideOrganization = null)
     {
         $organizationsPath = "organizations/{$organization}";
@@ -115,9 +120,10 @@ class Organizations
      *
      * @param string $organization WorkOS organization ID
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\Organization
      */
-
     public function getOrganization($organization)
     {
         $organizationsPath = "organizations/{$organization}";
@@ -131,6 +137,8 @@ class Organizations
      * Delete an Organization.
      *
      * @param string $organization WorkOS organization ID
+     *
+     * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\Response
      */

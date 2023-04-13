@@ -5,6 +5,6 @@ namespace WorkOS\Exception;
 /**
  * Class ServerException.
  */
-class ServerException extends BaseRequestException
+class ServerException extends BaseRequestException implements WorkOSException
 {
 }

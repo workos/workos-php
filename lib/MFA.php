@@ -16,8 +16,9 @@ class MFA
      * @param null|string $totpIssuer - Name of the Organization
      * @param null|string $totpUser - Email of user
      * @param null|string $phoneNumber - Phone number of user
-    */
-
+     *
+     * @throws Exception\WorkOSException
+     */
     public function enrollFactor(
         $type,
         $totpIssuer = null,
@@ -73,8 +74,7 @@ class MFA
      *
      * @param string $authenticationFactorId - ID of the authentication factor
      * @param string|null $smsTemplate - Optional parameter to customize the message for sms type factors. Must include "{{code}}" if used.
-    */
-
+     */
     public function challengeFactor(
         $authenticationFactorId,
         $smsTemplate = null
@@ -140,8 +140,9 @@ class MFA
      *
      * @param string $authenticationChallengeId - The ID of the authentication challenge that provided the user the verification code.
      * @param string $code - The verification code sent to and provided by the end user.
-    */
-
+     *
+     * @throws Exception\WorkOSException
+     */
     public function verifyChallenge(
         $authenticationChallengeId,
         $code
@@ -173,8 +174,9 @@ class MFA
      * Returns a Factor.
      *
      * @param string $authenticationFactorId - WorkOS Factor ID
-    */
-
+     *
+     * @throws Exception\WorkOSException
+     */
     public function getFactor($authenticationFactorId)
     {
         $getFactorPath = "auth/factors/{$authenticationFactorId}";
@@ -195,8 +197,9 @@ class MFA
      * Deletes a Factor.
      *
      * @param string $authenticationFactorId - WorkOS Factor ID
-    */
-
+     *
+     * @throws Exception\WorkOSException
+     */
     public function deleteFactor($authenticationFactorId)
     {
         $deleteFactorPath = "auth/factors/{$authenticationFactorId}";

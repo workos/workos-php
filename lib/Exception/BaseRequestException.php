@@ -7,7 +7,7 @@ namespace WorkOS\Exception;
  *
  * Base Exception for use in filtering a response for information.
  */
-class BaseRequestException extends \Exception
+class BaseRequestException extends \Exception implements WorkOSException
 {
     public $requestId = "";
     public $responseError;

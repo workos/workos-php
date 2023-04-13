@@ -19,6 +19,8 @@ class Portal
      * @param null|string $successUrl The URL to which WorkOS will redirect users to
      *      upon successfully setting up Single Sign On or Directory Sync. (Optional).
      *
+     * @throws Exception\WorkOSException
+     *
      * @return \WorkOS\Resource\PortalLink
      */
     public function generateLink($organization, $intent, $returnUrl = null, $successUrl = null)
