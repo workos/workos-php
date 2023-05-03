@@ -66,13 +66,15 @@ class AuditLogs
      * @var null|array $actions Actions that Audit Log Events will be filtered by.
      * @var null|array $actors Actor names that Audit Log Events will be filtered by.
      * @var null|array $targets Target types that Audit Log Events will be filtered by.
+     * @var null|array $actorNames Actor names that Audit Log Events will be filtered by.
+     * @var null|array $actorIds Actor IDs that Audit Log Events will be filtered by.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\AuditLogExport
      */
 
-    public function createExport($organizationId, $rangeStart, $rangeEnd, $actions = null, $actors = null, $targets = null)
+    public function createExport($organizationId, $rangeStart, $rangeEnd, $actions = null, $actors = null, $targets = null, $actorNames = null, $actorIds = null)
     {
         $createExportPath = "audit_logs/exports";
 
@@ -87,7 +89,19 @@ class AuditLogs
         };
 
         if (!is_null($actors)) {
+            $msg = "'actors' is deprecated. Please use 'actorNames' instead'";
+
+            error_log($msg);
+
             $params["actors"] = $actors;
+        };
+
+        if (!is_null($actorNames)) {
+            $params["actor_names"] = $actorNames;
+        };
+
+        if (!is_null($actorIds)) {
+            $params["actor_ids"] = $actorIds;
         };
 
         if (!is_null($targets)) {

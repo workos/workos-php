@@ -78,13 +78,17 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             "name" => "team",
         ];
         $actions = ["document.updated"];
-        $actors = ["user_123"];
+        $actors = ["Smith"];
+        $actorNames = ["Smith"];
+        $actorIds = ["user_123"];
         $params = [
             "organization_id" => $organizationId,
             "range_end" => $rangeEnd,
             "range_start" => $rangeStart,
             "actions" => $actions,
             "actors" => $actors,
+            "actor_names" => $actorNames,
+            "actor_ids" => $actorIds,
             "targets" => $targets
         ];
 
@@ -99,7 +103,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets);
+        $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds);
         $exportFixture = $this->createExportFixture();
 
         $this->assertSame($exportFixture, $auditLogExport->toArray());
