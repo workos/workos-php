@@ -89,7 +89,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-      /**
+    /**
      * @dataProvider requestExceptionTestProvider
      */
     public function testClientThrowsRequestExceptionsWithMessageAndCode($statusCode, $exceptionClass)
@@ -119,9 +119,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-     /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    /**
+    * @dataProvider requestExceptionTestProvider
+    */
     public function testClientThrowsRequestExceptionsWithErrorAndErrorDescription($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -149,7 +149,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-       /**
+    /**
      * @dataProvider requestExceptionTestProvider
      */
     public function testClientThrowsRequestExceptionsWithErrors($statusCode, $exceptionClass)
