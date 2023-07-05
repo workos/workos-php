@@ -1,14 +1,15 @@
 {
   "packages": [
-    "php@8.2.1"
+    "php@8.2.1",
+    "php82Packages.composer@2.5.5"
   ],
   "shell": {
     "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
+      "composer install"
     ],
     "scripts": {
       "test": [
-        "echo \"Error: no test specified\" && exit 1"
+        "composer run-script test"
       ]
     }
   }
