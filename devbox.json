@@ -1,0 +1,16 @@
+{
+  "packages": [
+    "php@8.2.1",
+    "php82Packages.composer@2.5.5"
+  ],
+  "shell": {
+    "init_hook": [
+      "composer install"
+    ],
+    "scripts": {
+      "test": [
+        "composer run-script test"
+      ]
+    }
+  }
+}
