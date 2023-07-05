@@ -120,8 +120,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-    * @dataProvider requestExceptionTestProvider
-    */
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsWithErrorAndErrorDescription($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
