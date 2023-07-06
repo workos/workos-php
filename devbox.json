@@ -8,9 +8,8 @@
       "composer install"
     ],
     "scripts": {
-      "test": [
-        "composer run-script test"
-      ]
+      "format": "composer run-script format",
+      "test": "composer run-script test"
     }
   }
 }
