@@ -43,4 +43,4 @@ jobs:
       - run: pwd
 
       - name: Test
-        run: devbox run test
+        run: devbox --config php-8_1 run test
