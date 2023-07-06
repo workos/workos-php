@@ -5,6 +5,7 @@
   ],
   "shell": {
     "init_hook": [
+      "pwd",
       "echo \"running init hook\"",
       "composer config --global use-parent-dir true",
       "echo \"composer install\"",
