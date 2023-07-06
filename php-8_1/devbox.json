@@ -5,18 +5,11 @@
   ],
   "shell": {
     "init_hook": [
-      "pwd",
-      "echo \"running init hook\"",
-      "composer config --global use-parent-dir true",
-      "echo \"composer install\"",
+      "cd ..",
       "composer install"
     ],
     "scripts": {
-      "test":[
-        "echo \"test\"",
-        "composer config --global use-parent-dir true",
-        "composer run-script test"
-      ]
+      "test": "composer run-script test"
     }
   }
 }
