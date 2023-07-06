@@ -38,7 +38,7 @@ jobs:
         uses: jetpack-io/devbox-install-action@v0.4.0
         with:
           enable-cache: false
-          project-path: 'devbox.d/php-8_1'
+          project-path: 'php-8_1'
 
       - run: pwd
 
