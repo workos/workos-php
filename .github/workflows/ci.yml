@@ -31,8 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
+      # - name: Install Nix
+      #   uses: DeterminateSystems/nix-installer-action@v4
 
       - name: Install Devbox
         uses: jetpack-io/devbox-install-action@v0.4.0
