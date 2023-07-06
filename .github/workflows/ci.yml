@@ -24,3 +24,20 @@ jobs:
 
       - name: Test
         run: devbox run test
+
+  test_php_81:
+    name: Test (PHP 8.1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
+
+      - name: Install Devbox
+        uses: jetpack-io/devbox-install-action@v0.4.0
+        with:
+          enable-cache: true
+
+      - name: Test
+        run: devbox run --config devbox.d/php-8_1 test
