@@ -31,16 +31,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Install Nix
-      #   uses: DeterminateSystems/nix-installer-action@v4
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
 
       - name: Install Devbox
         uses: jetpack-io/devbox-install-action@v0.4.0
         with:
           enable-cache: false
-          project-path: 'devbox.d/php-8_1'
+          # project-path: 'devbox.d/php-8_1'
 
       - run: pwd
 
       - name: Test
-        run: devbox run test
+        run: devbox -c devbox.d/php-8_1 run test
