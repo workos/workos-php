@@ -5,7 +5,7 @@
   ],
   "shell": {
     "init_hook": [
-      "cd ..",
+      "cd ../..",
       "composer install"
     ],
     "scripts": {
