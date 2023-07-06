@@ -38,6 +38,7 @@ jobs:
         uses: jetpack-io/devbox-install-action@v0.4.0
         with:
           enable-cache: true
+          project-path: 'devbox.d/php-8_1'
 
       - name: Test
-        run: devbox run --config devbox.d/php-8_1 test
+        run: devbox run test
