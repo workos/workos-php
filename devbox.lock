@@ -1,0 +1,16 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "php82Packages.composer@2.5.5": {
+      "last_modified": "2023-05-25T03:54:59Z",
+      "resolved": "github:NixOS/nixpkgs/8d4d822bc0efa9de6eddc79cb0d82897a9baa750#php82Packages.composer",
+      "version": "2.5.5"
+    },
+    "php@8.2.1": {
+      "last_modified": "2023-01-31T09:49:33Z",
+      "plugin_version": "0.0.2",
+      "resolved": "github:NixOS/nixpkgs/e3945057be467f32028ff6b67403be08285ad8c8#php82",
+      "version": "8.2.1"
+    }
+  }
+}
