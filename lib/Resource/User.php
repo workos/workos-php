@@ -7,7 +7,7 @@ namespace WorkOS\Resource;
  */
 class User extends BaseWorkOSResource
 {
-    public const RESOURCE_TYPE = "authentication_factor";
+    public const RESOURCE_TYPE = "user";
 
     public const RESOURCE_ATTRIBUTES = [
         "object",
