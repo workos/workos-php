@@ -37,11 +37,11 @@ class Organizations
     ) {
         $organizationsPath = "organizations";
         $params = [
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "domains" => $domains,
-            "order" => $order
+          "limit" => $limit,
+          "before" => $before,
+          "after" => $after,
+          "domains" => $domains,
+          "order" => $order
         ];
 
         $response = Client::request(
@@ -104,10 +104,10 @@ class Organizations
     {
         $organizationsPath = "organizations/{$organization}";
         $params = [
-            "organization" => $organization,
-            "domains" => $domains,
-            "name" => $name,
-            "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
+          "organization" => $organization,
+          "domains" => $domains,
+          "name" => $name,
+          "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
 
         $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
