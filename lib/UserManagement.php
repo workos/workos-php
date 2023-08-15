@@ -139,11 +139,11 @@ class UserManagement
     /**
      * Create User.
      *
-     * @param string $email The name of the Organization.
-     * @param string|null $password The name of the Organization.
-     * @param string|null $firstName The name of the Organization.
-     * @param string|null $lastName The name of the Organization.
-     * @param boolean|null $emailVerified The name of the Organization.
+     * @param string $email The name of the User.
+     * @param string|null $password The name of the User.
+     * @param string|null $firstName The name of the User.
+     * @param string|null $lastName The name of the User.
+     * @param boolean|null $emailVerified The name of the User.
      * @param string|null $idempotencyKey is a unique string that identifies a distinct user
      * @throws Exception\WorkOSException
      *
