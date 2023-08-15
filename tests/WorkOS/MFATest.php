@@ -108,7 +108,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     {
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
         $path = "auth/challenges/{$authenticationChallengeId}/verify";
-        $code ="123456";
+        $code = "123456";
         $params = [
             "code" => $code
         ];
@@ -134,7 +134,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     {
         $authenticationChallengeId = "auth_challenge_01FXNX3BTZPPJVKF65NNWGRHZJ";
         $path = "auth/challenges/{$authenticationChallengeId}/verify";
-        $code ="123456";
+        $code = "123456";
         $params = [
             "code" => $code
         ];
