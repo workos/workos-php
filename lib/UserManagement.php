@@ -3,7 +3,7 @@
 namespace WorkOS;
 
 /**
- * Class Users
+ * Class UserManagement
  */
 class UserManagement
 {
