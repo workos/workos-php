@@ -361,7 +361,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     ],
                     "raw_attributes" => [
                         "schemas" => ["urn:scim:schemas:core:1.0"],
-                        "name"=> [
+                        "name" => [
                             "familyName" => "Seri",
                             "givenName" => "Yoon"
                         ],
@@ -416,7 +416,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             ],
             "raw_attributes" => [
                 "schemas" => ["urn:scim:schemas:core:1.0"],
-                "name"=> [
+                "name" => [
                     "familyName" => "Seri",
                     "givenName" => "Yoon"
                 ],
@@ -463,7 +463,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "emails" => [],
             "raw_attributes" => [
                 "schemas" => ["urn:scim:schemas:core:1.0"],
-                "name"=> [
+                "name" => [
                     "familyName" => "Seri",
                     "givenName" => "Yoon"
                 ],
@@ -501,7 +501,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "id" => "directory_usr_id",
             "rawAttributes" => [
                 "schemas" => ["urn:scim:schemas:core:1.0"],
-                "name"=> [
+                "name" => [
                     "familyName" => "Seri",
                     "givenName" => "Yoon"
                 ],
