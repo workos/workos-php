@@ -2,7 +2,7 @@
 
 namespace WorkOS;
 
-class UsersTest extends \PHPUnit\Framework\TestCase
+class UserManagementTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper {
         setUp as traitSetUp;
@@ -13,7 +13,7 @@ class UsersTest extends \PHPUnit\Framework\TestCase
         $this->traitSetUp();
 
         $this->withApiKeyAndClientId();
-        $this->users = new Users();
+        $this->userManagement = new UserManagement();
     }
 
     public function testAddUserToOrganization()
@@ -38,7 +38,7 @@ class UsersTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->users->addUserToOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $response = $this->userManagement->addUserToOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
         $this->assertSame($user, $response->toArray());
     }
 
@@ -61,7 +61,7 @@ class UsersTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->users->removeUserFromOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $response = $this->userManagement->removeUserFromOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
         $this->assertSame($user, $response->toArray());
     }
 
