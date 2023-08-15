@@ -8,9 +8,10 @@ namespace WorkOS;
 class Users
 {
     /**
-     * Remove a user from an organization.
+     * Add a user to an organization.
      *
-     * @param string $directory Directory ID
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID 
      *
      * @throws Exception\WorkOSException
      *
@@ -38,7 +39,8 @@ class Users
     /**
      * Remove a user from an organization.
      *
-     * @param string $directory Directory ID
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID 
      *
      * @throws Exception\WorkOSException
      *
