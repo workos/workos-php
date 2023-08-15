@@ -120,9 +120,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $user = $this->userFixture();
-        var_dump($user);
         list($before, $after, $users) = $this->userManagement->listUsers();
-        var_dump($users[0]);
         $this->assertSame($user, $users[0]->toArray());
     }
 
