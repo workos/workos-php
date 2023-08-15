@@ -3,11 +3,11 @@
 namespace WorkOS\Resource;
 
 /**
- * Class AuthenticationFactorSms.
+ * Class User.
  */
 class User extends BaseWorkOSResource
 {
-    public const RESOURCE_TYPE = "authentication_factor";
+    public const RESOURCE_TYPE = "user";
 
     public const RESOURCE_ATTRIBUTES = [
         "object",
