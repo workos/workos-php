@@ -165,4 +165,32 @@ class UserManagement
 
         return Resource\User::constructFromResponse($response);
     }
+
+    /**
+     * Creates a one-time Magic Auth code and emails it to the user.
+     *
+     * @param string $emailAddress The email address the one-time code will be sent to.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\MagicAuthChallenge
+     */
+    public function sendMagicAuthCode($emailAddress)
+    {
+        $sendCodePath = "users/magic_auth/send";
+
+        $params = [
+            "email_address" => $emailAddress,
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $sendCodePath,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\MagicAuthChallenge::constructFromResponse($response);
+    }
 }

@@ -147,6 +147,30 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    private function testSendMagicAuthCode()
+    {
+        $sendCodePath = "users/magic_auth/send";
+
+        $result = $this->sendMagicAuthCodeResponseFixture();
+
+        $params = [
+            "email" => "test@test.com"
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $sendCodePath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+
+        $response = $this->userManagement->sendMagicAuthCode("test@test.com");
+        $this->assertSame($magicAuthChallenge, $response->toArray());
+    }
     // Fixtures
 
     private function addUserToOrganizationResponseFixture()
@@ -180,6 +204,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "google_oauth_profile_id" => "goog_123ABC",
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
+        ]);
+    }
+
+    private function sendMagicAuthCodeResponseFixture()
+    {
+        return json_encode([
+            "object" => "magic_auth_challenge",
+            "id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5"
         ]);
     }
 
@@ -240,6 +272,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
+    }
+
+    private function magicAuthChallengeFixture()
+    {
+        return [
+            "object" => "magic_auth_challenge",
+            "id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5"
+        ];
     }
 
     private function userFixture()
