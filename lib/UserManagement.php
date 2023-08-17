@@ -82,6 +82,52 @@ class UserManagement
     }
 
     /**
+     * Create Email Verification Challenge.
+     *
+     * @param string $id The unique ID of the User whose email address will be verified.
+     * @param string $verificationUrl The URL that will be linked to in the verification email.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserAndToken
+     */
+    public function createEmailVerificationChallenge($id, $verificationUrl)
+    {
+        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+
+        $params = [
+            "verification_url" => $verificationUrl
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $createEmailVerificationPath, null, $params, true);
+
+        return Resource\UserAndtoken::constructFromResponse($response);
+    }
+
+    /**
+     * Complete Email Verification.
+     *
+     * @param string $token The verification token emailed to the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function completeEmailVerification($token)
+    {
+        $completeEmailVerificationPath = "users/email_verification";
+
+        $params = [
+            "token" => $token
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $completeEmailVerificationPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+
+    /**
      * List Users.
      *
      * @param null|string $type User type "unmanaged" or "managed"
@@ -164,5 +210,33 @@ class UserManagement
         $response = Client::request(Client::METHOD_POST, $usersPath, $headers, $params, true);
 
         return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Creates a one-time Magic Auth code and emails it to the user.
+     *
+     * @param string $emailAddress The email address the one-time code will be sent to.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\MagicAuthChallenge
+     */
+    public function sendMagicAuthCode($emailAddress)
+    {
+        $sendCodePath = "users/magic_auth/send";
+
+        $params = [
+            "email_address" => $emailAddress,
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $sendCodePath,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\MagicAuthChallenge::constructFromResponse($response);
     }
 }
