@@ -82,6 +82,52 @@ class UserManagement
     }
 
     /**
+     * Create Email Verification Challenge.
+     *
+     * @param string $id The unique ID of the User whose email address will be verified.
+     * @param string $verificationUrl The URL that will be linked to in the verification email.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserAndToken
+     */
+    public function createEmailVerificationChallenge($id, $verificationUrl)
+    {
+        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+
+        $params = [
+            "verification_url" => $verificationUrl
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $createEmailVerificationPath, null, $params, true);
+
+        return Resource\UserAndToken::constructFromResponse($response);
+    }
+
+    /**
+     * Complete Email Verification.
+     *
+     * @param string $token The verification token emailed to the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function completeEmailVerification($token)
+    {
+        $completeEmailVerificationPath = "users/email_verification";
+
+        $params = [
+            "token" => $token
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $completeEmailVerificationPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+
+    /**
      * List Users.
      *
      * @param null|string $type User type "unmanaged" or "managed"

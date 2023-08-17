@@ -71,6 +71,59 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    public function testCreateEmailVerificationChallenge()
+    {
+        $id = "user_01E4ZCR3C56J083X43JQXF3JK5";
+        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+
+        $result = $this->createUserAndTokenResponseFixture();
+
+        $params = [
+            "verification_url" => "https://your-app.com/verify-email",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $createEmailVerificationPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->createEmailVerificationChallenge("user_01E4ZCR3C56J083X43JQXF3JK5", "https://your-app.com/verify-email");
+        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
+        $this->assertSame($userFixture, $response->user->toArray());
+    }
+
+    public function testCompleteEmailVerification()
+    {
+        $usersPath = "users/email_verification";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->completeEmailVerification("01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $this->assertSame($user, $response->toArray());
+    }
+
 
     public function testGetUser()
     {
@@ -148,6 +201,26 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     // Fixtures
+
+    private function createUserAndTokenResponseFixture()
+    {
+        return json_encode([
+            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
+            "user" => [
+                "object" => "user",
+                "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                "user_type" => "unmanaged",
+                "email" => "test@test.com",
+                "first_name" => "Damien",
+                "last_name" => "Alabaster",
+                "email_verified_at" => "2021-07-25T19:07:33.155Z",
+                "sso_profile_id" => "1AO5ZPQDE43",
+                "google_oauth_profile_id" => "goog_123ABC",
+                "created_at" => "2021-06-25T19:07:33.155Z",
+                "updated_at" => "2021-06-25T19:07:33.155Z"
+            ]
+        ]);
+    }
 
     private function addUserToOrganizationResponseFixture()
     {
