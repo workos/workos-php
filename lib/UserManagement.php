@@ -101,7 +101,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $createEmailVerificationPath, null, $params, true);
 
-        return Resource\UserAndtoken::constructFromResponse($response);
+        return Resource\UserAndToken::constructFromResponse($response);
     }
 
     /**
