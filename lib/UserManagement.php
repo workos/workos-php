@@ -108,7 +108,7 @@ class UserManagement
      * Create Password Reset Challenge.
      *
      * @param string $email The email of the user that wishes to reset their password.
-     * @param string $passwordResetUrl The URL that will be linked to in the email..
+     * @param string $passwordResetUrl The URL that will be linked to in the email.
      *
      * @throws Exception\WorkOSException
      *
@@ -116,14 +116,14 @@ class UserManagement
      */
     public function createPasswordResetChallenge($email, $passwordResetUrl)
     {
-        $createPasswordResetEmailPath = "users/password_reset_challenge";
+        $createPasswordResetChallengePath = "users/password_reset_challenge";
 
         $params = [
             "email" => $email,
             "password_reset_url" => $passwordResetUrl
         ];
 
-        $response = Client::request(Client::METHOD_POST, $createPasswordResetEmailPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $createPasswordResetChallengePath, null, $params, true);
 
         return Resource\UserAndToken::constructFromResponse($response);
     }
