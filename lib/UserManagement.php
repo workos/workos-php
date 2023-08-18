@@ -190,14 +190,12 @@ class UserManagement
      * @param string|null $firstName The name of the User.
      * @param string|null $lastName The name of the User.
      * @param boolean|null $emailVerified The name of the User.
-     * @param string|null $idempotencyKey is a unique string that identifies a distinct user
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function createUser($email, $password, $firstName, $lastName, $emailVerified, $idempotencyKey = null)
+    public function createUser($email, $password, $firstName, $lastName, $emailVerified)
     {
-        $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $usersPath = "users";
         $params = [
             "email" => $email,
@@ -207,7 +205,7 @@ class UserManagement
             "email_verified" => $emailVerified
         ];
 
-        $response = Client::request(Client::METHOD_POST, $usersPath, $headers, $params, true);
+        $response = Client::request(Client::METHOD_POST, $usersPath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
