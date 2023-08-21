@@ -88,7 +88,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthToken
+     * @return \WorkOS\Resource\MagicAuthchallenge
      */
     public function sendVerificationEmail($id)
     {
