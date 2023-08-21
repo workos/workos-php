@@ -104,7 +104,7 @@ class UserManagement
      *
      * @param string $magicAuthChallengeId The challenge ID returned from the send verification email endpoint.
      * @param string $code The one-time code emailed to the user.
-     * 
+     *
      *
      * @throws Exception\WorkOSException
      *
