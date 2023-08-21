@@ -71,42 +71,39 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-    public function testCreateEmailVerificationChallenge()
+    public function testSendVerificationEmail()
     {
         $id = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
 
-        $result = $this->createUserAndTokenResponseFixture();
+        $result = $this->sendMagicAuthCodeResponseFixture();
 
-        $params = [
-            "verification_url" => "https://your-app.com/verify-email",
-        ];
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $createEmailVerificationPath,
+            $sendVerificationEmailPath,
             null,
-            $params,
+            null,
             true,
             $result
         );
 
 
-        $userFixture = $this->userFixture();
+        $magicAuthChallenge = $this->magicAuthChallengeFixture();
 
-        $response = $this->userManagement->createEmailVerificationChallenge("user_01E4ZCR3C56J083X43JQXF3JK5", "https://your-app.com/verify-email");
-        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
-        $this->assertSame($userFixture, $response->user->toArray());
+        $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
+        $this->assertSame($magicAuthChallenge, $response->toArray());
     }
 
-    public function testCompleteEmailVerification()
+    public function testVerifyEmail()
     {
-        $usersPath = "users/email_verification";
+        $usersPath = "users/verify_email";
 
         $result = $this->createUserResponseFixture();
 
         $params = [
-            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
+            "magic_auth_challenge_id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5",
+            "code" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
         ];
 
         $this->mockRequest(
@@ -120,7 +117,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->userManagement->completeEmailVerification("01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $response = $this->userManagement->verifyEmail("auth_challenge_01E4ZCR3C56J083X43JQXF3JK5", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($user, $response->toArray());
     }
 
