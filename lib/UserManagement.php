@@ -65,7 +65,7 @@ class UserManagement
             "password" => $password,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
-            "expires_in" => self::DEFAULT_TOKEN_EXPIRATION,
+            "expires_in" => $expiresIn,
             "grant_type" => "password",
             "client_secret" => WorkOS::getApiKey()
         ];
