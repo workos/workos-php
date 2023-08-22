@@ -54,6 +54,10 @@ class UserManagement
      */
     public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null, $expiresIn = null)
     {
+        if (!$expiresIn) {
+            $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
+        }
+
         $authenticateUserWithPasswordPath = "users/sessions/token";
         $params = [
             "client_id" => $clientId,
