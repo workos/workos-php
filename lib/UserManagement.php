@@ -110,7 +110,7 @@ class UserManagement
     }
 
     /**
-     * Authenticate an OAuth or SSO User with a Code
+     * Authenticate with Magic Auth
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
