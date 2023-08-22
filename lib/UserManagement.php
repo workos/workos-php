@@ -192,46 +192,93 @@ class UserManagement
      * Create Email Verification Challenge.
      *
      * @param string $id The unique ID of the User whose email address will be verified.
-     * @param string $verificationUrl The URL that will be linked to in the verification email.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserAndToken
+     * @return \WorkOS\Resource\MagicAuthchallenge
      */
-    public function createEmailVerificationChallenge($id, $verificationUrl)
+    public function sendVerificationEmail($id)
     {
-        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
 
-        $params = [
-            "verification_url" => $verificationUrl
-        ];
+        $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
 
-        $response = Client::request(Client::METHOD_POST, $createEmailVerificationPath, null, $params, true);
-
-        return Resource\UserAndToken::constructFromResponse($response);
+        return Resource\MagicAuthChallenge::constructFromResponse($response);
     }
 
     /**
      * Complete Email Verification.
      *
-     * @param string $token The verification token emailed to the user.
+     * @param string $magicAuthChallengeId The challenge ID returned from the send verification email endpoint.
+     * @param string $code The one-time code emailed to the user.
+     *
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function completeEmailVerification($token)
+    public function verifyEmail($magicAuthChallengeId, $code)
     {
-        $completeEmailVerificationPath = "users/email_verification";
+        $verifyEmailPath = "users/verify_email";
 
         $params = [
-            "token" => $token
+            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "code" => $code
         ];
 
-        $response = Client::request(Client::METHOD_POST, $completeEmailVerificationPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $verifyEmailPath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
+
+    /**
+     * Create Password Reset Challenge.
+     *
+     * @param string $email The email of the user that wishes to reset their password.
+     * @param string $passwordResetUrl The URL that will be linked to in the email.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserAndToken
+     */
+    public function createPasswordResetChallenge($email, $passwordResetUrl)
+    {
+        $createPasswordResetChallengePath = "users/password_reset_challenge";
+
+        $params = [
+            "email" => $email,
+            "password_reset_url" => $passwordResetUrl
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $createPasswordResetChallengePath, null, $params, true);
+
+        return Resource\UserAndToken::constructFromResponse($response);
+    }
+
+    /**
+     * Complete Password Reset.
+     *
+     * @param string $token The reset token emailed to the user.
+     * @param string $newPassword The new password to be set for the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function completePasswordReset($token, $newPassword)
+    {
+        $completePasswordResetPath = "users/password_reset";
+
+        $params = [
+            "token" => $token,
+            "new_password" => $newPassword
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $completePasswordResetPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
 
 
     /**
