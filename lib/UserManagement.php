@@ -124,6 +124,55 @@ class UserManagement
         return Resource\User::constructFromResponse($response);
     }
 
+    /**
+     * Create Password Reset Challenge.
+     *
+     * @param string $email The email of the user that wishes to reset their password.
+     * @param string $passwordResetUrl The URL that will be linked to in the email.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserAndToken
+     */
+    public function createPasswordResetChallenge($email, $passwordResetUrl)
+    {
+        $createPasswordResetChallengePath = "users/password_reset_challenge";
+
+        $params = [
+            "email" => $email,
+            "password_reset_url" => $passwordResetUrl
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $createPasswordResetChallengePath, null, $params, true);
+
+        return Resource\UserAndToken::constructFromResponse($response);
+    }
+
+    /**
+     * Complete Password Reset.
+     *
+     * @param string $token The reset token emailed to the user.
+     * @param string $newPassword The new password to be set for the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function completePasswordReset($token, $newPassword)
+    {
+        $completePasswordResetPath = "users/password_reset";
+
+        $params = [
+            "token" => $token,
+            "new_password" => $newPassword
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $completePasswordResetPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+
 
     /**
      * List Users.
