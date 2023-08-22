@@ -71,33 +71,56 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-    public function testCreateEmailVerificationChallenge()
+    public function testSendVerificationEmail()
     {
         $id = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $createEmailVerificationPath = "users/{$id}/email_verification_challenge";
+        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
 
-        $result = $this->createUserAndTokenResponseFixture();
+        $result = $this->sendMagicAuthCodeResponseFixture();
+
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $sendVerificationEmailPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+
+        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+
+        $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
+        $this->assertSame($magicAuthChallenge, $response->toArray());
+    }
+
+    public function testVerifyEmail()
+    {
+        $usersPath = "users/verify_email";
+
+        $result = $this->createUserResponseFixture();
 
         $params = [
-            "verification_url" => "https://your-app.com/verify-email",
+            "magic_auth_challenge_id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5",
+            "code" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
         ];
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $createEmailVerificationPath,
+            $usersPath,
             null,
             $params,
             true,
             $result
         );
 
+        $user = $this->userFixture();
 
-        $userFixture = $this->userFixture();
-
-        $response = $this->userManagement->createEmailVerificationChallenge("user_01E4ZCR3C56J083X43JQXF3JK5", "https://your-app.com/verify-email");
-        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
-        $this->assertSame($userFixture, $response->user->toArray());
+        $response = $this->userManagement->verifyEmail("auth_challenge_01E4ZCR3C56J083X43JQXF3JK5", "01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $this->assertSame($user, $response->toArray());
     }
+
 
     public function testCreatePasswordResetChallenge()
     {
@@ -125,31 +148,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $response = $this->userManagement->createPasswordResetChallenge("test@test.com", "https://your-app.com/reset-password");
         $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
         $this->assertSame($userFixture, $response->user->toArray());
-    }
-
-    public function testCompleteEmailVerification()
-    {
-        $usersPath = "users/email_verification";
-
-        $result = $this->createUserResponseFixture();
-
-        $params = [
-            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
-        ];
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $usersPath,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $user = $this->userFixture();
-
-        $response = $this->userManagement->completeEmailVerification("01DMEK0J53CVMC32CK5SE0KZ8Q");
-        $this->assertSame($user, $response->toArray());
     }
 
     public function testCompletePasswordReset()
@@ -254,6 +252,30 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    private function testSendMagicAuthCode()
+    {
+        $sendCodePath = "users/magic_auth/send";
+
+        $result = $this->sendMagicAuthCodeResponseFixture();
+
+        $params = [
+            "email" => "test@test.com"
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $sendCodePath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+
+        $response = $this->userManagement->sendMagicAuthCode("test@test.com");
+        $this->assertSame($magicAuthChallenge, $response->toArray());
+    }
     // Fixtures
 
     private function createUserAndTokenResponseFixture()
@@ -307,6 +329,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "google_oauth_profile_id" => "goog_123ABC",
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
+        ]);
+    }
+
+    private function sendMagicAuthCodeResponseFixture()
+    {
+        return json_encode([
+            "object" => "magic_auth_challenge",
+            "id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5"
         ]);
     }
 
@@ -367,6 +397,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
+    }
+
+    private function magicAuthChallengeFixture()
+    {
+        return [
+            "object" => "magic_auth_challenge",
+            "id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5"
+        ];
     }
 
     private function userFixture()
