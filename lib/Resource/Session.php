@@ -3,7 +3,7 @@
 namespace WorkOS\Resource;
 
 /**
- * Class Profile.
+ * Class Session.
  *
  * @property string $id
  * @property string $created_at
