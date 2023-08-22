@@ -14,7 +14,7 @@ namespace WorkOS\Resource;
  */
 class Session extends BaseWorkOSResource
 {
-    public const RESOURCE_TYPE = "profile";
+    public const RESOURCE_TYPE = "session";
 
     public const RESOURCE_ATTRIBUTES = [
         "object",
