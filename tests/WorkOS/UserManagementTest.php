@@ -305,7 +305,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users";
         $params = [
-            "type" => null,
             "email" => null,
             "organization" => null,
             "limit" => UserManagement::DEFAULT_PAGE_SIZE,
@@ -386,13 +385,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                "user_type" => "unmanaged",
                 "email" => "test@test.com",
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
-                "email_verified_at" => "2021-07-25T19:07:33.155Z",
-                "sso_profile_id" => "1AO5ZPQDE43",
-                "google_oauth_profile_id" => "goog_123ABC",
+                "email_verified" => true,
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -419,13 +415,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                "user_type" => "unmanaged",
                 "email" => "test@test.com",
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
-                "email_verified_at" => "2021-07-25T19:07:33.155Z",
-                "sso_profile_id" => "1AO5ZPQDE43",
-                "google_oauth_profile_id" => "goog_123ABC",
+                "email_verified" => true,
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -437,13 +430,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -454,13 +444,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -479,13 +466,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -498,13 +482,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     "object" => "user",
                     "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                    "user_type" => "unmanaged",
                     "email" => "test@test.com",
                     "first_name" => "Damien",
                     "last_name" => "Alabaster",
-                    "email_verified_at" => "2021-07-25T19:07:33.155Z",
-                    "sso_profile_id" => "1AO5ZPQDE43",
-                    "google_oauth_profile_id" => "goog_123ABC",
+                    "email_verified" => true,
                     "created_at" => "2021-06-25T19:07:33.155Z",
                     "updated_at" => "2021-06-25T19:07:33.155Z"
                 ]
@@ -521,13 +502,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -563,13 +541,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return [
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "userType" => "unmanaged",
             "email" => "test@test.com",
             "firstName" => "Damien",
             "lastName" => "Alabaster",
-            "emailVerifiedAt" => "2021-07-25T19:07:33.155Z",
-            "googleOauthProfileId" => "goog_123ABC",
-            "ssoProfileId" => "1AO5ZPQDE43",
+            "emailVerified" => true,
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z"
         ];
