@@ -12,13 +12,10 @@ class User extends BaseWorkOSResource
     public const RESOURCE_ATTRIBUTES = [
         "object",
         "id",
-        "userType",
         "email",
         "firstName",
         "lastName",
-        "emailVerifiedAt",
-        "googleOauthProfileId",
-        "ssoProfileId",
+        "emailVerified",
         "createdAt",
         "updatedAt"
     ];
@@ -26,13 +23,10 @@ class User extends BaseWorkOSResource
     public const RESPONSE_TO_RESOURCE_KEY = [
         "object" => "object",
         "id" => "id",
-        "user_type" => "userType",
         "email" => "email",
         "first_name" => "firstName",
         "last_name" => "lastName",
-        "email_verified_at" => "emailVerifiedAt",
-        "google_oauth_profile_id" => "googleOauthProfileId",
-        "sso_profile_id" => "ssoProfileId",
+        "email_verified" => "emailVerified",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];

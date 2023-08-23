@@ -284,7 +284,6 @@ class UserManagement
     /**
      * List Users.
      *
-     * @param null|string $type User type "unmanaged" or "managed"
      * @param null|string $email
      * @param null|string $organization Organization users are a member of
      * @param int $limit Maximum number of records to return
@@ -300,7 +299,6 @@ class UserManagement
      *      array \WorkOS\Resource\User instances
      */
     public function listUsers(
-        $type = null,
         $email = null,
         $organization = null,
         $limit = self::DEFAULT_PAGE_SIZE,
@@ -310,7 +308,6 @@ class UserManagement
     ) {
         $usersPath = "users";
         $params = [
-            "type" => $type,
             "email" => $email,
             "organization" => $organization,
             "limit" => $limit,
