@@ -385,7 +385,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-
                 "email" => "test@test.com",
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
