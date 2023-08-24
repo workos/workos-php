@@ -191,19 +191,19 @@ class UserManagement
     /**
      * Create Email Verification Challenge.
      *
-     * @param string $id The unique ID of the User whose email address will be verified.
+     * @param string $userId The unique ID of the User whose email address will be verified.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthchallenge
+     * @return \WorkOS\Resource\User
      */
-    public function sendVerificationEmail($id)
+    public function sendVerificationEmail($userId)
     {
-        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
+        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
 
         $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 
     /**
@@ -219,7 +219,7 @@ class UserManagement
      */
     public function verifyEmail($userId, $code)
     {
-        $verifyEmailPath = "users/verify_email";
+        $verifyEmailPath = "users/{$userId}/verify_email";
 
         $params = [
             "user_id" => $userId,
@@ -368,7 +368,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthChallenge
+     * @return \WorkOS\Resource\User
      */
     public function sendMagicAuthCode($emailAddress)
     {
@@ -386,6 +386,6 @@ class UserManagement
             true
         );
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 }

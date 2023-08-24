@@ -174,10 +174,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testSendVerificationEmail()
     {
-        $id = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
+        $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
+        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
 
-        $result = $this->sendMagicAuthCodeResponseFixture();
+        $result = $this->createUserResponseFixture();
 
 
         $this->mockRequest(
@@ -190,15 +190,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
 
-        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+        $user = $this->userFixture();
 
         $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
-        $this->assertSame($magicAuthChallenge, $response->toArray());
+        $this->assertSame($user, $response->toArray());
     }
 
     public function testVerifyEmail()
     {
-        $usersPath = "users/verify_email";
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $usersPath = "users/{$userId}/verify_email";
 
         $result = $this->createUserResponseFixture();
 
@@ -356,7 +357,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $sendCodePath = "users/magic_auth/send";
 
-        $result = $this->sendMagicAuthCodeResponseFixture();
+        $result = $this->createUserResponseFixture();
 
         $params = [
             "email" => "test@test.com"
@@ -371,10 +372,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+        $user = $this->userFixture();
 
         $response = $this->userManagement->sendMagicAuthCode("test@test.com");
-        $this->assertSame($magicAuthChallenge, $response->toArray());
+        $this->assertSame($user, $response->toArray());
     }
     // Fixtures
 
