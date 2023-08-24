@@ -44,7 +44,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateUserWithPassword()
     {
-        $usersPath = "users/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->createUserResponseFixture();
 
@@ -75,7 +75,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateUserWithCode()
     {
-        $usersPath = "users/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->createUserResponseFixture();
 
@@ -105,14 +105,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateUserWithMagicAuth()
     {
-        $usersPath = "users/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->createUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
             "code" => "123456",
-            "magic_auth_challenge_id" => "auth_challenge_123",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "ip_address" => null,
             "user_agent" => null,
             "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
@@ -130,7 +130,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateUserWithMagicAuth("project_0123456", "123456", "auth_challenge_123");
+        $response = $this->userManagement->authenticateUserWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
         $this->assertSame($userFixture, $response->toArray());
     }
 

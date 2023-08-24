@@ -53,7 +53,7 @@ class UserManagement
      */
     public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithPasswordPath = "users/token";
+        $authenticateUserWithPasswordPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "email" => $email,
@@ -82,7 +82,7 @@ class UserManagement
      */
     public function authenticateUserWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithCodePath = "users/token";
+        $authenticateUserWithCodePath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -102,20 +102,20 @@ class UserManagement
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $magicAuthChallengeId The challenge ID returned from when the one-time code was sent to the user.
+     * @param string $userId The unique ID of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function authenticateUserWithMagicAuth($clientId, $code, $magicAuthChallengeId, $ipAddress = null, $userAgent = null)
+    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithMagicAuthPath = "users/token";
+        $authenticateUserWithMagicAuthPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
             "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
