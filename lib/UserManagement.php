@@ -114,7 +114,7 @@ class UserManagement
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $userId The user ID returned from the Magic Auth challenge.
+     * @param string $userId The unique ID of the user being authenticated.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
