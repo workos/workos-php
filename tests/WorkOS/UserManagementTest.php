@@ -203,7 +203,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->createUserResponseFixture();
 
         $params = [
-            "magic_auth_challenge_id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "code" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
         ];
 
@@ -218,7 +218,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->userManagement->verifyEmail("auth_challenge_01E4ZCR3C56J083X43JQXF3JK5", "01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $response = $this->userManagement->verifyEmail("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($user, $response->toArray());
     }
 

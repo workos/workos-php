@@ -209,7 +209,7 @@ class UserManagement
     /**
      * Complete Email Verification.
      *
-     * @param string $magicAuthChallengeId The challenge ID returned from the send verification email endpoint.
+     * @param string $userId The unique ID of the user returned from the sendVerificationEmail response.
      * @param string $code The one-time code emailed to the user.
      *
      *
@@ -217,12 +217,12 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function verifyEmail($magicAuthChallengeId, $code)
+    public function verifyEmail($userId, $code)
     {
         $verifyEmailPath = "users/verify_email";
 
         $params = [
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "code" => $code
         ];
 
