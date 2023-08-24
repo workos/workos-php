@@ -114,7 +114,7 @@ class UserManagement
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $magicAuthChallengeId The challenge ID returned from when the one-time code was sent to the user.
+     * @param string $userId The unique ID of the user being authenticated.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
@@ -122,7 +122,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\SessionAndUser
      */
-    public function authenticateUserWithMagicAuth($clientId, $code, $magicAuthChallengeId, $ipAddress = null, $userAgent = null, $expiresIn = null)
+    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null, $expiresIn = null)
     {
         if (!$expiresIn) {
             $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
@@ -132,7 +132,7 @@ class UserManagement
         $params = [
             "client_id" => $clientId,
             "code" => $code,
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
             "expires_in" => $expiresIn,
@@ -191,25 +191,25 @@ class UserManagement
     /**
      * Create Email Verification Challenge.
      *
-     * @param string $id The unique ID of the User whose email address will be verified.
+     * @param string $userId The unique ID of the User whose email address will be verified.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthchallenge
+     * @return \WorkOS\Resource\User
      */
-    public function sendVerificationEmail($id)
+    public function sendVerificationEmail($userId)
     {
-        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
+        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
 
         $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 
     /**
      * Complete Email Verification.
      *
-     * @param string $magicAuthChallengeId The challenge ID returned from the send verification email endpoint.
+     * @param string $userId The unique ID of the user.
      * @param string $code The one-time code emailed to the user.
      *
      *
@@ -217,12 +217,12 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function verifyEmail($magicAuthChallengeId, $code)
+    public function verifyEmail($userId, $code)
     {
-        $verifyEmailPath = "users/verify_email";
+        $verifyEmailPath = "users/{$userId}/verify_email";
 
         $params = [
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "code" => $code
         ];
 
@@ -368,7 +368,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthChallenge
+     * @return \WorkOS\Resource\User
      */
     public function sendMagicAuthCode($emailAddress)
     {
@@ -386,6 +386,6 @@ class UserManagement
             true
         );
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 }
