@@ -165,10 +165,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testSendVerificationEmail()
     {
-        $id = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
+        $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
+        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
 
-        $result = $this->sendMagicAuthCodeResponseFixture();
+        $result = $this->createUserResponseFixture();
 
 
         $this->mockRequest(
@@ -181,20 +181,21 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
 
-        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+        $user = $this->userFixture();
 
         $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
-        $this->assertSame($magicAuthChallenge, $response->toArray());
+        $this->assertSame($user, $response->toArray());
     }
 
     public function testVerifyEmail()
     {
-        $usersPath = "users/verify_email";
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $usersPath = "users/{$userId}/verify_email";
 
         $result = $this->createUserResponseFixture();
 
         $params = [
-            "magic_auth_challenge_id" => "auth_challenge_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "code" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
         ];
 
@@ -209,7 +210,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->userManagement->verifyEmail("auth_challenge_01E4ZCR3C56J083X43JQXF3JK5", "01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $response = $this->userManagement->verifyEmail("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($user, $response->toArray());
     }
 
@@ -296,7 +297,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users";
         $params = [
-            "type" => null,
             "email" => null,
             "organization" => null,
             "limit" => UserManagement::DEFAULT_PAGE_SIZE,
@@ -348,7 +348,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $sendCodePath = "users/magic_auth/send";
 
-        $result = $this->sendMagicAuthCodeResponseFixture();
+        $result = $this->createUserResponseFixture();
 
         $params = [
             "email" => "test@test.com"
@@ -363,10 +363,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $magicAuthChallenge = $this->magicAuthChallengeFixture();
+        $user = $this->userFixture();
 
         $response = $this->userManagement->sendMagicAuthCode("test@test.com");
-        $this->assertSame($magicAuthChallenge, $response->toArray());
+        $this->assertSame($user, $response->toArray());
     }
     // Fixtures
 
@@ -377,13 +377,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                "user_type" => "unmanaged",
                 "email" => "test@test.com",
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
-                "email_verified_at" => "2021-07-25T19:07:33.155Z",
-                "sso_profile_id" => "1AO5ZPQDE43",
-                "google_oauth_profile_id" => "goog_123ABC",
+                "email_verified" => true,
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -395,13 +392,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -412,13 +406,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -437,13 +428,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -456,13 +444,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 [
                     "object" => "user",
                     "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                    "user_type" => "unmanaged",
                     "email" => "test@test.com",
                     "first_name" => "Damien",
                     "last_name" => "Alabaster",
-                    "email_verified_at" => "2021-07-25T19:07:33.155Z",
-                    "sso_profile_id" => "1AO5ZPQDE43",
-                    "google_oauth_profile_id" => "goog_123ABC",
+                    "email_verified" => true,
                     "created_at" => "2021-06-25T19:07:33.155Z",
                     "updated_at" => "2021-06-25T19:07:33.155Z"
                 ]
@@ -479,13 +464,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return json_encode([
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "user_type" => "unmanaged",
             "email" => "test@test.com",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified_at" => "2021-07-25T19:07:33.155Z",
-            "sso_profile_id" => "1AO5ZPQDE43",
-            "google_oauth_profile_id" => "goog_123ABC",
+            "email_verified" => true,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -504,13 +486,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         return [
             "object" => "user",
             "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "userType" => "unmanaged",
             "email" => "test@test.com",
             "firstName" => "Damien",
             "lastName" => "Alabaster",
-            "emailVerifiedAt" => "2021-07-25T19:07:33.155Z",
-            "googleOauthProfileId" => "goog_123ABC",
-            "ssoProfileId" => "1AO5ZPQDE43",
+            "emailVerified" => true,
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z"
         ];

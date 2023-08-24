@@ -109,6 +109,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
+
     public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
     {
         $authenticateUserWithMagicAuthPath = "users/authenticate";
@@ -173,25 +174,25 @@ class UserManagement
     /**
      * Create Email Verification Challenge.
      *
-     * @param string $id The unique ID of the User whose email address will be verified.
+     * @param string $userId The unique ID of the User whose email address will be verified.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthchallenge
+     * @return \WorkOS\Resource\User
      */
-    public function sendVerificationEmail($id)
+    public function sendVerificationEmail($userId)
     {
-        $sendVerificationEmailPath = "users/{$id}/send_verification_email";
+        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
 
         $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 
     /**
      * Complete Email Verification.
      *
-     * @param string $magicAuthChallengeId The challenge ID returned from the send verification email endpoint.
+     * @param string $userId The unique ID of the user.
      * @param string $code The one-time code emailed to the user.
      *
      *
@@ -199,12 +200,12 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function verifyEmail($magicAuthChallengeId, $code)
+    public function verifyEmail($userId, $code)
     {
-        $verifyEmailPath = "users/verify_email";
+        $verifyEmailPath = "users/{$userId}/verify_email";
 
         $params = [
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "code" => $code
         ];
 
@@ -266,7 +267,6 @@ class UserManagement
     /**
      * List Users.
      *
-     * @param null|string $type User type "unmanaged" or "managed"
      * @param null|string $email
      * @param null|string $organization Organization users are a member of
      * @param int $limit Maximum number of records to return
@@ -282,7 +282,6 @@ class UserManagement
      *      array \WorkOS\Resource\User instances
      */
     public function listUsers(
-        $type = null,
         $email = null,
         $organization = null,
         $limit = self::DEFAULT_PAGE_SIZE,
@@ -292,7 +291,6 @@ class UserManagement
     ) {
         $usersPath = "users";
         $params = [
-            "type" => $type,
             "email" => $email,
             "organization" => $organization,
             "limit" => $limit,
@@ -353,7 +351,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuthChallenge
+     * @return \WorkOS\Resource\User
      */
     public function sendMagicAuthCode($emailAddress)
     {
@@ -371,6 +369,6 @@ class UserManagement
             true
         );
 
-        return Resource\MagicAuthChallenge::constructFromResponse($response);
+        return Resource\User::constructFromResponse($response);
     }
 }
