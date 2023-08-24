@@ -114,7 +114,7 @@ class UserManagement
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $magicAuthChallengeId The challenge ID returned from when the one-time code was sent to the user.
+     * @param string $userId The user ID returned from the Magic Auth challenge.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
@@ -122,7 +122,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\SessionAndUser
      */
-    public function authenticateUserWithMagicAuth($clientId, $code, $magicAuthChallengeId, $ipAddress = null, $userAgent = null, $expiresIn = null)
+    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null, $expiresIn = null)
     {
         if (!$expiresIn) {
             $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
@@ -132,7 +132,7 @@ class UserManagement
         $params = [
             "client_id" => $clientId,
             "code" => $code,
-            "magic_auth_challenge_id" => $magicAuthChallengeId,
+            "user_id" => $userId,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
             "expires_in" => $expiresIn,
