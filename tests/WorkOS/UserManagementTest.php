@@ -16,6 +16,57 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->userManagement = new UserManagement();
     }
 
+    public function testDeleteUser()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $usersPath = "users/{$userId}";
+        $responseCode = 204;
+
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $usersPath,
+            null,
+            null,
+            true,
+            null,
+            null,
+            $responseCode
+        );
+
+        $response = $this->userManagement->deleteUser($userId);
+        $this->assertSame(204, $responseCode);
+        $this->assertSame($response, []);
+    }
+
+    public function testUpdateUserPassword()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $usersPath = "users/{$userId}";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "password" => "x^T!V23UN1@V"
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->updateUserPassword("user_01H7X1M4TZJN5N4HG4XXMA1234", "x^T!V23UN1@V");
+        $this->assertSame($user, $response->toArray());
+    }
+
+
+
     public function testAddUserToOrganization()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
