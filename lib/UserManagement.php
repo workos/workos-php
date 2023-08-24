@@ -209,7 +209,7 @@ class UserManagement
     /**
      * Complete Email Verification.
      *
-     * @param string $userId The unique ID of the user returned from the sendVerificationEmail response.
+     * @param string $userId The unique ID of the user.
      * @param string $code The one-time code emailed to the user.
      *
      *
