@@ -47,32 +47,26 @@ class UserManagement
      * @param string $password The password of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
-     * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\SessionAndUser
+     * @return \WorkOS\Resource\User
      */
-    public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null, $expiresIn = null)
+    public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
-        if (!$expiresIn) {
-            $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
-        }
-
-        $authenticateUserWithPasswordPath = "users/sessions/token";
+        $authenticateUserWithPasswordPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "email" => $email,
             "password" => $password,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
-            "expires_in" => $expiresIn,
             "grant_type" => "password",
             "client_secret" => WorkOS::getApiKey()
         ];
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithPasswordPath, null, $params, true);
 
-        return Resource\SessionAndUser::constructFromResponse($response);
+        return Resource\AuthenticateUserResponse::constructFromResponse($response);
     }
 
     /**
@@ -82,31 +76,25 @@ class UserManagement
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
-     * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\SessionAndUser
+     * @return \WorkOS\Resource\User
      */
-    public function authenticateUserWithCode($clientId, $code, $ipAddress = null, $userAgent = null, $expiresIn = null)
+    public function authenticateUserWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
-        if (!$expiresIn) {
-            $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
-        }
-
-        $authenticateUserWithCodePath = "users/sessions/token";
+        $authenticateUserWithCodePath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
-            "expires_in" => $expiresIn,
             "grant_type" => "authorization_code",
             "client_secret" => WorkOS::getApiKey()
         ];
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithCodePath, null, $params, true);
 
-        return Resource\SessionAndUser::constructFromResponse($response);
+        return Resource\AuthenticateUserResponse::constructFromResponse($response);
     }
 
     /**
@@ -114,35 +102,30 @@ class UserManagement
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $userId The unique ID of the user being authenticated.
+     * @param string $userId The unique ID of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
-     * @param int|null $expiresIn The length of the session in minutes. Defaults to 1 day, 1440.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\SessionAndUser
+     * @return \WorkOS\Resource\User
      */
-    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null, $expiresIn = null)
-    {
-        if (!$expiresIn) {
-            $expiresIn = self::DEFAULT_TOKEN_EXPIRATION;
-        }
 
-        $authenticateUserWithMagicAuthPath = "users/sessions/token";
+    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
+    {
+        $authenticateUserWithMagicAuthPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
             "user_id" => $userId,
             "ip_address" => $ipAddress,
             "user_agent" => $userAgent,
-            "expires_in" => $expiresIn,
             "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
             "client_secret" => WorkOS::getApiKey()
         ];
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithMagicAuthPath, null, $params, true);
 
-        return Resource\SessionAndUser::constructFromResponse($response);
+        return Resource\AuthenticateUserResponse::constructFromResponse($response);
     }
 
     /**

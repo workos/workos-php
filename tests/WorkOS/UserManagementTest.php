@@ -94,9 +94,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateUserWithPassword()
     {
-        $usersPath = "users/sessions/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createSessionAndUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -104,9 +104,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "password" => "i8uv6g34kd490s",
             "ip_address" => null,
             "user_agent" => null,
-            "expires_in" => 1440,
             "grant_type" => "password",
-            "client_secret" => Workos::getApiKey()
+            "client_secret" => WorkOS::getApiKey()
         ];
 
         $this->mockRequest(
@@ -119,27 +118,24 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $userFixture = $this->userFixture();
-        $sessionFixture = $this->sessionFixture();
 
         $response = $this->userManagement->authenticateUserWithPassword("project_0123456", "marcelina@foo-corp.com", "i8uv6g34kd490s");
-        $this->assertSame($sessionFixture, $response->session->toArray());
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testAuthenticateUserWithCode()
     {
-        $usersPath = "users/sessions/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createSessionAndUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
             "code" => "01E2RJ4C05B52KKZ8FSRDAP23J",
             "ip_address" => null,
             "user_agent" => null,
-            "expires_in" => 1440,
             "grant_type" => "authorization_code",
-            "client_secret" => Workos::getApiKey()
+            "client_secret" => WorkOS::getApiKey()
         ];
 
         $this->mockRequest(
@@ -152,18 +148,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $userFixture = $this->userFixture();
-        $sessionFixture = $this->sessionFixture();
 
         $response = $this->userManagement->authenticateUserWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
-        $this->assertSame($sessionFixture, $response->session->toArray());
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testAuthenticateUserWithMagicAuth()
     {
-        $usersPath = "users/sessions/token";
+        $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createSessionAndUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -171,9 +165,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "ip_address" => null,
             "user_agent" => null,
-            "expires_in" => 1440,
             "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
-            "client_secret" => Workos::getApiKey()
+            "client_secret" => WorkOS::getApiKey()
         ];
 
         $this->mockRequest(
@@ -186,10 +179,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $userFixture = $this->userFixture();
-        $sessionFixture = $this->sessionFixture();
 
         $response = $this->userManagement->authenticateUserWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
-        $this->assertSame($sessionFixture, $response->session->toArray());
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
@@ -429,10 +420,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     }
     // Fixtures
 
-    private function createUserAndTokenResponseFixture()
+    private function authenticateUserResponseFixture()
     {
         return json_encode([
-            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
@@ -446,23 +436,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    private function createSessionAndUserResponseFixture()
+    private function createUserAndTokenResponseFixture()
     {
         return json_encode([
-            "session" => [
-                "object" => "session",
-                "id" => "session_01E4ZCR3C56J083X43JQXF3JK5",
-                "token" => "session_token_123abc",
-                "authorized_organizations" => [
-                    "organization" => [
-                        "id" => "org_01E4ZCR3C56J083X43JQXF3JK5",
-                        "name" => "Foo Corp"
-                    ]
-                ],
-                "unauthorized_organizations" => [],
-                "created_at" => "2021-06-25T19:07:33.155Z",
-                "expires_at" => "2021-06-25T19:07:33.155Z"
-            ],
+            "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
             "user" => [
                 "object" => "user",
                 "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
@@ -570,23 +547,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    private function sessionFixture()
-    {
-        return [
-            "object" => "session",
-            "id" => "session_01E4ZCR3C56J083X43JQXF3JK5",
-            "token" => "session_token_123abc",
-            "authorizedOrganizations" => [
-                "organization" => [
-                    "id" => "org_01E4ZCR3C56J083X43JQXF3JK5",
-                    "name" => "Foo Corp"
-                ]
-            ],
-            "unauthorizedOrganizations" => [],
-            "createdAt" => "2021-06-25T19:07:33.155Z",
-            "expiresAt" => "2021-06-25T19:07:33.155Z"
-        ];
-    }
     private function userFixture()
     {
         return [
