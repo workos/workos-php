@@ -38,6 +38,34 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response, []);
     }
 
+    public function testUpdateUser()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $usersPath = "users/{$userId}";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "first_name" => "Damien",
+            "last_name" => "Alabaster",
+            "email_verified" => true
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->updateUser("user_01H7X1M4TZJN5N4HG4XXMA1234", "Damien", "Alabaster", true);
+        $this->assertSame($user, $response->toArray());
+    }
+
     public function testUpdateUserPassword()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
