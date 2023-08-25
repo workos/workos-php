@@ -200,16 +200,16 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function verifyEmail($userId, $code)
+    public function verifyEmailCode($userId, $code)
     {
-        $verifyEmailPath = "users/{$userId}/verify_email";
+        $verifyEmailCodePath = "users/{$userId}/verify_email_code";
 
         $params = [
             "user_id" => $userId,
             "code" => $code
         ];
 
-        $response = Client::request(Client::METHOD_POST, $verifyEmailPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $verifyEmailCodePath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
