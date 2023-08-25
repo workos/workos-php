@@ -3,7 +3,7 @@
 namespace WorkOS\Resource;
 
 /**
- * Class Authentication.
+ * Class AuthenticateUserResponse.
  *
  * @property User $user
  */
