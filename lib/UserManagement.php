@@ -422,7 +422,6 @@ class UserManagement
         $usersPath = "users/{$userId}";
 
         $params = [
-            "user_id" => $userId,
             "password" => $password
         ];
 
