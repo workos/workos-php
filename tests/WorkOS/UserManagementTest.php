@@ -46,7 +46,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -70,14 +70,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userFixture = $this->userFixture();
 
         $response = $this->userManagement->authenticateUserWithPassword("project_0123456", "marcelina@foo-corp.com", "i8uv6g34kd490s");
-        $this->assertSame($userFixture, $response->toArray());
+        $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testAuthenticateUserWithCode()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -100,14 +100,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userFixture = $this->userFixture();
 
         $response = $this->userManagement->authenticateUserWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
-        $this->assertSame($userFixture, $response->toArray());
+        $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testAuthenticateUserWithMagicAuth()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->createUserResponseFixture();
+        $result = $this->authenticateUserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -131,7 +131,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userFixture = $this->userFixture();
 
         $response = $this->userManagement->authenticateUserWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
-        $this->assertSame($userFixture, $response->toArray());
+        $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testCreateUser()
@@ -369,6 +369,22 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
     // Fixtures
+
+    private function authenticateUserResponseFixture()
+    {
+        return json_encode([
+            "user" => [
+                "object" => "user",
+                "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                "email" => "test@test.com",
+                "first_name" => "Damien",
+                "last_name" => "Alabaster",
+                "email_verified" => true,
+                "created_at" => "2021-06-25T19:07:33.155Z",
+                "updated_at" => "2021-06-25T19:07:33.155Z"
+            ]
+        ]);
+    }
 
     private function createUserAndTokenResponseFixture()
     {
