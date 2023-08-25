@@ -240,7 +240,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testVerifyEmailCode()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}/verify_email_code";
+        $verifyEmailCodePath = "users/{$userId}/verify_email_code";
 
         $result = $this->createUserResponseFixture();
 
@@ -251,7 +251,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $verifyEmailCodePath,
             null,
             $params,
             true,
