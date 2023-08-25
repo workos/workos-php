@@ -46,7 +46,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->createUserResponseFixture();
 
         $params = [
-            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "password" => "x^T!V23UN1@V"
         ];
 
