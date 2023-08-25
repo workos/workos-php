@@ -336,11 +336,11 @@ class UserManagement
     /**
      * Create User.
      *
-     * @param string $email The name of the User.
-     * @param string|null $password The name of the User.
-     * @param string|null $firstName The name of the User.
-     * @param string|null $lastName The name of the User.
-     * @param boolean|null $emailVerified The name of the User.
+     * @param string $email The email address of the user.
+     * @param string|null $password The password of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
@@ -385,6 +385,47 @@ class UserManagement
             $params,
             true
         );
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Delete a user.
+     *
+     * @param string $userId Unique ID of a user
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteUser($userId)
+    {
+        $usersPath = "users/{$userId}";
+
+        $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
+
+        return $response;
+    }
+
+    /**
+     * Update a User's password.
+     *
+     * @param string $userId The unique ID of the user.
+     * @param string $password The password of the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function updateUserPassword($userId, $password)
+    {
+        $usersPath = "users/{$userId}";
+
+        $params = [
+            "password" => $password
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
