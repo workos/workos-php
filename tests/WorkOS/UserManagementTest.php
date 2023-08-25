@@ -237,10 +237,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-    public function testVerifyEmail()
+    public function testVerifyEmailCode()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}/verify_email";
+        $verifyEmailCodePath = "users/{$userId}/verify_email_code";
 
         $result = $this->createUserResponseFixture();
 
@@ -251,7 +251,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $verifyEmailCodePath,
             null,
             $params,
             true,
@@ -260,7 +260,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $user = $this->userFixture();
 
-        $response = $this->userManagement->verifyEmail("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $response = $this->userManagement->verifyEmailCode("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($user, $response->toArray());
     }
 
