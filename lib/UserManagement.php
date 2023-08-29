@@ -391,6 +391,33 @@ class UserManagement
     }
 
     /**
+     * Update a User
+     *
+     * @param string $userId The unique ID of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function updateUser($userId, $firstName, $lastName, $emailVerified)
+    {
+        $usersPath = "users/{$userId}";
+
+        $params = [
+            "first_name" => $firstName,
+            "last_name" => $lastName,
+            "email_verified" => $emailVerified
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
      * Update a User's password.
      *
      * @param string $userId The unique ID of the user.
