@@ -41,7 +41,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testUpdateUserPassword()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}";
+        $usersPath = "users/{$userId}/password";
 
         $result = $this->createUserResponseFixture();
 
