@@ -429,7 +429,7 @@ class UserManagement
      */
     public function updateUserPassword($userId, $password)
     {
-        $usersPath = "users/{$userId}";
+        $usersPath = "users/{$userId}/password";
 
         $params = [
             "password" => $password
