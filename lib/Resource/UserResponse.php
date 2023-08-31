@@ -3,11 +3,11 @@
 namespace WorkOS\Resource;
 
 /**
- * Class AuthenticateUserResponse.
+ * Class UserResponse.
  *
  * @property User $user
  */
-class AuthenticateUserResponse extends BaseWorkOSResource
+class UserResponse extends BaseWorkOSResource
 {
     public const RESOURCE_ATTRIBUTES = [
         "user"

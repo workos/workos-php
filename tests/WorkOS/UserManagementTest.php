@@ -124,7 +124,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->authenticateUserResponseFixture();
+        $result = $this->UserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -155,7 +155,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->authenticateUserResponseFixture();
+        $result = $this->UserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -185,7 +185,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
-        $result = $this->authenticateUserResponseFixture();
+        $result = $this->UserResponseFixture();
 
         $params = [
             "client_id" => "project_0123456",
@@ -270,7 +270,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
         $verifyEmailCodePath = "users/{$userId}/verify_email_code";
 
-        $result = $this->createUserResponseFixture();
+        $result = $this->UserResponseFixture();
 
         $params = [
             "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
@@ -286,10 +286,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $user = $this->userFixture();
+        $userFixture = $this->userFixture();
 
         $response = $this->userManagement->verifyEmailCode("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
-        $this->assertSame($user, $response->toArray());
+        $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testCreatePasswordResetChallenge()
@@ -448,7 +448,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     }
     // Fixtures
 
-    private function authenticateUserResponseFixture()
+    private function UserResponseFixture()
     {
         return json_encode([
             "user" => [

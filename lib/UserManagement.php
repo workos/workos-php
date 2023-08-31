@@ -66,7 +66,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithPasswordPath, null, $params, true);
 
-        return Resource\AuthenticateUserResponse::constructFromResponse($response);
+        return Resource\UserResponse::constructFromResponse($response);
     }
 
     /**
@@ -94,7 +94,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithCodePath, null, $params, true);
 
-        return Resource\AuthenticateUserResponse::constructFromResponse($response);
+        return Resource\UserResponse::constructFromResponse($response);
     }
 
     /**
@@ -125,7 +125,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $authenticateUserWithMagicAuthPath, null, $params, true);
 
-        return Resource\AuthenticateUserResponse::constructFromResponse($response);
+        return Resource\UserResponse::constructFromResponse($response);
     }
 
     /**
@@ -211,7 +211,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $verifyEmailCodePath, null, $params, true);
 
-        return Resource\User::constructFromResponse($response);
+        return Resource\UserResponse::constructFromResponse($response);
     }
 
     /**
