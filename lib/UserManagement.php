@@ -49,7 +49,7 @@ class UserManagement
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserResponse
      */
     public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
@@ -78,7 +78,7 @@ class UserManagement
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserResponse
      */
     public function authenticateUserWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
@@ -107,7 +107,7 @@ class UserManagement
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserResponse
      */
 
     public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
@@ -198,7 +198,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserResponse
      */
     public function verifyEmailCode($userId, $code)
     {
