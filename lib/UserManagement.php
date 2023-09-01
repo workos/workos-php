@@ -171,13 +171,13 @@ class UserManagement
      */
     public function enrollAuthFactor($userId, $type)
     {
-        $verifyEmailCodePath = "users/{$userId}/auth/factors";
+        $enrollAuthFactorPath = "users/{$userId}/auth/factors";
 
         $params = [
             "type" => $type
         ];
 
-        $response = Client::request(Client::METHOD_POST, $verifyEmailCodePath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $enrollAuthFactorPath, null, $params, true);
 
         return Resource\AuthenticationFactorAndChallengeTotp::constructFromResponse($response);
     }
