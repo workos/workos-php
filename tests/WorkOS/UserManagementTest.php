@@ -448,7 +448,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     }
     // Fixtures
 
-    private function UserResponseFixture()
+    private function userResponseFixture()
     {
         return json_encode([
             "user" => [
