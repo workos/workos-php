@@ -132,9 +132,9 @@ class UserManagement
      * Authenticate with TOTP
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
-     * @param string $pendingAuthenticationToken 
-     * @param string $authenticationChallengeId 
-     * @param string $code 
+     * @param string $pendingAuthenticationToken
+     * @param string $authenticationChallengeId
+     * @param string $code
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
