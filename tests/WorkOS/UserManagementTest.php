@@ -292,9 +292,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
-    public function testCreatePasswordResetChallenge()
+    public function testSendPasswordResetEmail()
     {
-        $createPasswordResetChallengePath = "users/password_reset_challenge";
+        $sendPasswordResetEmailPath = "users/send_password_reset_email";
 
         $result = $this->createUserAndTokenResponseFixture();
 
@@ -305,7 +305,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $createPasswordResetChallengePath,
+            $sendPasswordResetEmailPath,
             null,
             $params,
             true,
@@ -315,16 +315,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->createPasswordResetChallenge("test@test.com", "https://your-app.com/reset-password");
+        $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
         $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
-    public function testCompletePasswordReset()
+    public function testResetPassword()
     {
-        $completePasswordResetPath = "users/password_reset";
+        $resetPasswordPath = "users/password_reset";
 
-        $result = $this->createUserResponseFixture();
+        $result = $this->userResponseFixture();
 
         $params = [
             "token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
@@ -333,17 +333,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $completePasswordResetPath,
+            $resetPasswordPath,
             null,
             $params,
             true,
             $result
         );
 
-        $user = $this->userFixture();
+        $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->completePasswordReset("01DMEK0J53CVMC32CK5SE0KZ8Q", "^O9w8hiZu3x!");
-        $this->assertSame($user, $response->toArray());
+        $response = $this->userManagement->resetPassword("01DMEK0J53CVMC32CK5SE0KZ8Q", "^O9w8hiZu3x!");
+        $this->assertSame($userFixture, $response->user->toArray());
     }
 
 
