@@ -246,7 +246,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserResponse
      */
     public function resetPassword($token, $newPassword)
     {
