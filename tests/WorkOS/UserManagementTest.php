@@ -199,12 +199,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             true,
             $result
         );
-        $enrollFactorTotp = $this->userManagement->enrollAuthFactor($userId, "totp");
 
+        $enrollFactorTotp = $this->userManagement->enrollAuthFactor($userId, "totp");
         $enrollUserAuthFactorFixture = $this->enrollAuthFactorFixture();
         $enrollUserAuthChallengeFixture = $this->enrollAuthChallengeFixture();
-
-        var_dump($enrollFactorTotp->authenticationFactor);
 
         $this->assertSame($enrollUserAuthFactorFixture, $enrollFactorTotp->authenticationFactor->toArray());
         $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
