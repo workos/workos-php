@@ -456,7 +456,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function updateUser($userId, $firstName, $lastName, $emailVerified)
+    public function updateUser($userId, $firstName = null, $lastName = null, $emailVerified = null)
     {
         $usersPath = "users/{$userId}";
 
