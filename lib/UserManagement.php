@@ -129,6 +129,60 @@ class UserManagement
     }
 
     /**
+     * Authenticate with TOTP
+     *
+     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $pendingAuthenticationToken
+     * @param string $authenticationChallengeId
+     * @param string $code
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserResponse
+     */
+
+    public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
+    {
+        $authenticatePath = "users/authenticate";
+        $params = [
+            "client_id" => $clientId,
+            "pending_authentication_token" => $pendingAuthenticationToken,
+            "authentication_challenge_id" => $authenticationChallengeId,
+            "code" => $code,
+            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $authenticatePath, null, $params, true);
+
+        return Resource\UserResponse::constructFromResponse($response);
+    }
+
+
+    /**
+     * Enroll An Authentication Factor.
+     *
+     * @param string $userId The unique ID of the user.
+     * @param string $type The type of MFA factor used to authenticate.
+     *
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserResponse
+     */
+    public function enrollAuthFactor($userId, $type)
+    {
+        $enrollAuthFactorPath = "users/{$userId}/auth/factors";
+
+        $params = [
+            "type" => $type
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $enrollAuthFactorPath, null, $params, true);
+
+        return Resource\AuthenticationFactorAndChallengeTotp::constructFromResponse($response);
+    }
+
+    /**
      * Remove a user from an organization.
      *
      * @param string $userId User ID
