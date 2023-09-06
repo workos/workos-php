@@ -142,7 +142,7 @@ class UserManagement
 
     public function authenticateUserWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
     {
-        $authenticateUserWithMagicAuthPath = "users/authenticate";
+        $authenticatePath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "pending_authentication_token" => $pendingAuthenticationToken,
