@@ -524,7 +524,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $authFactors = $this->listAuthFactorFixture();
         $response = $this->userManagement->listAuthFactors("user_01H96FETWYSJMJEGF0Q3ZB272F");
-        var_dump($response);
         $this->assertSame($authFactors, $response[0]->toArray());
     }
 
