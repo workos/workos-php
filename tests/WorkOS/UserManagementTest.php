@@ -208,7 +208,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
     }
 
-    public function testAuthenticateUserWithTotp()
+    public function testAuthenticateWithTotp()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
@@ -234,7 +234,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateUserWithTotp("project_0123456", "cTDQJTTkTkkVYxQUlKBIxEsFs", "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0", "123456");
+        $response = $this->userManagement->authenticateWithTotp("project_0123456", "cTDQJTTkTkkVYxQUlKBIxEsFs", "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0", "123456");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
