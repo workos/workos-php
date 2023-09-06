@@ -152,7 +152,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateUserWithMagicAuthPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $authenticatePath, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
