@@ -51,9 +51,9 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function authenticateUserWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
+    public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithPasswordPath = "users/authenticate";
+        $authenticateWithPasswordPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "email" => $email,
@@ -64,7 +64,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateUserWithPasswordPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $authenticateWithPasswordPath, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -80,9 +80,9 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function authenticateUserWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
+    public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithCodePath = "users/authenticate";
+        $authenticateWithCodePath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -92,7 +92,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateUserWithCodePath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $authenticateWithCodePath, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -110,9 +110,9 @@ class UserManagement
      * @return \WorkOS\Resource\UserResponse
      */
 
-    public function authenticateUserWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
+    public function authenticateWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
     {
-        $authenticateUserWithMagicAuthPath = "users/authenticate";
+        $authenticateWithMagicAuthPath = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -123,7 +123,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateUserWithMagicAuthPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $authenticateWithMagicAuthPath, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -492,5 +492,29 @@ class UserManagement
         $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * List a User's Authentication Factors.
+     *
+     * @param string $userId The unique ID of the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array $authFactors An array containing the user's authentication factors as \WorkOS\Resource\UserAuthenticationFactorTotp instances
+     */
+    public function listAuthFactors($userId)
+    {
+        $usersPath = "users/{$userId}/auth/factors";
+
+        $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
+
+        $authFactors = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($authFactors, Resource\UserAuthenticationFactorTotp::constructFromResponse($responseData));
+        }
+
+        return $authFactors;
     }
 }

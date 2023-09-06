@@ -120,7 +120,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-    public function testAuthenticateUserWithPassword()
+    public function testAuthenticateWithPassword()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
@@ -147,11 +147,11 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateUserWithPassword("project_0123456", "marcelina@foo-corp.com", "i8uv6g34kd490s");
+        $response = $this->userManagement->authenticateWithPassword("project_0123456", "marcelina@foo-corp.com", "i8uv6g34kd490s");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
-    public function testAuthenticateUserWithCode()
+    public function testAuthenticateWithCode()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
@@ -177,7 +177,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateUserWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
+        $response = $this->userManagement->authenticateWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
@@ -240,7 +240,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
 
 
-    public function testAuthenticateUserWithMagicAuth()
+    public function testAuthenticateWithMagicAuth()
     {
         $usersPath = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
@@ -267,7 +267,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateUserWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
+        $response = $this->userManagement->authenticateWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
@@ -505,7 +505,80 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $response = $this->userManagement->sendMagicAuthCode("test@test.com");
         $this->assertSame($user, $response->toArray());
     }
-    // Fixtures
+
+    public function testListAuthFactors()
+    {
+        $userId = "user_01H96FETWYSJMJEGF0Q3ZB272F";
+        $usersPath = "users/{$userId}/auth/factors";
+
+        $result = $this->listAuthFactorResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $authFactors = $this->listAuthFactorFixture();
+        $response = $this->userManagement->listAuthFactors("user_01H96FETWYSJMJEGF0Q3ZB272F");
+        var_dump($response);
+        $this->assertSame($authFactors, $response[0]->toArray());
+    }
+
+    //Fixtures
+
+    private function listAuthFactorResponseFixture()
+    {
+        return json_encode(
+            [
+                "data" => [
+                    [
+                        "object" => "authentication_factor",
+                        "id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+                        "user_id" => "user_01H96FETWYSJMJEGF0Q3ZB272F",
+                        "created_at" => "2022-03-08T23:12:20.157Z",
+                        "updated_at" => "2022-03-08T23:12:20.157Z",
+                        "type" => "totp",
+                        "totp" => [
+                            "issuer" => "Foo Corp",
+                            "user" => "user@foo-corp.com",
+                        ]
+                    ],
+                    [
+                        "object" => "authentication_factor",
+                        "id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJN",
+                        "user_id" => "user_01H96FETWYSJMJEGF0Q3ZB272F",
+                        "created_at" => "2022-03-08T23:12:20.157Z",
+                        "updated_at" => "2022-03-08T23:12:20.157Z",
+                        "type" => "totp",
+                        "totp" => [
+                            "issuer" => "Bar Corp",
+                            "user" => "user@bar-corp.com"
+                        ]
+                    ]
+                ]
+            ]
+        );
+    }
+
+    private function listAuthFactorFixture()
+    {
+        return [
+            "object" => "authentication_factor",
+            "id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
+            "userId" => "user_01H96FETWYSJMJEGF0Q3ZB272F",
+            "createdAt" => "2022-03-08T23:12:20.157Z",
+            "updatedAt" => "2022-03-08T23:12:20.157Z",
+            "type" => "totp",
+            "totp" => [
+                "issuer" => "Foo Corp",
+                "user" => "user@foo-corp.com",
+            ]
+        ];
+    }
 
     private function userResponseFixture()
     {
