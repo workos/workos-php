@@ -140,7 +140,7 @@ class UserManagement
      * @return \WorkOS\Resource\UserResponse
      */
 
-    public function authenticateUserWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
+    public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
     {
         $authenticatePath = "users/authenticate";
         $params = [
