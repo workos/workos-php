@@ -1,0 +1,7 @@
+/tests export-ignore
+/devbox.d export-ignore
+/ci export-ignore
+/devbox.json export-ignore
+/devbox.lock export-ignore
+/phpunit.xml export-ignore
+/.* export-ignore
