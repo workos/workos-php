@@ -23,12 +23,12 @@ trait TestHelper
 
     // Configuration
 
-    protected function withApiKey($apiKey = "pk_secretsauce")
+    protected static function withApiKey($apiKey = "pk_secretsauce")
     {
         WorkOS::setApiKey($apiKey);
     }
 
-    protected function withApiKeyAndClientId($apiKey = "pk_secretsauce", $clientId = "client_pizza")
+    protected static function withApiKeyAndClientId($apiKey = "pk_secretsauce", $clientId = "client_pizza")
     {
         WorkOS::setApiKey($apiKey);
         WorkOS::setClientId($clientId);
