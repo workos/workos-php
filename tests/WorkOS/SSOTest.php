@@ -114,7 +114,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testGetConnection()
     {
         $connection = "connection_id";
-        $connectionPath = "connections/{$connection}";
+        $connectionPath = "connections/${connection}";
 
         $result = $this->connectionResponseFixture();
 
@@ -166,7 +166,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testDeleteConnection()
     {
         $connection = "connection_id";
-        $connectionPath = "connections/{$connection}";
+        $connectionPath = "connections/${connection}";
         $responseCode = 204;
 
         $this->mockRequest(
@@ -186,7 +186,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     // Providers
 
-    public static function authorizationUrlTestProvider()
+    public function authorizationUrlTestProvider()
     {
         return [
             [null, null, null, Resource\ConnectionType::GoogleOAuth, null],
