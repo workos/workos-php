@@ -159,7 +159,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     public function testGetFactor()
     {
         $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
-        $getFactorPath = "auth/factors/{$authenticationFactorId}";
+        $getFactorPath = "auth/factors/${authenticationFactorId}";
 
         $result = $this->getFactorResponseFixture();
 
@@ -181,7 +181,7 @@ class MFATest extends \PHPUnit\Framework\TestCase
     public function testDeleteFactor()
     {
         $authenticationFactorId = "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM";
-        $deleteFactorPath = "auth/factors/{$authenticationFactorId}";
+        $deleteFactorPath = "auth/factors/${authenticationFactorId}";
         $responseCode = 200;
 
         $this->mockRequest(

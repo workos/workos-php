@@ -343,10 +343,11 @@ class UserManagement
         $after = null,
         $order = null
     ) {
-        $usersPath = "users";
+        $usersPath = "user_management/users";
+
         $params = [
             "email" => $email,
-            "organization" => $organization,
+            "organization_id" => $organization,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
@@ -437,7 +438,7 @@ class UserManagement
      */
     public function deleteUser($userId)
     {
-        $usersPath = "users/{$userId}";
+        $usersPath = "user_management/users/{$userId}";
 
         $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
 

@@ -113,7 +113,7 @@ class AuditLogsTest extends \PHPUnit\Framework\TestCase
     {
         $auditLogExportId = "123";
 
-        $path = "audit_logs/exports/{$auditLogExportId}";
+        $path = "audit_logs/exports/${auditLogExportId}";
 
         $result = $this->getExportResponseFixture();
 

@@ -19,7 +19,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testDeleteUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}";
+        $usersPath = "user_management/users/{$userId}";
         $responseCode = 204;
 
         $this->mockRequest(
@@ -432,10 +432,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testListUsers()
     {
-        $usersPath = "users";
+        $usersPath = "user_management/users";
         $params = [
             "email" => null,
-            "organization" => null,
+            "organization_id" => null,
             "limit" => UserManagement::DEFAULT_PAGE_SIZE,
             "before" => null,
             "after" => null,
