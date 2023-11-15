@@ -346,7 +346,7 @@ class UserManagement
         $usersPath = "users";
         $params = [
             "email" => $email,
-            "organization" => $organization,
+            "organization_id" => $organization,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
@@ -362,10 +362,11 @@ class UserManagement
         );
 
         $users = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
         foreach ($response["data"] as $responseData) {
             \array_push($users, Resource\User::constructFromResponse($responseData));
         }
+
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
 
         return [$before, $after, $users];
     }
