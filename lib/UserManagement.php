@@ -22,9 +22,10 @@ class UserManagement
      */
     public function addUserToOrganization($userId, $organizationId)
     {
-        $userOrganizationPath = "users/{$userId}/organizations";
+        $userOrganizationPath = "user_management/organization_memberships";
 
         $params = [
+            "user_id" => $userId,
             "organization_id" => $organizationId,
         ];
 
@@ -346,7 +347,7 @@ class UserManagement
         $usersPath = "users";
         $params = [
             "email" => $email,
-            "organization" => $organization,
+            "organization_id" => $organization,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
