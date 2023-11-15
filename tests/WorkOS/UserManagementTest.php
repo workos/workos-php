@@ -19,7 +19,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testDeleteUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}";
+        $usersPath = "user_management/users/{$userId}";
         $responseCode = 204;
 
         $this->mockRequest(
