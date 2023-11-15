@@ -438,7 +438,7 @@ class UserManagement
      */
     public function deleteUser($userId)
     {
-        $usersPath = "users/{$userId}";
+        $usersPath = "user_management/users/{$userId}";
 
         $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
 
