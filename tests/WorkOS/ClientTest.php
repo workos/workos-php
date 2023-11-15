@@ -179,7 +179,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     }
 
     // Providers
-    public static function requestExceptionTestProvider()
+    public function requestExceptionTestProvider()
     {
         return [
             [400, Exception\BadRequestException::class],
