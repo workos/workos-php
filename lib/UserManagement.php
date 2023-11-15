@@ -343,10 +343,11 @@ class UserManagement
         $after = null,
         $order = null
     ) {
-        $usersPath = "users";
+        $usersPath = "user_management/users";
+
         $params = [
             "email" => $email,
-            "organization" => $organization,
+            "organization_id" => $organization,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,

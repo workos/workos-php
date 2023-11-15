@@ -432,10 +432,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testListUsers()
     {
-        $usersPath = "users";
+        $usersPath = "user_management/users";
         $params = [
             "email" => null,
-            "organization" => null,
+            "organization_id" => null,
             "limit" => UserManagement::DEFAULT_PAGE_SIZE,
             "before" => null,
             "after" => null,
