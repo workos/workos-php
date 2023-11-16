@@ -164,12 +164,13 @@ class UserManagement
      *
      * @return \WorkOS\Resource\Response
      */
-    public function addUserToOrganization($userId, $organizationId)
+    public function createOrganizationMembership($userId, $organizationId)
     {
-        $userOrganizationPath = "users/{$userId}/organizations";
+        $userOrganizationPath = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
+            "user_id" => $userId
         ];
 
         $response = Client::request(
@@ -180,7 +181,32 @@ class UserManagement
             true
         );
 
-        return Resource\User::constructFromResponse($response);
+        return Resource\OrganizationMembership::constructFromResponse($response);
+    }
+
+    /**
+     * Add a user to an organization.
+     *
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function getOrganizationMembership($organizationMembershipId)
+    {
+        $userOrganizationPath = "user_management/organization_memberships/{$organizationMembershipId}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $userOrganizationPath,
+            null,
+            null,
+            true
+        );
+
+        return Resource\OrganizationMembership::constructFromResponse($response);
     }
 
     /**
@@ -193,9 +219,9 @@ class UserManagement
      *
      * @return \WorkOS\Resource\Response
      */
-    public function removeUserFromOrganization($userId, $organizationId)
+    public function deleteOrganizationMembership($organizationMembershipId)
     {
-        $userOrganizationPath = "users/{$userId}/organizations/{$organizationId}";
+        $userOrganizationPath = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $response = Client::request(
             Client::METHOD_DELETE,
@@ -205,7 +231,50 @@ class UserManagement
             true
         );
 
-        return Resource\User::constructFromResponse($response);
+        return $response;
+    }
+
+    /**
+     * List memberships for user to organization.
+     *
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function listOrganizationMemberships(
+        $userId,
+        $organizationId,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null
+    ) {
+        $userOrganizationPath = "user_management/organization_memberships";
+
+        $params = [
+            "organization_id" => $organizationId,
+            "user_id" => $userId,
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $userOrganizationPath,
+            null,
+            $params,
+            true
+        );
+
+        $organizationMemberships = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($organizationMemberships, Resource\OrganizationMembership::constructFromResponse($responseData));
+        }
+
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+       
+        return [$before, $after, $organizationMemberships];
     }
 
     /**

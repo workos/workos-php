@@ -92,34 +92,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-
-
-    public function testAddUserToOrganization()
-    {
-        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersOrganizationsPath = "users/{$userId}/organizations";
-
-        $result = $this->addUserToOrganizationResponseFixture();
-
-        $params = [
-            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-        ];
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $usersOrganizationsPath,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $user = $this->userFixture();
-
-        $response = $this->userManagement->addUserToOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
-        $this->assertSame($user, $response->toArray());
-    }
-
     public function testAuthenticateWithPassword()
     {
         $usersPath = "users/authenticate";
@@ -457,29 +429,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $users[0]->toArray());
     }
 
-    public function testRemoveUserFromOrganization()
-    {
-        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $organizationId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
-        $usersOrganizationsDeletionPath = "users/{$userId}/organizations/{$organizationId}";
-
-        $result = $this->removeUserFromOrganizationResponseFixture();
-
-        $this->mockRequest(
-            Client::METHOD_DELETE,
-            $usersOrganizationsDeletionPath,
-            null,
-            null,
-            true,
-            $result
-        );
-
-        $user = $this->userFixture();
-
-        $response = $this->userManagement->removeUserFromOrganization("user_01H7X1M4TZJN5N4HG4XXMA1234", "org_01EHQMYV6MBK39QC5PZXHY59C3");
-        $this->assertSame($user, $response->toArray());
-    }
-
     private function testSendMagicAuthCode()
     {
         $sendCodePath = "/user_management/magic_auth/send";
@@ -526,7 +475,152 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($authFactors, $response[0]->toArray());
     }
 
+    public function testCreateOrganizationMembership()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $path = "user_management/organization_memberships";
+        
+        $result = $this->organizationMembershipResponseFixture();
+        
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId
+        ];
+        
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+        
+        $organizationMembership = $this->organizationMembershipFixture();
+        
+        $response = $this->userManagement->createOrganizationMembership($userId, $orgId);
+        $this->assertSame($organizationMembership, $response->toArray());
+    }
+
+    public function testGetOrganizationMembership()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+        
+        $result = $this->organizationMembershipResponseFixture();
+       
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->getOrganizationMembership($organizationMembershipId);
+
+        $this->assertSame($organizationMembership, $response->toArray());
+    }
+
+    public function testListOrganizationMemberships()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $path = "user_management/organization_memberships";
+        
+        $result = $this->organizationMembershipListResponseFixture();
+
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId
+        ];
+        
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+        
+        $organizationMembership = $this->organizationMembershipFixture();
+        
+        list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId);
+        
+        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+    }
+
+    public function testDeleteOrganizationMembership()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+        
+        $result = $this->organizationMembershipResponseFixture();
+       
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            204
+        );
+       
+        $response = $this->userManagement->deleteOrganizationMembership($organizationMembershipId);
+        
+        $this->assertSame($response, []);
+    }
+
     //Fixtures
+
+    private function organizationMembershipResponseFixture()
+    {
+        return json_encode([
+            "object" => "organization_membership",
+            "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "created_at" => "2021-06-25T19:07:33.155Z",
+            "updated_at" => "2021-06-25T19:07:33.155Z",
+        ]);
+    }
+
+    private function organizationMembershipListResponseFixture()
+    {
+        return json_encode(
+            [
+                "data" => [[
+                    "object" => "organization_membership",
+                    "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
+                    "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                    "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                    "created_at" => "2021-06-25T19:07:33.155Z",
+                    "updated_at" => "2021-06-25T19:07:33.155Z",
+                ]],
+                "list_metadata" => [
+                    "before" => null,
+                    "after" => null
+                ],
+            ]);
+    }
+
+    private function organizationMembershipFixture()
+    {
+        return [
+            "object" => "organization_membership",
+            "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
+            "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "createdAt" => "2021-06-25T19:07:33.155Z",
+            "updatedAt" => "2021-06-25T19:07:33.155Z",
+        ];
+    }
 
     private function listAuthFactorResponseFixture()
     {
@@ -611,20 +705,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    private function addUserToOrganizationResponseFixture()
-    {
-        return json_encode([
-            "object" => "user",
-            "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "email" => "test@test.com",
-            "first_name" => "Damien",
-            "last_name" => "Alabaster",
-            "email_verified" => true,
-            "created_at" => "2021-06-25T19:07:33.155Z",
-            "updated_at" => "2021-06-25T19:07:33.155Z"
-        ]);
-    }
-
     private function createUserResponseFixture()
     {
         return json_encode([
@@ -680,20 +760,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "before" => null,
                 "after" => null
             ],
-        ]);
-    }
-
-    private function removeUserFromOrganizationResponseFixture()
-    {
-        return json_encode([
-            "object" => "user",
-            "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "email" => "test@test.com",
-            "first_name" => "Damien",
-            "last_name" => "Alabaster",
-            "email_verified" => true,
-            "created_at" => "2021-06-25T19:07:33.155Z",
-            "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
     }
 
