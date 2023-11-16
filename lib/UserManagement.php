@@ -236,7 +236,7 @@ class UserManagement
      */
     public function sendVerificationEmail($userId)
     {
-        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
+        $sendVerificationEmailPath = "user_management/users/{$userId}/email_verification/send";
 
         $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
 
@@ -256,10 +256,9 @@ class UserManagement
      */
     public function verifyEmailCode($userId, $code)
     {
-        $verifyEmailCodePath = "users/{$userId}/verify_email_code";
+        $verifyEmailCodePath = "user_management/users/{$userId}/email_verification/confirm";
 
         $params = [
-            "user_id" => $userId,
             "code" => $code
         ];
 
