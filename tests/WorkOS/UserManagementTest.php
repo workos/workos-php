@@ -352,7 +352,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testSendPasswordResetEmail()
     {
-        $sendPasswordResetEmailPath = "users/send_password_reset_email";
+        $sendPasswordResetEmailPath = "user_management/password_reset/send";
 
         $result = $this->createUserAndTokenResponseFixture();
 
@@ -380,7 +380,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testResetPassword()
     {
-        $resetPasswordPath = "users/password_reset";
+        $resetPasswordPath = "user_management/password_reset/confirm";
 
         $result = $this->userResponseFixture();
 

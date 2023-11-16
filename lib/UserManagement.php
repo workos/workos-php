@@ -279,7 +279,7 @@ class UserManagement
      */
     public function sendPasswordResetEmail($email, $passwordResetUrl)
     {
-        $sendPasswordResetEmailPath = "users/send_password_reset_email";
+        $sendPasswordResetEmailPath = "user_management/password_reset/send";
 
         $params = [
             "email" => $email,
@@ -303,7 +303,7 @@ class UserManagement
      */
     public function resetPassword($token, $newPassword)
     {
-        $resetPasswordPath = "users/password_reset";
+        $resetPasswordPath = "user_management/password_reset/confirm";
 
         $params = [
             "token" => $token,
