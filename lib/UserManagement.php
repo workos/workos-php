@@ -235,7 +235,7 @@ class UserManagement
     }
 
     /**
-     * List memberships for user to organization.
+     * List memberships for user and organization.
      *
      * @param string $userId User ID
      * @param string $organizationId Organization ID
