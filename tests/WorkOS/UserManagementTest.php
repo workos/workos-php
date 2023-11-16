@@ -509,7 +509,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testListAuthFactors()
     {
         $userId = "user_01H96FETWYSJMJEGF0Q3ZB272F";
-        $usersPath = "users/{$userId}/auth/factors";
+        $usersPath = "/user_management/users/{$userId}/auth_factors";
 
         $result = $this->listAuthFactorResponseFixture();
 

@@ -157,31 +157,6 @@ class UserManagement
         return Resource\UserResponse::constructFromResponse($response);
     }
 
-
-    /**
-     * Enroll An Authentication Factor.
-     *
-     * @param string $userId The unique ID of the user.
-     * @param string $type The type of MFA factor used to authenticate.
-     *
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\UserResponse
-     */
-    public function enrollAuthFactor($userId, $type)
-    {
-        $enrollAuthFactorPath = "users/{$userId}/auth/factors";
-
-        $params = [
-            "type" => $type
-        ];
-
-        $response = Client::request(Client::METHOD_POST, $enrollAuthFactorPath, null, $params, true);
-
-        return Resource\AuthenticationFactorAndChallengeTotp::constructFromResponse($response);
-    }
-
     /**
      * Remove a user from an organization.
      *
@@ -506,10 +481,11 @@ class UserManagement
      */
     public function listAuthFactors($userId)
     {
-        $usersPath = "users/{$userId}/auth/factors";
+        $usersPath = "/user_management/users/{$userId}/auth_factors";
 
         $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
-
+echo "\nlist auth !".$userId."\n";
+var_dump($response);
         $authFactors = [];
 
         foreach ($response["data"] as $responseData) {
@@ -517,5 +493,56 @@ class UserManagement
         }
 
         return $authFactors;
+    }
+
+    /**
+     * Enroll a User in Authentication Factors.
+     *
+     * @param string $type - Type of factor to be enrolled (only option available is totp)
+     * @param null|string $totpIssuer - An identifier for the organization issuing the challenge
+     * @param null|string $totpUser - An identifier for the user. Used by authenticator apps to label connections.
+     *
+     * @throws Exception\WorkOSException
+     */
+    public function enrollAuthFactor(
+        $userId,
+        $type,
+        $totpIssuer = null,
+        $totpUser = null
+    ) {
+        $enrollPath = "/user_management/users/{$userId}/auth_factors";
+
+        if (!isset($type)) {
+            $msg = "Incomplete arguments: Need to specify a type of factor";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        if ($type != "totp") {
+            $msg = "Type Parameter must be in ['totp']";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        if ($type == "totp" && (!isset($totpIssuer) || !isset($totpUser))) {
+            $msg = "Incomplete arguments: totpIssuer and totpUser need to be specified when using 'totp' as type.";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        $params = [
+            "type" => $type,
+            "totp_issuer" => $totpIssuer,
+            "totp_user" => $totpUser,
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $enrollPath,
+            null,
+            $params,
+            true
+        );
+
+        if ($type == "totp") {
+            return Resource\AuthenticationFactorAndChallengeTotp::constructFromResponse($response);
+        } 
     }
 }
