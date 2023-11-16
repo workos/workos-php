@@ -327,7 +327,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testVerifyEmailCode()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $verifyEmailCodePath = "/user_management/users/{$userId}/email_verification/confirm";
+        $verifyEmailCodePath = "user_management/users/{$userId}/email_verification/confirm";
 
         $result = $this->UserResponseFixture();
 
