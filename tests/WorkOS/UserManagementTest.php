@@ -303,7 +303,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testSendVerificationEmail()
     {
         $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $sendVerificationEmailPath = "users/{$userId}/send_verification_email";
+        $sendVerificationEmailPath = "user_management/users/{$userId}/email_verification/send";
 
         $result = $this->createUserResponseFixture();
 
@@ -327,12 +327,11 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testVerifyEmailCode()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $verifyEmailCodePath = "users/{$userId}/verify_email_code";
+        $verifyEmailCodePath = "/user_management/users/{$userId}/email_verification/confirm";
 
         $result = $this->UserResponseFixture();
 
         $params = [
-            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "code" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
         ];
 
