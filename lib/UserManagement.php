@@ -11,6 +11,150 @@ class UserManagement
     public const DEFAULT_TOKEN_EXPIRATION = 1440;
 
     /**
+     * Create User.
+     *
+     * @param string $email The email address of the user.
+     * @param string|null $password The password of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function createUser($email, $password, $firstName, $lastName, $emailVerified)
+    {
+        $usersPath = "users";
+        $params = [
+            "email" => $email,
+            "password" => $password,
+            "first_name" => $firstName,
+            "last_name" => $lastName,
+            "email_verified" => $emailVerified
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $usersPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Get a User.
+     *
+     * @param string $userId user ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function getUser($userId)
+    {
+        $usersPath = "users/{$userId}";
+
+        $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Update a User
+     *
+     * @param string $userId The unique ID of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function updateUser($userId, $firstName = null, $lastName = null, $emailVerified = null)
+    {
+        $usersPath = "users/{$userId}";
+
+        $params = [
+            "first_name" => $firstName,
+            "last_name" => $lastName,
+            "email_verified" => $emailVerified
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * List Users.
+     *
+     * @param null|string $email
+     * @param null|string $organization Organization users are a member of
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before User ID to look before
+     * @param null|string $after User ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array An array containing the following:
+     *      null|string User ID to use as before cursor
+     *      null|string User ID to use as after cursor
+     *      array \WorkOS\Resource\User instances
+     */
+    public function listUsers(
+        $email = null,
+        $organization = null,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null,
+        $order = null
+    ) {
+        $usersPath = "user_management/users";
+
+        $params = [
+            "email" => $email,
+            "organization_id" => $organization,
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "order" => $order
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true
+        );
+
+        $users = [];
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $responseData) {
+            \array_push($users, Resource\User::constructFromResponse($responseData));
+        }
+
+        return [$before, $after, $users];
+    }
+
+    /**
+     * Delete a user.
+     *
+     * @param string $userId Unique ID of a user
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteUser($userId)
+    {
+        $usersPath = "user_management/users/{$userId}";
+
+        $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
+
+        return $response;
+    }
+
+    /**
      * Add a user to an organization.
      *
      * @param string $userId User ID
@@ -33,6 +177,31 @@ class UserManagement
             $userOrganizationPath,
             null,
             $params,
+            true
+        );
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Remove a user from an organization.
+     *
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function removeUserFromOrganization($userId, $organizationId)
+    {
+        $userOrganizationPath = "users/{$userId}/organizations/{$organizationId}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $userOrganizationPath,
+            null,
+            null,
             true
         );
 
@@ -139,7 +308,6 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-
     public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
     {
         $authenticatePath = "users/authenticate";
@@ -156,7 +324,6 @@ class UserManagement
 
         return Resource\UserResponse::constructFromResponse($response);
     }
-
 
     /**
      * Enroll An Authentication Factor.
@@ -183,46 +350,27 @@ class UserManagement
     }
 
     /**
-     * Remove a user from an organization.
+     * List a User's Authentication Factors.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\Response
-     */
-    public function removeUserFromOrganization($userId, $organizationId)
-    {
-        $userOrganizationPath = "users/{$userId}/organizations/{$organizationId}";
-
-        $response = Client::request(
-            Client::METHOD_DELETE,
-            $userOrganizationPath,
-            null,
-            null,
-            true
-        );
-
-        return Resource\User::constructFromResponse($response);
-    }
-
-    /**
-     * Get a User.
-     *
-     * @param string $userId user ID
+     * @param string $userId The unique ID of the user.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return array $authFactors An array containing the user's authentication factors as \WorkOS\Resource\UserAuthenticationFactorTotp instances
      */
-    public function getUser($userId)
+    public function listAuthFactors($userId)
     {
-        $usersPath = "users/{$userId}";
+        $usersPath = "users/{$userId}/auth/factors";
 
         $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
 
-        return Resource\User::constructFromResponse($response);
+        $authFactors = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($authFactors, Resource\UserAuthenticationFactorTotp::constructFromResponse($responseData));
+        }
+
+        return $authFactors;
     }
 
     /**
@@ -315,85 +463,25 @@ class UserManagement
         return Resource\UserResponse::constructFromResponse($response);
     }
 
-
-
     /**
-     * List Users.
+     * Update a User's password.
      *
-     * @param null|string $email
-     * @param null|string $organization Organization users are a member of
-     * @param int $limit Maximum number of records to return
-     * @param null|string $before User ID to look before
-     * @param null|string $after User ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param string $userId The unique ID of the user.
+     * @param string $password The password of the user.
      *
-     * @throws Exception\WorkOSException
-     *
-     * @return array An array containing the following:
-     *      null|string User ID to use as before cursor
-     *      null|string User ID to use as after cursor
-     *      array \WorkOS\Resource\User instances
-     */
-    public function listUsers(
-        $email = null,
-        $organization = null,
-        $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
-    ) {
-        $usersPath = "user_management/users";
-
-        $params = [
-            "email" => $email,
-            "organization_id" => $organization,
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "order" => $order
-        ];
-
-        $response = Client::request(
-            Client::METHOD_GET,
-            $usersPath,
-            null,
-            $params,
-            true
-        );
-
-        $users = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($users, Resource\User::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $users];
-    }
-
-    /**
-     * Create User.
-     *
-     * @param string $email The email address of the user.
-     * @param string|null $password The password of the user.
-     * @param string|null $firstName The first name of the user.
-     * @param string|null $lastName The last name of the user.
-     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function createUser($email, $password, $firstName, $lastName, $emailVerified)
+    public function updateUserPassword($userId, $password)
     {
-        $usersPath = "users";
+        $usersPath = "users/{$userId}/password";
+
         $params = [
-            "email" => $email,
-            "password" => $password,
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "email_verified" => $emailVerified
+            "password" => $password
         ];
 
-        $response = Client::request(Client::METHOD_POST, $usersPath, null, $params, true);
+        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -424,97 +512,5 @@ class UserManagement
         );
 
         return Resource\User::constructFromResponse($response);
-    }
-
-    /**
-     * Delete a user.
-     *
-     * @param string $userId Unique ID of a user
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\Response
-     */
-    public function deleteUser($userId)
-    {
-        $usersPath = "user_management/users/{$userId}";
-
-        $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
-
-        return $response;
-    }
-
-    /**
-     * Update a User
-     *
-     * @param string $userId The unique ID of the user.
-     * @param string|null $firstName The first name of the user.
-     * @param string|null $lastName The last name of the user.
-     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\User
-     */
-    public function updateUser($userId, $firstName = null, $lastName = null, $emailVerified = null)
-    {
-        $usersPath = "users/{$userId}";
-
-        $params = [
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "email_verified" => $emailVerified
-        ];
-
-        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
-
-        return Resource\User::constructFromResponse($response);
-    }
-
-    /**
-     * Update a User's password.
-     *
-     * @param string $userId The unique ID of the user.
-     * @param string $password The password of the user.
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\User
-     */
-    public function updateUserPassword($userId, $password)
-    {
-        $usersPath = "users/{$userId}/password";
-
-        $params = [
-            "password" => $password
-        ];
-
-        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
-
-        return Resource\User::constructFromResponse($response);
-    }
-
-    /**
-     * List a User's Authentication Factors.
-     *
-     * @param string $userId The unique ID of the user.
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return array $authFactors An array containing the user's authentication factors as \WorkOS\Resource\UserAuthenticationFactorTotp instances
-     */
-    public function listAuthFactors($userId)
-    {
-        $usersPath = "users/{$userId}/auth/factors";
-
-        $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
-
-        $authFactors = [];
-
-        foreach ($response["data"] as $responseData) {
-            \array_push($authFactors, Resource\UserAuthenticationFactorTotp::constructFromResponse($responseData));
-        }
-
-        return $authFactors;
     }
 }
