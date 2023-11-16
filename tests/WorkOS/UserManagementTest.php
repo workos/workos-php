@@ -482,7 +482,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     private function testSendMagicAuthCode()
     {
-        $sendCodePath = "users/magic_auth/send";
+        $sendCodePath = "/user_management/magic_auth/send";
 
         $result = $this->createUserResponseFixture();
 

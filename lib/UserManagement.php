@@ -401,18 +401,18 @@ class UserManagement
     /**
      * Creates a one-time Magic Auth code and emails it to the user.
      *
-     * @param string $emailAddress The email address the one-time code will be sent to.
+     * @param string $email The email address the one-time code will be sent to.
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function sendMagicAuthCode($emailAddress)
+    public function sendMagicAuthCode($email)
     {
-        $sendCodePath = "users/magic_auth/send";
+        $sendCodePath = "/user_management/magic_auth/send";
 
         $params = [
-            "email_address" => $emailAddress,
+            "email" => $email,
         ];
 
         $response = Client::request(
