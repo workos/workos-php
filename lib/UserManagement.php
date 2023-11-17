@@ -155,7 +155,7 @@ class UserManagement
     }
 
     /**
-     * Add a user to an organization.
+     * Add a User to an Organization.
      *
      * @param string $userId User ID
      * @param string $organizationId Organization ID
@@ -166,7 +166,7 @@ class UserManagement
      */
     public function createOrganizationMembership($userId, $organizationId)
     {
-        $userOrganizationPath = "user_management/organization_memberships";
+        $path = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
@@ -175,7 +175,7 @@ class UserManagement
 
         $response = Client::request(
             Client::METHOD_POST,
-            $userOrganizationPath,
+            $path,
             null,
             $params,
             true
@@ -185,10 +185,9 @@ class UserManagement
     }
 
     /**
-     * Add a user to an organization.
+     * Get Organization Memberships.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
+     * @param string $organizationMembershipId Organization Membership ID
      *
      * @throws Exception\WorkOSException
      *
@@ -196,11 +195,11 @@ class UserManagement
      */
     public function getOrganizationMembership($organizationMembershipId)
     {
-        $userOrganizationPath = "user_management/organization_memberships/{$organizationMembershipId}";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $response = Client::request(
             Client::METHOD_GET,
-            $userOrganizationPath,
+            $path,
             null,
             null,
             true
@@ -212,8 +211,7 @@ class UserManagement
     /**
      * Remove a user from an organization.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
+     * @param string $organizationMembershipId Organization Membership ID
      *
      * @throws Exception\WorkOSException
      *
@@ -221,11 +219,11 @@ class UserManagement
      */
     public function deleteOrganizationMembership($organizationMembershipId)
     {
-        $userOrganizationPath = "user_management/organization_memberships/{$organizationMembershipId}";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $response = Client::request(
             Client::METHOD_DELETE,
-            $userOrganizationPath,
+            $path,
             null,
             null,
             true
@@ -235,10 +233,13 @@ class UserManagement
     }
 
     /**
-     * List memberships for user and organization.
+     * List organization memberships.
      *
      * @param string $userId User ID
      * @param string $organizationId Organization ID
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Organization Membership ID to look before
+     * @param null|string $after Organization Membership ID to look after
      *
      * @throws Exception\WorkOSException
      *
@@ -251,7 +252,7 @@ class UserManagement
         $before = null,
         $after = null
     ) {
-        $userOrganizationPath = "user_management/organization_memberships";
+        $path = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
@@ -260,7 +261,7 @@ class UserManagement
 
         $response = Client::request(
             Client::METHOD_GET,
-            $userOrganizationPath,
+            $path,
             null,
             $params,
             true
