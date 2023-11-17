@@ -185,7 +185,7 @@ class UserManagement
     }
 
     /**
-     * Get Organization Memberships.
+     * Get an Organization Membership.
      *
      * @param string $organizationMembershipId Organization Membership ID
      *
