@@ -155,7 +155,7 @@ class UserManagement
     }
 
     /**
-     * Add a user to an organization.
+     * Add a User to an Organization.
      *
      * @param string $userId User ID
      * @param string $organizationId Organization ID
@@ -164,48 +164,118 @@ class UserManagement
      *
      * @return \WorkOS\Resource\Response
      */
-    public function addUserToOrganization($userId, $organizationId)
+    public function createOrganizationMembership($userId, $organizationId)
     {
-        $userOrganizationPath = "users/{$userId}/organizations";
+        $path = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
+            "user_id" => $userId
         ];
 
         $response = Client::request(
             Client::METHOD_POST,
-            $userOrganizationPath,
+            $path,
             null,
             $params,
             true
         );
 
-        return Resource\User::constructFromResponse($response);
+        return Resource\OrganizationMembership::constructFromResponse($response);
     }
 
     /**
-     * Remove a user from an organization.
+     * Get an Organization Membership.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
+     * @param string $organizationMembershipId Organization Membership ID
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\Response
      */
-    public function removeUserFromOrganization($userId, $organizationId)
+    public function getOrganizationMembership($organizationMembershipId)
     {
-        $userOrganizationPath = "users/{$userId}/organizations/{$organizationId}";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $response = Client::request(
-            Client::METHOD_DELETE,
-            $userOrganizationPath,
+            Client::METHOD_GET,
+            $path,
             null,
             null,
             true
         );
 
-        return Resource\User::constructFromResponse($response);
+        return Resource\OrganizationMembership::constructFromResponse($response);
+    }
+
+    /**
+     * Remove a user from an organization.
+     *
+     * @param string $organizationMembershipId Organization Membership ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deleteOrganizationMembership($organizationMembershipId)
+    {
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+
+        $response = Client::request(
+            Client::METHOD_DELETE,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return $response;
+    }
+
+    /**
+     * List organization memberships.
+     *
+     * @param string $userId User ID
+     * @param string $organizationId Organization ID
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Organization Membership ID to look before
+     * @param null|string $after Organization Membership ID to look after
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function listOrganizationMemberships(
+        $userId,
+        $organizationId,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null
+    ) {
+        $path = "user_management/organization_memberships";
+
+        $params = [
+            "organization_id" => $organizationId,
+            "user_id" => $userId,
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        $organizationMemberships = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($organizationMemberships, Resource\OrganizationMembership::constructFromResponse($responseData));
+        }
+
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+
+        return [$before, $after, $organizationMemberships];
     }
 
     /**
