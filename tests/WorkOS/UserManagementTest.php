@@ -536,7 +536,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             "organization_id" => $orgId,
-            "user_id" => $userId
+            "user_id" => $userId,
+            "limit" => 10,
+            "before" => null,
+            "after" => null
         ];
 
         $this->mockRequest(
@@ -577,7 +580,177 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response, []);
     }
 
+    public function testSendInvitation()
+    {
+        $path = "/user_management/invitations";
+
+        $result = $this->invitationResponseFixture();
+
+        $params = [
+            "email" => "someemail@test.com",
+            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "expires_in_days" => 10,
+            "inviter_user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234"
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->sendInvitation(
+            "someemail@test.com",
+            "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            10,
+            "user_01H7X1M4TZJN5N4HG4XXMA1234"
+        );
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+
+    }
+
+    public function testGetInvitation()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "/user_management/invitations/{$invitationId}";
+
+        $result = $this->invitationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->getInvitation($invitationId);
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testListInvitations()
+    {
+        $path = "/user_management/invitations";
+
+        $result = $this->invitationListResponseFixture();
+
+        $params = [
+            "email" => "someemail@test.com",
+            "organization_id" => null,
+            "limit" => 10,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        list($before, $after, $invitations) = $this->userManagement->listInvitations("someemail@test.com");
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($expected, $invitations[0]->toArray());
+    }
+
+    public function testRevokeInvitation()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "/user_management/invitations/{$invitationId}/revoke";
+
+        $result = $this->invitationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->revokeInvitation($invitationId);
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
     //Fixtures
+
+    private function invitationResponseFixture()
+    {
+        return json_encode([
+            "object" => "invitation",
+            "id" => "invitation_01E4ZCR3C56J083X43JQXF3JK5",
+            "email" => "someemail@test.com",
+            "state" => "pending",
+            "accepted_at" => "2021-07-01T19:07:33.155Z",
+            "revoked_at" => "2021-07-01T19:07:33.155Z",
+            "expires_at" => "2021-07-01T19:07:33.155Z",
+            "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "created_at" => "2021-07-01T19:07:33.155Z",
+            "updated_at" => "2021-07-01T19:07:33.155Z",
+        ]);
+    }
+
+    private function invitationFixture()
+    {
+        return [
+            "object" => "invitation",
+            "id" => "invitation_01E4ZCR3C56J083X43JQXF3JK5",
+            "email" => "someemail@test.com",
+            "state" => "pending",
+            "acceptedAt" => "2021-07-01T19:07:33.155Z",
+            "revokedAt" => "2021-07-01T19:07:33.155Z",
+            "expiresAt" => "2021-07-01T19:07:33.155Z",
+            "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "createdAt" => "2021-07-01T19:07:33.155Z",
+            "updatedAt" => "2021-07-01T19:07:33.155Z",
+        ];
+    }
+
+    private function invitationListResponseFixture()
+    {
+        return json_encode(
+            [
+                "data" => [[
+                    "object" => "invitation",
+                    "id" => "invitation_01E4ZCR3C56J083X43JQXF3JK5",
+                    "email" => "someemail@test.com",
+                    "state" => "pending",
+                    "accepted_at" => "2021-07-01T19:07:33.155Z",
+                    "revoked_at" => "2021-07-01T19:07:33.155Z",
+                    "expires_at" => "2021-07-01T19:07:33.155Z",
+                    "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+                    "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                    "created_at" => "2021-07-01T19:07:33.155Z",
+                    "updated_at" => "2021-07-01T19:07:33.155Z",
+                ]],
+                "list_metadata" => [
+                    "before" => null,
+                    "after" => null
+                ],
+            ]
+        );
+    }
 
     private function organizationMembershipResponseFixture()
     {

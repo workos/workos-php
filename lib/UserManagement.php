@@ -18,6 +18,7 @@ class UserManagement
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
      * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
+     *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
@@ -235,15 +236,18 @@ class UserManagement
     /**
      * List organization memberships.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
+     * @param string|null $userId User ID
+     * @param string|null $organizationId Organization ID
      * @param int $limit Maximum number of records to return
-     * @param null|string $before Organization Membership ID to look before
-     * @param null|string $after Organization Membership ID to look after
+     * @param string|null $before Organization Membership ID to look before
+     * @param string|null $after Organization Membership ID to look after
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return array An array containing the following:
+     *      string|null Organization Membership ID to use as before cursor
+     *      string|null Organization Membership ID to use as after cursor
+     *      array \WorkOS\Resource\OrganizationMembership instances
      */
     public function listOrganizationMemberships(
         $userId,
@@ -257,6 +261,9 @@ class UserManagement
         $params = [
             "organization_id" => $organizationId,
             "user_id" => $userId,
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
         ];
 
         $response = Client::request(
@@ -279,6 +286,147 @@ class UserManagement
     }
 
     /**
+     * Sends an Invitation
+     *
+     * @param string $email The email address of the invitee
+     * @param string|null $organizationId Organization ID
+     * @param int|null $expiresInDays expiration delay in days
+     * @param string|null $inviterUserId User ID of the inviter
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function sendInvitation(
+        $email,
+        $organizationId = null,
+        $expiresInDays = null,
+        $inviterUserId = null
+    ) {
+        $path = "/user_management/invitations";
+
+        $params = [
+            "email" => $email,
+            "organization_id" => $organizationId,
+            "expires_in_days" => $expiresInDays,
+            "inviter_user_id" => $inviterUserId
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
+     * Get an Invitation
+     *
+     * @param string $invitationId ID of the Invitation
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function getInvitation($invitationId)
+    {
+        $path = "/user_management/invitations/{$invitationId}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
+     * List Invitations
+     *
+     * @param string|null $email Email of the invitee
+     * @param string|null $organizationId Organization ID
+     * @param int $limit Maximum number of records to return
+     * @param string|null $before Organization Membership ID to look before
+     * @param string|null $after Organization Membership ID to look after
+     * @param string|null $after Sort order
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array An array containing the following:
+     *      string|null Invitation ID to use as before cursor
+     *      string|null Invitation ID to use as after cursor
+     *      array \WorkOS\Resource\Invitation instances
+     */
+    public function listInvitations(
+        $email = null,
+        $organizationId = null,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null,
+        $order = null
+    ) {
+        $path = "/user_management/invitations";
+
+        $params = [
+            "email" => $email,
+            "organization_id" => $organizationId,
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "order" => $order
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        $invitations = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($invitations, Resource\Invitation::constructFromResponse($responseData));
+        }
+
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+
+        return [$before, $after, $invitations];
+    }
+
+    /**
+     * Revoke an Invitation
+     *
+     * @param string $invitationId ID of the Invitation
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function revokeInvitation($invitationId)
+    {
+        $path = "/user_management/invitations/{$invitationId}/revoke";
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
      * Authenticate a User with Password
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
@@ -286,6 +434,7 @@ class UserManagement
      * @param string $password The password of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
@@ -315,6 +464,7 @@ class UserManagement
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
@@ -344,6 +494,7 @@ class UserManagement
      * @param string $userId The unique ID of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
@@ -374,6 +525,7 @@ class UserManagement
      * @param string $pendingAuthenticationToken
      * @param string $authenticationChallengeId
      * @param string $code
+     *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
@@ -400,7 +552,6 @@ class UserManagement
      *
      * @param string $userId The unique ID of the user.
      * @param string $type The type of MFA factor used to authenticate.
-     *
      *
      * @throws Exception\WorkOSException
      *
@@ -466,7 +617,6 @@ class UserManagement
      *
      * @param string $userId The unique ID of the user.
      * @param string $code The one-time code emailed to the user.
-     *
      *
      * @throws Exception\WorkOSException
      *
