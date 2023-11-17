@@ -19,12 +19,12 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testDeleteUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "user_management/users/{$userId}";
+        $path = "user_management/users/{$userId}";
         $responseCode = 204;
 
         $this->mockRequest(
             Client::METHOD_DELETE,
-            $usersPath,
+            $path,
             null,
             null,
             true,
@@ -41,7 +41,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testUpdateUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}";
+        $path = "users/{$userId}";
 
         $result = $this->createUserResponseFixture();
 
@@ -53,7 +53,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_PUT,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -69,7 +69,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testUpdateUserPassword()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}/password";
+        $path = "users/{$userId}/password";
 
         $result = $this->createUserResponseFixture();
 
@@ -79,7 +79,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_PUT,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -94,7 +94,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithPassword()
     {
-        $usersPath = "users/authenticate";
+        $path = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -110,7 +110,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -125,7 +125,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithCode()
     {
-        $usersPath = "users/authenticate";
+        $path = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -140,7 +140,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -182,7 +182,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithTotp()
     {
-        $usersPath = "users/authenticate";
+        $path = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -197,7 +197,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -214,7 +214,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithMagicAuth()
     {
-        $usersPath = "users/authenticate";
+        $path = "users/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -230,7 +230,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -245,7 +245,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateUser()
     {
-        $usersPath = "users";
+        $path = "users";
 
         $result = $this->createUserResponseFixture();
 
@@ -259,7 +259,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -275,14 +275,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testSendVerificationEmail()
     {
         $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
-        $sendVerificationEmailPath = "user_management/users/{$userId}/email_verification/send";
+        $path = "user_management/users/{$userId}/email_verification/send";
 
         $result = $this->createUserResponseFixture();
 
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $sendVerificationEmailPath,
+            $path,
             null,
             null,
             true,
@@ -296,10 +296,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
-    public function testVerifyEmailCode()
+    public function testVerifyEmail()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $verifyEmailCodePath = "user_management/users/{$userId}/email_verification/confirm";
+        $path = "user_management/users/{$userId}/email_verification/confirm";
 
         $result = $this->UserResponseFixture();
 
@@ -309,7 +309,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $verifyEmailCodePath,
+            $path,
             null,
             $params,
             true,
@@ -318,13 +318,13 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->verifyEmailCode("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
+        $response = $this->userManagement->verifyEmail("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
     public function testSendPasswordResetEmail()
     {
-        $sendPasswordResetEmailPath = "user_management/password_reset/send";
+        $path = "user_management/password_reset/send";
 
         $result = $this->createUserAndTokenResponseFixture();
 
@@ -335,7 +335,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $sendPasswordResetEmailPath,
+            $path,
             null,
             $params,
             true,
@@ -352,7 +352,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testResetPassword()
     {
-        $resetPasswordPath = "user_management/password_reset/confirm";
+        $path = "user_management/password_reset/confirm";
 
         $result = $this->userResponseFixture();
 
@@ -363,7 +363,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $resetPasswordPath,
+            $path,
             null,
             $params,
             true,
@@ -381,13 +381,13 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $usersPath = "users/{$userId}";
+        $path = "users/{$userId}";
 
         $result = $this->getUserResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_GET,
-            $usersPath,
+            $path,
             null,
             null,
             true,
@@ -403,7 +403,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testListUsers()
     {
-        $usersPath = "user_management/users";
+        $path = "user_management/users";
         $params = [
             "email" => null,
             "organization_id" => null,
@@ -417,7 +417,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_GET,
-            $usersPath,
+            $path,
             null,
             $params,
             true,
@@ -431,7 +431,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     private function testSendMagicAuthCode()
     {
-        $sendCodePath = "/user_management/magic_auth/send";
+        $path = "/user_management/magic_auth/send";
 
         $result = $this->createUserResponseFixture();
 
@@ -441,7 +441,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->mockRequest(
             Client::METHOD_POST,
-            $sendCodePath,
+            $path,
             null,
             $params,
             true,
@@ -457,13 +457,13 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testListAuthFactors()
     {
         $userId = "user_01H96FETWYSJMJEGF0Q3ZB272F";
-        $usersPath = "users/{$userId}/auth/factors";
+        $path = "users/{$userId}/auth/factors";
 
         $result = $this->listAuthFactorResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_GET,
-            $usersPath,
+            $path,
             null,
             null,
             true,
