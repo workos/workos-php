@@ -273,7 +273,7 @@ class UserManagement
         }
 
         list($before, $after) = Util\Request::parsePaginationArgs($response);
-       
+
         return [$before, $after, $organizationMemberships];
     }
 

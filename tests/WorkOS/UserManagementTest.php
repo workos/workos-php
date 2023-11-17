@@ -480,14 +480,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
         $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
         $path = "user_management/organization_memberships";
-        
+
         $result = $this->organizationMembershipResponseFixture();
-        
+
         $params = [
             "organization_id" => $orgId,
             "user_id" => $userId
         ];
-        
+
         $this->mockRequest(
             Client::METHOD_POST,
             $path,
@@ -496,9 +496,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             true,
             $result
         );
-        
+
         $organizationMembership = $this->organizationMembershipFixture();
-        
+
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId);
         $this->assertSame($organizationMembership, $response->toArray());
     }
@@ -507,9 +507,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
-        
+
         $result = $this->organizationMembershipResponseFixture();
-       
+
         $this->mockRequest(
             Client::METHOD_GET,
             $path,
@@ -531,14 +531,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
         $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
         $path = "user_management/organization_memberships";
-        
+
         $result = $this->organizationMembershipListResponseFixture();
 
         $params = [
             "organization_id" => $orgId,
             "user_id" => $userId
         ];
-        
+
         $this->mockRequest(
             Client::METHOD_GET,
             $path,
@@ -547,11 +547,11 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             true,
             $result
         );
-        
+
         $organizationMembership = $this->organizationMembershipFixture();
-        
+
         list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId);
-        
+
         $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
     }
 
@@ -559,9 +559,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
-        
+
         $result = $this->organizationMembershipResponseFixture();
-       
+
         $this->mockRequest(
             Client::METHOD_DELETE,
             $path,
@@ -571,9 +571,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             null,
             204
         );
-       
+
         $response = $this->userManagement->deleteOrganizationMembership($organizationMembershipId);
-        
+
         $this->assertSame($response, []);
     }
 
@@ -607,7 +607,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                     "before" => null,
                     "after" => null
                 ],
-            ]);
+            ]
+        );
     }
 
     private function organizationMembershipFixture()
