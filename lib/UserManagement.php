@@ -289,9 +289,9 @@ class UserManagement
      * Sends an Invitation
      *
      * @param string $email The email address of the invitee
-     * @param string $organizationId|null Organization ID
-     * @param int $expiresInDays|null expiration delay in days
-     * @param string $inviterUserId|null User ID of the inviter
+     * @param string|null $organizationId Organization ID
+     * @param int|null $expiresInDays expiration delay in days
+     * @param string|null $inviterUserId User ID of the inviter
      *
      * @throws Exception\WorkOSException
      *
