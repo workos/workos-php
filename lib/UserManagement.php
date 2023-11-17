@@ -25,7 +25,7 @@ class UserManagement
      */
     public function createUser($email, $password, $firstName, $lastName, $emailVerified)
     {
-        $usersPath = "users";
+        $path = "users";
         $params = [
             "email" => $email,
             "password" => $password,
@@ -34,7 +34,7 @@ class UserManagement
             "email_verified" => $emailVerified
         ];
 
-        $response = Client::request(Client::METHOD_POST, $usersPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -50,9 +50,9 @@ class UserManagement
      */
     public function getUser($userId)
     {
-        $usersPath = "users/{$userId}";
+        $path = "users/{$userId}";
 
-        $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -71,7 +71,7 @@ class UserManagement
      */
     public function updateUser($userId, $firstName = null, $lastName = null, $emailVerified = null)
     {
-        $usersPath = "users/{$userId}";
+        $path = "users/{$userId}";
 
         $params = [
             "first_name" => $firstName,
@@ -79,7 +79,7 @@ class UserManagement
             "email_verified" => $emailVerified
         ];
 
-        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
+        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -109,7 +109,7 @@ class UserManagement
         $after = null,
         $order = null
     ) {
-        $usersPath = "user_management/users";
+        $path = "user_management/users";
 
         $params = [
             "email" => $email,
@@ -122,7 +122,7 @@ class UserManagement
 
         $response = Client::request(
             Client::METHOD_GET,
-            $usersPath,
+            $path,
             null,
             $params,
             true
@@ -148,9 +148,9 @@ class UserManagement
      */
     public function deleteUser($userId)
     {
-        $usersPath = "user_management/users/{$userId}";
+        $path = "user_management/users/{$userId}";
 
-        $response = Client::request(Client::METHOD_DELETE, $usersPath, null, null, true);
+        $response = Client::request(Client::METHOD_DELETE, $path, null, null, true);
 
         return $response;
     }
@@ -441,7 +441,7 @@ class UserManagement
      */
     public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
-        $authenticateWithPasswordPath = "users/authenticate";
+        $path = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "email" => $email,
@@ -452,7 +452,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateWithPasswordPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -471,7 +471,7 @@ class UserManagement
      */
     public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
-        $authenticateWithCodePath = "users/authenticate";
+        $path = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -481,7 +481,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateWithCodePath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -502,7 +502,7 @@ class UserManagement
 
     public function authenticateWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
     {
-        $authenticateWithMagicAuthPath = "users/authenticate";
+        $path = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -513,7 +513,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticateWithMagicAuthPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -532,7 +532,7 @@ class UserManagement
      */
     public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
     {
-        $authenticatePath = "users/authenticate";
+        $path = "users/authenticate";
         $params = [
             "client_id" => $clientId,
             "pending_authentication_token" => $pendingAuthenticationToken,
@@ -542,7 +542,7 @@ class UserManagement
             "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $authenticatePath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -559,13 +559,13 @@ class UserManagement
      */
     public function enrollAuthFactor($userId, $type)
     {
-        $enrollAuthFactorPath = "users/{$userId}/auth/factors";
+        $path = "users/{$userId}/auth/factors";
 
         $params = [
             "type" => $type
         ];
 
-        $response = Client::request(Client::METHOD_POST, $enrollAuthFactorPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\AuthenticationFactorAndChallengeTotp::constructFromResponse($response);
     }
@@ -581,9 +581,9 @@ class UserManagement
      */
     public function listAuthFactors($userId)
     {
-        $usersPath = "users/{$userId}/auth/factors";
+        $path = "users/{$userId}/auth/factors";
 
-        $response = Client::request(Client::METHOD_GET, $usersPath, null, null, true);
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
         $authFactors = [];
 
@@ -605,9 +605,9 @@ class UserManagement
      */
     public function sendVerificationEmail($userId)
     {
-        $sendVerificationEmailPath = "user_management/users/{$userId}/email_verification/send";
+        $path = "user_management/users/{$userId}/email_verification/send";
 
-        $response = Client::request(Client::METHOD_POST, $sendVerificationEmailPath, null, null, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, null, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -647,14 +647,14 @@ class UserManagement
      */
     public function sendPasswordResetEmail($email, $passwordResetUrl)
     {
-        $sendPasswordResetEmailPath = "user_management/password_reset/send";
+        $path = "user_management/password_reset/send";
 
         $params = [
             "email" => $email,
             "password_reset_url" => $passwordResetUrl
         ];
 
-        $response = Client::request(Client::METHOD_POST, $sendPasswordResetEmailPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserAndToken::constructFromResponse($response);
     }
@@ -671,14 +671,14 @@ class UserManagement
      */
     public function resetPassword($token, $newPassword)
     {
-        $resetPasswordPath = "user_management/password_reset/confirm";
+        $path = "user_management/password_reset/confirm";
 
         $params = [
             "token" => $token,
             "new_password" => $newPassword
         ];
 
-        $response = Client::request(Client::METHOD_POST, $resetPasswordPath, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -695,13 +695,13 @@ class UserManagement
      */
     public function updateUserPassword($userId, $password)
     {
-        $usersPath = "users/{$userId}/password";
+        $path = "users/{$userId}/password";
 
         $params = [
             "password" => $password
         ];
 
-        $response = Client::request(Client::METHOD_PUT, $usersPath, null, $params, true);
+        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
 
         return Resource\User::constructFromResponse($response);
     }
@@ -717,7 +717,7 @@ class UserManagement
      */
     public function sendMagicAuthCode($email)
     {
-        $sendCodePath = "/user_management/magic_auth/send";
+        $path = "/user_management/magic_auth/send";
 
         $params = [
             "email" => $email,
@@ -725,7 +725,7 @@ class UserManagement
 
         $response = Client::request(
             Client::METHOD_POST,
-            $sendCodePath,
+            $path,
             null,
             $params,
             true
