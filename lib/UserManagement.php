@@ -257,6 +257,9 @@ class UserManagement
         $params = [
             "organization_id" => $organizationId,
             "user_id" => $userId,
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
         ];
 
         $response = Client::request(
@@ -276,6 +279,134 @@ class UserManagement
         list($before, $after) = Util\Request::parsePaginationArgs($response);
 
         return [$before, $after, $organizationMemberships];
+    }
+
+    /**
+     * Sends an Invitation
+     *
+     * @param string $email The email address of the invitee
+     * @param string $organizationId Organization ID
+     * @param int $expiresInDays expiration delay in days
+     * @param string $inviterUserId User ID of the inviter
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function sendInvitation($email, $organizationId, $expiresInDays, $inviterUserId)
+    {
+        $path = "/user_management/invitations";
+
+        $params = [
+            "email" => $email,
+            "organization_id" => $organizationId,
+            "expires_in_days" => $expiresInDays,
+            "inviter_user_id" => $inviterUserId
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
+     * Get an Invitation
+     *
+     * @param string $invitationId ID of the Invitation
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function getInvitation($invitationId)
+    {
+        $path = "/user_management/invitations/{$invitationId}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
+     * List Invitations
+     *
+     * @param string $invitationId ID of the Invitation
+     * @throws Exception\WorkOSException
+     *
+     * @return array An array containing the following:
+     *      null|string Invitation ID to use as before cursor
+     *      null|string Invitation ID to use as after cursor
+     *      array \WorkOS\Resource\Invitation instances
+     */
+    public function listInvitations(
+        $email = null,
+        $organizationId = null,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null,
+        $order = null
+    ) {
+        $path = "/user_management/invitations";
+
+        $params = [
+            "email" => $email,
+            "organization_id" => $organizationId,
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "order" => $order
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        $invitations = [];
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($invitations, Resource\Invitation::constructFromResponse($responseData));
+        }
+
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+
+        return [$before, $after, $invitations];
+    }
+
+    /**
+     * Revoke an Invitation
+     *
+     * @param string $invitationId ID of the Invitation
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function revokeInvitation($invitationId)
+    {
+        $path = "/user_management/invitations/{$invitationId}/revoke";
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
     }
 
     /**
