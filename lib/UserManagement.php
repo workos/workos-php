@@ -88,7 +88,7 @@ class UserManagement
      * List Users.
      *
      * @param null|string $email
-     * @param null|string $organization Organization users are a member of
+     * @param null|string $organizationId Organization users are a member of
      * @param int $limit Maximum number of records to return
      * @param null|string $before User ID to look before
      * @param null|string $after User ID to look after
@@ -103,7 +103,7 @@ class UserManagement
      */
     public function listUsers(
         $email = null,
-        $organization = null,
+        $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
         $after = null,
@@ -113,7 +113,7 @@ class UserManagement
 
         $params = [
             "email" => $email,
-            "organization_id" => $organization,
+            "organization_id" => $organizationId,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
@@ -424,6 +424,74 @@ class UserManagement
         );
 
         return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
+     * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
+     *
+     * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
+     * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
+     * @param null|string $provider Service provider that handles the identity of the user
+     * @param null|string $connectionId Unique identifier for a WorkOS Connection
+     * @param null|string $organizationId Unique identifier for a WorkOS Organization
+     * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
+     * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
+     *
+     * @throws Exception\UnexpectedValueException
+     * @throws Exception\ConfigurationException
+     *
+     * @return string
+     */
+    public function getAuthorizationUrl(
+        $redirectUri,
+        $state,
+        $provider = null,
+        $connectionId = null,
+        $organizationId = null,
+        $domainHint = null,
+        $loginHint = null
+    ) {
+        $path = "user_management/authorize";
+
+        if (!isset($provider) && !isset($connectionId) && !isset($organizationId)) {
+            $msg = "Either \$provider, \$connectionId, or \$organizationId is required";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        $params = [
+            "client_id" => WorkOS::getClientId(),
+            "response_type" => "code"
+        ];
+
+        if ($redirectUri) {
+            $params["redirect_uri"] = $redirectUri;
+        }
+
+        if (null !== $state && !empty($state)) {
+            $params["state"] = \json_encode($state);
+        }
+
+        if ($provider) {
+            $params["provider"] = $provider;
+        }
+
+        if ($connectionId) {
+            $params["connection_id"] = $connectionId;
+        }
+
+        if ($organizationId) {
+            $params["organization_id"] = $organizationId;
+        }
+
+        if ($domainHint) {
+            $params["domain_hint"] = $domainHint;
+        }
+
+        if ($loginHint) {
+            $params["login_hint"] = $loginHint;
+        }
+
+        return Client::generateUrl($path, $params);
     }
 
     /**
