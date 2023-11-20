@@ -92,6 +92,79 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    public static function authorizationUrlTestDataProvider()
+    {
+        return [
+            [null, null, Resource\ConnectionType::GoogleOAuth, null],
+            [null, null, null, "connection_123"],
+            [null, null, null, null, "org_01FG7HGMY2CZZR2FWHTEE94VF0"],
+            ["https://papagenos.com/auth/callback", null, null, "connection_123", null, "foo.com", null],
+            ["https://papagenos.com/auth/callback", null, null, "connection_123", null, null, "foo@workos.com"],
+            ["https://papagenos.com/auth/callback", null, null, "connection_123"],
+            [null, null, null, "connection_123"],
+            ["https://papagenos.com/auth/callback", ["toppings" => "ham"], null, "connection_123"]
+        ];
+    }
+
+    /**
+     * @dataProvider authorizationUrlTestDataProvider
+     */
+    public function testAuthorizationURLExpectedParams(
+        $redirectUri,
+        $state,
+        $provider,
+        $connectionId,
+        $organizationId = null,
+        $domainHint = null,
+        $loginHint = null
+    ) {
+        $expectedParams = [
+            "client_id" => WorkOS::getClientId(),
+            "response_type" => "code"
+        ];
+
+        if ($redirectUri) {
+            $expectedParams["redirect_uri"] = $redirectUri;
+        }
+
+        if (null !== $state && !empty($state)) {
+            $expectedParams["state"] = \json_encode($state);
+        }
+
+        if ($provider) {
+            $expectedParams["provider"] = $provider;
+        }
+
+        if ($connectionId) {
+            $expectedParams["connection_id"] = $connectionId;
+        }
+
+        if ($organizationId) {
+            $expectedParams["organization_id"] = $organizationId;
+        }
+
+        if ($domainHint) {
+            $expectedParams["domain_hint"] = $domainHint;
+        }
+
+        if ($loginHint) {
+            $expectedParams["login_hint"] = $loginHint;
+        }
+
+        $authorizationUrl = $this->userManagement->getAuthorizationUrl(
+            $redirectUri,
+            $state,
+            $provider,
+            $connectionId,
+            $organizationId,
+            $domainHint,
+            $loginHint
+        );
+        $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
+        \parse_str($paramsString, $paramsArray);
+        $this->assertSame($expectedParams, $paramsArray);
+    }
+
     public function testAuthenticateWithPassword()
     {
         $path = "users/authenticate";
