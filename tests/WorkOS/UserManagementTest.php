@@ -92,6 +92,25 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    public function testAuthorizationURLInvalidInputs()
+    {
+
+        $this->expectException(Exception\UnexpectedValueException::class);
+        $authorizationUrl = $this->userManagement->getAuthorizationUrl(
+            "https://apage.com",
+            null,
+            "randomProvider",
+        );
+
+        $this->expectException(Exception\UnexpectedValueException::class);
+        $authorizationUrl = $this->userManagement->getAuthorizationUrl(
+            "https://apage.com",
+            null,
+            null,
+            null,
+        );
+    }
+
     public static function authorizationUrlTestDataProvider()
     {
         return [
