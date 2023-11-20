@@ -10,6 +10,10 @@ class UserManagement
     public const DEFAULT_PAGE_SIZE = 10;
     public const DEFAULT_TOKEN_EXPIRATION = 1440;
 
+    public const AUTHORIZATION_PROVIDER_AUTHKIT = "authkit";
+    public const AUTHORIZATION_PROVIDER_GOOGLE_OAUTH = "GoogleOAuth";
+    public const AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH = "MicrosoftOAuth";
+
     /**
      * Create User.
      *
@@ -455,6 +459,17 @@ class UserManagement
 
         if (!isset($provider) && !isset($connectionId) && !isset($organizationId)) {
             $msg = "Either \$provider, \$connectionId, or \$organizationId is required";
+            throw new Exception\UnexpectedValueException($msg);
+        }
+
+        $supportedProviders = [
+            self::AUTHORIZATION_PROVIDER_AUTHKIT,
+            self::AUTHORIZATION_PROVIDER_GOOGLE_OAUTH,
+            self::AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH
+        ];
+
+        if (isset($provider) && !\in_array($provider, $supportedProviders)) {
+            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported";
             throw new Exception\UnexpectedValueException($msg);
         }
 
