@@ -432,8 +432,8 @@ class UserManagement
      * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|string $provider Service provider that handles the identity of the user
-     * @param null|string $connection_id Unique identifier for a WorkOS Connection
-     * @param null|string $organization_id Unique identifier for a WorkOS Organization
+     * @param null|string $connectionId Unique identifier for a WorkOS Connection
+     * @param null|string $organizationId Unique identifier for a WorkOS Organization
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      *
