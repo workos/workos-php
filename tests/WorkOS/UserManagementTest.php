@@ -631,7 +631,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "user_id" => $userId,
             "limit" => 10,
             "before" => null,
-            "after" => null
+            "after" => null,
+            "order" => null,
         ];
 
         $this->mockRequest(

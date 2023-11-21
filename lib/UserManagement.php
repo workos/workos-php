@@ -245,6 +245,7 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
@@ -258,7 +259,8 @@ class UserManagement
         $organizationId,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
-        $after = null
+        $after = null,
+        $order = null,
     ) {
         $path = "user_management/organization_memberships";
 
@@ -268,6 +270,7 @@ class UserManagement
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
+            "order" => $order
         ];
 
         $response = Client::request(
@@ -359,7 +362,7 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
-     * @param string|null $after Sort order
+     * @param string|null $order Sort order
      *
      * @throws Exception\WorkOSException
      *
