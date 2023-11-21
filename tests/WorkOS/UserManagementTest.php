@@ -186,18 +186,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithPassword()
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
         $params = [
-            "client_id" => "project_0123456",
             "email" => "marcelina@foo-corp.com",
             "password" => "i8uv6g34kd490s",
             "ip_address" => null,
             "user_agent" => null,
             "grant_type" => "password",
-            "client_secret" => WorkOS::getApiKey()
         ];
 
         $this->mockRequest(

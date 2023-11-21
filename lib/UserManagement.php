@@ -469,7 +469,7 @@ class UserManagement
         ];
 
         if (isset($provider) && !\in_array($provider, $supportedProviders)) {
-            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported";
+            $msg = "Only '" . implode("','", $supportedProviders) . "' providers are supported";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -512,7 +512,6 @@ class UserManagement
     /**
      * Authenticate a User with Password
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $email The email address of the user.
      * @param string $password The password of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -522,20 +521,20 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
+    public function authenticateWithPassword($email, $password, $ipAddress = null, $userAgent = null)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
-            "client_id" => $clientId,
+            "grant_type" => "password",
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
             "email" => $email,
             "password" => $password,
             "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "password",
-            "client_secret" => WorkOS::getApiKey()
+            "user_agent" => $userAgent
         ];
 
-        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, false);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
