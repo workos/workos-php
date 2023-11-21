@@ -16,6 +16,35 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->userManagement = new UserManagement();
     }
 
+    public function testCreateUser()
+    {
+        $path = "users";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "email" => "test@test.com",
+            "password" => "x^T!V23UN1@V",
+            "first_name" => "Damien",
+            "last_name" => "Alabaster",
+            "email_verified" => true
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->createUser("test@test.com", "x^T!V23UN1@V", "Damien", "Alabaster", true);
+        $this->assertSame($user, $response->toArray());
+    }
+
     public function testDeleteUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
@@ -64,6 +93,57 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->userManagement->updateUser("user_01H7X1M4TZJN5N4HG4XXMA1234", "Damien", "Alabaster", true);
         $this->assertSame($user, $response->toArray());
+    }
+
+    public function testGetUser()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $path = "users/{$userId}";
+
+        $result = $this->getUserResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->getUser($userId);
+
+        $this->assertSame($user, $response->toArray());
+    }
+
+    public function testListUsers()
+    {
+        $path = "user_management/users";
+        $params = [
+            "email" => null,
+            "organization_id" => null,
+            "limit" => UserManagement::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
+        $result = $this->listUsersResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+        list($before, $after, $users) = $this->userManagement->listUsers();
+        $this->assertSame($user, $users[0]->toArray());
     }
 
     public function testUpdateUserPassword()
@@ -217,17 +297,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithCode()
     {
-        $path = "users/authenticate";
-        WorkOS::setApiKey("sk_test_12345");
+        $path = "user_management/authenticate";
         $result = $this->UserResponseFixture();
 
         $params = [
-            "client_id" => "project_0123456",
+            "client_id" =>  WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "authorization_code",
             "code" => "01E2RJ4C05B52KKZ8FSRDAP23J",
             "ip_address" => null,
-            "user_agent" => null,
-            "grant_type" => "authorization_code",
-            "client_secret" => WorkOS::getApiKey()
+            "user_agent" => null
         ];
 
         $this->mockRequest(
@@ -235,13 +314,74 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $path,
             null,
             $params,
-            true,
+            false,
             $result
         );
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
+        $response = $this->userManagement->authenticateWithCode("01E2RJ4C05B52KKZ8FSRDAP23J");
+        $this->assertSame($userFixture, $response->user->toArray());
+    }
+
+
+    public function testAuthenticateWithTotp()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->UserResponseFixture();
+
+        $params = [
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
+            "pending_authentication_token" => "cTDQJTTkTkkVYxQUlKBIxEsFs",
+            "authentication_challenge_id" => "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0",
+            "code" => "123456"
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            false,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithTotp("cTDQJTTkTkkVYxQUlKBIxEsFs", "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0", "123456");
+        $this->assertSame($userFixture, $response->user->toArray());
+    }
+
+    public function testAuthenticateWithMagicAuth()
+    {
+        $path = "user_management/authenticate";
+        $result = $this->UserResponseFixture();
+
+        $params = [
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
+            "code" => "123456",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "ip_address" => null,
+            "user_agent" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            false,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithMagicAuth("123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
@@ -270,98 +410,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($enrollUserAuthFactorFixture, $enrollFactorTotp->authenticationFactor->toArray());
         $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
-    }
-
-    public function testAuthenticateWithTotp()
-    {
-        $path = "users/authenticate";
-        WorkOS::setApiKey("sk_test_12345");
-        $result = $this->UserResponseFixture();
-
-        $params = [
-            "client_id" => "project_0123456",
-            "pending_authentication_token" => "cTDQJTTkTkkVYxQUlKBIxEsFs",
-            "authentication_challenge_id" => "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0",
-            "code" => "123456",
-            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
-            "client_secret" => WorkOS::getApiKey()
-        ];
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $path,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $userFixture = $this->userFixture();
-
-        $response = $this->userManagement->authenticateWithTotp("project_0123456", "cTDQJTTkTkkVYxQUlKBIxEsFs", "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0", "123456");
-        $this->assertSame($userFixture, $response->user->toArray());
-    }
-
-
-
-    public function testAuthenticateWithMagicAuth()
-    {
-        $path = "users/authenticate";
-        WorkOS::setApiKey("sk_test_12345");
-        $result = $this->UserResponseFixture();
-
-        $params = [
-            "client_id" => "project_0123456",
-            "code" => "123456",
-            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-            "ip_address" => null,
-            "user_agent" => null,
-            "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
-            "client_secret" => WorkOS::getApiKey()
-        ];
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $path,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $userFixture = $this->userFixture();
-
-        $response = $this->userManagement->authenticateWithMagicAuth("project_0123456", "123456", "user_01H7X1M4TZJN5N4HG4XXMA1234");
-        $this->assertSame($userFixture, $response->user->toArray());
-    }
-
-    public function testCreateUser()
-    {
-        $path = "users";
-
-        $result = $this->createUserResponseFixture();
-
-        $params = [
-            "email" => "test@test.com",
-            "password" => "x^T!V23UN1@V",
-            "first_name" => "Damien",
-            "last_name" => "Alabaster",
-            "email_verified" => true
-        ];
-
-        $this->mockRequest(
-            Client::METHOD_POST,
-            $path,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $user = $this->userFixture();
-
-        $response = $this->userManagement->createUser("test@test.com", "x^T!V23UN1@V", "Damien", "Alabaster", true);
-        $this->assertSame($user, $response->toArray());
     }
 
     public function testSendVerificationEmail()
@@ -470,56 +518,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
 
 
-    public function testGetUser()
-    {
-        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $path = "users/{$userId}";
 
-        $result = $this->getUserResponseFixture();
 
-        $this->mockRequest(
-            Client::METHOD_GET,
-            $path,
-            null,
-            null,
-            true,
-            $result
-        );
 
-        $user = $this->userFixture();
-
-        $response = $this->userManagement->getUser($userId);
-
-        $this->assertSame($user, $response->toArray());
-    }
-
-    public function testListUsers()
-    {
-        $path = "user_management/users";
-        $params = [
-            "email" => null,
-            "organization_id" => null,
-            "limit" => UserManagement::DEFAULT_PAGE_SIZE,
-            "before" => null,
-            "after" => null,
-            "order" => null
-        ];
-
-        $result = $this->listUsersResponseFixture();
-
-        $this->mockRequest(
-            Client::METHOD_GET,
-            $path,
-            null,
-            $params,
-            true,
-            $result
-        );
-
-        $user = $this->userFixture();
-        list($before, $after, $users) = $this->userManagement->listUsers();
-        $this->assertSame($user, $users[0]->toArray());
-    }
 
     private function testSendMagicAuthCode()
     {

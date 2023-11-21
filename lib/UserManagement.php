@@ -543,7 +543,6 @@ class UserManagement
     /**
      * Authenticate an OAuth or SSO User with a Code
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
@@ -552,19 +551,19 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
+    public function authenticateWithCode($code, $ipAddress = null, $userAgent = null)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
-            "client_id" => $clientId,
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "authorization_code",
             "code" => $code,
             "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "authorization_code",
-            "client_secret" => WorkOS::getApiKey()
+            "user_agent" => $userAgent
         ];
 
-        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, false);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -572,7 +571,6 @@ class UserManagement
     /**
      * Authenticate with Magic Auth
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string $userId The unique ID of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -583,20 +581,20 @@ class UserManagement
      * @return \WorkOS\Resource\UserResponse
      */
 
-    public function authenticateWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
+    public function authenticateWithMagicAuth($code, $userId, $ipAddress = null, $userAgent = null)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
-            "client_id" => $clientId,
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
             "code" => $code,
             "user_id" => $userId,
             "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
-            "client_secret" => WorkOS::getApiKey()
+            "user_agent" => $userAgent
         ];
 
-        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, false);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
@@ -604,7 +602,6 @@ class UserManagement
     /**
      * Authenticate with TOTP
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $pendingAuthenticationToken
      * @param string $authenticationChallengeId
      * @param string $code
@@ -613,19 +610,19 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
+    public function authenticateWithTotp($pendingAuthenticationToken, $authenticationChallengeId, $code)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
-            "client_id" => $clientId,
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApiKey(),
+            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
             "pending_authentication_token" => $pendingAuthenticationToken,
             "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code,
-            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
-            "client_secret" => WorkOS::getApiKey()
         ];
 
-        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, false);
 
         return Resource\UserResponse::constructFromResponse($response);
     }
