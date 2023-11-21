@@ -266,18 +266,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithPassword()
     {
-        $path = "users/authenticate";
-        WorkOS::setApiKey("sk_test_12345");
+        $path = "user_management/authenticate";
         $result = $this->UserResponseFixture();
 
         $params = [
-            "client_id" => "project_0123456",
+            "grant_type" => "password",
+            "client_id" =>  WorkOS::getClientId(),
+            "client_secret" => WorkOs::getApiKey(),
             "email" => "marcelina@foo-corp.com",
             "password" => "i8uv6g34kd490s",
             "ip_address" => null,
-            "user_agent" => null,
-            "grant_type" => "password",
-            "client_secret" => WorkOS::getApiKey()
+            "user_agent" => null
         ];
 
         $this->mockRequest(
@@ -285,13 +284,13 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $path,
             null,
             $params,
-            true,
+            false,
             $result
         );
 
         $userFixture = $this->userFixture();
 
-        $response = $this->userManagement->authenticateWithPassword("project_0123456", "marcelina@foo-corp.com", "i8uv6g34kd490s");
+        $response = $this->userManagement->authenticateWithPassword("marcelina@foo-corp.com", "i8uv6g34kd490s");
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
