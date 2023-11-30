@@ -362,7 +362,7 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
-     * @param string|null $order Sort order
+     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
