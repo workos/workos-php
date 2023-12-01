@@ -41,14 +41,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testUpdateUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $path = "users/{$userId}";
+        $path = "user_management/users/{$userId}";
 
         $result = $this->createUserResponseFixture();
 
         $params = [
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified" => true
+            "email_verified" => true,
+            "password" => null,
+            "password_hash" => null,
+            "password_hash_type" => null,
         ];
 
         $this->mockRequest(
