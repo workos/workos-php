@@ -68,19 +68,32 @@ class UserManagement
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
      * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
+     * @param string|null $password The password to set for the user.
+     * @param string|null $passwordHash The hashed password to set for the user.
+     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are bcrypt.
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\User
      */
-    public function updateUser($userId, $firstName = null, $lastName = null, $emailVerified = null)
-    {
-        $path = "users/{$userId}";
+    public function updateUser(
+        $userId,
+        $firstName = null,
+        $lastName = null,
+        $emailVerified = null,
+        $password = null,
+        $passwordHash = null,
+        $passwordHashType = null,
+    ) {
+        $path = "user_management/users/{$userId}";
 
         $params = [
             "first_name" => $firstName,
             "last_name" => $lastName,
-            "email_verified" => $emailVerified
+            "email_verified" => $emailVerified,
+            "password" => $password,
+            "password_hash" => $passwordHash,
+            "password_hash_type" => $passwordHashType,
         ];
 
         $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
