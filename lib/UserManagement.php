@@ -783,29 +783,6 @@ class UserManagement
     }
 
     /**
-     * Update a User's password.
-     *
-     * @param string $userId The unique ID of the user.
-     * @param string $password The password of the user.
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return \WorkOS\Resource\User
-     */
-    public function updateUserPassword($userId, $password)
-    {
-        $path = "users/{$userId}/password";
-
-        $params = [
-            "password" => $password
-        ];
-
-        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
-
-        return Resource\User::constructFromResponse($response);
-    }
-
-    /**
      * Creates a one-time Magic Auth code and emails it to the user.
      *
      * @param string $email The email address the one-time code will be sent to.
