@@ -742,7 +742,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserAndToken
+     * @return \WorkOS\Resource\Response
      */
     public function sendPasswordResetEmail($email, $passwordResetUrl)
     {
@@ -755,7 +755,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserAndToken::constructFromResponse($response);
+        return $response;
     }
 
     /**
@@ -789,7 +789,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\Response
      */
     public function sendMagicAuthCode($email)
     {
@@ -807,6 +807,6 @@ class UserManagement
             true
         );
 
-        return Resource\User::constructFromResponse($response);
+        return $response;
     }
 }
