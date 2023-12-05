@@ -395,8 +395,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $path = "user_management/password_reset/send";
 
-        $result = $this->createUserAndTokenResponseFixture();
-
+        $responseCode = 204;
         $params = [
             "email" => "test@test.com",
             "password_reset_url" => "https://your-app.com/reset-password"
@@ -408,15 +407,15 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result
+            null,
+            null,
+            $responseCode
         );
 
-
-        $userFixture = $this->userFixture();
-
         $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
-        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $response->token);
-        $this->assertSame($userFixture, $response->user->toArray());
+        $this->assertSame(204, $responseCode);
+        $this->assertSame($response, []);
+
     }
 
     public function testResetPassword()
@@ -502,11 +501,11 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $path = "/user_management/magic_auth/send";
 
-        $result = $this->createUserResponseFixture();
-
         $params = [
             "email" => "test@test.com"
         ];
+
+        $responseCode = 204;
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -514,13 +513,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             null,
             $params,
             true,
-            $result
+            null,
+            null,
+            $responseCode
         );
 
         $user = $this->userFixture();
 
         $response = $this->userManagement->sendMagicAuthCode("test@test.com");
-        $this->assertSame($user, $response->toArray());
+
+        $this->assertSame(204, $responseCode);
+        $this->assertSame($response, []);
     }
 
     public function testListAuthFactors()
