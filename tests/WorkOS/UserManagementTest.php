@@ -20,7 +20,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
         $path = "user_management/users/{$userId}";
-        $responseCode = 204;
+        $responseCode = 200;
 
         $this->mockRequest(
             Client::METHOD_DELETE,
@@ -34,7 +34,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $response = $this->userManagement->deleteUser($userId);
-        $this->assertSame(204, $responseCode);
+        $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
     }
 
@@ -395,7 +395,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         $path = "user_management/password_reset/send";
 
-        $responseCode = 204;
+        $responseCode = 200;
         $params = [
             "email" => "test@test.com",
             "password_reset_url" => "https://your-app.com/reset-password"
@@ -413,7 +413,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
-        $this->assertSame(204, $responseCode);
+        $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
 
     }
@@ -505,7 +505,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "email" => "test@test.com"
         ];
 
-        $responseCode = 204;
+        $responseCode = 200;
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -522,7 +522,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->userManagement->sendMagicAuthCode("test@test.com");
 
-        $this->assertSame(204, $responseCode);
+        $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
     }
 
@@ -644,8 +644,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             null,
             null,
             true,
-            null,
-            204
         );
 
         $response = $this->userManagement->deleteOrganizationMembership($organizationMembershipId);
