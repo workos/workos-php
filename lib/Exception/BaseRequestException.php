@@ -15,6 +15,7 @@ class BaseRequestException extends \Exception implements WorkOSException
     public $responseErrors;
     public $responseCode;
     public $responseMessage;
+    public $response;
 
     /**
      * BaseRequestException constructor.
@@ -24,6 +25,8 @@ class BaseRequestException extends \Exception implements WorkOSException
      */
     public function __construct($response, $message = null)
     {
+        $this->response = $response;
+
         $responseJson = $response->json();
 
         if (!empty($responseJson["error"])) {

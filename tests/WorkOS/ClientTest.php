@@ -86,6 +86,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             Client::request(Client::METHOD_GET, $path);
         } catch (Exception\BaseRequestException $e) {
             $this->assertEquals($e->getMessage(), $result);
+            $this->assertEquals($e->response->json(), json_decode($result, true));
         }
     }
 
@@ -116,6 +117,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             // var_dump($e);
             $this->assertEquals($e->responseMessage, "Start date cannot be before 2022-06-22T00:00:00.000Z.");
             $this->assertEquals($e->responseCode, "invalid_date_range_exception");
+            $this->assertEquals($e->response->json(), json_decode($result, true));
         }
     }
 
@@ -146,6 +148,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             // var_dump($e);
             $this->assertEquals($e->responseError, "invalid_grant");
             $this->assertEquals($e->responseErrorDescription, "The code '01GDK892VGKGVF2QNWVTABG8MX' has expired or is invalid.");
+            $this->assertEquals($e->response->json(), json_decode($result, true));
         }
     }
 
@@ -175,6 +178,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         } catch (Exception\BaseRequestException $e) {
             // var_dump($e);
             $this->assertEquals($e->responseErrors, ["invalid_grant", "ambiguous_connection_selector"]);
+            $this->assertEquals($e->response->json(), json_decode($result, true));
         }
     }
 
