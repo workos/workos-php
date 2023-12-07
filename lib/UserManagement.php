@@ -536,7 +536,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     * @return \WorkOS\Resource\AuthenticationResponse
      */
     public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
@@ -553,7 +553,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+        return Resource\AuthenticationResponse::constructFromResponse($response);
     }
 
     /**
@@ -567,7 +567,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     * @return \WorkOS\Resource\AuthenticationResponse
      */
     public function authenticateWithSelectedOrganization(
         $clientId,
@@ -589,7 +589,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+        return Resource\AuthenticationResponse::constructFromResponse($response);
     }
 
     /**
@@ -603,7 +603,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     * @return \WorkOS\Resource\AuthenticationResponse
      */
     public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
@@ -619,7 +619,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+        return Resource\AuthenticationResponse::constructFromResponse($response);
     }
 
     /**
@@ -633,7 +633,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     * @return \WorkOS\Resource\AuthenticationResponse
      */
 
     public function authenticateWithMagicAuth(
@@ -656,7 +656,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+        return Resource\AuthenticationResponse::constructFromResponse($response);
     }
 
     /**
@@ -671,7 +671,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     * @return \WorkOS\Resource\AuthenticationResponse
      */
     public function authenticateWithTotp(
         $clientId,
@@ -695,7 +695,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+        return Resource\AuthenticationResponse::constructFromResponse($response);
     }
 
     /**
