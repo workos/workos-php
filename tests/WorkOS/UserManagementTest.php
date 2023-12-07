@@ -296,6 +296,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "pending_authentication_token" => "cTDQJTTkTkkVYxQUlKBIxEsFs",
             "authentication_challenge_id" => "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0",
             "code" => "123456",
+            "ip_address" => null,
+            "user_agent" => null,
             "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
             "client_secret" => WorkOS::getApiKey()
         ];
@@ -382,8 +384,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
         $path = "user_management/users/{$userId}/email_verification/send";
 
-        $result = $this->createUserResponseFixture();
-
+        $result = $this->userResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -398,7 +399,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $user = $this->userFixture();
 
         $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
-        $this->assertSame($user, $response->toArray());
+        $this->assertSame($user, $response->user->toArray());
     }
 
     public function testVerifyEmail()
