@@ -163,7 +163,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithPassword()
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -192,9 +192,45 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
+    public function testAuthenticateWithSelectedOrganization()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->userAndOrgResponseFixture();
+
+        $params = [
+            "client_id" => "project_0123456",
+            "pending_authentication_token" => "token_super_safe",
+            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "ip_address" => null,
+            "user_agent" => null,
+            "grant_type" => "urn:workos:oauth:grant-type:organization-selection",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithSelectedOrganization(
+            "project_0123456",
+            "token_super_safe",
+            "org_01EHQMYV6MBK39QC5PZXHY59C3"
+        );
+        $this->assertSame($userFixture, $response->user->toArray());
+        $this->assertSame("org_01EHQMYV6MBK39QC5PZXHY59C3", $response->organizationId);
+    }
+
     public function testAuthenticateWithCode()
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -225,7 +261,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testEnrollAuthFactor()
     {
         $userId = "user_123456";
-        $path = "users/{$userId}/auth/factors";
+        $path = "user_management/users/{$userId}/auth_factors";
         $params = [
             "type" => "totp"
         ];
@@ -251,7 +287,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithTotp()
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -260,6 +296,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "pending_authentication_token" => "cTDQJTTkTkkVYxQUlKBIxEsFs",
             "authentication_challenge_id" => "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0",
             "code" => "123456",
+            "ip_address" => null,
+            "user_agent" => null,
             "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
             "client_secret" => WorkOS::getApiKey()
         ];
@@ -283,7 +321,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthenticateWithMagicAuth()
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         WorkOS::setApiKey("sk_test_12345");
         $result = $this->UserResponseFixture();
 
@@ -314,7 +352,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateUser()
     {
-        $path = "users";
+        $path = "user_management/users";
 
         $result = $this->createUserResponseFixture();
 
@@ -346,8 +384,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
         $path = "user_management/users/{$userId}/email_verification/send";
 
-        $result = $this->createUserResponseFixture();
-
+        $result = $this->userResponseFixture();
 
         $this->mockRequest(
             Client::METHOD_POST,
@@ -362,7 +399,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $user = $this->userFixture();
 
         $response = $this->userManagement->sendVerificationEmail("user_01E4ZCR3C56J083X43JQXF3JK5");
-        $this->assertSame($user, $response->toArray());
+        $this->assertSame($user, $response->user->toArray());
     }
 
     public function testVerifyEmail()
@@ -449,7 +486,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetUser()
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
-        $path = "users/{$userId}";
+        $path = "user_management/users/{$userId}";
 
         $result = $this->getUserResponseFixture();
 
@@ -529,7 +566,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testListAuthFactors()
     {
         $userId = "user_01H96FETWYSJMJEGF0Q3ZB272F";
-        $path = "users/{$userId}/auth/factors";
+        $path = "user_management/users/{$userId}/auth_factors";
 
         $result = $this->listAuthFactorResponseFixture();
 
@@ -1029,6 +1066,24 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "updatedAt" => "2021-06-25T19:07:33.155Z"
         ];
     }
+
+    private function userAndOrgResponseFixture()
+    {
+        return json_encode([
+            "user" => [
+                "object" => "user",
+                "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                "email" => "test@test.com",
+                "first_name" => "Damien",
+                "last_name" => "Alabaster",
+                "email_verified" => true,
+                "created_at" => "2021-06-25T19:07:33.155Z",
+                "updated_at" => "2021-06-25T19:07:33.155Z"
+            ],
+            "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+        ]);
+    }
+
 
     private function enrollAuthFactorResponseFixture()
     {
