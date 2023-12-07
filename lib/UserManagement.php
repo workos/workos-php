@@ -29,7 +29,7 @@ class UserManagement
      */
     public function createUser($email, $password, $firstName, $lastName, $emailVerified)
     {
-        $path = "users";
+        $path = "user_management/users";
         $params = [
             "email" => $email,
             "password" => $password,
@@ -54,7 +54,7 @@ class UserManagement
      */
     public function getUser($userId)
     {
-        $path = "users/{$userId}";
+        $path = "user_management/users/{$userId}";
 
         $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
@@ -449,7 +449,7 @@ class UserManagement
     /**
      * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
      *
-     * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
+     * @param string $redirectUri URI to direct the user to upon successful completion of SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|string $provider Service provider that handles the identity of the user
      * @param null|string $connectionId Unique identifier for a WorkOS Connection
@@ -464,7 +464,7 @@ class UserManagement
      */
     public function getAuthorizationUrl(
         $redirectUri,
-        $state,
+        $state = null,
         $provider = null,
         $connectionId = null,
         $organizationId = null,
@@ -536,11 +536,11 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
      */
     public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
             "client_id" => $clientId,
             "email" => $email,
@@ -553,11 +553,48 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserResponse::constructFromResponse($response);
+        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
+    }
+
+    /**
+     * Authenticate a User with Selected Organization
+     *
+     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
+     * @param string $organizationId The Organization ID the user selected.
+     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
+     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
+     */
+    public function authenticateWithSelectedOrganization(
+        $clientId,
+        $pendingAuthenticationToken,
+        $organizationId,
+        $ipAddress = null,
+        $userAgent = null
+    ) {
+        $path = "user_management/authenticate";
+        $params = [
+            "client_id" => $clientId,
+            "pending_authentication_token" => $pendingAuthenticationToken,
+            "organization_id" => $organizationId,
+            "ip_address" => $ipAddress,
+            "user_agent" => $userAgent,
+            "grant_type" => "urn:workos:oauth:grant-type:organization-selection",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
     }
 
     /**
      * Authenticate an OAuth or SSO User with a Code
+     * This should be used for "Hosted AuthKit" and "OAuth or SSO" UserAuthentications
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
@@ -566,11 +603,11 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
      */
     public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
-        $path = "users/authenticate";
+        $path = "user_management/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -582,7 +619,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserResponse::constructFromResponse($response);
+        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
     }
 
     /**
@@ -596,12 +633,17 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
      */
 
-    public function authenticateWithMagicAuth($clientId, $code, $userId, $ipAddress = null, $userAgent = null)
-    {
-        $path = "users/authenticate";
+    public function authenticateWithMagicAuth(
+        $clientId,
+        $code,
+        $userId,
+        $ipAddress = null,
+        $userAgent = null
+    ) {
+        $path = "user_management/authenticate";
         $params = [
             "client_id" => $clientId,
             "code" => $code,
@@ -614,7 +656,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserResponse::constructFromResponse($response);
+        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
     }
 
     /**
@@ -624,26 +666,36 @@ class UserManagement
      * @param string $pendingAuthenticationToken
      * @param string $authenticationChallengeId
      * @param string $code
+     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
+     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return \WorkOS\Resource\UserWithOrganizationIdResponse
      */
-    public function authenticateWithTotp($clientId, $pendingAuthenticationToken, $authenticationChallengeId, $code)
-    {
-        $path = "users/authenticate";
+    public function authenticateWithTotp(
+        $clientId,
+        $pendingAuthenticationToken,
+        $authenticationChallengeId,
+        $code,
+        $ipAddress = null,
+        $userAgent = null
+    ) {
+        $path = "user_management/authenticate";
         $params = [
             "client_id" => $clientId,
             "pending_authentication_token" => $pendingAuthenticationToken,
             "authentication_challenge_id" => $authenticationChallengeId,
             "code" => $code,
+            "ip_address" => $ipAddress,
+            "user_agent" => $userAgent,
             "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
             "client_secret" => WorkOS::getApiKey()
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\UserResponse::constructFromResponse($response);
+        return Resource\UserWithOrganizationIdResponse::constructFromResponse($response);
     }
 
     /**
@@ -658,7 +710,7 @@ class UserManagement
      */
     public function enrollAuthFactor($userId, $type)
     {
-        $path = "users/{$userId}/auth/factors";
+        $path = "user_management/users/{$userId}/auth_factors";
 
         $params = [
             "type" => $type
@@ -680,7 +732,7 @@ class UserManagement
      */
     public function listAuthFactors($userId)
     {
-        $path = "users/{$userId}/auth/factors";
+        $path = "user_management/users/{$userId}/auth_factors";
 
         $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
@@ -708,7 +760,7 @@ class UserManagement
 
         $response = Client::request(Client::METHOD_POST, $path, null, null, true);
 
-        return Resource\User::constructFromResponse($response);
+        return Resource\UserResponse::constructFromResponse($response);
     }
 
     /**
