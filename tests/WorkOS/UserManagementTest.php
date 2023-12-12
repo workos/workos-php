@@ -228,6 +228,41 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame("org_01EHQMYV6MBK39QC5PZXHY59C3", $response->organizationId);
     }
 
+    public function testAuthenticateWithEmailVerification()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->userAndOrgResponseFixture();
+
+        $params = [
+            "client_id" => "project_0123456",
+            "code" => "code_super_safe",
+            "pending_authentication_token" => "token_super_safe",
+            "ip_address" => null,
+            "user_agent" => null,
+            "grant_type" => "urn:workos:oauth:grant-type:email-verification:code",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithEmailVerification(
+            "project_0123456",
+            "code_super_safe",
+            "token_super_safe",
+        );
+        $this->assertSame($userFixture, $response->user->toArray());
+    }
+
     public function testAuthenticateWithCode()
     {
         $path = "user_management/authenticate";

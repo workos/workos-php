@@ -623,6 +623,37 @@ class UserManagement
     }
 
     /**
+     * Authenticates a user with an unverified email and verifies their email address.
+     *
+     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
+     * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
+     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
+     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\AuthenticationResponse
+     */
+    public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, $ipAddress = null, $userAgent = null)
+    {
+        $path = "user_management/authenticate";
+        $params = [
+            "client_id" => $clientId,
+            "code" => $code,
+            "pending_authentication_token" => $pendingAuthenticationToken,
+            "ip_address" => $ipAddress,
+            "user_agent" => $userAgent,
+            "grant_type" => "urn:workos:oauth:grant-type:email-verification:code",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\AuthenticationResponse::constructFromResponse($response);
+    }
+
+    /**
      * Authenticate with Magic Auth
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
