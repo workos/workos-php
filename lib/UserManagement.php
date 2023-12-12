@@ -739,12 +739,14 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function enrollAuthFactor($userId, $type)
+    public function enrollAuthFactor($userId, $type, $totpIssuer, $totpUser)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
         $params = [
-            "type" => $type
+            "type" => $type,
+            "totp_user" => $totpUser,
+            "totp_issuer" => $totpIssuer
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);

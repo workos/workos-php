@@ -298,7 +298,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $userId = "user_123456";
         $path = "user_management/users/{$userId}/auth_factors";
         $params = [
-            "type" => "totp"
+            "type" => "totp",
+            "totp_user" => "totpUser",
+            "totp_issuer" => "totpIssuer"
         ];
 
         $result = $this->enrollAuthFactorResponseFixture();
@@ -312,7 +314,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             $result
         );
 
-        $enrollFactorTotp = $this->userManagement->enrollAuthFactor($userId, "totp");
+        $enrollFactorTotp = $this->userManagement->enrollAuthFactor($userId, "totp", "totpIssuer", "totpUser");
         $enrollUserAuthFactorFixture = $this->enrollAuthFactorFixture();
         $enrollUserAuthChallengeFixture = $this->enrollAuthChallengeFixture();
 
