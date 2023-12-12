@@ -734,6 +734,8 @@ class UserManagement
      *
      * @param string $userId The unique ID of the user.
      * @param string $type The type of MFA factor used to authenticate.
+     * @param string|null $totpIssuer Your application or company name, this helps users distinguish between factors in authenticator apps.
+     * @param string|null $totpUser Used as the account name in authenticator apps.
      *
      * @throws Exception\WorkOSException
      *
