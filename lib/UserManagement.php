@@ -734,17 +734,21 @@ class UserManagement
      *
      * @param string $userId The unique ID of the user.
      * @param string $type The type of MFA factor used to authenticate.
+     * @param string|null $totpIssuer Your application or company name, this helps users distinguish between factors in authenticator apps.
+     * @param string|null $totpUser Used as the account name in authenticator apps.
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function enrollAuthFactor($userId, $type)
+    public function enrollAuthFactor($userId, $type, $totpIssuer, $totpUser)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
         $params = [
-            "type" => $type
+            "type" => $type,
+            "totp_user" => $totpUser,
+            "totp_issuer" => $totpIssuer
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
