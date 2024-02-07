@@ -876,19 +876,21 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode(
             [
-                "data" => [[
-                    "object" => "invitation",
-                    "id" => "invitation_01E4ZCR3C56J083X43JQXF3JK5",
-                    "email" => "someemail@test.com",
-                    "state" => "pending",
-                    "accepted_at" => "2021-07-01T19:07:33.155Z",
-                    "revoked_at" => "2021-07-01T19:07:33.155Z",
-                    "expires_at" => "2021-07-01T19:07:33.155Z",
-                    "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
-                    "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-                    "created_at" => "2021-07-01T19:07:33.155Z",
-                    "updated_at" => "2021-07-01T19:07:33.155Z",
-                ]],
+                "data" => [
+                    [
+                        "object" => "invitation",
+                        "id" => "invitation_01E4ZCR3C56J083X43JQXF3JK5",
+                        "email" => "someemail@test.com",
+                        "state" => "pending",
+                        "accepted_at" => "2021-07-01T19:07:33.155Z",
+                        "revoked_at" => "2021-07-01T19:07:33.155Z",
+                        "expires_at" => "2021-07-01T19:07:33.155Z",
+                        "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+                        "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                        "created_at" => "2021-07-01T19:07:33.155Z",
+                        "updated_at" => "2021-07-01T19:07:33.155Z",
+                    ]
+                ],
                 "list_metadata" => [
                     "before" => null,
                     "after" => null
@@ -913,14 +915,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     {
         return json_encode(
             [
-                "data" => [[
-                    "object" => "organization_membership",
-                    "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
-                    "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
-                    "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-                    "created_at" => "2021-06-25T19:07:33.155Z",
-                    "updated_at" => "2021-06-25T19:07:33.155Z",
-                ]],
+                "data" => [
+                    [
+                        "object" => "organization_membership",
+                        "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
+                        "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                        "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                        "created_at" => "2021-06-25T19:07:33.155Z",
+                        "updated_at" => "2021-06-25T19:07:33.155Z",
+                    ]
+                ],
                 "list_metadata" => [
                     "before" => null,
                     "after" => null
@@ -1001,6 +1005,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
                 "email_verified" => true,
+                "profile_picture_url" => "https://example.com/photo.jpg",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -1018,6 +1023,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
                 "email_verified" => true,
+                'profile_picture_url' => 'https://example.com/photo.jpg',
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -1033,6 +1039,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "first_name" => "Damien",
             "last_name" => "Alabaster",
             "email_verified" => true,
+            'profile_picture_url' => 'https://example.com/photo.jpg',
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -1055,6 +1062,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "first_name" => "Damien",
             "last_name" => "Alabaster",
             "email_verified" => true,
+            "profile_picture_url" => "https://example.com/photo.jpg",
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -1071,6 +1079,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                     "first_name" => "Damien",
                     "last_name" => "Alabaster",
                     "email_verified" => true,
+                    "profile_picture_url" => "https://example.com/photo.jpg",
                     "created_at" => "2021-06-25T19:07:33.155Z",
                     "updated_at" => "2021-06-25T19:07:33.155Z"
                 ]
@@ -1099,6 +1108,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "firstName" => "Damien",
             "lastName" => "Alabaster",
             "emailVerified" => true,
+            "profilePictureUrl" => "https://example.com/photo.jpg",
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z"
         ];
@@ -1114,6 +1124,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "first_name" => "Damien",
                 "last_name" => "Alabaster",
                 "email_verified" => true,
+                "profile_picture_url" => "https://example.com/photo.jpg",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ],
