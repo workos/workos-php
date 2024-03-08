@@ -940,6 +940,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
             "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "status" => "active",
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z",
         ];
