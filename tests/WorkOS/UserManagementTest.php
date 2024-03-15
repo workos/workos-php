@@ -293,6 +293,40 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($userFixture, $response->user->toArray());
     }
 
+    public function testAuthenticateImpersonatorWithCode()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->userAndImpersonatorResponseFixture();
+
+        $params = [
+            "client_id" => "project_0123456",
+            "code" => "01E2RJ4C05B52KKZ8FSRDAP23J",
+            "ip_address" => null,
+            "user_agent" => null,
+            "grant_type" => "authorization_code",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
+        $this->assertSame($userFixture, $response->user->toArray());
+        $this->assertSame([
+            "email" => "admin@foocorp.com",
+            "reason" => "Helping debug an account issue."
+        ], $response->impersonator->toArray());
+    }
+
     public function testEnrollAuthFactor()
     {
         $userId = "user_123456";
@@ -1008,6 +1042,27 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "profile_picture_url" => "https://example.com/photo.jpg",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
+            ]
+        ]);
+    }
+
+    private function userAndImpersonatorResponseFixture()
+    {
+        return json_encode([
+            "user" => [
+                "object" => "user",
+                "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                "email" => "test@test.com",
+                "first_name" => "Damien",
+                "last_name" => "Alabaster",
+                "email_verified" => true,
+                "profile_picture_url" => "https://example.com/photo.jpg",
+                "created_at" => "2021-06-25T19:07:33.155Z",
+                "updated_at" => "2021-06-25T19:07:33.155Z"
+            ],
+            "impersonator" => [
+                "email" => "admin@foocorp.com",
+                "reason" => "Helping debug an account issue.",
             ]
         ]);
     }
