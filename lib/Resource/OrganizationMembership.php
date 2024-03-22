@@ -15,6 +15,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "id",
         "userId",
         "organizationId",
+        "status",
         "createdAt",
         "updatedAt"
     ];
@@ -24,6 +25,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "id" => "id",
         "user_id" => "userId",
         "organization_id" => "organizationId",
+        "status" => "status",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];
