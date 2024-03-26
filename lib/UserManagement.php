@@ -456,6 +456,7 @@ class UserManagement
      * @param null|string $organizationId Unique identifier for a WorkOS Organization
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
+     * @param null|string $screenHint The page that the user will be redirected to when the provider is authkit
      *
      * @throws Exception\UnexpectedValueException
      * @throws Exception\ConfigurationException
@@ -469,7 +470,8 @@ class UserManagement
         $connectionId = null,
         $organizationId = null,
         $domainHint = null,
-        $loginHint = null
+        $loginHint = null,
+        $screenHint = null
     ) {
         $path = "user_management/authorize";
 
@@ -521,6 +523,15 @@ class UserManagement
         if ($loginHint) {
             $params["login_hint"] = $loginHint;
         }
+
+        if($screenHint !== null) {
+            if ($provider !== self::AUTHORIZATION_PROVIDER_AUTHKIT) {
+                throw new Exception\UnexpectedValueException("A 'screenHint' can only be provided when the provider is 'authkit'.");
+            }
+            $params["screen_hint"] = $screenHint;
+        }
+
+   
 
         return Client::generateUrl($path, $params);
     }
