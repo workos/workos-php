@@ -524,14 +524,12 @@ class UserManagement
             $params["login_hint"] = $loginHint;
         }
 
-        if($screenHint !== null) {
+        if ($screenHint !== null) {
             if ($provider !== self::AUTHORIZATION_PROVIDER_AUTHKIT) {
                 throw new Exception\UnexpectedValueException("A 'screenHint' can only be provided when the provider is 'authkit'.");
             }
             $params["screen_hint"] = $screenHint;
         }
-
-   
 
         return Client::generateUrl($path, $params);
     }
