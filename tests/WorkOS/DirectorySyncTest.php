@@ -23,7 +23,6 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
             "before" => null,
             "after" => null,
-            "domain" => null,
             "search" => null,
             "organization_id" => null,
             "order" => null
