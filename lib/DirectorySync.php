@@ -14,7 +14,6 @@ class DirectorySync
     /**
      * List Directories.
      *
-     * @param null|string $domain Domain of a Directory
      * @param null|string $search Searchable text for a Directory
      * @param int $limit Maximum number of records to return
      * @param null|string $before Directory ID to look before
@@ -30,7 +29,6 @@ class DirectorySync
      *      array \WorkOS\Resource\Directory instances
      */
     public function listDirectories(
-        $domain = null,
         $search = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
@@ -43,7 +41,6 @@ class DirectorySync
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
-            "domain" => $domain,
             "search" => $search,
             "organization_id" => $organizationId,
             "order" => $order
