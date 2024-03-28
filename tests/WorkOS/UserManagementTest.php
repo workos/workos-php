@@ -71,6 +71,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testAuthorizationURLInvalidInputs()
     {
+        $this->expectException(Exception\UnexpectedValueException::class);
+        $authorizationUrl = $this->userManagement->getAuthorizationUrl(
+            "https://apage.com",
+            null,
+            "randomProvider",
+            null,
+            null,
+            null,
+            null,
+            'sign-up'
+        );
 
         $this->expectException(Exception\UnexpectedValueException::class);
         $authorizationUrl = $this->userManagement->getAuthorizationUrl(
