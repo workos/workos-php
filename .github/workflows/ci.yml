@@ -2,43 +2,37 @@ name: CI
 
 on:
   push:
-  pull_request:
+    branches:
+      - 'master'
+  pull_request: {}
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   test:
-    name: Test
+    name: Test PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3']
     steps:
       - uses: actions/checkout@v3
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
-
-      - name: Install Devbox
-        uses: jetpack-io/devbox-install-action@v0.4.0
+      - uses: shivammathur/setup-php@v2
         with:
-          enable-cache: true
+          php-version: ${{ matrix.php }}
+          tools: 'composer'
 
-      - name: Check formatting
-        run: devbox run -- composer run-script format-check
+      - name: Install dependencies
+        run: |
+          composer install
+
+      - name: Lint and formatting
+        run: |
+          composer run-script format-check
 
       - name: Test
-        run: devbox run test
-
-  test_php_81:
-    name: Test (PHP 8.1)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
-
-      - name: Install Devbox
-        uses: jetpack-io/devbox-install-action@v0.4.0
-        with:
-          enable-cache: true
-          project-path: 'ci/php-8_1'
-
-      - name: Test
-        run: devbox --config ci/php-8_1 run test
+        run: |
+          composer run-script test
