@@ -432,7 +432,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "password" => "x^T!V23UN1@V",
             "first_name" => "Damien",
             "last_name" => "Alabaster",
-            "email_verified" => true
+            "email_verified" => true,
+            "password_hash" => null,
+            "password_hash_type" => null,
         ];
 
         $this->mockRequest(
