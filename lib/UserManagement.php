@@ -23,7 +23,7 @@ class UserManagement
      * @param string|null $lastName The last name of the user.
      * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
      * @param string|null $passwordHash The hashed password to set for the user.
-     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are bcrypt.
+     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
      *
      * @throws Exception\WorkOSException
      *
@@ -74,7 +74,7 @@ class UserManagement
      * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
      * @param string|null $password The password to set for the user.
      * @param string|null $passwordHash The hashed password to set for the user.
-     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are bcrypt.
+     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
      *
      * @throws Exception\WorkOSException
      *
