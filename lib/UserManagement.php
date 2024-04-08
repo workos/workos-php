@@ -316,6 +316,7 @@ class UserManagement
      * @param string|null $organizationId Organization ID
      * @param int|null $expiresInDays expiration delay in days
      * @param string|null $inviterUserId User ID of the inviter
+     * @param string|null $roleSlug Slug of the role to assign to the invitee User
      *
      * @throws Exception\WorkOSException
      *
@@ -325,7 +326,8 @@ class UserManagement
         $email,
         $organizationId = null,
         $expiresInDays = null,
-        $inviterUserId = null
+        $inviterUserId = null,
+        $roleSlug = null
     ) {
         $path = "/user_management/invitations";
 
@@ -333,7 +335,8 @@ class UserManagement
             "email" => $email,
             "organization_id" => $organizationId,
             "expires_in_days" => $expiresInDays,
-            "inviter_user_id" => $inviterUserId
+            "inviter_user_id" => $inviterUserId,
+            "role_slug" => $roleSlug
         ];
 
         $response = Client::request(

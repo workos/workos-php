@@ -771,7 +771,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "email" => "someemail@test.com",
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "expires_in_days" => 10,
-            "inviter_user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234"
+            "inviter_user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "role_slug" => "staff"
         ];
 
         $this->mockRequest(
@@ -787,7 +788,8 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "someemail@test.com",
             "org_01EHQMYV6MBK39QC5PZXHY59C3",
             10,
-            "user_01H7X1M4TZJN5N4HG4XXMA1234"
+            "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "staff"
         );
 
         $expected = $this->invitationFixture();
