@@ -65,7 +65,8 @@ class Organizations
      * Create Organization.
      *
      * @param string $name The name of the Organization.
-     * @param array $domains The domains of the Organization.
+     * @param array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param array $domain_data The domains of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
      *      that are outside of the Organization's configured User Email Domains.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
@@ -74,13 +75,14 @@ class Organizations
      *
      * @return \WorkOS\Resource\Organization
      */
-    public function createOrganization($name, $domains, $allowProfilesOutsideOrganization = null, $idempotencyKey = null)
+    public function createOrganization($name, $domains = null, $allowProfilesOutsideOrganization = null, $idempotencyKey = null, $domain_data = null)
     {
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
         $params = [
             "name" => $name,
             "domains" => $domains,
+            "domain_data" => $domain_data,
             "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
 
@@ -93,19 +95,20 @@ class Organizations
      * Update Organization.
      *
      * @param string $organization An Organization identifier.
-     * @param array $domains The domains of the Organization.
+     * @param array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param array $domain_data The domains of the Organization.
      * @param string $name The name of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
      *      that are outside of the Organization's configured User Email Domains.
      *
      * @throws Exception\WorkOSException
      */
-    public function updateOrganization($organization, $domains, $name, $allowProfilesOutsideOrganization = null)
+    public function updateOrganization($organization, $domains = null, $name = null, $allowProfilesOutsideOrganization = null, $domain_data = null)
     {
         $organizationsPath = "organizations/{$organization}";
         $params = [
-          "organization" => $organization,
           "domains" => $domains,
+          "domain_data" => $domain_data,
           "name" => $name,
           "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
         ];
