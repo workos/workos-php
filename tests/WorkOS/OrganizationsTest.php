@@ -16,7 +16,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $this->organizations = new Organizations();
     }
 
-    public function testCreateOrganization()
+    public function testCreateOrganizationWithDomains()
     {
         $organizationsPath = "organizations";
 
@@ -25,6 +25,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $params = [
             "name" => "Organization Name",
             "domains" => array("example.com"),
+            "domain_data" => null,
             "allow_profiles_outside_organization" => null
         ];
 
@@ -43,6 +44,74 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $response->toArray());
     }
 
+    public function testCreateOrganizationWithDomainData()
+    {
+        $organizationsPath = "organizations";
+
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "name" => "Organization Name",
+            "domains" => null,
+            "domain_data" => array([
+                "domain" => "example.com",
+                "state" => "verified",
+            ]),
+            "allow_profiles_outside_organization" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organization = $this->organizationFixture();
+
+        $response = $this->organizations->createOrganization(
+            "Organization Name",
+            domain_data: array(["domain" => "example.com", "state" => "verified"]),
+        );
+        $this->assertSame($organization, $response->toArray());
+    }
+
+    public function testUpdateOrganizationWithDomainData()
+    {
+        $organizationsPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3";
+
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "domains" => null,
+            "domain_data" => array([
+                "domain" => "example.com",
+                "state" => "verified",
+            ]),
+            "name" => null,
+            "allow_profiles_outside_organization" => null,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organization = $this->organizationFixture();
+
+        $response = $this->organizations->updateOrganization(
+            "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            domain_data: array(["domain" => "example.com", "state" => "verified"]),
+        );
+        $this->assertSame($organization, $response->toArray());
+    }
+
     public function testCreateOrganizationSendsIdempotencyKey()
     {
         $organizationsPath = "organizations";
@@ -52,6 +121,7 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $params = [
             "name" => "Organization Name",
             "domains" => array("example.com"),
+            "domain_data" => null,
             "allow_profiles_outside_organization" => null
         ];
 
