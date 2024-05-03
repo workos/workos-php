@@ -886,6 +886,62 @@ class UserManagement
     }
 
     /**
+     * Get a Magic Auth object
+     *
+     * @param string $magicAuthId ID of the Magic Auth object
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\MagicAuth
+     */
+    public function getMagicAuth($magicAuthId)
+    {
+        $path = "/user_management/magic_auth/{$magicAuthId}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\MagicAuth::constructFromResponse($response);
+    }
+
+    /**
+     * Creates a Magic Auth code
+     *
+     * @param string $email The email address of the user
+     * @param string|null $invitationToken The token of an Invitation, if required.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\MagicAuth
+     */
+    public function createMagicAuth(
+        $email,
+        $invitationToken = null,
+    ) {
+        $path = "/user_management/magic_auth";
+
+        $params = [
+            "email" => $email,
+            "invitation_token" => $invitationToken
+        ];
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\MagicAuth::constructFromResponse($response);
+    }
+
+    /**
      * Creates a one-time Magic Auth code and emails it to the user.
      *
      * @param string $email The email address the one-time code will be sent to.
@@ -901,6 +957,10 @@ class UserManagement
         $params = [
             "email" => $email,
         ];
+
+        $msg = "'sendMagicAuthCode' is deprecated. Please use 'createMagicAuth' instead. This method will be removed in a future major version.";
+
+        error_log($msg);
 
         $response = Client::request(
             Client::METHOD_POST,
