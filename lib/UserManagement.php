@@ -884,7 +884,7 @@ class UserManagement
 
         return Resource\UserResponse::constructFromResponse($response);
     }
-    
+
     /**
      * Get a Magic Auth object
      *
@@ -908,7 +908,7 @@ class UserManagement
 
         return Resource\MagicAuth::constructFromResponse($response);
     }
-    
+
     /**
      * Creates a Magic Auth code
      *
@@ -957,7 +957,7 @@ class UserManagement
         $params = [
             "email" => $email,
         ];
-        
+
         $msg = "'sendMagicAuthCode' is deprecated. Please use 'createMagicAuth' instead. This method will be removed in a future major version.";
 
         error_log($msg);

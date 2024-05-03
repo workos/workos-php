@@ -536,7 +536,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
         $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
-
     }
 
     public function testResetPassword()
@@ -617,7 +616,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         list($before, $after, $users) = $this->userManagement->listUsers();
         $this->assertSame($user, $users[0]->toArray());
     }
-    
+
     public function testGetMagicAuth()
     {
         $magicAuthId = "magic_auth_01E4ZCR3C56J083X43JQXF3JK5";
@@ -640,7 +639,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame($response->toArray(), $expected);
     }
-    
+
     public function testCreateMagicAuth()
     {
         $path = "/user_management/magic_auth";
@@ -649,6 +648,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             "email" => "someemail@test.com",
+            "invitation_token" => null
         ];
 
         $this->mockRequest(
@@ -667,7 +667,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $expected = $this->magicAuthFixture();
 
         $this->assertSame($response->toArray(), $expected);
-
     }
 
     private function testSendMagicAuthCode()
@@ -858,7 +857,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $expected = $this->invitationFixture();
 
         $this->assertSame($response->toArray(), $expected);
-
     }
 
     public function testGetInvitation()
@@ -1172,7 +1170,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
     }
-    
+
     private function magicAuthResponseFixture()
     {
         return json_encode([
