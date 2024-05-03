@@ -617,6 +617,58 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         list($before, $after, $users) = $this->userManagement->listUsers();
         $this->assertSame($user, $users[0]->toArray());
     }
+    
+    public function testGetMagicAuth()
+    {
+        $magicAuthId = "magic_auth_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "/user_management/magic_auth/{$magicAuthId}";
+
+        $result = $this->magicAuthResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->getMagicAuth($magicAuthId);
+
+        $expected = $this->magicAuthFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+    
+    public function testCreateMagicAuth()
+    {
+        $path = "/user_management/magic_auth";
+
+        $result = $this->magicAuthResponseFixture();
+
+        $params = [
+            "email" => "someemail@test.com",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->createMagicAuth(
+            "someemail@test.com",
+        );
+
+        $expected = $this->magicAuthFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+
+    }
 
     private function testSendMagicAuthCode()
     {
@@ -898,6 +950,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "revoked_at" => "2021-07-01T19:07:33.155Z",
             "expires_at" => "2021-07-01T19:07:33.155Z",
             "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "accept_invitation_url" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "created_at" => "2021-07-01T19:07:33.155Z",
             "updated_at" => "2021-07-01T19:07:33.155Z",
@@ -915,6 +968,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "revokedAt" => "2021-07-01T19:07:33.155Z",
             "expiresAt" => "2021-07-01T19:07:33.155Z",
             "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "acceptInvitationUrl" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "createdAt" => "2021-07-01T19:07:33.155Z",
             "updatedAt" => "2021-07-01T19:07:33.155Z",
@@ -935,6 +989,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                         "revoked_at" => "2021-07-01T19:07:33.155Z",
                         "expires_at" => "2021-07-01T19:07:33.155Z",
                         "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+                        "accept_invitation_url" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
                         "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
                         "created_at" => "2021-07-01T19:07:33.155Z",
                         "updated_at" => "2021-07-01T19:07:33.155Z",
@@ -1116,6 +1171,34 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
+    }
+    
+    private function magicAuthResponseFixture()
+    {
+        return json_encode([
+            "object" => "magic_auth",
+            "id" => "magic_auth_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "expires_at" => "2021-07-01T19:07:33.155Z",
+            "code" => "123456",
+            "created_at" => "2021-07-01T19:07:33.155Z",
+            "updated_at" => "2021-07-01T19:07:33.155Z",
+        ]);
+    }
+
+    private function magicAuthFixture()
+    {
+        return [
+            "object" => "magic_auth",
+            "id" => "magic_auth_01E4ZCR3C56J083X43JQXF3JK5",
+            "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "expiresAt" => "2021-07-01T19:07:33.155Z",
+            "code" => "123456",
+            "createdAt" => "2021-07-01T19:07:33.155Z",
+            "updatedAt" => "2021-07-01T19:07:33.155Z",
+        ];
     }
 
     private function sendMagicAuthCodeResponseFixture()

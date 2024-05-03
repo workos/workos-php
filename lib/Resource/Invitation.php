@@ -19,6 +19,7 @@ class Invitation extends BaseWorkOSResource
         "revokedAt",
         "expiresAt",
         "token",
+        "acceptInvitationUrl",
         "organizationId",
         "createdAt",
         "updatedAt"
@@ -33,6 +34,7 @@ class Invitation extends BaseWorkOSResource
         "revoked_at" => "revokedAt",
         "expires_at" => "expiresAt",
         "token" => "token",
+        "accept_invitation_url" => "acceptInvitationUrl",
         "organization_id" => "organizationId",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
