@@ -707,6 +707,38 @@ class UserManagement
     }
 
     /**
+     * Authenticate with Refresh Token
+     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $refreshToken The refresh token used to obtain a new access token     
+     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
+     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\AuthenticationResponse
+     */
+    public function authenticateWithRefreshToken(
+        $clientId,
+        $refreshToken,
+        $ipAddress = null,
+        $userAgent = null
+    ) {
+        $path = "user_management/authenticate";
+        $params = [
+            "client_id" => $clientId,
+            "refresh_token" => $refreshToken,
+            "ip_address" => $ipAddress,
+            "user_agent" => $userAgent,
+            "grant_type" => "refresh_token",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\AuthenticationResponse::constructFromResponse($response);
+    }
+
+    /**
      * Authenticate with TOTP
      *
      * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
