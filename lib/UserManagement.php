@@ -1010,12 +1010,14 @@ class UserManagement
      * 
      * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * 
+     * @throws Exception\UnexpectedValueException
+     * 
      * @return string
      */
     public function getJwksUrl(string $clientId)
     {
-        if (!isset($clientId)) {
-            throw new Exception('$clientId must be a valid client ID');
+        if (!isset($clientId) || empty($clientId)) {
+            throw new Exception\UnexpectedValueException("clientId must not be empty");
         }
 
         $baseUrl = WorkOS::getApiBaseUrl();

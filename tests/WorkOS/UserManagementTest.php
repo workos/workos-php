@@ -976,6 +976,17 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $expected);
     }
 
+    public function testGetJwksUrlException() 
+    {
+        $result = "clientId must not be empty";
+
+        try {
+            $this->userManagement->getJwksUrl('');
+        } catch (Exception\UnexpectedValueException $e) {
+            $this->assertEquals($e->getMessage(), $result);
+        }
+    }
+
     //Fixtures
 
     private function invitationResponseFixture()
