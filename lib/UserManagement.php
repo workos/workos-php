@@ -29,7 +29,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\User
      */
-    public function createUser($email, $password, $firstName, $lastName, $emailVerified, $passwordHash = null, $passwordHashType = null)
+    public function createUser($email, $password = null, $firstName = null, $lastName = null, $emailVerified = null, $passwordHash = null, $passwordHashType = null)
     {
         $path = "user_management/users";
         $params = [
@@ -272,8 +272,8 @@ class UserManagement
      *      array \WorkOS\Resource\OrganizationMembership instances
      */
     public function listOrganizationMemberships(
-        $userId,
-        $organizationId,
+        $userId = null,
+        $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
         $after = null,
@@ -789,7 +789,7 @@ class UserManagement
      *
      * @return \WorkOS\Resource\UserResponse
      */
-    public function enrollAuthFactor($userId, $type, $totpIssuer, $totpUser)
+    public function enrollAuthFactor($userId, $type, $totpIssuer = null, $totpUser = null)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
