@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper;
-    
+
     #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptions($statusCode, $exceptionClass)
     {

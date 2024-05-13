@@ -375,10 +375,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->UserResponseFixture();
 
         $params = [
-            "client_id" => "project_0123456",            
+            "client_id" => "project_0123456",
             "refresh_token" => "Xw0NsCVXMBf7svAoIoKBmkpEK",
             "ip_address" => null,
-            "user_agent" => null,            
+            "user_agent" => null,
             "grant_type" => "refresh_token",
             "client_secret" => WorkOS::getApiKey()
         ];
@@ -976,7 +976,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $expected);
     }
 
-    public function testGetJwksUrlException() 
+    public function testGetJwksUrlException()
     {
         $result = "clientId must not be empty";
 

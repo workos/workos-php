@@ -709,7 +709,7 @@ class UserManagement
     /**
      * Authenticate with Refresh Token
      * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $refreshToken The refresh token used to obtain a new access token     
+     * @param string $refreshToken The refresh token used to obtain a new access token
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
      *
@@ -1007,11 +1007,11 @@ class UserManagement
 
     /**
      * Returns the public key host that is used for verifying access tokens.
-     * 
+     *
      * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * 
+     *
      * @throws Exception\UnexpectedValueException
-     * 
+     *
      * @return string
      */
     public function getJwksUrl(string $clientId)

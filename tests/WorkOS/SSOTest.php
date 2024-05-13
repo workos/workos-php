@@ -18,7 +18,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->withApiKeyAndClientId();
         $this->sso = new SSO();
     }
-    
+
     #[DataProvider('authorizationUrlTestProvider')]
     public function testAuthorizationURLExpectedParams(
         $domain,
