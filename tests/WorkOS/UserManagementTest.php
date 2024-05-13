@@ -964,6 +964,18 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response->toArray(), $expected);
     }
 
+    public function testGetJwksUrl()
+    {
+        $clientId = "12345";
+
+        $result = $this->userManagement->getJwksUrl($clientId);
+
+        $baseUrl = WorkOS::getApiBaseUrl();
+        $expected = "{$baseUrl}/sso/jwks/{$clientId}";
+
+        $this->assertSame($result, $expected);
+    }
+
     //Fixtures
 
     private function invitationResponseFixture()

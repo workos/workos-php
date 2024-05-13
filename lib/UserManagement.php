@@ -544,7 +544,7 @@ class UserManagement
     /**
      * Authenticate a User with Password
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $email The email address of the user.
      * @param string $password The password of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -575,7 +575,7 @@ class UserManagement
     /**
      * Authenticate a User with Selected Organization
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
      * @param string $organizationId The Organization ID the user selected.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -612,7 +612,7 @@ class UserManagement
      * Authenticate an OAuth or SSO User with a Code
      * This should be used for "Hosted AuthKit" and "OAuth or SSO" UserAuthentications
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
@@ -641,7 +641,7 @@ class UserManagement
     /**
      * Authenticates a user with an unverified email and verifies their email address.
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -672,7 +672,7 @@ class UserManagement
     /**
      * Authenticate with Magic Auth
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
      * @param string $userId The unique ID of the user.
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
@@ -708,7 +708,7 @@ class UserManagement
 
     /**
      * Authenticate with Refresh Token
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $refreshToken The refresh token used to obtain a new access token     
      * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
      * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
@@ -741,7 +741,7 @@ class UserManagement
     /**
      * Authenticate with TOTP
      *
-     * @param string $clientId This value can be obtained from the Configuration page in the WorkOS dashboard.
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
      * @param string $pendingAuthenticationToken
      * @param string $authenticationChallengeId
      * @param string $code
@@ -1003,5 +1003,23 @@ class UserManagement
         );
 
         return $response;
+    }
+
+    /**
+     * Returns the public key host that is used for verifying access tokens.
+     * 
+     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * 
+     * @return string
+     */
+    public function getJwksUrl(string $clientId)
+    {
+        if (!isset($clientId)) {
+            throw new Exception('$clientId must be a valid client ID');
+        }
+
+        $baseUrl = WorkOS::getApiBaseUrl();
+
+        return "{$baseUrl}/sso/jwks/{$clientId}";
     }
 }
