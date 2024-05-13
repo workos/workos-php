@@ -2,6 +2,9 @@
 
 namespace WorkOS;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 class UserManagementTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper {
@@ -113,9 +116,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider authorizationUrlTestDataProvider
-     */
+    #[DataProvider('authorizationUrlTestDataProvider')]
     public function testAuthorizationURLExpectedParams(
         $redirectUri,
         $state,
@@ -367,6 +368,36 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
     }
 
+    public function testAuthenticateWithRefreshToken()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->UserResponseFixture();
+
+        $params = [
+            "client_id" => "project_0123456",            
+            "refresh_token" => "Xw0NsCVXMBf7svAoIoKBmkpEK",
+            "ip_address" => null,
+            "user_agent" => null,            
+            "grant_type" => "refresh_token",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithRefreshToken("project_0123456", "Xw0NsCVXMBf7svAoIoKBmkpEK");
+        $this->assertSame($userFixture, $response->user->toArray());
+    }
+
     public function testAuthenticateWithTotp()
     {
         $path = "user_management/authenticate";
@@ -398,8 +429,6 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $response = $this->userManagement->authenticateWithTotp("project_0123456", "cTDQJTTkTkkVYxQUlKBIxEsFs", "auth_challenge_01H96FETXGTW1QMBSBT2T36PW0", "123456");
         $this->assertSame($userFixture, $response->user->toArray());
     }
-
-
 
     public function testAuthenticateWithMagicAuth()
     {
