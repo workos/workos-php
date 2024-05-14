@@ -2,13 +2,14 @@
 
 namespace WorkOS;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper;
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptions($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -30,9 +31,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         Client::request(Client::METHOD_GET, $path);
     }
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptionsIncludeRequestId($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -61,9 +60,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->fail("Expected exception of type " . $exceptionClass . " not thrown.");
     }
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptionsWithBadMessage($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -90,9 +87,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptionsWithMessageAndCode($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -121,9 +116,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptionsWithErrorAndErrorDescription($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -152,9 +145,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @dataProvider requestExceptionTestProvider
-     */
+    #[DataProvider('requestExceptionTestProvider')]
     public function testClientThrowsRequestExceptionsWithErrors($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -183,7 +174,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     }
 
     // Providers
-    public function requestExceptionTestProvider()
+    public static function requestExceptionTestProvider()
     {
         return [
             [400, Exception\BadRequestException::class],

@@ -2,6 +2,9 @@
 
 namespace WorkOS;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 class SSOTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper {
@@ -16,9 +19,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->sso = new SSO();
     }
 
-    /**
-     * @dataProvider authorizationUrlTestProvider
-     */
+    #[DataProvider('authorizationUrlTestProvider')]
     public function testAuthorizationURLExpectedParams(
         $domain,
         $redirectUri,
@@ -114,7 +115,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testGetConnection()
     {
         $connection = "connection_id";
-        $connectionPath = "connections/${connection}";
+        $connectionPath = "connections/{$connection}";
 
         $result = $this->connectionResponseFixture();
 
@@ -166,7 +167,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
     public function testDeleteConnection()
     {
         $connection = "connection_id";
-        $connectionPath = "connections/${connection}";
+        $connectionPath = "connections/{$connection}";
         $responseCode = 204;
 
         $this->mockRequest(
@@ -186,7 +187,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
 
     // Providers
 
-    public function authorizationUrlTestProvider()
+    public static function authorizationUrlTestProvider()
     {
         return [
             [null, null, null, Resource\ConnectionType::GoogleOAuth, null],

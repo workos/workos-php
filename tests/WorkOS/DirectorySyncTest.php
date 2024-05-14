@@ -49,7 +49,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testGetDirectory()
     {
         $directoryId = "directory_id";
-        $directoryPath = "directories/${directoryId}";
+        $directoryPath = "directories/{$directoryId}";
 
         $result = $this->getDirectoryResponseFixture();
 
@@ -71,7 +71,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testGetGroup()
     {
         $directoryGroup = "directory_grp_id";
-        $groupPath = "directory_groups/${directoryGroup}";
+        $groupPath = "directory_groups/{$directoryGroup}";
 
         $result = $this->groupResponseFixture();
 
@@ -120,7 +120,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testGetUser()
     {
         $directoryUser = "directory_usr_id";
-        $userPath = "directory_users/${directoryUser}";
+        $userPath = "directory_users/{$directoryUser}";
 
         $result = $this->userResponseFixture();
 
@@ -142,7 +142,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testGetUserPrimaryEmail()
     {
         $directoryUser = "directory_usr_id";
-        $userPath = "directory_users/${directoryUser}";
+        $userPath = "directory_users/{$directoryUser}";
         $expectedEmail = "yoon@seri.com";
         $result = $this->userResponseFixture();
 
@@ -164,7 +164,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testGetUserPrimaryEmailNoPrimaryEmail()
     {
         $directoryUser = "directory_usr_id";
-        $userPath = "directory_users/${directoryUser}";
+        $userPath = "directory_users/{$directoryUser}";
         $expectedEmail = null;
         $result = $this->userResponseFixtureNoEmail();
 
@@ -213,7 +213,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
     public function testDeleteDirectory()
     {
         $directory = "directory_id";
-        $directoryPath = "directories/${directory}";
+        $directoryPath = "directories/{$directory}";
         $responseCode = 204;
 
         $this->mockRequest(
