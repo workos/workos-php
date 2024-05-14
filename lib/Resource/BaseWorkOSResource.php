@@ -80,7 +80,7 @@ class BaseWorkOSResource
             return $this->values[$key];
         }
 
-        if ($this->raw[$key]) {
+        if (isset($this->raw[$key])) {
             return $this->raw[$key];
         }
 
