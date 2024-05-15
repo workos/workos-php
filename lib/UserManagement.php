@@ -335,7 +335,7 @@ class UserManagement
         $path = "user_management/organization_memberships/{$organizationMembershipId}/deactivate";
 
         $response = Client::request(
-            Client::METHOD_POST,
+            Client::METHOD_PUT,
             $path,
             null,
             null,
@@ -359,7 +359,7 @@ class UserManagement
         $path = "user_management/organization_memberships/{$organizationMembershipId}/reactivate";
 
         $response = Client::request(
-            Client::METHOD_POST,
+            Client::METHOD_PUT,
             $path,
             null,
             null,

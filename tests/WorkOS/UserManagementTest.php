@@ -902,7 +902,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->organizationMembershipResponseFixture("inactive");
 
         $this->mockRequest(
-            Client::METHOD_POST,
+            Client::METHOD_PUT,
             $path,
             null,
             null,
@@ -925,7 +925,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->organizationMembershipResponseFixture();
 
         $this->mockRequest(
-            Client::METHOD_POST,
+            Client::METHOD_PUT,
             $path,
             null,
             null,
