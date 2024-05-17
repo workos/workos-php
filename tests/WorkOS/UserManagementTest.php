@@ -810,6 +810,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $params = [
             "organization_id" => $orgId,
             "user_id" => $userId,
+            "statuses" => null,
             "limit" => 10,
             "before" => null,
             "after" => null,
@@ -832,6 +833,76 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
     }
 
+    public function testListOrganizationMembershipsWithStatuses()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $statuses = array("active", "inactive");
+        $path = "user_management/organization_memberships";
+
+        $result = $this->organizationMembershipListResponseFixture();
+
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId,
+            "statuses" => "active,inactive",
+            "limit" => 10,
+            "before" => null,
+            "after" => null,
+            "order" => null,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId, $statuses);
+
+        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+    }
+
+    public function testListOrganizationMembershipsWithStatus()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $statuses = array("inactive");
+        $path = "user_management/organization_memberships";
+
+        $result = $this->organizationMembershipListResponseFixture();
+
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId,
+            "statuses" => "inactive",
+            "limit" => 10,
+            "before" => null,
+            "after" => null,
+            "order" => null,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId, $statuses);
+
+        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+    }
+
     public function testDeleteOrganizationMembership()
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
@@ -850,6 +921,52 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $response = $this->userManagement->deleteOrganizationMembership($organizationMembershipId);
 
         $this->assertSame($response, []);
+    }
+
+    public function testDeactivateOrganizationMembership()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}/deactivate";
+
+        $result = $this->organizationMembershipResponseFixture("inactive");
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->deactivateOrganizationMembership($organizationMembershipId);
+
+        $this->assertSame(array_merge($organizationMembership, array("status" => "inactive")), $response->toArray());
+    }
+
+    public function testReactivateOrganizationMembership()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}/reactivate";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->reactivateOrganizationMembership($organizationMembershipId);
+
+        $this->assertSame($organizationMembership, $response->toArray());
     }
 
     public function testSendInvitation()
@@ -1053,14 +1170,14 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    private function organizationMembershipResponseFixture()
+    private function organizationMembershipResponseFixture($status = "active")
     {
         return json_encode([
             "object" => "organization_membership",
             "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
             "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-            "status" => "active",
+            "status" => $status,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z",
         ]);

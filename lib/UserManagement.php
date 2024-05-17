@@ -259,6 +259,7 @@ class UserManagement
      *
      * @param string|null $userId User ID
      * @param string|null $organizationId Organization ID
+     * @param array|null $statuses Organization Membership statuses to filter
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
@@ -274,6 +275,7 @@ class UserManagement
     public function listOrganizationMemberships(
         $userId = null,
         $organizationId = null,
+        $statuses = null,
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
         $after = null,
@@ -281,9 +283,19 @@ class UserManagement
     ) {
         $path = "user_management/organization_memberships";
 
+        if (isset($statuses)) {
+            if (!is_array($statuses)) {
+                $msg = "Invalid argument: statuses must be an array or null.";
+                throw new Exception\UnexpectedValueException($msg);
+            }
+
+            $statuses = join(",", $statuses);
+        }
+
         $params = [
             "organization_id" => $organizationId,
             "user_id" => $userId,
+            "statuses" => $statuses,
             "limit" => $limit,
             "before" => $before,
             "after" => $after,
@@ -307,6 +319,54 @@ class UserManagement
         list($before, $after) = Util\Request::parsePaginationArgs($response);
 
         return [$before, $after, $organizationMemberships];
+    }
+
+    /**
+     * Deactivate an Organization Membership.
+     *
+     * @param string $organizationMembershipId Organization Membership ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function deactivateOrganizationMembership($organizationMembershipId)
+    {
+        $path = "user_management/organization_memberships/{$organizationMembershipId}/deactivate";
+
+        $response = Client::request(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\OrganizationMembership::constructFromResponse($response);
+    }
+
+    /**
+     * Reactivate an Organization Membership.
+     *
+     * @param string $organizationMembershipId Organization Membership ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Response
+     */
+    public function reactivateOrganizationMembership($organizationMembershipId)
+    {
+        $path = "user_management/organization_memberships/{$organizationMembershipId}/reactivate";
+
+        $response = Client::request(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\OrganizationMembership::constructFromResponse($response);
     }
 
     /**
