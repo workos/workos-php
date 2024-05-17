@@ -1084,4 +1084,22 @@ class UserManagement
 
         return "{$baseUrl}/sso/jwks/{$clientId}";
     }
+
+    /**
+     * Returns the logout URL to end a user's session and redirect to your home page.
+     *
+     * @param string $sessionId The session ID of the user.
+     *
+     * @return string
+     */
+    public function getLogoutUrl(string $sessionId)
+    {
+        if (!isset($sessionId) || empty($sessionId)) {
+            throw new Exception\UnexpectedValueException("sessionId must not be empty");
+        }
+
+        $baseUrl = WorkOS::getApiBaseUrl();
+
+        return "{$baseUrl}/user_management/sessions/logout?session_id={$sessionId}";
+    }
 }
