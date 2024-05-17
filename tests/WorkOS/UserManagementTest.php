@@ -1104,6 +1104,29 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testGetLogoutUrl()
+    {
+        $sessionId = "session_123";
+
+        $result = $this->userManagement->getLogoutUrl($sessionId);
+
+        $baseUrl = WorkOS::getApiBaseUrl();
+        $expected = "{$baseUrl}/user_management/sessions/logout?session_id={$sessionId}";
+
+        $this->assertSame($result, $expected);
+    }
+
+    public function testGetLogoutUrlException()
+    {
+        $result = "sessionId must not be empty";
+
+        try {
+            $this->userManagement->getLogoutUrl('');
+        } catch (Exception\UnexpectedValueException $e) {
+            $this->assertEquals($e->getMessage(), $result);
+        }
+    }
+
     //Fixtures
 
     private function invitationResponseFixture()
