@@ -1082,7 +1082,7 @@ class UserManagement
 
         $baseUrl = WorkOS::getApiBaseUrl();
 
-        return "{$baseUrl}/sso/jwks/{$clientId}";
+        return "{$baseUrl}sso/jwks/{$clientId}";
     }
 
     /**
@@ -1100,6 +1100,6 @@ class UserManagement
 
         $baseUrl = WorkOS::getApiBaseUrl();
 
-        return "{$baseUrl}/user_management/sessions/logout?session_id={$sessionId}";
+        return "{$baseUrl}user_management/sessions/logout?session_id={$sessionId}";
     }
 }
