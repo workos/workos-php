@@ -1088,7 +1088,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->userManagement->getJwksUrl($clientId);
 
         $baseUrl = WorkOS::getApiBaseUrl();
-        $expected = "{$baseUrl}/sso/jwks/{$clientId}";
+        $expected = "{$baseUrl}sso/jwks/{$clientId}";
 
         $this->assertSame($result, $expected);
     }
@@ -1111,7 +1111,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $result = $this->userManagement->getLogoutUrl($sessionId);
 
         $baseUrl = WorkOS::getApiBaseUrl();
-        $expected = "{$baseUrl}/user_management/sessions/logout?session_id={$sessionId}";
+        $expected = "{$baseUrl}user_management/sessions/logout?session_id={$sessionId}";
 
         $this->assertSame($result, $expected);
     }
