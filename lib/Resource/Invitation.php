@@ -21,6 +21,7 @@ class Invitation extends BaseWorkOSResource
         "token",
         "acceptInvitationUrl",
         "organizationId",
+        "inviterUserId",
         "createdAt",
         "updatedAt"
     ];
@@ -36,6 +37,7 @@ class Invitation extends BaseWorkOSResource
         "token" => "token",
         "accept_invitation_url" => "acceptInvitationUrl",
         "organization_id" => "organizationId",
+        "inviter_user_id" => "inviterUserId",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];
