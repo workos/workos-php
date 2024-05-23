@@ -492,6 +492,29 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    public function testGetEmailVerification()
+    {
+        $emailVerificationId = "email_verification_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "/user_management/email_verification/{$emailVerificationId}";
+
+        $result = $this->emailVerificationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->getEmailVerification($emailVerificationId);
+
+        $expected = $this->emailVerificationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
     public function testSendVerificationEmail()
     {
         $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
@@ -539,6 +562,57 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->userManagement->verifyEmail("user_01H7X1M4TZJN5N4HG4XXMA1234", "01DMEK0J53CVMC32CK5SE0KZ8Q");
         $this->assertSame($userFixture, $response->user->toArray());
+    }
+
+    public function testGetPasswordReset()
+    {
+        $passwordResetId = "password_reset_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "/user_management/password_reset/{$passwordResetId}";
+
+        $result = $this->passwordResetResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->getPasswordReset($passwordResetId);
+
+        $expected = $this->passwordResetFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testCreatePasswordReset()
+    {
+        $path = "/user_management/password_reset";
+
+        $result = $this->passwordResetResponseFixture();
+
+        $params = [
+            "email" => "someemail@test.com",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->createPasswordReset(
+            "someemail@test.com",
+        );
+
+        $expected = $this->passwordResetFixture();
+
+        $this->assertSame($response->toArray(), $expected);
     }
 
     public function testSendPasswordResetEmail()
@@ -1140,8 +1214,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "revoked_at" => "2021-07-01T19:07:33.155Z",
             "expires_at" => "2021-07-01T19:07:33.155Z",
             "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
-            "accept_invitation_url" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "accept_invitation_url" => "https://your-app.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "inviter_user_id" => "user_01HYKE1DMN34HMHC180HJMF4AQ",
             "created_at" => "2021-07-01T19:07:33.155Z",
             "updated_at" => "2021-07-01T19:07:33.155Z",
         ]);
@@ -1158,8 +1233,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "revokedAt" => "2021-07-01T19:07:33.155Z",
             "expiresAt" => "2021-07-01T19:07:33.155Z",
             "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
-            "acceptInvitationUrl" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "acceptInvitationUrl" => "https://your-app.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "inviterUserId" => "user_01HYKE1DMN34HMHC180HJMF4AQ",
             "createdAt" => "2021-07-01T19:07:33.155Z",
             "updatedAt" => "2021-07-01T19:07:33.155Z",
         ];
@@ -1179,8 +1255,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                         "revoked_at" => "2021-07-01T19:07:33.155Z",
                         "expires_at" => "2021-07-01T19:07:33.155Z",
                         "token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
-                        "accept_invitation_url" => "https://myauthkit.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
+                        "accept_invitation_url" => "https://your-app.com/invite?invitation_token=Z1uX3RbwcIl5fIGJJJCXXisdI",
                         "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                        "inviter_user_id" => "user_01HYKE1DMN34HMHC180HJMF4AQ",
                         "created_at" => "2021-07-01T19:07:33.155Z",
                         "updated_at" => "2021-07-01T19:07:33.155Z",
                     ]
@@ -1388,6 +1465,62 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "code" => "123456",
             "createdAt" => "2021-07-01T19:07:33.155Z",
             "updatedAt" => "2021-07-01T19:07:33.155Z",
+        ];
+    }
+
+    private function emailVerificationResponseFixture()
+    {
+        return json_encode([
+            "object" => "email_verification",
+            "id" => "email_verification_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "expires_at" => "2021-07-01T19:07:33.155Z",
+            "code" => "123456",
+            "created_at" => "2021-07-01T19:07:33.155Z",
+            "updated_at" => "2021-07-01T19:07:33.155Z",
+        ]);
+    }
+
+    private function emailVerificationFixture()
+    {
+        return [
+            "object" => "email_verification",
+            "id" => "email_verification_01E4ZCR3C56J083X43JQXF3JK5",
+            "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "expiresAt" => "2021-07-01T19:07:33.155Z",
+            "code" => "123456",
+            "createdAt" => "2021-07-01T19:07:33.155Z",
+            "updatedAt" => "2021-07-01T19:07:33.155Z",
+        ];
+    }
+
+    private function passwordResetResponseFixture()
+    {
+        return json_encode([
+            "object" => "password_reset",
+            "id" => "password_reset_01E4ZCR3C56J083X43JQXF3JK5",
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "password_reset_token" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "password_reset_url" => "https://your-app.com/reset-password?token=Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "expires_at" => "2021-07-01T19:07:33.155Z",
+            "created_at" => "2021-07-01T19:07:33.155Z",
+        ]);
+    }
+
+    private function passwordResetFixture()
+    {
+        return [
+            "object" => "password_reset",
+            "id" => "password_reset_01E4ZCR3C56J083X43JQXF3JK5",
+            "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "email" => "someemail@test.com",
+            "passwordResetToken" => "Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "passwordResetUrl" => "https://your-app.com/reset-password?token=Z1uX3RbwcIl5fIGJJJCXXisdI",
+            "expiresAt" => "2021-07-01T19:07:33.155Z",
+            "createdAt" => "2021-07-01T19:07:33.155Z",
         ];
     }
 
