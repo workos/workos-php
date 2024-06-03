@@ -435,6 +435,30 @@ class UserManagement
     }
 
     /**
+     * Find an Invitation by Token
+     *
+     * @param string $invitationToken The token of the Invitation
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\Invitation
+     */
+    public function findInvitationByToken($invitationToken)
+    {
+        $path = "/user_management/invitations/by_token/{$invitationToken}";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
      * List Invitations
      *
      * @param string|null $email Email of the invitee

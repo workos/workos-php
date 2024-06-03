@@ -1102,6 +1102,29 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($response->toArray(), $expected);
     }
 
+    public function testFindInvitationByToken()
+    {
+        $invitationToken = "Z1uX3RbwcIl5fIGJJJCXXisdI";
+        $path = "/user_management/invitations/by_token/{$invitationToken}";
+
+        $result = $this->invitationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->findInvitationByToken($invitationToken);
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
     public function testListInvitations()
     {
         $path = "/user_management/invitations";
