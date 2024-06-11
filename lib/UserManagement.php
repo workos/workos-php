@@ -11,6 +11,8 @@ class UserManagement
     public const DEFAULT_TOKEN_EXPIRATION = 1440;
 
     public const AUTHORIZATION_PROVIDER_AUTHKIT = "authkit";
+    public const AUTHORIZATION_PROVIDER_APPLE_OAUTH = "AppleOAuth";
+    public const AUTHORIZATION_PROVIDER_GITHUB_OAUTH = "GitHubOAuth";
     public const AUTHORIZATION_PROVIDER_GOOGLE_OAUTH = "GoogleOAuth";
     public const AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH = "MicrosoftOAuth";
 
