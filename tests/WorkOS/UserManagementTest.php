@@ -105,7 +105,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public static function authorizationUrlTestDataProvider()
     {
         return [
-            [null, null, Resource\ConnectionType::AppleOAauth, null],
+            [null, null, Resource\ConnectionType::AppleOAuth, null],
             [null, null, Resource\ConnectionType::GitHubOAuth, null],
             [null, null, Resource\ConnectionType::GoogleOAuth, null],
             [null, null, Resource\ConnectionType::MicrosoftOAuth, null],
