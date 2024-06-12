@@ -18,6 +18,7 @@ class ConnectionType
     public const GoogleOAuth = "GoogleOAuth";
     public const GoogleSAML = "GoogleSAML";
     public const MagicLink = "MagicLink";
+    public const MicrosoftOAuth = "MicrosoftOAuth";
     public const OneLoginSAML = "OneLoginSAML";
     public const OktaSAML = "OktaSAML";
     public const PingFederateSAML = "PingFederateSAML";
