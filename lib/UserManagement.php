@@ -575,6 +575,8 @@ class UserManagement
 
         $supportedProviders = [
             self::AUTHORIZATION_PROVIDER_AUTHKIT,
+            self::AUTHORIZATION_PROVIDER_APPLE_OAUTH,
+            self::AUTHORIZATION_PROVIDER_GITHUB_OAUTH,
             self::AUTHORIZATION_PROVIDER_GOOGLE_OAUTH,
             self::AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH
         ];
