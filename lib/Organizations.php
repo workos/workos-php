@@ -79,12 +79,18 @@ class Organizations
     {
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
-        $params = [
-            "name" => $name,
-            "domains" => $domains,
-            "domain_data" => $domain_data,
-            "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
-        ];
+
+        $params = [ "name" => $name ];
+
+        if (isset($domains)) {
+            $params["domains"] = $domains;
+        }
+        if (isset($domain_data)) {
+            $params["domain_data"] = $domain_data;
+        }
+        if (isset($allowProfilesOutsideOrganization)) {
+            $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
+        }
 
         $response = Client::request(Client::METHOD_POST, $organizationsPath, $headers, $params, true);
 
@@ -106,12 +112,18 @@ class Organizations
     public function updateOrganization($organization, $domains = null, $name = null, $allowProfilesOutsideOrganization = null, $domain_data = null)
     {
         $organizationsPath = "organizations/{$organization}";
-        $params = [
-          "domains" => $domains,
-          "domain_data" => $domain_data,
-          "name" => $name,
-          "allow_profiles_outside_organization" => $allowProfilesOutsideOrganization
-        ];
+
+        $params = [ "name" => $name ];
+
+        if (isset($domains)) {
+            $params["domains"] = $domains;
+        }
+        if (isset($domain_data)) {
+            $params["domain_data"] = $domain_data;
+        }
+        if (isset($allowProfilesOutsideOrganization)) {
+            $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
+        }
 
         $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
 
