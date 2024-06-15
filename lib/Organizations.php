@@ -67,8 +67,8 @@ class Organizations
      * @param string $name The name of the Organization.
      * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
-     *      that are outside of the Organization's configured User Email Domains.
+     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     *      any email domain, contact support@workos.com.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
      *
      * @throws Exception\WorkOSException
@@ -104,8 +104,8 @@ class Organizations
      * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
      * @param null|string $name The name of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization Whether Connections within the Organization allow profiles
-     *      that are outside of the Organization's configured User Email Domains.
+     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     *      any email domain, contact support@workos.com.
      *
      * @throws Exception\WorkOSException
      */
