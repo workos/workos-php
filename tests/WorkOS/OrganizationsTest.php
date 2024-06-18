@@ -25,8 +25,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $params = [
             "name" => "Organization Name",
             "domains" => array("example.com"),
-            "domain_data" => null,
-            "allow_profiles_outside_organization" => null
         ];
 
         $this->mockRequest(
@@ -52,12 +50,10 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $params = [
             "name" => "Organization Name",
-            "domains" => null,
             "domain_data" => array([
                 "domain" => "example.com",
                 "state" => "verified",
             ]),
-            "allow_profiles_outside_organization" => null
         ];
 
         $this->mockRequest(
@@ -85,13 +81,11 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $result = $this->createOrganizationResponseFixture();
 
         $params = [
-            "domains" => null,
+            "name" => null,
             "domain_data" => array([
                 "domain" => "example.com",
                 "state" => "verified",
             ]),
-            "name" => null,
-            "allow_profiles_outside_organization" => null,
         ];
 
         $this->mockRequest(
@@ -121,8 +115,6 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $params = [
             "name" => "Organization Name",
             "domains" => array("example.com"),
-            "domain_data" => null,
-            "allow_profiles_outside_organization" => null
         ];
 
         $this->mockRequest(
