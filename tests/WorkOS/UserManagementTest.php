@@ -495,7 +495,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetEmailVerification()
     {
         $emailVerificationId = "email_verification_01E4ZCR3C56J083X43JQXF3JK5";
-        $path = "/user_management/email_verification/{$emailVerificationId}";
+        $path = "user_management/email_verification/{$emailVerificationId}";
 
         $result = $this->emailVerificationResponseFixture();
 
@@ -567,7 +567,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetPasswordReset()
     {
         $passwordResetId = "password_reset_01E4ZCR3C56J083X43JQXF3JK5";
-        $path = "/user_management/password_reset/{$passwordResetId}";
+        $path = "user_management/password_reset/{$passwordResetId}";
 
         $result = $this->passwordResetResponseFixture();
 
@@ -589,7 +589,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testCreatePasswordReset()
     {
-        $path = "/user_management/password_reset";
+        $path = "user_management/password_reset";
 
         $result = $this->passwordResetResponseFixture();
 
@@ -723,7 +723,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetMagicAuth()
     {
         $magicAuthId = "magic_auth_01E4ZCR3C56J083X43JQXF3JK5";
-        $path = "/user_management/magic_auth/{$magicAuthId}";
+        $path = "user_management/magic_auth/{$magicAuthId}";
 
         $result = $this->magicAuthResponseFixture();
 
@@ -745,7 +745,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateMagicAuth()
     {
-        $path = "/user_management/magic_auth";
+        $path = "user_management/magic_auth";
 
         $result = $this->magicAuthResponseFixture();
 
@@ -774,7 +774,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     private function testSendMagicAuthCode()
     {
-        $path = "/user_management/magic_auth/send";
+        $path = "user_management/magic_auth/send";
 
         $params = [
             "email" => "test@test.com"
@@ -1045,7 +1045,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testSendInvitation()
     {
-        $path = "/user_management/invitations";
+        $path = "user_management/invitations";
 
         $result = $this->invitationResponseFixture();
 
@@ -1082,7 +1082,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testGetInvitation()
     {
         $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
-        $path = "/user_management/invitations/{$invitationId}";
+        $path = "user_management/invitations/{$invitationId}";
 
         $result = $this->invitationResponseFixture();
 
@@ -1105,7 +1105,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testFindInvitationByToken()
     {
         $invitationToken = "Z1uX3RbwcIl5fIGJJJCXXisdI";
-        $path = "/user_management/invitations/by_token/{$invitationToken}";
+        $path = "user_management/invitations/by_token/{$invitationToken}";
 
         $result = $this->invitationResponseFixture();
 
@@ -1127,7 +1127,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testListInvitations()
     {
-        $path = "/user_management/invitations";
+        $path = "user_management/invitations";
 
         $result = $this->invitationListResponseFixture();
 
@@ -1158,7 +1158,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public function testRevokeInvitation()
     {
         $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
-        $path = "/user_management/invitations/{$invitationId}/revoke";
+        $path = "user_management/invitations/{$invitationId}/revoke";
 
         $result = $this->invitationResponseFixture();
 

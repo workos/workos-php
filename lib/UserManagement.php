@@ -389,7 +389,7 @@ class UserManagement
         $inviterUserId = null,
         $roleSlug = null
     ) {
-        $path = "/user_management/invitations";
+        $path = "user_management/invitations";
 
         $params = [
             "email" => $email,
@@ -421,7 +421,7 @@ class UserManagement
      */
     public function getInvitation($invitationId)
     {
-        $path = "/user_management/invitations/{$invitationId}";
+        $path = "user_management/invitations/{$invitationId}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -445,7 +445,7 @@ class UserManagement
      */
     public function findInvitationByToken($invitationToken)
     {
-        $path = "/user_management/invitations/by_token/{$invitationToken}";
+        $path = "user_management/invitations/by_token/{$invitationToken}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -483,7 +483,7 @@ class UserManagement
         $after = null,
         $order = null
     ) {
-        $path = "/user_management/invitations";
+        $path = "user_management/invitations";
 
         $params = [
             "email" => $email,
@@ -524,7 +524,7 @@ class UserManagement
      */
     public function revokeInvitation($invitationId)
     {
-        $path = "/user_management/invitations/{$invitationId}/revoke";
+        $path = "user_management/invitations/{$invitationId}/revoke";
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -923,7 +923,7 @@ class UserManagement
      */
     public function getEmailVerification($emailVerificationId)
     {
-        $path = "/user_management/email_verification/{$emailVerificationId}";
+        $path = "user_management/email_verification/{$emailVerificationId}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -988,7 +988,7 @@ class UserManagement
      */
     public function getPasswordReset($passwordResetId)
     {
-        $path = "/user_management/password_reset/{$passwordResetId}";
+        $path = "user_management/password_reset/{$passwordResetId}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -1013,7 +1013,7 @@ class UserManagement
     public function createPasswordReset(
         $email,
     ) {
-        $path = "/user_management/password_reset";
+        $path = "user_management/password_reset";
 
         $params = [
             "email" => $email
@@ -1093,7 +1093,7 @@ class UserManagement
      */
     public function getMagicAuth($magicAuthId)
     {
-        $path = "/user_management/magic_auth/{$magicAuthId}";
+        $path = "user_management/magic_auth/{$magicAuthId}";
 
         $response = Client::request(
             Client::METHOD_GET,
@@ -1120,7 +1120,7 @@ class UserManagement
         $email,
         $invitationToken = null,
     ) {
-        $path = "/user_management/magic_auth";
+        $path = "user_management/magic_auth";
 
         $params = [
             "email" => $email,
@@ -1149,7 +1149,7 @@ class UserManagement
      */
     public function sendMagicAuthCode($email)
     {
-        $path = "/user_management/magic_auth/send";
+        $path = "user_management/magic_auth/send";
 
         $params = [
             "email" => $email,
