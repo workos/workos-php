@@ -105,7 +105,10 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
     public static function authorizationUrlTestDataProvider()
     {
         return [
+            [null, null, Resource\ConnectionType::AppleOAuth, null],
+            [null, null, Resource\ConnectionType::GitHubOAuth, null],
             [null, null, Resource\ConnectionType::GoogleOAuth, null],
+            [null, null, Resource\ConnectionType::MicrosoftOAuth, null],
             [null, null, null, "connection_123"],
             [null, null, null, null, "org_01FG7HGMY2CZZR2FWHTEE94VF0"],
             ["https://papagenos.com/auth/callback", null, null, "connection_123", null, "foo.com", null],
