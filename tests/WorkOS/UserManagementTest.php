@@ -380,6 +380,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $params = [
             "client_id" => "project_0123456",
             "refresh_token" => "Xw0NsCVXMBf7svAoIoKBmkpEK",
+            "organization_id" => null,
             "ip_address" => null,
             "user_agent" => null,
             "grant_type" => "refresh_token",
