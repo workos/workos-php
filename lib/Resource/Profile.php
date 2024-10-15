@@ -2,6 +2,8 @@
 
 namespace WorkOS\Resource;
 
+use WorkOS\Resource\RoleResponse;
+
 /**
  * Class Profile.
  *
@@ -13,6 +15,7 @@ namespace WorkOS\Resource;
  * @property string $connectionId
  * @property string $connectionType
  * @property string $idpId
+ * @property RoleResponse|null $role
  * @property array  $groups
  * @property array  $rawAttributes
  */
@@ -29,6 +32,7 @@ class Profile extends BaseWorkOSResource
         "connectionId",
         "connectionType",
         "idpId",
+        "role",
         "groups",
         "rawAttributes"
     ];
@@ -42,7 +46,19 @@ class Profile extends BaseWorkOSResource
         "connection_id" => "connectionId",
         "connection_type" => "connectionType",
         "idp_id" => "idpId",
+        "role" => "role",
         "groups" => "groups",
         "raw_attributes" => "rawAttributes"
     ];
+
+    public static function constructFromResponse($response)
+    {
+        $instance = parent::constructFromResponse($response);
+
+        if (isset($response["role"])) {
+            $instance->values["role"] = new RoleResponse($response["role"]["slug"]);
+        }
+
+        return $instance;
+    }
 }
