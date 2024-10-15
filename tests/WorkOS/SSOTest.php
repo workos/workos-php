@@ -4,6 +4,7 @@ namespace WorkOS;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use WorkOS\Resource\RoleResponse;
 
 class SSOTest extends \PHPUnit\Framework\TestCase
 {
@@ -216,6 +217,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
                 "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
                 "connection_type" => "GoogleOAuth",
                 "idp_id" => "randomalphanum",
+                "role" => new RoleResponse("admin"),
                 "groups" => array("Admins", "Developers"),
                 "raw_attributes" => array(
                     "email" => "hen@papagenos.com",
@@ -239,6 +241,7 @@ class SSOTest extends \PHPUnit\Framework\TestCase
             "connectionId" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
             "connectionType" => "GoogleOAuth",
             "idpId" => "randomalphanum",
+            "role" => new RoleResponse("admin"),
             "groups" => array("Admins", "Developers"),
             "rawAttributes" => array(
                 "email" => "hen@papagenos.com",
