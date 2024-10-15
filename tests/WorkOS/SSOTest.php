@@ -113,7 +113,6 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($profileFixture, $profileAndToken->profile->toArray());
     }
 
-
     public function testGetConnection()
     {
         $connection = "connection_id";
