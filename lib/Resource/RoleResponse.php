@@ -4,7 +4,7 @@ namespace WorkOS\Resource;
 
 /**
  * Class RoleResponse.
- * 
+ *
  * @property string $slug
  */
 class RoleResponse extends BaseWorkOSResource
