@@ -149,7 +149,7 @@ class SSO
         $decodedResponse = json_decode($result, true);
 
         $profile = Resource\Profile::constructFromResponse($decodedResponse);
-    
+
         return $profile->json();
     }
 
