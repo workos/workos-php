@@ -110,7 +110,37 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $profileFixture = $this->profileFixture();
 
         $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
-        $this->assertSame($profileFixture, $profileAndToken->profile->toArray());
+        $this->assertEquals($profileFixture, $profileAndToken->profile->toArray());
+    }
+
+    public function testGetProfileReturnsProfileWithExpectedValues()
+    {
+        $code = 'code';
+        $path = "sso/token";
+        $params = [
+            "client_id" => WorkOS::getClientId(),
+            "client_secret" => WorkOS::getApikey(),
+            "code" => $code,
+            "grant_type" => "authorization_code"
+        ];
+
+        $result = $this->profileAndTokenResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            false,
+            $result
+        );
+
+        $profileAndToken = $this->sso->getProfileAndToken('code');
+        $profile = $this->sso->getProfile($profileAndToken->accessToken);
+        $profileFixture = $this->profileFixture();
+
+        $this->assertSame("01DMEK0J53CVMC32CK5SE0KZ8Q", $profileAndToken->accessToken);
+        $this->assertEquals($profileFixture, $profile->toArray());
     }
 
     public function testGetConnection()

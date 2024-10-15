@@ -50,4 +50,15 @@ class Profile extends BaseWorkOSResource
         "groups" => "groups",
         "raw_attributes" => "rawAttributes"
     ];
+
+    public static function constructFromResponse($response)
+    {
+        $instance = parent::constructFromResponse($response);
+
+        if (isset($response["role"])) {
+            $instance->values["role"] = new RoleResponse($response["role"]["slug"]);
+        }
+
+        return $instance;
+    }
 }
