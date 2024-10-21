@@ -146,9 +146,11 @@ class SSO
             null
         );
 
-        $response = new Resource\Response($result, $responseHeaders, $responseCode);
+        $decodedResponse = json_decode($result, true);
 
-        return $response->json();
+        $profile = Resource\Profile::constructFromResponse($decodedResponse);
+
+        return $profile->json();
     }
 
     /**
