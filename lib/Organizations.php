@@ -70,6 +70,7 @@ class Organizations
      * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
+     * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      *
      * @throws Exception\WorkOSException
      *
@@ -109,6 +110,7 @@ class Organizations
      * @param null|string $name The name of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
+     * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      *
      * @throws Exception\WorkOSException
      */
