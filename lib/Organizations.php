@@ -70,13 +70,12 @@ class Organizations
      * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
-     * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      *
      * @throws Exception\WorkOSException
      *
      * @return \WorkOS\Resource\Organization
      */
-    public function createOrganization($name, $domains = null, $allowProfilesOutsideOrganization = null, $idempotencyKey = null, $domain_data = null, $stripeCustomerId = null)
+    public function createOrganization($name, $domains = null, $allowProfilesOutsideOrganization = null, $idempotencyKey = null, $domain_data = null)
     {
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
@@ -91,9 +90,6 @@ class Organizations
         }
         if (isset($allowProfilesOutsideOrganization)) {
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
-        }
-        if (isset($stripeCustomerId)) {
-            $params["stripe_customer_id"] = $stripeCustomerId;
         }
 
         $response = Client::request(Client::METHOD_POST, $organizationsPath, $headers, $params, true);
