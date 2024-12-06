@@ -106,10 +106,11 @@ class Organizations
      * @param null|string $name The name of the Organization.
      * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
+     * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      *
      * @throws Exception\WorkOSException
      */
-    public function updateOrganization($organization, $domains = null, $name = null, $allowProfilesOutsideOrganization = null, $domain_data = null)
+    public function updateOrganization($organization, $domains = null, $name = null, $allowProfilesOutsideOrganization = null, $domain_data = null, $stripeCustomerId = null)
     {
         $organizationsPath = "organizations/{$organization}";
 
@@ -123,6 +124,9 @@ class Organizations
         }
         if (isset($allowProfilesOutsideOrganization)) {
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
+        }
+        if (isset($stripeCustomerId)) {
+            $params["stripe_customer_id"] = $stripeCustomerId;
         }
 
         $response = Client::request(Client::METHOD_PUT, $organizationsPath, null, $params, true);
