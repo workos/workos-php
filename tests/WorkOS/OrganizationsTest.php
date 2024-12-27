@@ -161,6 +161,27 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($organization, $organizations[0]->toArray());
     }
 
+    public function testListOrganizationRoles()
+    {
+        $organizationRolesPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/roles";
+
+        $result = $this->organizationRolesResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $organizationRolesPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        list($roles) = $this->organizations->listOrganizationRoles("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame($role, $roles[0]->toArray());
+    }
+
     // Fixtures
 
     private function createOrganizationResponseFixture()
@@ -245,6 +266,58 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
                     "domain" => "example.com"
                 ]
             ]
+        ];
+    }
+
+    private function organizationRolesResponseFixture()
+    {
+        return json_encode([
+            "object" => "list",
+            "data" => [
+                [
+                    "object" => "role",
+                    "id" => "role_01EHQMYV6MBK39QC5PZXHY59C2",
+                    "name" => "Admin",
+                    "slug" => "admin",
+                    "description" => "Admin role",
+                    "type" => "EnvironmentRole",
+                    "created_at" => "2024-01-01T00:00:00.000Z",
+                    "updated_at" => "2024-01-01T00:00:00.000Z"
+                ],
+                [
+                    "object" => "role",
+                    "id" => "role_01EHQMYV6MBK39QC5PZXHY59C3",
+                    "name" => "Member",
+                    "slug" => "member",
+                    "description" => "Member role",
+                    "type" => "EnvironmentRole",
+                    "created_at" => "2024-01-01T00:00:00.000Z",
+                    "updated_at" => "2024-01-01T00:00:00.000Z"
+                ],
+                [
+                    "object" => "role",
+                    "id" => "role_01EHQMYV6MBK39QC5PZXHY59C4",
+                    "name" => "Org. Member",
+                    "slug" => "org-member",
+                    "description" => "Organization member role",
+                    "type" => "OrganizationRole",
+                    "created_at" => "2024-01-01T00:00:00.000Z",
+                    "updated_at" => "2024-01-01T00:00:00.000Z"
+                ],
+            ],
+        ]);
+    }
+
+    private function roleFixture()
+    {
+        return [
+            "id" => "role_01EHQMYV6MBK39QC5PZXHY59C2",
+            "name" => "Admin",
+            "slug" => "admin",
+            "description" => "Admin role",
+            "type" => "EnvironmentRole",
+            "created_at" => "2024-01-01T00:00:00.000Z",
+            "updated_at" => "2024-01-01T00:00:00.000Z"
         ];
     }
 }

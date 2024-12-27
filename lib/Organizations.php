@@ -175,4 +175,34 @@ class Organizations
 
         return $response;
     }
+
+    /**
+     * List roles for an organization.
+     *
+     * @param string $organizationId WorkOS organization ID to fetch roles for
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array An array containing the following:
+     *      array \WorkOS\Resource\Role instances
+     */
+    public function listOrganizationRoles($organizationId)
+    {
+        $organizationRolesPath = "organizations/{$organizationId}/roles";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $organizationRolesPath,
+            null,
+            null,
+            true
+        );
+
+        $roles = [];
+        foreach ($response["data"] as $responseData) {
+            \array_push($roles, Resource\Role::constructFromResponse($responseData));
+        }
+
+        return [$roles];
+    }
 }
