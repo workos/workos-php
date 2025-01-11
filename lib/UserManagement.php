@@ -1201,17 +1201,21 @@ class UserManagement
      * Returns the logout URL to end a user's session and redirect to your home page.
      *
      * @param string $sessionId The session ID of the user.
+     * @param string $return_to The URL to redirect to after the user logs out.
      *
      * @return string
      */
-    public function getLogoutUrl(string $sessionId)
+    public function getLogoutUrl(string $sessionId, string $return_to = null)
     {
         if (!isset($sessionId) || empty($sessionId)) {
             throw new Exception\UnexpectedValueException("sessionId must not be empty");
         }
 
-        $baseUrl = WorkOS::getApiBaseUrl();
+        $params = [ "session_id" => $sessionId ];
+        if ($return_to) {
+            $params["return_to"] = $return_to;
+        }
 
-        return "{$baseUrl}user_management/sessions/logout?session_id={$sessionId}";
+        return Client::generateUrl("user_management/sessions/logout", $params);
     }
 }
