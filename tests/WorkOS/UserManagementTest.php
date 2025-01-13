@@ -1217,6 +1217,16 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($result, $expected);
     }
 
+    public function testGetLogoutUrlWithReturnTo()
+    {
+        $result = $this->userManagement->getLogoutUrl("session_123", return_to: "https://your-app.com");
+
+        $this->assertSame(
+            $result,
+            "https://api.workos.com/user_management/sessions/logout?session_id=session_123&return_to=https%3A%2F%2Fyour-app.com"
+        );
+    }
+
     public function testGetLogoutUrlException()
     {
         $result = "sessionId must not be empty";
