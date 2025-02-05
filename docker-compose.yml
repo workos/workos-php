@@ -1,0 +1,37 @@
+services:
+  php81:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: "8.1"
+    image: workos-php-test:8.1
+    volumes:
+      - .:/app
+
+  php82:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: "8.2"
+    volumes:
+      - .:/app
+
+  php83:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: "8.3"
+    volumes:
+      - .:/app
+
+  php84:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: "8.4"
+    volumes:
+      - .:/app
