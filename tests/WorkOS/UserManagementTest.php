@@ -1013,7 +1013,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             Client::METHOD_PUT,
             $path,
             null,
-            ["role_slug" => $roleSlug],  // Move role_slug back to params (4th argument)
+            ["role_slug" => $roleSlug],
             true,
             $result
         );
