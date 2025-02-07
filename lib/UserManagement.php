@@ -257,6 +257,35 @@ class UserManagement
     }
 
     /**
+     * Update a User organization membership.
+     *
+     * @param string $organizationMembershipId Organization Membership ID
+     * @param string $role_slug The unique role identifier.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return \WorkOS\Resource\User
+     */
+    public function updateOrganizationMembership($organizationMembershipId, $role_slug)
+    {
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+
+        $params = [
+            "role_slug" => $role_slug
+        ];
+
+        $response = Client::request(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        return Resource\OrganizationMembership::constructFromResponse($response);
+    }
+
+    /**
      * List organization memberships.
      *
      * @param string|null $userId User ID
@@ -322,6 +351,7 @@ class UserManagement
 
         return [$before, $after, $organizationMemberships];
     }
+    
 
     /**
      * Deactivate an Organization Membership.
