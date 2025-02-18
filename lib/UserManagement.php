@@ -351,7 +351,7 @@ class UserManagement
 
         return [$before, $after, $organizationMemberships];
     }
-    
+
 
     /**
      * Deactivate an Organization Membership.
