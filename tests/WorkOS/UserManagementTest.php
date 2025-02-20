@@ -1417,6 +1417,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "last_name" => "Alabaster",
                 "email_verified" => true,
                 "profile_picture_url" => "https://example.com/photo.jpg",
+                "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -1434,6 +1435,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "last_name" => "Alabaster",
                 "email_verified" => true,
                 "profile_picture_url" => "https://example.com/photo.jpg",
+                "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ],
@@ -1456,6 +1458,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "last_name" => "Alabaster",
                 "email_verified" => true,
                 'profile_picture_url' => 'https://example.com/photo.jpg',
+                "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ]
@@ -1472,6 +1475,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "last_name" => "Alabaster",
             "email_verified" => true,
             'profile_picture_url' => 'https://example.com/photo.jpg',
+            "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -1579,6 +1583,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "last_name" => "Alabaster",
             "email_verified" => true,
             "profile_picture_url" => "https://example.com/photo.jpg",
+            "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z"
         ]);
@@ -1596,6 +1601,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                     "last_name" => "Alabaster",
                     "email_verified" => true,
                     "profile_picture_url" => "https://example.com/photo.jpg",
+                    "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                     "created_at" => "2021-06-25T19:07:33.155Z",
                     "updated_at" => "2021-06-25T19:07:33.155Z"
                 ]
@@ -1625,6 +1631,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
             "lastName" => "Alabaster",
             "emailVerified" => true,
             "profilePictureUrl" => "https://example.com/photo.jpg",
+            "lastSignInAt" => "2021-06-25T19:07:33.155Z",
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z"
         ];
@@ -1641,6 +1648,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
                 "last_name" => "Alabaster",
                 "email_verified" => true,
                 "profile_picture_url" => "https://example.com/photo.jpg",
+                "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
                 "updated_at" => "2021-06-25T19:07:33.155Z"
             ],
