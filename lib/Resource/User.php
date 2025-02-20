@@ -17,6 +17,7 @@ class User extends BaseWorkOSResource
         "lastName",
         "emailVerified",
         "profilePictureUrl",
+        "lastSignInAt",
         "createdAt",
         "updatedAt"
     ];
@@ -29,6 +30,7 @@ class User extends BaseWorkOSResource
         "last_name" => "lastName",
         "email_verified" => "emailVerified",
         "profile_picture_url" => "profilePictureUrl",
+        "last_sign_in_at" => "lastSignInAt",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];
