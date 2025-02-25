@@ -2,6 +2,8 @@
 
 namespace WorkOS\Exception;
 
+use WorkOS\Resource\Response;
+
 /**
  * Class BaseRequestException.
  *
@@ -20,7 +22,7 @@ class BaseRequestException extends \Exception implements WorkOSException
     /**
      * BaseRequestException constructor.
      *
-     * @param \WorkOS\Resource\Response $response
+     * @param Response $response
      * @param null|string $message Exception message
      */
     public function __construct($response, $message = null)

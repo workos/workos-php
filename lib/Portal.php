@@ -21,7 +21,7 @@ class Portal
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\PortalLink
+     * @return Resource\PortalLink
      */
     public function generateLink($organization, $intent, $returnUrl = null, $successUrl = null)
     {

@@ -2,6 +2,9 @@
 
 namespace WorkOS\RequestClient;
 
+use WorkOS\Client;
+use WorkOS\Exception\GenericException;
+
 /**
  * Class CurlRequestClient.
  */
@@ -13,7 +16,7 @@ class CurlRequestClient implements RequestClientInterface
      * @param null|array $headers Headers for request
      * @param null|array $params Associative array that'll be passed as query parameters or form data
      *
-     * @throws \WorkOS\Exception\GenericException if a client level exception is encountered
+     * @throws GenericException if a client level exception is encountered
      *
      * @return array An array composed of the result string, response headers and status code
      */
@@ -26,14 +29,14 @@ class CurlRequestClient implements RequestClientInterface
         $opts = [\CURLOPT_RETURNTRANSFER => 1];
 
         switch ($method) {
-            case \WorkOS\Client::METHOD_GET:
+            case Client::METHOD_GET:
                 if (!empty($params)) {
                     $url .= "?" . http_build_query($params);
                 }
 
                 break;
 
-            case \WorkOS\CLIENT::METHOD_POST:
+            case Client::METHOD_POST:
                 \array_push($headers, "Content-Type: application/json");
 
                 $opts[\CURLOPT_POST] = 1;
@@ -44,7 +47,7 @@ class CurlRequestClient implements RequestClientInterface
 
                 break;
 
-            case \WorkOS\CLIENT::METHOD_DELETE:
+            case Client::METHOD_DELETE:
 
                 $opts[\CURLOPT_CUSTOMREQUEST] = 'DELETE';
 
@@ -55,7 +58,7 @@ class CurlRequestClient implements RequestClientInterface
 
                 break;
 
-            case \WorkOS\CLIENT::METHOD_PUT:
+            case Client::METHOD_PUT:
 
                 \array_push($headers, "Content-Type: application/json");
 
@@ -103,7 +106,7 @@ class CurlRequestClient implements RequestClientInterface
             $msg = \curl_error($curl);
             \curl_close($curl);
 
-            throw new \WorkOS\Exception\GenericException($msg, ["curlErrno" => $errno]);
+            throw new GenericException($msg, ["curlErrno" => $errno]);
         } else {
             // Unsure how versions of cURL and PHP correlate so using the legacy
             // reference for getting the last response code

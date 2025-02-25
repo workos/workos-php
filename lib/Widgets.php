@@ -14,11 +14,11 @@ class Widgets
      *
      * @param string $organization_id An Organization identifier.
      * @param string $user_id An AuthKit user identifier.
-     * @param WidgetScope[] $scopes The scopes to mint the widget token with. Possible values are ["widgets:users-table:manage"].
+     * @param Resource\WidgetScope[] $scopes The scopes to mint the widget token with. Possible values are ["widgets:users-table:manage"].
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\WidgetTokenResponse
+     * @return Resource\WidgetTokenResponse
      */
     public function getToken($organization_id, $user_id, $scopes)
     {

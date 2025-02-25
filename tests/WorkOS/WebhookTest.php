@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class WebhookTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class WebhookTest extends TestCase
 {
     use TestHelper {
         setUp as protected traitSetUp;

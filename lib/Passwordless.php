@@ -13,15 +13,15 @@ class Passwordless
      * Generates a passwordless session.
      *
      * @param string $email Email address of the user that the session is to be created for
-     * @param null|string $redirectURI URI to direct the user to user to upon authenticating through the passwordless link
+     * @param null|string $redirectUri URI to direct the user to user to upon authenticating through the passwordless link
      * @param null|string $state Encoded string used to manage application state
      * @param string $type The only supported ConnectionType at the time of this writing is MagicLink
-     * @param $connection the unique WorkOS connection_ID
-     * @param $expiresIn The number of seconds the Passwordless Session should live before expiring.
+     * @param string $connection Unique WorkOS connection_ID
+     * @param int $expiresIn Number of seconds the Passwordless Session should live before expiring.
      *
      * @throws Exception\WorkOSException
      *
-     * @return  \WorkOS\Resource\PasswordlessSession
+     * @return  Resource\PasswordlessSession
      */
     public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
     {
@@ -56,11 +56,11 @@ class Passwordless
     /**
      * Send a passwordless link via email from WorkOS.
      *
-     * @param \WorkOS\Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
+     * @param Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
      *
      * @throws Exception\WorkOSException
      *
-     * @return boolean true
+     * @return true
      */
     public function sendSession($session)
     {

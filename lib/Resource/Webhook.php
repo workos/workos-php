@@ -14,12 +14,13 @@ class Webhook
      *
      * @param  $payload
      *
-     * @return \WorkOS\Resource\Webhook
+     * @return Webhook
      */
     public static function constructFromPayload($payload)
     {
         $jsonPayload = json_decode($payload);
         $object = (object) $jsonPayload;
+
         return $object;
     }
 }

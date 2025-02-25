@@ -19,14 +19,11 @@ class Organizations
      * @param int $limit Maximum number of records to return
      * @param null|string $before Organization ID to look before
      * @param null|string $after Organization ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
+     *
+     * @return array{?string, ?string, Resource\Organization[]} An array containing the Organization ID to use as before and after cursor, and an array of Organization instances
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array An array containing the following:
-     *      null|string Organization ID to use as before cursor
-     *      null|string Organization ID to use as after cursor
-     *      array \WorkOS\Resource\Organization instances
      */
     public function listOrganizations(
         $domains = null,
@@ -73,7 +70,7 @@ class Organizations
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Organization
+     * @return Resource\Organization
      */
     public function createOrganization($name, $domains = null, $allowProfilesOutsideOrganization = null, $idempotencyKey = null, $domain_data = null)
     {
@@ -141,7 +138,7 @@ class Organizations
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Organization
+     * @return Resource\Organization
      */
     public function getOrganization($organization)
     {
@@ -159,7 +156,7 @@ class Organizations
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function deleteOrganization($organization)
     {
@@ -183,8 +180,7 @@ class Organizations
      *
      * @throws Exception\WorkOSException
      *
-     * @return array An array containing the following:
-     *      array \WorkOS\Resource\Role instances
+     * @return array{0: Resource\Role[]} An array containing the list of Role instances
      */
     public function listOrganizationRoles($organizationId)
     {

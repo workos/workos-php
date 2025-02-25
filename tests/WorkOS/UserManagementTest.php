@@ -5,7 +5,7 @@ namespace WorkOS;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class UserManagementTest extends \PHPUnit\Framework\TestCase
+class UserManagementTest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;

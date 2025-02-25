@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WorkOS\Resource\RoleResponse;
 
-class SSOTest extends \PHPUnit\Framework\TestCase
+class SSOTest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;
