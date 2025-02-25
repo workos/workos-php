@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class DirectorySyncTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class DirectorySyncTest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;

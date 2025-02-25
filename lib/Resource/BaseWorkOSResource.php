@@ -21,9 +21,9 @@ class BaseWorkOSResource
     /**
      * Creates a Resource from a Response.
      *
-     * @param \WorkOS\Resource\Response $response
+     * @param Response $response
      *
-     * @return \WorkOS\Resource\*
+     * @return static
      */
     public static function constructFromResponse($response)
     {

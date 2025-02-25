@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class PortalTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class PortalTest extends TestCase
 {
     use TestHelper {
         setUp as protected traitSetUp;

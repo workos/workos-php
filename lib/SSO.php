@@ -98,7 +98,7 @@ class SSO
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\ProfileAndToken
+     * @return Resource\ProfileAndToken
      */
     public function getProfileAndToken($code)
     {
@@ -123,7 +123,7 @@ class SSO
      *
      * @throws Exception\GenericException
      *
-     * @return \WorkOS\Resource\Profile
+     * @return Resource\Profile
      */
     public function getProfile($accessToken)
     {
@@ -160,7 +160,7 @@ class SSO
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function deleteConnection($connection)
     {
@@ -184,7 +184,7 @@ class SSO
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Connection
+     * @return Resource\Connection
      */
     public function getConnection($connection)
     {
@@ -212,14 +212,11 @@ class SSO
      * @param int $limit Maximum number of records to return
      * @param null|string $before Connection ID to look before
      * @param null|string $after Connection ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
+     *
+     * @return array{?string, ?string, Resource\Connection[]} An array containing the Directory Connection ID to use as before and after cursor, and an array of Connection instances
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array An array containing the following:
-     *      null|string Connection ID to use as before cursor
-     *      null|string Connection ID to use as after cursor
-     *      array \WorkOS\Resource\Connection instances
      */
     public function listConnections(
         $domain = null,
