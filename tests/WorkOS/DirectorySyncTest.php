@@ -352,6 +352,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                     "organization_id" => "org_123",
                     "idp_id" => null,
                     "groups" => null,
+                    "email" => "yoon@seri.com",
                     "emails" => [
                         [
                             "primary" => true,
@@ -407,6 +408,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "organization_id" => "org_123",
             "idp_id" => null,
             "groups" => null,
+            "email" => "yoon@seri.com",
             "emails" => [
                 [
                     "primary" => true,
@@ -460,6 +462,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
             "organization_id" => "org_123",
             "idp_id" => null,
             "groups" => null,
+            "email" => null,
             "emails" => [],
             "raw_attributes" => [
                 "schemas" => ["urn:scim:schemas:core:1.0"],
@@ -530,6 +533,7 @@ class DirectorySyncTest extends \PHPUnit\Framework\TestCase
                 "fullName" => "Yoon Seri"
             ],
             "firstName" => "Yoon",
+            "email" => "yoon@seri.com",
             "emails" => [
                 [
                     "primary" => true,
