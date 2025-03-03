@@ -19,7 +19,7 @@ class DirectoryUser extends BaseWorkOSResource
          * @deprecated Will be removed in a future major version.
          * Enable the `emails` custom attribute in dashboard and pull from customAttributes instead.
          * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
-         */ 
+         */
         "emails",
         /**
          * @deprecated Will be removed in a future major version.
