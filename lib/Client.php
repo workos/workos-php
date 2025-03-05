@@ -44,7 +44,7 @@ class Client
      * @throws \WorkOS\Exception\NotFoundException if a 404 status code is returned
      * @throws \WorkOS\Exception\BadRequestException if a 400 status code is returned
      *
-     * @return \WorkOS\Resource\Response
+     * @return array
      */
     public static function request($method, $path, $headers = null, $params = null, $withAuth = false)
     {
