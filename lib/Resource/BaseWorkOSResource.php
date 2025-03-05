@@ -21,7 +21,7 @@ class BaseWorkOSResource
     /**
      * Creates a Resource from a Response.
      *
-     * @param Response $response
+     * @param array<string, mixed> $response
      *
      * @return static
      */
