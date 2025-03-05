@@ -69,7 +69,10 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->organizations->createOrganization(
             "Organization Name",
-            domain_data: array(["domain" => "example.com", "state" => "verified"]),
+            null,
+            null,
+            null,
+            array(["domain" => "example.com", "state" => "verified"]),
         );
         $this->assertSame($organization, $response->toArray());
     }
@@ -101,7 +104,10 @@ class OrganizationsTest extends \PHPUnit\Framework\TestCase
 
         $response = $this->organizations->updateOrganization(
             "org_01EHQMYV6MBK39QC5PZXHY59C3",
-            domain_data: array(["domain" => "example.com", "state" => "verified"]),
+            null,
+            null,
+            null,
+            array(["domain" => "example.com", "state" => "verified"]),
         );
         $this->assertSame($organization, $response->toArray());
     }

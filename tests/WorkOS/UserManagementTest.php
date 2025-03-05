@@ -119,7 +119,9 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    #[DataProvider('authorizationUrlTestDataProvider')]
+    /**
+     * @dataProvider authorizationUrlTestDataProvider
+     */
     public function testAuthorizationURLExpectedParams(
         $redirectUri,
         $state,
@@ -1240,7 +1242,7 @@ class UserManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLogoutUrlWithReturnTo()
     {
-        $result = $this->userManagement->getLogoutUrl("session_123", return_to: "https://your-app.com");
+        $result = $this->userManagement->getLogoutUrl("session_123", "https://your-app.com");
 
         $this->assertSame(
             $result,

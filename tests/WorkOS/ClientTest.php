@@ -9,7 +9,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 {
     use TestHelper;
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptions($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -31,7 +33,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         Client::request(Client::METHOD_GET, $path);
     }
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsIncludeRequestId($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -60,7 +64,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->fail("Expected exception of type " . $exceptionClass . " not thrown.");
     }
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsWithBadMessage($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -87,7 +93,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsWithMessageAndCode($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -116,7 +124,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsWithErrorAndErrorDescription($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();
@@ -145,7 +155,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    #[DataProvider('requestExceptionTestProvider')]
+    /**
+     * @dataProvider requestExceptionTestProvider
+     */
     public function testClientThrowsRequestExceptionsWithErrors($statusCode, $exceptionClass)
     {
         $this->withApiKeyAndClientId();

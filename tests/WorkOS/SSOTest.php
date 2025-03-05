@@ -20,7 +20,9 @@ class SSOTest extends \PHPUnit\Framework\TestCase
         $this->sso = new SSO();
     }
 
-    #[DataProvider('authorizationUrlTestProvider')]
+    /**
+     * @dataProvider authorizationUrlTestProvider
+     */
     public function testAuthorizationURLExpectedParams(
         $domain,
         $redirectUri,
