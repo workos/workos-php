@@ -14,7 +14,7 @@ class Webhook
     /**
      * Initializes an Event object from a JSON payload
      *
-     * @return string
+     * @return string|Resource\Webhook
      */
     public function constructEvent($sigHeader, $payload, $secret, $tolerance)
     {
