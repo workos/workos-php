@@ -29,7 +29,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return Resource\User
      */
     public function createUser($email, $password = null, $firstName = null, $lastName = null, $emailVerified = null, $passwordHash = null, $passwordHashType = null)
     {
@@ -56,7 +56,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return Resource\User
      */
     public function getUser($userId)
     {
@@ -80,7 +80,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return Resource\User
      */
     public function updateUser(
         $userId,
@@ -115,14 +115,11 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param null|string $before User ID to look before
      * @param null|string $after User ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
+     *
+     * @return array{?string, ?string, Resource\User[]} An array containing the Directory User ID to use as before and after cursor, and an array of User instances
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array An array containing the following:
-     *      null|string User ID to use as before cursor
-     *      null|string User ID to use as after cursor
-     *      array \WorkOS\Resource\User instances
      */
     public function listUsers(
         $email = null,
@@ -167,7 +164,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function deleteUser($userId)
     {
@@ -186,7 +183,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\OrganizationMembership
      */
     public function createOrganizationMembership($userId, $organizationId)
     {
@@ -215,7 +212,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\OrganizationMembership
      */
     public function getOrganizationMembership($organizationMembershipId)
     {
@@ -239,7 +236,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function deleteOrganizationMembership($organizationMembershipId)
     {
@@ -264,7 +261,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return Resource\OrganizationMembership
      */
     public function updateOrganizationMembership($organizationMembershipId, $role_slug)
     {
@@ -294,14 +291,11 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
-     * @return array An array containing the following:
-     *      string|null Organization Membership ID to use as before cursor
-     *      string|null Organization Membership ID to use as after cursor
-     *      array \WorkOS\Resource\OrganizationMembership instances
+     * @return array{?string, ?string, Resource\OrganizationMembership[]} An array containing the Organization Membership ID to use as before and after cursor, and a list of Organization Memberships instances
      */
     public function listOrganizationMemberships(
         $userId = null,
@@ -359,7 +353,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\OrganizationMembership
      */
     public function deactivateOrganizationMembership($organizationMembershipId)
     {
@@ -383,7 +377,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\OrganizationMembership
      */
     public function reactivateOrganizationMembership($organizationMembershipId)
     {
@@ -411,7 +405,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Invitation
+     * @return Resource\Invitation
      */
     public function sendInvitation(
         $email,
@@ -448,7 +442,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Invitation
+     * @return Resource\Invitation
      */
     public function getInvitation($invitationId)
     {
@@ -472,7 +466,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Invitation
+     * @return Resource\Invitation
      */
     public function findInvitationByToken($invitationToken)
     {
@@ -497,14 +491,11 @@ class UserManagement
      * @param int $limit Maximum number of records to return
      * @param string|null $before Organization Membership ID to look before
      * @param string|null $after Organization Membership ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
-     * @return array An array containing the following:
-     *      string|null Invitation ID to use as before cursor
-     *      string|null Invitation ID to use as after cursor
-     *      array \WorkOS\Resource\Invitation instances
+     * @return array{?string, ?string, Resource\Invitation[]} An array containing the Invitation ID to use as before and after cursor, and a list of Invitations instances
      */
     public function listInvitations(
         $email = null,
@@ -551,7 +542,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Invitation
+     * @return Resource\Invitation
      */
     public function revokeInvitation($invitationId)
     {
@@ -669,7 +660,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
     {
@@ -700,7 +691,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithSelectedOrganization(
         $clientId,
@@ -736,7 +727,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
     {
@@ -766,7 +757,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, $ipAddress = null, $userAgent = null)
     {
@@ -797,7 +788,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
 
     public function authenticateWithMagicAuth(
@@ -833,7 +824,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithRefreshToken(
         $clientId,
@@ -870,7 +861,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\AuthenticationResponse
+     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithTotp(
         $clientId,
@@ -907,7 +898,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return Resource\AuthenticationFactorAndChallengeTotp
      */
     public function enrollAuthFactor($userId, $type, $totpIssuer = null, $totpUser = null)
     {
@@ -931,7 +922,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return array $authFactors An array containing the user's authentication factors as \WorkOS\Resource\UserAuthenticationFactorTotp instances
+     * @return Resource\UserAuthenticationFactorTotp[] $authFactors A list of user's authentication factors
      */
     public function listAuthFactors($userId)
     {
@@ -955,7 +946,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\EmailVerification
+     * @return Resource\EmailVerification
      */
     public function getEmailVerification($emailVerificationId)
     {
@@ -979,7 +970,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\User
+     * @return Resource\UserResponse
      */
     public function sendVerificationEmail($userId)
     {
@@ -998,7 +989,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return Resource\UserResponse
      */
     public function verifyEmail($userId, $code)
     {
@@ -1020,7 +1011,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\PasswordReset
+     * @return Resource\PasswordReset
      */
     public function getPasswordReset($passwordResetId)
     {
@@ -1044,7 +1035,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\PasswordReset
+     * @return Resource\PasswordReset
      */
     public function createPasswordReset(
         $email,
@@ -1074,7 +1065,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function sendPasswordResetEmail($email, $passwordResetUrl)
     {
@@ -1102,7 +1093,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\UserResponse
+     * @return Resource\UserResponse
      */
     public function resetPassword($token, $newPassword)
     {
@@ -1125,7 +1116,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuth
+     * @return Resource\MagicAuth
      */
     public function getMagicAuth($magicAuthId)
     {
@@ -1150,7 +1141,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\MagicAuth
+     * @return Resource\MagicAuth
      */
     public function createMagicAuth(
         $email,
@@ -1181,7 +1172,7 @@ class UserManagement
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function sendMagicAuthCode($email)
     {

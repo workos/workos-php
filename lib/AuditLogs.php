@@ -37,7 +37,7 @@ class AuditLogs
      *
      * @throws Exception\WorkOSException
      *
-     * @return  \WorkOS\Resource\AuditLogCreateEventStatus
+     * @return  Resource\AuditLogCreateEventStatus
      */
 
     public function createEvent($organizationId, $event, $idempotencyKey = null)

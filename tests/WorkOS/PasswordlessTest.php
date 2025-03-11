@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class PasswordlessTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class PasswordlessTest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;

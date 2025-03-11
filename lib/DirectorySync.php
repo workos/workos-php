@@ -20,14 +20,11 @@ class DirectorySync
      * @param null|string $before Directory ID to look before
      * @param null|string $after Directory ID to look after
      * @param null|string $organizationId Unique ID for an organization
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
-     * @return array An array containing the following:
-     *      null|string Directory ID to use as before cursor
-     *      null|string Directory ID to use as after cursor
-     *      array \WorkOS\Resource\Directory instances
+     * @return array{?string, ?string, Resource\Directory[]} An array containing the Directory ID to use as before and after cursor, and an array of Directory instances
      */
     public function listDirectories(
         $domain = null,
@@ -74,14 +71,11 @@ class DirectorySync
      * @param int $limit Maximum number of records to return
      * @param null|string $before Directory Group ID to look before
      * @param null|string $after Directory Group ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
      *
      * @throws Exception\WorkOSException
      *
-     * @return array An array containing the following:
-     *      null|string Directory Group ID to use as before cursor
-     *      null|string Directory Group ID to use as after cursor
-     *      array \WorkOS\Resource\DirectoryGroup instances
+     * @return array{?string, ?string, Resource\DirectoryGroup[]} An array containing the Directory Group ID to use as before and after cursor, and an array of Directory Group instances
      */
     public function listGroups(
         $directory = null,
@@ -130,7 +124,7 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\DirectoryGroup
+     * @return Resource\DirectoryGroup
      */
     public function getGroup($directoryGroup)
     {
@@ -155,14 +149,11 @@ class DirectorySync
      * @param int $limit Maximum number of records to return
      * @param null|string $before Directory User ID to look before
      * @param null|string $after Directory User ID to look after
-     * @param \WorkOS\Resource\Order $order The Order in which to paginate records
+     * @param Resource\Order $order The Order in which to paginate records
+     *
+     * @return array{?string, ?string, Resource\DirectoryUser[]} An array containing the Directory User ID to use as before and after cursor, and an array of Directory User instances
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array An array containing the following:
-     *      null|string Directory User ID to use as before cursor
-     *      null|string Directory User ID to use as after cursor
-     *      array \WorkOS\Resource\DirectoryUser instances
      */
     public function listUsers(
         $directory = null,
@@ -211,7 +202,7 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\DirectoryUser
+     * @return Resource\DirectoryUser
      */
     public function getUser($directoryUser)
     {
@@ -235,7 +226,7 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Response
+     * @return Resource\Response
      */
     public function deleteDirectory($directory)
     {
@@ -259,7 +250,7 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return \WorkOS\Resource\Directory
+     * @return Resource\Directory
      */
     public function getDirectory($directory)
     {

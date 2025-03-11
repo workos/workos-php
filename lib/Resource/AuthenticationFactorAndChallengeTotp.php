@@ -25,6 +25,7 @@ class AuthenticationFactorAndChallengeTotp extends BaseWorkOSResource
         $instance = parent::constructFromResponse($response);
         $instance->values["authenticationFactor"] = AuthenticationFactorTotp::constructFromResponse($response["authentication_factor"]);
         $instance->values["authenticationChallenge"] = AuthenticationChallengeTotp::constructFromResponse($response["authentication_challenge"]);
+
         return $instance;
     }
 }

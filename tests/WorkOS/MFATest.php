@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class MFATest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class MFATest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;

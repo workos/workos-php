@@ -2,7 +2,9 @@
 
 namespace WorkOS;
 
-class OrganizationsTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class OrganizationsTest extends TestCase
 {
     use TestHelper {
         setUp as protected traitSetUp;

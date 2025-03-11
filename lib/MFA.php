@@ -48,11 +48,11 @@ class MFA
         }
 
         $params = [
-        "type" => $type,
-        "totp_issuer" => $totpIssuer,
-        "totp_user" => $totpUser,
-        "phone_number" => $phoneNumber
-    ];
+            "type" => $type,
+            "totp_issuer" => $totpIssuer,
+            "totp_user" => $totpUser,
+            "phone_number" => $phoneNumber
+        ];
         $response = Client::request(
             Client::METHOD_POST,
             $enrollPath,
@@ -74,6 +74,8 @@ class MFA
      *
      * @param string $authenticationFactorId - ID of the authentication factor
      * @param string|null $smsTemplate - Optional parameter to customize the message for sms type factors. Must include "{{code}}" if used.
+     *
+     * @return Resource\AuthenticationChallengeTotp|Resource\AuthenticationChallengeSms
      */
     public function challengeFactor(
         $authenticationFactorId,
@@ -197,6 +199,8 @@ class MFA
      * Deletes a Factor.
      *
      * @param string $authenticationFactorId - WorkOS Factor ID
+     *
+     * @return Resource\Response
      *
      * @throws Exception\WorkOSException
      */
