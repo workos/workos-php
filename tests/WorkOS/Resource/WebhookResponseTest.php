@@ -34,9 +34,8 @@ class WebhookResponseTest extends TestCase
     {
         $response = WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
-            WebhookResponse::VERDICT_ALLOW,
-            null,
-            $this->secret
+            $this->secret,
+            WebhookResponse::VERDICT_ALLOW
         );
 
         $array = $response->toArray();
@@ -54,9 +53,9 @@ class WebhookResponseTest extends TestCase
         $errorMessage = 'Registration denied due to risk assessment';
         $response = WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
+            $this->secret,
             WebhookResponse::VERDICT_DENY,
-            $errorMessage,
-            $this->secret
+            $errorMessage
         );
 
         $array = $response->toArray();
@@ -73,9 +72,8 @@ class WebhookResponseTest extends TestCase
     {
         $response = WebhookResponse::create(
             WebhookResponse::AUTHENTICATION_ACTION,
-            WebhookResponse::VERDICT_ALLOW,
-            null,
-            $this->secret
+            $this->secret,
+            WebhookResponse::VERDICT_ALLOW
         );
 
         $array = $response->toArray();
@@ -87,14 +85,14 @@ class WebhookResponseTest extends TestCase
 
     public function testCreateWithoutSecret()
     {
-        $response = WebhookResponse::create(
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Secret is required');
+
+        WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
+            '',
             WebhookResponse::VERDICT_ALLOW
         );
-
-        $array = $response->toArray();
-
-        $this->assertArrayNotHasKey('signature', $array);
     }
 
     public function testInvalidResponseType()
@@ -104,6 +102,7 @@ class WebhookResponseTest extends TestCase
 
         WebhookResponse::create(
             'invalid_type',
+            $this->secret,
             WebhookResponse::VERDICT_ALLOW
         );
     }
@@ -115,6 +114,7 @@ class WebhookResponseTest extends TestCase
 
         WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
+            $this->secret,
             'invalid_verdict'
         );
     }
@@ -126,6 +126,7 @@ class WebhookResponseTest extends TestCase
 
         WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
+            $this->secret,
             WebhookResponse::VERDICT_DENY
         );
     }
@@ -134,9 +135,8 @@ class WebhookResponseTest extends TestCase
     {
         $response = WebhookResponse::create(
             WebhookResponse::USER_REGISTRATION_ACTION,
-            WebhookResponse::VERDICT_ALLOW,
-            null,
-            $this->secret
+            $this->secret,
+            WebhookResponse::VERDICT_ALLOW
         );
 
         $json = $response->toJson();

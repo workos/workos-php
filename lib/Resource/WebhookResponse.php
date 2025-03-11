@@ -35,16 +35,20 @@ class WebhookResponse
      * Create a new WebhookResponse instance
      *
      * @param string $type Either USER_REGISTRATION_ACTION or AUTHENTICATION_ACTION
+     * @param string $secret Webhook secret for signing the response
      * @param string $verdict Either VERDICT_ALLOW or VERDICT_DENY
      * @param string|null $errorMessage Required if verdict is VERDICT_DENY
-     * @param string|null $secret Webhook secret for signing the response
      * @return self
      * @throws \InvalidArgumentException
      */
-    public static function create($type, $verdict, $errorMessage = null, $secret = null)
+    public static function create($type, $secret, $verdict, $errorMessage = null)
     {
         if (!in_array($type, [self::USER_REGISTRATION_ACTION, self::AUTHENTICATION_ACTION])) {
             throw new \InvalidArgumentException('Invalid response type');
+        }
+
+        if (empty($secret)) {
+            throw new \InvalidArgumentException('Secret is required');
         }
 
         if (!in_array($verdict, [self::VERDICT_ALLOW, self::VERDICT_DENY])) {
@@ -69,11 +73,9 @@ class WebhookResponse
 
         $instance->payload = $payload;
 
-        if ($secret) {
-            $timestamp = $payload['timestamp'];
-            $payloadString = json_encode($payload);
-            $instance->signature = (new Webhook())->computeSignature($timestamp, $payloadString, $secret);
-        }
+        $timestamp = $payload['timestamp'];
+        $payloadString = json_encode($payload);
+        $instance->signature = (new Webhook())->computeSignature($timestamp, $payloadString, $secret);
 
         return $instance;
     }
