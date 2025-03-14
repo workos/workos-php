@@ -89,7 +89,7 @@ class UserManagement
         $emailVerified = null,
         $password = null,
         $passwordHash = null,
-        $passwordHashType = null,
+        $passwordHashType = null
     ) {
         $path = "user_management/users/{$userId}";
 
@@ -304,7 +304,7 @@ class UserManagement
         $limit = self::DEFAULT_PAGE_SIZE,
         $before = null,
         $after = null,
-        $order = null,
+        $order = null
     ) {
         $path = "user_management/organization_memberships";
 
@@ -1038,7 +1038,7 @@ class UserManagement
      * @return Resource\PasswordReset
      */
     public function createPasswordReset(
-        $email,
+        $email
     ) {
         $path = "user_management/password_reset";
 
@@ -1145,7 +1145,7 @@ class UserManagement
      */
     public function createMagicAuth(
         $email,
-        $invitationToken = null,
+        $invitationToken = null
     ) {
         $path = "user_management/magic_auth";
 

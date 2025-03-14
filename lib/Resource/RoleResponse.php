@@ -9,7 +9,7 @@ namespace WorkOS\Resource;
  */
 class RoleResponse
 {
-    public string $slug;
+    public $slug;
 
     public function __construct(string $slug)
     {
