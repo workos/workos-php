@@ -6,7 +6,10 @@ namespace WorkOS\Resource;
  * Class AuthenticationResponse.
  *
  * @property User $user
- * @property string $organizationId
+ * @property ?string $organizationId
+ * @property string $accessToken
+ * @property string $refreshToken
+ * @property ?Impersonator $impersonator
  */
 class AuthenticationResponse extends BaseWorkOSResource
 {
