@@ -44,8 +44,7 @@ class Webhook
         $signature = $this->getSignature($sigHeader);
 
         $currentTime = time();
-        $signedPayload = $timestamp . "." . $payload;
-        $expectedSignature = hash_hmac("sha256", $signedPayload, $secret, false);
+        $expectedSignature = $this->computeSignature($timestamp, $payload, $secret);
 
         if (empty($timestamp)) {
             return "No Timestamp available";
@@ -88,5 +87,19 @@ class Webhook
         $signature = substr($workosHeadersSplit[1], 4);
 
         return $signature;
+    }
+
+    /**
+     * Computes a signature for a webhook payload using the provided timestamp and secret
+     *
+     * @param  int     $timestamp  Unix timestamp to use in signature
+     * @param  string  $payload    The payload to sign
+     * @param  string  $secret     Secret key used for signing
+     * @return string  The computed HMAC SHA-256 signature
+     */
+    public function computeSignature($timestamp, $payload, $secret)
+    {
+        $signedPayload = $timestamp . '.' . $payload;
+        return hash_hmac('sha256', $signedPayload, $secret, false);
     }
 }
