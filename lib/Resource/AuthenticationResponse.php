@@ -14,10 +14,14 @@ class AuthenticationResponse extends BaseWorkOSResource
         "user",
         "organizationId",
         "impersonator",
+        "accessToken",
+        "refreshToken",
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
         "organization_id" => "organizationId",
+        "access_token" => "accessToken",
+        "refresh_token" => "refreshToken",
     ];
 
     public static function constructFromResponse($response)
