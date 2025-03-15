@@ -11,10 +11,10 @@ use WorkOS\Webhook;
  */
 class WebhookResponse
 {
-    const USER_REGISTRATION_ACTION = 'user_registration_action_response';
-    const AUTHENTICATION_ACTION = 'authentication_action_response';
-    const VERDICT_ALLOW = 'Allow';
-    const VERDICT_DENY = 'Deny';
+    public const USER_REGISTRATION_ACTION = 'user_registration_action_response';
+    public const AUTHENTICATION_ACTION = 'authentication_action_response';
+    public const VERDICT_ALLOW = 'Allow';
+    public const VERDICT_DENY = 'Deny';
 
     /**
      * @var string
