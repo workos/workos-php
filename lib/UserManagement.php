@@ -33,6 +33,7 @@ class UserManagement
      *
      * @return Resource\User
      */
+
     public function createUser(
         $email,
         $password = null,
