@@ -163,7 +163,7 @@ class Organizations
     }
 
     /**
-     * Get a Directory Group.
+     * Get an Organization
      *
      * @param string $organization WorkOS organization ID
      *
@@ -174,6 +174,24 @@ class Organizations
     public function getOrganization($organization)
     {
         $organizationsPath = "organizations/{$organization}";
+
+        $response = Client::request(Client::METHOD_GET, $organizationsPath, null, null, true);
+
+        return Resource\Organization::constructFromResponse($response);
+    }
+
+    /**
+     * Get an Organization by its external id
+     *
+     * @param string $externalId external id
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Organization
+     */
+    public function getOrganizationByExternalId($externalId)
+    {
+        $organizationsPath = "organizations/external_id/{$externalId}";
 
         $response = Client::request(Client::METHOD_GET, $organizationsPath, null, null, true);
 
