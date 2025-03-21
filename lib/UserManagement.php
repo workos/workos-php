@@ -33,6 +33,7 @@ class UserManagement
      *
      * @return Resource\User
      */
+
     public function createUser(
         $email,
         $password = null,
@@ -74,6 +75,24 @@ class UserManagement
     public function getUser($userId)
     {
         $path = "user_management/users/{$userId}";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        return Resource\User::constructFromResponse($response);
+    }
+
+    /**
+     * Get a User by external ID.
+     *
+     * @param string $externalId The external ID of the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\User
+     */
+    public function getUserByExternalId($externalId)
+    {
+        $path = "user_management/users/external_id/{$externalId}";
 
         $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
