@@ -205,7 +205,9 @@ class OrganizationsTest extends TestCase
                     "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                     "domain" => "example.com"
                 ]
-            ]
+            ],
+            "external_id" => null,
+            "metadata" => []
         ]);
     }
 
@@ -225,7 +227,9 @@ class OrganizationsTest extends TestCase
                         "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                         "domain" => "example.com"
                     ]
-                ]
+                ],
+                "external_id" => null,
+                "metadata" => []
                 ],
                 [
                 "object" => "organization",
@@ -238,7 +242,9 @@ class OrganizationsTest extends TestCase
                         "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
                         "domain" => "example2.com"
                     ]
-                ]
+                ],
+                "external_id" => null,
+                "metadata" => []
                 ],
                 [
                 "object" => "organization",
@@ -251,7 +257,9 @@ class OrganizationsTest extends TestCase
                         "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
                         "domain" => "example5.com"
                     ]
-                ]
+                ],
+                "external_id" => null,
+                "metadata" => []
                 ]
             ],
             "list_metadata" => [
@@ -273,7 +281,9 @@ class OrganizationsTest extends TestCase
                     "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
                     "domain" => "example.com"
                 ]
-            ]
+            ],
+            "externalId" => null,
+            "metadata" => []
         ];
     }
 
