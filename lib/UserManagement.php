@@ -26,14 +26,25 @@ class UserManagement
      * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
      * @param string|null $passwordHash The hashed password to set for the user.
      * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
-     * @param string|null $externalId The external ID of the user.
+     * @param string|null $externalId The user's external ID.
+     * @param array<string, string> $metadata The user's metadata.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\User
      */
-    public function createUser($email, $password = null, $firstName = null, $lastName = null, $emailVerified = null, $passwordHash = null, $passwordHashType = null, $externalId = null)
-    {
+
+    public function createUser(
+        $email,
+        $password = null,
+        $firstName = null,
+        $lastName = null,
+        $emailVerified = null,
+        $passwordHash = null,
+        $passwordHashType = null,
+        $externalId = null,
+        $metadata = null
+    ) {
         $path = "user_management/users";
         $params = [
             "email" => $email,
@@ -44,6 +55,7 @@ class UserManagement
             "password_hash" => $passwordHash,
             "password_hash_type" => $passwordHashType,
             "external_id" => $externalId,
+            "metadata" => $metadata
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -97,7 +109,8 @@ class UserManagement
      * @param string|null $password The password to set for the user.
      * @param string|null $passwordHash The hashed password to set for the user.
      * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
-     * @param string|null $externalId The external ID of the user.
+     * @param string|null $externalId The user's external ID.
+     * @param array<string, string>|null $metadata The user's metadata.
      *
      * @throws Exception\WorkOSException
      *
@@ -111,7 +124,8 @@ class UserManagement
         $password = null,
         $passwordHash = null,
         $passwordHashType = null,
-        $externalId = null
+        $externalId = null,
+        $metadata = null
     ) {
         $path = "user_management/users/{$userId}";
 
@@ -123,6 +137,7 @@ class UserManagement
             "password_hash" => $passwordHash,
             "password_hash_type" => $passwordHashType,
             "external_id" => $externalId,
+            "metadata" => $metadata
         ];
 
         $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);

@@ -19,7 +19,9 @@ class User extends BaseWorkOSResource
         "profilePictureUrl",
         "lastSignInAt",
         "createdAt",
-        "updatedAt"
+        "updatedAt",
+        "externalId",
+        "metadata"
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
@@ -32,6 +34,8 @@ class User extends BaseWorkOSResource
         "profile_picture_url" => "profilePictureUrl",
         "last_sign_in_at" => "lastSignInAt",
         "created_at" => "createdAt",
-        "updated_at" => "updatedAt"
+        "updated_at" => "updatedAt",
+        "external_id" => "externalId",
+        "metadata" => "metadata"
     ];
 }
