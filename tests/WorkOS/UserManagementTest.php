@@ -55,6 +55,8 @@ class UserManagementTest extends TestCase
             "password" => null,
             "password_hash" => null,
             "password_hash_type" => null,
+            "external_id" => null,
+            "metadata" => null
         ];
 
         $this->mockRequest(
@@ -481,6 +483,8 @@ class UserManagementTest extends TestCase
             "email_verified" => true,
             "password_hash" => null,
             "password_hash_type" => null,
+            "external_id" => null,
+            "metadata" => null
         ];
 
         $this->mockRequest(
@@ -1442,7 +1446,9 @@ class UserManagementTest extends TestCase
                 "profile_picture_url" => "https://example.com/photo.jpg",
                 "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
-                "updated_at" => "2021-06-25T19:07:33.155Z"
+                "updated_at" => "2021-06-25T19:07:33.155Z",
+                "external_id" => null,
+                "metadata" => []
             ]
         ]);
     }
@@ -1460,7 +1466,9 @@ class UserManagementTest extends TestCase
                 "profile_picture_url" => "https://example.com/photo.jpg",
                 "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
-                "updated_at" => "2021-06-25T19:07:33.155Z"
+                "updated_at" => "2021-06-25T19:07:33.155Z",
+                "external_id" => null,
+                "metadata" => []
             ],
             "impersonator" => [
                 "email" => "admin@foocorp.com",
@@ -1500,7 +1508,9 @@ class UserManagementTest extends TestCase
             'profile_picture_url' => 'https://example.com/photo.jpg',
             "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
             "created_at" => "2021-06-25T19:07:33.155Z",
-            "updated_at" => "2021-06-25T19:07:33.155Z"
+            "updated_at" => "2021-06-25T19:07:33.155Z",
+            "external_id" => null,
+            "metadata" => []
         ]);
     }
 
@@ -1608,7 +1618,9 @@ class UserManagementTest extends TestCase
             "profile_picture_url" => "https://example.com/photo.jpg",
             "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
             "created_at" => "2021-06-25T19:07:33.155Z",
-            "updated_at" => "2021-06-25T19:07:33.155Z"
+            "updated_at" => "2021-06-25T19:07:33.155Z",
+            "external_id" => null,
+            "metadata" => []
         ]);
     }
 
@@ -1626,7 +1638,9 @@ class UserManagementTest extends TestCase
                     "profile_picture_url" => "https://example.com/photo.jpg",
                     "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                     "created_at" => "2021-06-25T19:07:33.155Z",
-                    "updated_at" => "2021-06-25T19:07:33.155Z"
+                    "updated_at" => "2021-06-25T19:07:33.155Z",
+                    "external_id" => null,
+                    "metadata" => []
                 ]
             ],
             "list_metadata" => [
@@ -1656,7 +1670,9 @@ class UserManagementTest extends TestCase
             "profilePictureUrl" => "https://example.com/photo.jpg",
             "lastSignInAt" => "2021-06-25T19:07:33.155Z",
             "createdAt" => "2021-06-25T19:07:33.155Z",
-            "updatedAt" => "2021-06-25T19:07:33.155Z"
+            "updatedAt" => "2021-06-25T19:07:33.155Z",
+            "externalId" => null,
+            "metadata" => []
         ];
     }
 
@@ -1673,7 +1689,9 @@ class UserManagementTest extends TestCase
                 "profile_picture_url" => "https://example.com/photo.jpg",
                 "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
                 "created_at" => "2021-06-25T19:07:33.155Z",
-                "updated_at" => "2021-06-25T19:07:33.155Z"
+                "updated_at" => "2021-06-25T19:07:33.155Z",
+                "external_id" => null,
+                "metadata" => []
             ],
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
         ]);
