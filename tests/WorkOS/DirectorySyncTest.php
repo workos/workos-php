@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\DirectorySync;
 use PHPUnit\Framework\TestCase;
 
 class DirectorySyncTest extends TestCase
 {
+    /**
+     * @var DirectorySync
+     */
+    protected $ds;
+
     use TestHelper {
         setUp as traitSetUp;
     }

@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\Widgets;
 use PHPUnit\Framework\TestCase;
 
 class WidgetsTest extends TestCase
 {
+    /**
+     * @var Widgets
+     */
+    protected $widgets;
+
     use TestHelper {
         setUp as protected traitSetUp;
     }
@@ -15,7 +21,7 @@ class WidgetsTest extends TestCase
         $this->traitSetUp();
 
         $this->withApiKey();
-        $this->ap = new Widgets();
+        $this->widgets = new Widgets();
     }
 
     public function testGenerateLinkSSO()
@@ -41,7 +47,7 @@ class WidgetsTest extends TestCase
 
         $expectation = "abc123456";
 
-        $response = $this->ap->getToken("org_01EHZNVPK3SFK441A1RGBFSHRT", "user_01EHZNVPK3SFK441A1RGBFSHRT", ["widgets:users-table:manage"]);
+        $response = $this->widgets->getToken("org_01EHZNVPK3SFK441A1RGBFSHRT", "user_01EHZNVPK3SFK441A1RGBFSHRT", ["widgets:users-table:manage"]);
         $this->assertSame($expectation, $response->token);
     }
 

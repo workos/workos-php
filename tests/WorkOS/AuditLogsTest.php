@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\AuditLogs;
 use PHPUnit\Framework\TestCase;
 
 class AuditLogsTest extends TestCase
 {
+    /**
+     * @var AuditLogs
+     */
+    protected $al;
+
     use TestHelper {
         setUp as protected traitSetUp;
     }
@@ -25,22 +31,23 @@ class AuditLogsTest extends TestCase
         $idempotencyKey = null;
         $organizationId = "org_123";
         $auditLogEvent =
-        [
-            "action" => "document.updated",
-            "occurred_at" => time(),
-            "version" => 1,
-            "actor" =>
             [
-                "Id" => "user_123",
-                "Type" => "user",
-                "Name" => "User",
-            ],
-            "targets" =>
-            [
+                "action" => "document.updated",
+                "occurred_at" => time(),
+                "version" => 1,
+                "actor" =>
+                [
+                    "Id" => "user_123",
+                    "Type" => "user",
+                    "Name" => "User",
+                ],
+                "targets" =>
+                [
                     "id" => "team_123",
                     "type" => "team",
                     "name" => "team",
-            ]];
+                ]
+            ];
         $params = [
             "organization_id" => $organizationId,
             "event" => $auditLogEvent
@@ -60,7 +67,6 @@ class AuditLogsTest extends TestCase
             true,
             $result
         );
-
         $eventStatus = $this->al->createEvent($organizationId, $auditLogEvent);
         $eventFixture = $this->createEventFixture();
 
@@ -105,7 +111,11 @@ class AuditLogsTest extends TestCase
             $result
         );
 
-        $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds);
+        $auditLogExport = $this->assertDeprecationTriggered(
+            "'actors' is deprecated. Please use 'actorNames' instead",
+            fn() => $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds)
+        );
+
         $exportFixture = $this->createExportFixture();
 
         $this->assertSame($exportFixture, $auditLogExport->toArray());

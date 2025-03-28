@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\Organizations;
 use PHPUnit\Framework\TestCase;
 
 class OrganizationsTest extends TestCase
 {
+    /**
+     * @var Organizations
+     */
+    protected $organizations;
+
     use TestHelper {
         setUp as protected traitSetUp;
     }
@@ -217,49 +223,49 @@ class OrganizationsTest extends TestCase
             "object" => "list",
             "data" => [
                 [
-                "object" => "organization",
-                "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-                "name" => "Organization Name",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
-                        "domain" => "example.com"
-                    ]
-                ],
-                "external_id" => null,
-                "metadata" => []
-                ],
-                [
-                "object" => "organization",
-                "id" => "org_01EHQMVDTC2GRAHFCCRNTSKH46",
-                "name" => "example2.com",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
-                        "domain" => "example2.com"
-                    ]
-                ],
-                "external_id" => null,
-                "metadata" => []
+                    "object" => "organization",
+                    "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                    "name" => "Organization Name",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
+                            "domain" => "example.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ],
                 [
-                "object" => "organization",
-                "id" => "org_01EGP9Z6RY2J6YE0ZV57CGEXV2",
-                "name" => "example5.com",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
-                        "domain" => "example5.com"
-                    ]
+                    "object" => "organization",
+                    "id" => "org_01EHQMVDTC2GRAHFCCRNTSKH46",
+                    "name" => "example2.com",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
+                            "domain" => "example2.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ],
-                "external_id" => null,
-                "metadata" => []
+                [
+                    "object" => "organization",
+                    "id" => "org_01EGP9Z6RY2J6YE0ZV57CGEXV2",
+                    "name" => "example5.com",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
+                            "domain" => "example5.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ]
             ],
             "list_metadata" => [

@@ -2,11 +2,17 @@
 
 namespace WorkOS;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use WorkOS\UserManagement;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserManagementTest extends TestCase
 {
+    /**
+     * @var UserManagement
+     */
+    protected $userManagement;
+
     use TestHelper {
         setUp as traitSetUp;
     }
@@ -627,6 +633,7 @@ class UserManagementTest extends TestCase
     public function testSendPasswordResetEmail()
     {
         $path = "user_management/password_reset/send";
+        $msg = "'sendPasswordResetEmail' is deprecated. Please use 'createPasswordReset' instead. This method will be removed in a future major version.";
 
         // Mock the API request
         $responseCode = 200;
@@ -646,7 +653,12 @@ class UserManagementTest extends TestCase
             $responseCode
         );
 
-        $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
+        // Call the deprecated method
+        $response = $this->assertDeprecationTriggered(
+            $msg,
+            fn() => $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password")
+        );
+
         // Test the functionality
         $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);

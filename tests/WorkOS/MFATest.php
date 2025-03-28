@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\MFA;
 use PHPUnit\Framework\TestCase;
 
 class MFATest extends TestCase
 {
+    /**
+     * @var MFA
+     */
+    protected $mfa;
+
     use TestHelper {
         setUp as traitSetUp;
     }
@@ -126,7 +132,10 @@ class MFATest extends TestCase
             $result
         );
 
-        $verifyFactor = $this->mfa->verifyFactor($authenticationChallengeId, $code);
+        $verifyFactor = $this->assertDeprecationTriggered(
+            "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead",
+            fn() => $this->mfa->verifyFactor($authenticationChallengeId, $code)
+        );
         $verifyFactorResponseFixture = $this->verifyFactorFixture();
 
         $this->assertSame($verifyFactorResponseFixture, $verifyFactor->toArray());
@@ -244,8 +253,8 @@ class MFATest extends TestCase
             "updated_at" => "2022-03-08T23:12:20.157Z",
             "type" => "sms",
             "sms" => [
-                    "phone_number" => "+7208675309"
-                    ]
+                "phone_number" => "+7208675309"
+            ]
         ]);
     }
 
@@ -258,8 +267,8 @@ class MFATest extends TestCase
             "updatedAt" => "2022-03-08T23:12:20.157Z",
             "type" => "sms",
             "sms" => [
-                    "phone_number" => "+7208675309"
-                    ]
+                "phone_number" => "+7208675309"
+            ]
         ];
     }
 
@@ -298,8 +307,8 @@ class MFATest extends TestCase
                 "expires_at" => "2022-02-15T15:36:53.279Z",
                 "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
             ],
-                "valid" => "true"
-            ]);
+            "valid" => "true"
+        ]);
     }
 
     private function verifyFactorFixture()
@@ -313,8 +322,8 @@ class MFATest extends TestCase
                 "expires_at" => "2022-02-15T15:36:53.279Z",
                 "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
             ],
-                "valid" => "true"
-            ];
+            "valid" => "true"
+        ];
     }
 
     private function verifyChallengeResponseFixture()
@@ -328,8 +337,8 @@ class MFATest extends TestCase
                 "expires_at" => "2022-02-15T15:36:53.279Z",
                 "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
             ],
-                "valid" => "true"
-            ]);
+            "valid" => "true"
+        ]);
     }
 
     private function verifyChallengeFixture()
@@ -343,8 +352,8 @@ class MFATest extends TestCase
                 "expires_at" => "2022-02-15T15:36:53.279Z",
                 "authentication_factor_id" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM",
             ],
-                "valid" => "true"
-            ];
+            "valid" => "true"
+        ];
     }
 
     private function getFactorResponseFixture()

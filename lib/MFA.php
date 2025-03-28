@@ -89,8 +89,8 @@ class MFA
         $challengePath = "auth/factors/{$authenticationFactorId}/challenge";
 
         $params = [
-        "sms_template" => $smsTemplate
-    ];
+            "sms_template" => $smsTemplate
+        ];
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -126,13 +126,13 @@ class MFA
 
         $msg = "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead";
 
-        error_log($msg);
+        trigger_error($msg, E_USER_DEPRECATED);
 
         $response = (new \WorkOS\MFA())
-    ->verifyChallenge(
-        $authenticationChallengeId,
-        $code
-    );
+            ->verifyChallenge(
+                $authenticationChallengeId,
+                $code
+            );
 
         return $response;
     }
@@ -158,8 +158,8 @@ class MFA
         $verifyPath = "auth/challenges/{$authenticationChallengeId}/verify";
 
         $params = [
-        "code" => $code
-    ];
+            "code" => $code
+        ];
 
         $response = Client::request(
             Client::METHOD_POST,
