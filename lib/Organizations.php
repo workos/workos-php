@@ -89,7 +89,7 @@ class Organizations
         $params = ["name" => $name];
 
         if (isset($domains)) {
-            $msg = "'domains' is deprecated. Please use 'domain_data' instead";
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead.";
 
             trigger_error($msg, E_USER_DEPRECATED);
 
@@ -147,7 +147,7 @@ class Organizations
         $params = ["name" => $name];
 
         if (isset($domains)) {
-            $msg = "'domains' is deprecated. Please use 'domain_data' instead";
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead.";
 
             trigger_error($msg, E_USER_DEPRECATED);
 

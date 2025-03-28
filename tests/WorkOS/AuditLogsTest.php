@@ -112,7 +112,7 @@ class AuditLogsTest extends TestCase
         );
 
         $auditLogExport = $this->assertDeprecationTriggered(
-            "'actors' is deprecated. Please use 'actorNames' instead",
+            "'actors' is deprecated. Please use 'actorNames' instead.",
             fn() => $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds)
         );
 

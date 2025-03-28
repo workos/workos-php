@@ -133,7 +133,7 @@ class MFATest extends TestCase
         );
 
         $verifyFactor = $this->assertDeprecationTriggered(
-            "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead",
+            "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead.",
             fn() => $this->mfa->verifyFactor($authenticationChallengeId, $code)
         );
         $verifyFactorResponseFixture = $this->verifyFactorFixture();

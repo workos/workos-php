@@ -627,7 +627,7 @@ class UserManagement
         $path = "user_management/authorize";
 
         if (!isset($provider) && !isset($connectionId) && !isset($organizationId)) {
-            $msg = "Either \$provider, \$connectionId, or \$organizationId is required";
+            $msg = "Either \$provider, \$connectionId, or \$organizationId is required.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -640,7 +640,7 @@ class UserManagement
         ];
 
         if (isset($provider) && !\in_array($provider, $supportedProviders)) {
-            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported";
+            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported.";
             throw new Exception\UnexpectedValueException($msg);
         }
 

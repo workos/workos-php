@@ -88,7 +88,7 @@ class SSOTest extends TestCase
 
         if ($domain) {
             $authorizationUrl = $this->assertDeprecationTriggered(
-                "Domain is being deprecated, please switch to using Connection or Organization ID",
+                "'domain' is being deprecated, please switch to using 'connection' or 'organization'.",
                 $fn
             );
         } else {

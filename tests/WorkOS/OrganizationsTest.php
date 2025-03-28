@@ -47,7 +47,7 @@ class OrganizationsTest extends TestCase
         $organization = $this->organizationFixture();
 
         $response = $this->assertDeprecationTriggered(
-            "'domains' is deprecated. Please use 'domain_data' instead",
+            "'domains' is deprecated. Please use 'domain_data' instead.",
             fn() => $this->organizations->createOrganization("Organization Name", array("example.com")),
         );
         $this->assertSame($organization, $response->toArray());
@@ -170,11 +170,11 @@ class OrganizationsTest extends TestCase
         );
 
         $response = $this->assertDeprecationTriggered(
-            "'domains' is deprecated. Please use 'domain_data' instead",
+            "'domains' is deprecated. Please use 'domain_data' instead.",
             fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
         );
         $response2 = $this->assertDeprecationTriggered(
-            "'domains' is deprecated. Please use 'domain_data' instead",
+            "'domains' is deprecated. Please use 'domain_data' instead.",
             fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
         );
 
