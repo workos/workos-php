@@ -99,7 +99,7 @@ class Organizations
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
-            $msg = "'allowProfilesOutsideOrganization' is deprecated. Please use 'allow_profiles_outside_organization' instead";
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.";
 
             trigger_error($msg, E_USER_DEPRECATED);
 
@@ -157,7 +157,7 @@ class Organizations
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
-            $msg = "'allowProfilesOutsideOrganization' is deprecated. Please use 'allow_profiles_outside_organization' instead";
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.";
 
             trigger_error($msg, E_USER_DEPRECATED);
 

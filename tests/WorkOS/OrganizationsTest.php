@@ -88,6 +88,32 @@ class OrganizationsTest extends TestCase
         $this->assertSame($organization, $response->toArray());
     }
 
+    public function testCreateOrganizationWithAllowProfilesOutsideOrganizationDeprecationNotice()
+    {
+        $organizationsPath = "organizations";
+
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "name" => "Organization Name",
+            "allow_profiles_outside_organization" => true,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $this->assertDeprecationTriggered(
+            "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.",
+            fn() => $this->organizations->createOrganization("Organization Name", null, true),
+        );
+    }
+
     public function testUpdateOrganizationWithDomainData()
     {
         $organizationsPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3";
