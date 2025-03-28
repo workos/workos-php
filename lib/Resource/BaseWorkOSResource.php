@@ -5,6 +5,22 @@ namespace WorkOS\Resource;
 class BaseWorkOSResource
 {
     /**
+     * Maps response keys to resource keys.
+     * Child classes should override this constant.
+     *
+     * @var array<string, string>
+     */
+    protected const RESPONSE_TO_RESOURCE_KEY = [];
+
+    /**
+     * List of attributes available in this resource.
+     * Child classes should override this constant.
+     *
+     * @var array<string>
+     */
+    protected const RESOURCE_ATTRIBUTES = [];
+
+    /**
      * @var array $values;
      */
     protected $values;
@@ -14,9 +30,7 @@ class BaseWorkOSResource
      */
     public $raw;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * Creates a Resource from a Response.
@@ -60,7 +74,7 @@ class BaseWorkOSResource
             $this->values[$key] = $value;
         }
 
-        $msg = "{$key} does not exist on " . static::class;
+        $msg = "{$key} does not exist on " . static::class . ".";
         throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 
@@ -84,7 +98,7 @@ class BaseWorkOSResource
             return $this->raw[$key];
         }
 
-        $msg = "{$key} does not exist on " . static::class;
+        $msg = "{$key} does not exist on " . static::class . ".";
         throw new \WorkOS\Exception\UnexpectedValueException($msg);
     }
 }

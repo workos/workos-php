@@ -13,7 +13,7 @@ class SSO
     /**
      * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
      *
-     * @param null|string $domain Domain of the user that will be going through SSO
+     * @param null|string $domain Domain of the user that will be going through SSO @deprecated 1.5.0 Use $connection or $organization instead.
      * @param null|string $redirectUri URI to direct the user to upon successful completion of SSO
      * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
      * @param null|string $provider Service provider that handles the identity of the user
@@ -40,15 +40,15 @@ class SSO
         $authorizationPath = "sso/authorize";
 
         if (!isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
-            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required";
+            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required.";
 
             throw new Exception\UnexpectedValueException($msg);
         }
 
         if (isset($domain)) {
-            $msg = "Domain is being deprecated, please switch to using Connection or Organization ID";
+            $msg = "'domain' is being deprecated, please switch to using 'connection' or 'organization'.";
 
-            error_log($msg);
+            trigger_error($msg, E_USER_DEPRECATED);
         }
 
         $params = [

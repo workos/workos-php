@@ -2,11 +2,17 @@
 
 namespace WorkOS;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use WorkOS\UserManagement;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserManagementTest extends TestCase
 {
+    /**
+     * @var UserManagement
+     */
+    protected $userManagement;
+
     use TestHelper {
         setUp as traitSetUp;
     }
@@ -601,10 +607,10 @@ class UserManagementTest extends TestCase
     {
         $path = "user_management/password_reset";
 
-        $result = $this->passwordResetResponseFixture();
+        $response = $this->passwordResetResponseFixture();
 
         $params = [
-            "email" => "someemail@test.com",
+            "email" => "someemail@test.com"
         ];
 
         $this->mockRequest(
@@ -613,7 +619,7 @@ class UserManagementTest extends TestCase
             null,
             $params,
             true,
-            $result
+            $response
         );
 
         $response = $this->userManagement->createPasswordReset(
@@ -621,14 +627,14 @@ class UserManagementTest extends TestCase
         );
 
         $expected = $this->passwordResetFixture();
-
-        $this->assertSame($response->toArray(), $expected);
+        $this->assertSame($expected, $response->toArray());
     }
 
     public function testSendPasswordResetEmail()
     {
         $path = "user_management/password_reset/send";
 
+        // Mock the API request
         $responseCode = 200;
         $params = [
             "email" => "test@test.com",
@@ -646,7 +652,13 @@ class UserManagementTest extends TestCase
             $responseCode
         );
 
-        $response = $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password");
+        // Call the deprecated method
+        $response = $this->assertDeprecationTriggered(
+            "'sendPasswordResetEmail' is deprecated. Please use 'createPasswordReset' instead. This method will be removed in a future major version.",
+            fn() => $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password")
+        );
+
+        // Test the functionality
         $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
     }
@@ -1341,6 +1353,9 @@ class UserManagementTest extends TestCase
             "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
             "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "role" => [
+                "slug" => "admin",
+            ],
             "status" => $status,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z",
@@ -1357,6 +1372,9 @@ class UserManagementTest extends TestCase
                         "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
                         "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
                         "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                        "role" => [
+                            "slug" => "admin",
+                        ],
                         "status" => "active",
                         "created_at" => "2021-06-25T19:07:33.155Z",
                         "updated_at" => "2021-06-25T19:07:33.155Z",
@@ -1377,6 +1395,9 @@ class UserManagementTest extends TestCase
             "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
             "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+            "role" => [
+                "slug" => "admin",
+            ],
             "status" => "active",
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z",

@@ -2,10 +2,16 @@
 
 namespace WorkOS;
 
+use WorkOS\Organizations;
 use PHPUnit\Framework\TestCase;
 
 class OrganizationsTest extends TestCase
 {
+    /**
+     * @var Organizations
+     */
+    protected $organizations;
+
     use TestHelper {
         setUp as protected traitSetUp;
     }
@@ -40,7 +46,10 @@ class OrganizationsTest extends TestCase
 
         $organization = $this->organizationFixture();
 
-        $response = $this->organizations->createOrganization("Organization Name", array("example.com"));
+        $response = $this->assertDeprecationTriggered(
+            "'domains' is deprecated. Please use 'domain_data' instead.",
+            fn() => $this->organizations->createOrganization("Organization Name", array("example.com")),
+        );
         $this->assertSame($organization, $response->toArray());
     }
 
@@ -77,6 +86,32 @@ class OrganizationsTest extends TestCase
             array(["domain" => "example.com", "state" => "verified"]),
         );
         $this->assertSame($organization, $response->toArray());
+    }
+
+    public function testCreateOrganizationWithAllowProfilesOutsideOrganizationDeprecationNotice()
+    {
+        $organizationsPath = "organizations";
+
+        $result = $this->createOrganizationResponseFixture();
+
+        $params = [
+            "name" => "Organization Name",
+            "allow_profiles_outside_organization" => true,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $this->assertDeprecationTriggered(
+            "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.",
+            fn() => $this->organizations->createOrganization("Organization Name", null, true),
+        );
     }
 
     public function testUpdateOrganizationWithDomainData()
@@ -134,8 +169,14 @@ class OrganizationsTest extends TestCase
             $result
         );
 
-        $response = $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey);
-        $response2 = $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey);
+        $response = $this->assertDeprecationTriggered(
+            "'domains' is deprecated. Please use 'domain_data' instead.",
+            fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
+        );
+        $response2 = $this->assertDeprecationTriggered(
+            "'domains' is deprecated. Please use 'domain_data' instead.",
+            fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
+        );
 
         $this->assertSame($response2->toArray()["id"], $response->toArray()["id"]);
     }
@@ -217,49 +258,49 @@ class OrganizationsTest extends TestCase
             "object" => "list",
             "data" => [
                 [
-                "object" => "organization",
-                "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-                "name" => "Organization Name",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
-                        "domain" => "example.com"
-                    ]
-                ],
-                "external_id" => null,
-                "metadata" => []
-                ],
-                [
-                "object" => "organization",
-                "id" => "org_01EHQMVDTC2GRAHFCCRNTSKH46",
-                "name" => "example2.com",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
-                        "domain" => "example2.com"
-                    ]
-                ],
-                "external_id" => null,
-                "metadata" => []
+                    "object" => "organization",
+                    "id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
+                    "name" => "Organization Name",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EHQMYV71XT8H31WE5HF8YK4A",
+                            "domain" => "example.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ],
                 [
-                "object" => "organization",
-                "id" => "org_01EGP9Z6RY2J6YE0ZV57CGEXV2",
-                "name" => "example5.com",
-                "allow_profiles_outside_organization" => false,
-                "domains" => [
-                    [
-                        "object" => "organization_domain",
-                        "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
-                        "domain" => "example5.com"
-                    ]
+                    "object" => "organization",
+                    "id" => "org_01EHQMVDTC2GRAHFCCRNTSKH46",
+                    "name" => "example2.com",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EHQMVDTZVA27PK614ME4YK7V",
+                            "domain" => "example2.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ],
-                "external_id" => null,
-                "metadata" => []
+                [
+                    "object" => "organization",
+                    "id" => "org_01EGP9Z6RY2J6YE0ZV57CGEXV2",
+                    "name" => "example5.com",
+                    "allow_profiles_outside_organization" => false,
+                    "domains" => [
+                        [
+                            "object" => "organization_domain",
+                            "id" => "org_domain_01EGP9Z6S6HVQ5CPD152GJBEA5",
+                            "domain" => "example5.com"
+                        ]
+                    ],
+                    "external_id" => null,
+                    "metadata" => []
                 ]
             ],
             "list_metadata" => [

@@ -34,11 +34,11 @@ class Organizations
     ) {
         $organizationsPath = "organizations";
         $params = [
-          "limit" => $limit,
-          "before" => $before,
-          "after" => $after,
-          "domains" => $domains,
-          "order" => $order
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "domains" => $domains,
+            "order" => $order
         ];
 
         $response = Client::request(
@@ -62,9 +62,9 @@ class Organizations
      * Create Organization.
      *
      * @param string $name The name of the Organization.
-     * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param null|array $domains @deprecated 4.5.0 The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     * @param null|boolean $allowProfilesOutsideOrganization @deprecated 4.5.0 If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
      * @param null|string $externalId The organization's external id
@@ -86,15 +86,23 @@ class Organizations
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
 
-        $params = [ "name" => $name ];
+        $params = ["name" => $name];
 
         if (isset($domains)) {
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead.";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["domains"] = $domains;
         }
         if (isset($domain_data)) {
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
         }
         if (isset($externalId)) {
@@ -113,10 +121,10 @@ class Organizations
      * Update Organization.
      *
      * @param string $organization An Organization identifier.
-     * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param null|array $domains @deprecated 4.5.0 The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
      * @param null|string $name The name of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     * @param null|boolean $allowProfilesOutsideOrganization @deprecated 4.5.0 If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      * @param null|string $externalId The organization's external id
@@ -136,15 +144,23 @@ class Organizations
     ) {
         $organizationsPath = "organizations/{$organization}";
 
-        $params = [ "name" => $name ];
+        $params = ["name" => $name];
 
         if (isset($domains)) {
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead.";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["domains"] = $domains;
         }
         if (isset($domain_data)) {
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
         }
         if (isset($stripeCustomerId)) {
