@@ -10,36 +10,35 @@ namespace WorkOS;
 class AuditLogs
 {
     /**
+     * Creates an audit log event for an organization.
      *
-     * @param string $organizationId the unique identifier for the organization.
-     * @param array $event Associative array containing the keys detailed below
-            * string "action" Specific activity performed by the actor. REQUIRED.
-            * string "occurred_at" ISO-8601 datetime at which the event happened. REQUIRED.
-            * array "actor" Associative array describing Actor of the event. REQUIRED.
-                * KEYS:
-                * string "id" - REQUIRED
-                * string "name" - NOT REQUIRED
-                * string "type" - REQUIRED
-                * array "metadata" - Associative array ["Any Key" => "Any Value] - NOT REQUIRED
-            * array "targets" Targets of the event. Nested array as there can be multiple targets. REQUIRED
-                * KEYS:
-                * string "id" - REQUIRED
-                * string "name" - NOT REQUIRED
-                * string "type" - REQUIRED
-                * array "metadata" - Associative array ["Any Key" => "Any Value] - NOT REQUIRED
-            * array "context" Context of the event. REQUIRED.
-                * KEYS:
-                * string "location" -  REQUIRED
-                * string "user_agent" -  NOT REQUIRED
-            * int "version" Version of the event. Required if version is anything other than 1. NOT REQUIRED.
-            * array "metadata" Arbitrary key-value data containing information associated with the event. NOT REQUIRED
-     * @param string $idempotencyKey Unique key guaranteeing idempotency of events for 24 hours.
+     * @param string $organizationId The unique identifier for the organization.
+     * @param array  $event          An associative array with the following keys:
+     *   - **action** (string, *required*): Specific activity performed by the actor.
+     *   - **occurred_at** (string, *required*): ISO-8601 datetime when the event occurred.
+     *   - **actor** (array, *required*): Associative array describing the actor.
+     *     - **id** (string, *required*): Unique identifier for the actor.
+     *     - **name** (string, *optional*): Name of the actor.
+     *     - **type** (string, *required*): Type or role of the actor.
+     *     - **metadata** (array, *optional*): Arbitrary key-value data.
+     *   - **targets** (array, *required*): Array of associative arrays for each target.
+     *     Each target includes:
+     *     - **id** (string, *required*): Unique identifier for the target.
+     *     - **name** (string, *optional*): Name of the target.
+     *     - **type** (string, *required*): Type or category of the target.
+     *     - **metadata** (array, *optional*): Arbitrary key-value data.
+     *   - **context** (array, *required*): Associative array providing additional context.
+     *     - **location** (string, *required*): Location associated with the event.
+     *     - **user_agent** (string, *optional*): User agent string if applicable.
+     *   - **version** (int, *optional*): Event version. Required if the version is not 1.
+     *   - **metadata** (array, *optional*): Additional arbitrary key-value data for the event.
+     *
+     * @param string $idempotencyKey A unique key ensuring idempotency of events for 24 hours.
      *
      * @throws Exception\WorkOSException
      *
-     * @return  Resource\AuditLogCreateEventStatus
+     * @return Resource\AuditLogCreateEventStatus
      */
-
     public function createEvent($organizationId, $event, $idempotencyKey = null)
     {
         $eventsPath = "audit_logs/events";
@@ -64,7 +63,7 @@ class AuditLogs
      * @var null|string $rangeStart ISO-8601 Timestamp of the start of Export's the date range.
      * @var null|string $rangeEnd ISO-8601 Timestamp  of the end of Export's the date range.
      * @var null|array $actions Actions that Audit Log Events will be filtered by.
-     * @var null|array $actors Actor names that Audit Log Events will be filtered by.
+     * @var null|array $actors Actor names that Audit Log Events will be filtered by. @deprecated 3.3.0 Use $actorNames instead. This method will be removed in a future major version.
      * @var null|array $targets Target types that Audit Log Events will be filtered by.
      * @var null|array $actorNames Actor names that Audit Log Events will be filtered by.
      * @var null|array $actorIds Actor IDs that Audit Log Events will be filtered by.
@@ -79,9 +78,9 @@ class AuditLogs
         $createExportPath = "audit_logs/exports";
 
         $params = [
-         "organization_id" => $organizationId,
-         "range_end" => $rangeEnd,
-         "range_start" => $rangeStart
+            "organization_id" => $organizationId,
+            "range_end" => $rangeEnd,
+            "range_start" => $rangeStart
         ];
 
         if (!is_null($actions)) {

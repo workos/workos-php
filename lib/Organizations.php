@@ -34,11 +34,11 @@ class Organizations
     ) {
         $organizationsPath = "organizations";
         $params = [
-          "limit" => $limit,
-          "before" => $before,
-          "after" => $after,
-          "domains" => $domains,
-          "order" => $order
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "domains" => $domains,
+            "order" => $order
         ];
 
         $response = Client::request(
@@ -62,9 +62,9 @@ class Organizations
      * Create Organization.
      *
      * @param string $name The name of the Organization.
-     * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param null|array $domains @deprecated 4.5.0 The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     * @param null|boolean $allowProfilesOutsideOrganization @deprecated 4.5.0 If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $idempotencyKey is a unique string that identifies a distinct organization
      * @param null|string $externalId The organization's external id
@@ -86,7 +86,7 @@ class Organizations
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
 
-        $params = [ "name" => $name ];
+        $params = ["name" => $name];
 
         if (isset($domains)) {
             $params["domains"] = $domains;
@@ -113,10 +113,10 @@ class Organizations
      * Update Organization.
      *
      * @param string $organization An Organization identifier.
-     * @param null|array $domains [Deprecated] The domains of the Organization. Use domain_data instead.
+     * @param null|array $domains @deprecated 4.5.0 The domains of the Organization. Use domain_data instead.
      * @param null|array $domain_data The domains of the Organization.
      * @param null|string $name The name of the Organization.
-     * @param null|boolean $allowProfilesOutsideOrganization [Deprecated] If you need to allow sign-ins from
+     * @param null|boolean $allowProfilesOutsideOrganization @deprecated 4.5.0 If you need to allow sign-ins from
      *      any email domain, contact support@workos.com.
      * @param null|string $stripeCustomerId The Stripe Customer ID of the Organization.
      * @param null|string $externalId The organization's external id
@@ -136,7 +136,7 @@ class Organizations
     ) {
         $organizationsPath = "organizations/{$organization}";
 
-        $params = [ "name" => $name ];
+        $params = ["name" => $name];
 
         if (isset($domains)) {
             $params["domains"] = $domains;

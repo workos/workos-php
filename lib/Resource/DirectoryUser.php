@@ -16,20 +16,20 @@ class DirectoryUser extends BaseWorkOSResource
         "firstName",
         "email",
         /**
-         * [Deprecated] Will be removed in a future major version.
+         * @deprecated 4.22.0 Will be removed in a future major version.
          * Enable the `emails` custom attribute in dashboard and pull from customAttributes instead.
          * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
          */
         "emails",
         /**
-         * [Deprecated] Will be removed in a future major version.
+         * @deprecated 4.22.0 Will be removed in a future major version.
          * Enable the `username` custom attribute in dashboard and pull from customAttributes instead.
          * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
          */
         "username",
         "lastName",
         /**
-         * [Deprecated] Will be removed in a future major version.
+         * @deprecated 4.22.0 Will be removed in a future major version.
          * Enable the `job_title` custom attribute in dashboard and pull from customAttributes instead.
          * See https://workos.com/docs/directory-sync/attributes/custom-attributes/auto-mapped-attributes for details.
          */
@@ -59,7 +59,9 @@ class DirectoryUser extends BaseWorkOSResource
     ];
 
     /**
-     * [Deprecated] Use `email` instead.
+     * @deprecated 4.22.0 Use `email` property instead.
+     *
+     * @return string|null The primary email address if found, null otherwise
      */
     public function primaryEmail()
     {

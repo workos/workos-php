@@ -108,11 +108,12 @@ class MFA
 
 
     /**
+     * @deprecated 1.12.0 Use `verifyChallenge` instead. This method will be removed in a future major version.
      * Verifies the one time password provided by the end-user.
      *
      * @param string $authenticationChallengeId - The ID of the authentication challenge that provided the user the verification code.
      * @param string $code - The verification code sent to and provided by the end user.
-    */
+     */
 
     public function verifyFactor(
         $authenticationChallengeId,

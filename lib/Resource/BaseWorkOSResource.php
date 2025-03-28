@@ -5,6 +5,22 @@ namespace WorkOS\Resource;
 class BaseWorkOSResource
 {
     /**
+     * Maps response keys to resource keys.
+     * Child classes should override this constant.
+     *
+     * @var array<string, string>
+     */
+    protected const RESPONSE_TO_RESOURCE_KEY = [];
+
+    /**
+     * List of attributes available in this resource.
+     * Child classes should override this constant.
+     *
+     * @var array<string>
+     */
+    protected const RESOURCE_ATTRIBUTES = [];
+
+    /**
      * @var array $values;
      */
     protected $values;
