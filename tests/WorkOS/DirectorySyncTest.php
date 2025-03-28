@@ -164,7 +164,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead",
+            fn() => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }
@@ -186,7 +189,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead",
+            fn() => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }

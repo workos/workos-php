@@ -89,12 +89,20 @@ class Organizations
         $params = ["name" => $name];
 
         if (isset($domains)) {
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["domains"] = $domains;
         }
         if (isset($domain_data)) {
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. Please use 'allow_profiles_outside_organization' instead";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
         }
         if (isset($externalId)) {
@@ -139,12 +147,20 @@ class Organizations
         $params = ["name" => $name];
 
         if (isset($domains)) {
+            $msg = "'domains' is deprecated. Please use 'domain_data' instead";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["domains"] = $domains;
         }
         if (isset($domain_data)) {
             $params["domain_data"] = $domain_data;
         }
         if (isset($allowProfilesOutsideOrganization)) {
+            $msg = "'allowProfilesOutsideOrganization' is deprecated. Please use 'allow_profiles_outside_organization' instead";
+
+            trigger_error($msg, E_USER_DEPRECATED);
+
             $params["allow_profiles_outside_organization"] = $allowProfilesOutsideOrganization;
         }
         if (isset($stripeCustomerId)) {
