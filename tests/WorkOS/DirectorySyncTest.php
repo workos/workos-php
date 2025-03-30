@@ -54,6 +54,36 @@ class DirectorySyncTest extends TestCase
         $this->assertSame($directory, $directories[0]->toArray());
     }
 
+    public function testListDirectoriesDeprecationNoticeForDomain()
+    {
+        $directoriesPath = "directories";
+        $params = [
+            "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domain" => 'test.com',
+            "search" => null,
+            "organization_id" => null,
+            "order" => null
+        ];
+
+        $result = $this->directoriesResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoriesPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $this->assertDeprecationTriggered(
+            "'domain' is deprecated. Please switch to using 'search' or 'organizationId'. This parameter will be removed in a future major version.",
+            fn() => $this->ds->listDirectories(domain: 'test.com'),
+        );
+    }
+
     public function testGetDirectory()
     {
         $directoryId = "directory_id";

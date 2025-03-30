@@ -14,7 +14,7 @@ class DirectorySync
     /**
      * List Directories.
      *
-     * @param null|string $domain Domain of a Directory
+     * @param null|string $domain Domain of a Directory @deprecated v4.23.0 Use `search` or `organizationId` instead. This parameter will be removed in a future major version.
      * @param null|string $search Searchable text for a Directory
      * @param int $limit Maximum number of records to return
      * @param null|string $before Directory ID to look before
@@ -35,6 +35,11 @@ class DirectorySync
         $organizationId = null,
         $order = null
     ) {
+        if ($domain) {
+            $msg = "'domain' is deprecated. Please switch to using 'search' or 'organizationId'. This parameter will be removed in a future major version.";
+            trigger_error($msg, E_USER_DEPRECATED);
+        }
+
         $directoriesPath = "directories";
         $params = [
             "limit" => $limit,
@@ -97,7 +102,7 @@ class DirectorySync
             $params["directory"] = $directory;
         }
         if ($user) {
-            $params["user"] = $group;
+            $params["user"] = $user;
         }
 
         $response = Client::request(
