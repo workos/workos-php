@@ -2,11 +2,14 @@
 
 namespace WorkOS;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use WorkOS\Resource\UserIdentityProviderType;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserManagementTest extends TestCase
 {
+    private $userManagement;
+
     use TestHelper {
         setUp as traitSetUp;
     }
@@ -1263,6 +1266,50 @@ class UserManagementTest extends TestCase
         } catch (Exception\UnexpectedValueException $e) {
             $this->assertEquals($e->getMessage(), $result);
         }
+    }
+
+    public function testGetUserIdentityProviders()
+    {
+        $userId = "user_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/users/{$userId}/identities";
+
+        $result = $this->userIdentityProvidersResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $userIdentityProviderFixture = $this->userIdentityProviderFixture();
+
+        $response = $this->userManagement->getUserIdentityProviders($userId);
+
+        $this->assertCount(1, $response);
+        $this->assertSame($userIdentityProviderFixture, $response[0]->toArray());
+    }
+
+    private function userIdentityProvidersResponseFixture()
+    {
+        return json_encode([
+            [
+                "idp_id" => "4F42ABDE-1E44-4B66-824A-5F733C037A6D",
+                "type" => "OAuth",
+                "provider" => "MicrosoftOAuth"
+            ]
+        ]);
+    }
+
+    private function userIdentityProviderFixture()
+    {
+        return [
+            "idpId" => "4F42ABDE-1E44-4B66-824A-5F733C037A6D",
+            "type" => "OAuth",
+            "provider" => "MicrosoftOAuth"
+        ];
     }
 
     //Fixtures
