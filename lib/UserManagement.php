@@ -1096,6 +1096,7 @@ class UserManagement
     }
 
     /**
+     * @deprecated 4.9.0 Use `createPasswordReset` instead. This method will be removed in a future major version.
      * Create Password Reset Email.
      *
      * @param string $email The email of the user that wishes to reset their password.
@@ -1204,6 +1205,7 @@ class UserManagement
     }
 
     /**
+     * @deprecated 4.6.0 Use `createMagicAuth` instead. This method will be removed in a future major version.
      * Creates a one-time Magic Auth code and emails it to the user.
      *
      * @param string $email The email address the one-time code will be sent to.
