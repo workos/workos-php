@@ -20,7 +20,7 @@ jobs:
         php: ["7.3", "7.4", "8.1", "8.2", "8.3"]
     steps:
       - uses: actions/checkout@v4
-      - uses: shivammathur/setup-php@v2
+      - uses: shivammathur/setup-php@9e72090525849c5e82e596468b86eb55e9cc5401 # v2.32.0
         with:
           php-version: ${{ matrix.php }}
           tools: "composer"
