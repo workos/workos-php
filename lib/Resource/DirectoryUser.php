@@ -65,6 +65,10 @@ class DirectoryUser extends BaseWorkOSResource
      */
     public function primaryEmail()
     {
+        $msg = "'primaryEmail' is deprecated. Please use 'email' instead.";
+
+        trigger_error($msg, E_USER_DEPRECATED);
+
         $response = $this;
 
         if (count($response->raw["emails"]) == 0) {

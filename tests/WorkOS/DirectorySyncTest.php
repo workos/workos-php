@@ -2,6 +2,7 @@
 
 namespace WorkOS;
 
+use WorkOS\DirectorySync;
 use PHPUnit\Framework\TestCase;
 
 class DirectorySyncTest extends TestCase
@@ -9,6 +10,10 @@ class DirectorySyncTest extends TestCase
     use TestHelper {
         setUp as traitSetUp;
     }
+    /**
+     * @var DirectorySync
+     */
+    protected $ds;
 
     protected function setUp(): void
     {
@@ -46,6 +51,36 @@ class DirectorySyncTest extends TestCase
 
         list($before, $after, $directories) = $this->ds->listDirectories();
         $this->assertSame($directory, $directories[0]->toArray());
+    }
+
+    public function testListDirectoriesDeprecationNoticeForDomain()
+    {
+        $directoriesPath = "directories";
+        $params = [
+            "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domain" => 'test.com',
+            "search" => null,
+            "organization_id" => null,
+            "order" => null
+        ];
+
+        $result = $this->directoriesResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoriesPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $this->assertDeprecationTriggered(
+            "'domain' is deprecated. Please switch to using 'search' or 'organizationId'. This parameter will be removed in a future major version.",
+            fn () => $this->ds->listDirectories(domain: 'test.com'),
+        );
     }
 
     public function testGetDirectory()
@@ -158,7 +193,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead.",
+            fn () => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }
@@ -180,7 +218,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead.",
+            fn () => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }
