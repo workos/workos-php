@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class MFATest extends TestCase
 {
+    use TestHelper {
+        setUp as traitSetUp;
+    }
     /**
      * @var MFA
      */
     protected $mfa;
-
-    use TestHelper {
-        setUp as traitSetUp;
-    }
 
     protected function setUp(): void
     {
@@ -134,7 +133,7 @@ class MFATest extends TestCase
 
         $verifyFactor = $this->assertDeprecationTriggered(
             "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead.",
-            fn() => $this->mfa->verifyFactor($authenticationChallengeId, $code)
+            fn () => $this->mfa->verifyFactor($authenticationChallengeId, $code)
         );
         $verifyFactorResponseFixture = $this->verifyFactorFixture();
 

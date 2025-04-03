@@ -30,7 +30,9 @@ class BaseWorkOSResource
      */
     public $raw;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * Creates a Resource from a Response.
