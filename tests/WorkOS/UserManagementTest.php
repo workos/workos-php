@@ -8,11 +8,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class UserManagementTest extends TestCase
 {
-    private $userManagement;
-
     use TestHelper {
         setUp as traitSetUp;
     }
+    private $userManagement;
 
     protected function setUp(): void
     {
