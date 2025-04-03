@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordlessTest extends TestCase
 {
+    use TestHelper {
+        setUp as traitSetUp;
+    }
     /**
      * @var Passwordless
      */
     protected $passwordless;
-
-    use TestHelper {
-        setUp as traitSetUp;
-    }
 
     protected function setUp(): void
     {

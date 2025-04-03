@@ -9,14 +9,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class SSOTest extends TestCase
 {
+    use TestHelper {
+        setUp as traitSetUp;
+    }
     /**
      * @var SSO
      */
     protected $sso;
-
-    use TestHelper {
-        setUp as traitSetUp;
-    }
 
     protected function setUp(): void
     {
@@ -75,7 +74,7 @@ class SSOTest extends TestCase
             $expectedParams["login_hint"] = $loginHint;
         }
 
-        $fn = fn() => $this->sso->getAuthorizationUrl(
+        $fn = fn () => $this->sso->getAuthorizationUrl(
             $domain,
             $redirectUri,
             $state,

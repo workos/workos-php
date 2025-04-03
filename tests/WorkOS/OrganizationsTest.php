@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class OrganizationsTest extends TestCase
 {
+    use TestHelper {
+        setUp as protected traitSetUp;
+    }
     /**
      * @var Organizations
      */
     protected $organizations;
-
-    use TestHelper {
-        setUp as protected traitSetUp;
-    }
 
     protected function setUp(): void
     {
@@ -48,7 +47,7 @@ class OrganizationsTest extends TestCase
 
         $response = $this->assertDeprecationTriggered(
             "'domains' is deprecated. Please use 'domain_data' instead.",
-            fn() => $this->organizations->createOrganization("Organization Name", array("example.com")),
+            fn () => $this->organizations->createOrganization("Organization Name", array("example.com")),
         );
         $this->assertSame($organization, $response->toArray());
     }
@@ -110,7 +109,7 @@ class OrganizationsTest extends TestCase
 
         $this->assertDeprecationTriggered(
             "'allowProfilesOutsideOrganization' is deprecated. If you need to allow sign-ins from any email domain, contact support@workos.com.",
-            fn() => $this->organizations->createOrganization("Organization Name", null, true),
+            fn () => $this->organizations->createOrganization("Organization Name", null, true),
         );
     }
 
@@ -171,11 +170,11 @@ class OrganizationsTest extends TestCase
 
         $response = $this->assertDeprecationTriggered(
             "'domains' is deprecated. Please use 'domain_data' instead.",
-            fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
+            fn () => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
         );
         $response2 = $this->assertDeprecationTriggered(
             "'domains' is deprecated. Please use 'domain_data' instead.",
-            fn() => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
+            fn () => $this->organizations->createOrganization("Organization Name", array("example.com"), null, $idempotencyKey),
         );
 
         $this->assertSame($response2->toArray()["id"], $response->toArray()["id"]);

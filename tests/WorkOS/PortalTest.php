@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class PortalTest extends TestCase
 {
+    use TestHelper {
+        setUp as protected traitSetUp;
+    }
     /**
      * @var Portal
      */
     protected $portal;
-
-    use TestHelper {
-        setUp as protected traitSetUp;
-    }
 
     protected function setUp(): void
     {

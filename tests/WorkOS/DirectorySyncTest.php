@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class DirectorySyncTest extends TestCase
 {
+    use TestHelper {
+        setUp as traitSetUp;
+    }
     /**
      * @var DirectorySync
      */
     protected $ds;
-
-    use TestHelper {
-        setUp as traitSetUp;
-    }
 
     protected function setUp(): void
     {
@@ -80,7 +79,7 @@ class DirectorySyncTest extends TestCase
 
         $this->assertDeprecationTriggered(
             "'domain' is deprecated. Please switch to using 'search' or 'organizationId'. This parameter will be removed in a future major version.",
-            fn() => $this->ds->listDirectories(domain: 'test.com'),
+            fn () => $this->ds->listDirectories(domain: 'test.com'),
         );
     }
 
@@ -196,7 +195,7 @@ class DirectorySyncTest extends TestCase
         $user = $this->ds->getUser($directoryUser);
         $userEmail = $this->assertDeprecationTriggered(
             "'primaryEmail' is deprecated. Please use 'email' instead.",
-            fn() => $user->primaryEmail(),
+            fn () => $user->primaryEmail(),
         );
 
         $this->assertSame($userEmail, $expectedEmail);
@@ -221,7 +220,7 @@ class DirectorySyncTest extends TestCase
         $user = $this->ds->getUser($directoryUser);
         $userEmail = $this->assertDeprecationTriggered(
             "'primaryEmail' is deprecated. Please use 'email' instead.",
-            fn() => $user->primaryEmail(),
+            fn () => $user->primaryEmail(),
         );
 
         $this->assertSame($userEmail, $expectedEmail);

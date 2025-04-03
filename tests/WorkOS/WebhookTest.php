@@ -7,6 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 class WebhookTest extends TestCase
 {
+    use TestHelper {
+        setUp as protected traitSetUp;
+    }
     /**
      * @var Webhook
      */
@@ -41,10 +44,6 @@ class WebhookTest extends TestCase
      * @var string
      */
     protected $sigHeader;
-
-    use TestHelper {
-        setUp as protected traitSetUp;
-    }
 
     protected function setUp(): void
     {

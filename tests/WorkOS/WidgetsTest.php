@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class WidgetsTest extends TestCase
 {
+    use TestHelper {
+        setUp as protected traitSetUp;
+    }
     /**
      * @var Widgets
      */
     protected $widgets;
-
-    use TestHelper {
-        setUp as protected traitSetUp;
-    }
 
     protected function setUp(): void
     {

@@ -7,14 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class AuditLogsTest extends TestCase
 {
+    use TestHelper {
+        setUp as protected traitSetUp;
+    }
     /**
      * @var AuditLogs
      */
     protected $al;
-
-    use TestHelper {
-        setUp as protected traitSetUp;
-    }
 
     protected function setUp(): void
     {
@@ -113,7 +112,7 @@ class AuditLogsTest extends TestCase
 
         $auditLogExport = $this->assertDeprecationTriggered(
             "'actors' is deprecated. Please use 'actorNames' instead.",
-            fn() => $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds)
+            fn () => $this->al->createExport($organizationId, $rangeStart, $rangeEnd, $actions, $actors, $targets, $actorNames, $actorIds)
         );
 
         $exportFixture = $this->createExportFixture();
