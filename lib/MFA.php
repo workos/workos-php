@@ -28,12 +28,12 @@ class MFA
         $enrollPath = "auth/factors/enroll";
 
         if (!isset($type)) {
-            $msg = "Incomplete arguments: Need to specify a type of factor";
+            $msg = "Incomplete arguments: Need to specify a type of factor.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
         if ($type != "sms" && $type != "totp") {
-            $msg = "Type Parameter must either be 'sms' or 'totp'";
+            $msg = "Type Parameter must either be 'sms' or 'totp'.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -82,15 +82,15 @@ class MFA
         $smsTemplate = null
     ) {
         if (!isset($authenticationFactorId)) {
-            $msg = "Incomplete arguments: 'authentication_factor_id' is a required parameter";
+            $msg = "Incomplete arguments: 'authentication_factor_id' is a required parameter.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
         $challengePath = "auth/factors/{$authenticationFactorId}/challenge";
 
         $params = [
-        "sms_template" => $smsTemplate
-    ];
+            "sms_template" => $smsTemplate
+        ];
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -120,19 +120,19 @@ class MFA
         $code
     ) {
         if (!isset($authenticationChallengeId) || !isset($code)) {
-            $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
+            $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
-        $msg = "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead";
+        $msg = "'verifyFactor' is deprecated. Please use 'verifyChallenge' instead.";
 
-        error_log($msg);
+        trigger_error($msg, E_USER_DEPRECATED);
 
         $response = (new \WorkOS\MFA())
-    ->verifyChallenge(
-        $authenticationChallengeId,
-        $code
-    );
+            ->verifyChallenge(
+                $authenticationChallengeId,
+                $code
+            );
 
         return $response;
     }
@@ -151,15 +151,15 @@ class MFA
         $code
     ) {
         if (!isset($authenticationChallengeId) || !isset($code)) {
-            $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters";
+            $msg = "Incomplete arguments: 'authenticationChallengeId' and 'code' are required parameters.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
         $verifyPath = "auth/challenges/{$authenticationChallengeId}/verify";
 
         $params = [
-        "code" => $code
-    ];
+            "code" => $code
+        ];
 
         $response = Client::request(
             Client::METHOD_POST,
