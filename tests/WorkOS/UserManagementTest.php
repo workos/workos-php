@@ -656,7 +656,7 @@ class UserManagementTest extends TestCase
             "'sendPasswordResetEmail' is deprecated. Please use 'createPasswordReset' instead. This method will be removed in a future major version.",
             fn () => $this->userManagement->sendPasswordResetEmail("test@test.com", "https://your-app.com/reset-password")
         );
-
+      
         // Test the functionality
         $this->assertSame(200, $responseCode);
         $this->assertSame($response, []);
