@@ -221,12 +221,14 @@ class SSOTest extends TestCase
                 "idp_id" => "randomalphanum",
                 "role" => new RoleResponse("admin"),
                 "groups" => array("Admins", "Developers"),
+                "custom_attributes" => array("license" => "professional"),
                 "raw_attributes" => array(
                     "email" => "hen@papagenos.com",
                     "first_name" => "hen",
                     "last_name" => "cha",
                     "ipd_id" => "randomalphanum",
-                    "groups" => array("Admins", "Developers")
+                    "groups" => array("Admins", "Developers"),
+                    "license" => "professional"
                 )
             ]
         ]);
@@ -245,13 +247,15 @@ class SSOTest extends TestCase
             "idpId" => "randomalphanum",
             "role" => new RoleResponse("admin"),
             "groups" => array("Admins", "Developers"),
+            "customAttributes" => array("license" => "professional"),
             "rawAttributes" => array(
                 "email" => "hen@papagenos.com",
                 "first_name" => "hen",
                 "last_name" => "cha",
                 "ipd_id" => "randomalphanum",
-                "groups" => array("Admins", "Developers")
-            )
+                "groups" => array("Admins", "Developers"),
+                "license" => "professional"
+            ),
         ];
     }
 

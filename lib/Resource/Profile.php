@@ -34,6 +34,7 @@ class Profile extends BaseWorkOSResource
         "idpId",
         "role",
         "groups",
+        "customAttributes",
         "rawAttributes"
     ];
 
@@ -48,6 +49,7 @@ class Profile extends BaseWorkOSResource
         "idp_id" => "idpId",
         "role" => "role",
         "groups" => "groups",
+        "custom_attributes" => "customAttributes",
         "raw_attributes" => "rawAttributes"
     ];
 
