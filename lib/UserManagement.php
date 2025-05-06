@@ -241,9 +241,6 @@ class UserManagement
             $params,
             true
         );
-        if (!is_null($roleSlug) && !is_string($roleSlug)) {
-            throw new \InvalidArgumentException("roleSlug must be a string or null");
-        }
 
         return Resource\OrganizationMembership::constructFromResponse($response);
     }
@@ -321,9 +318,6 @@ class UserManagement
             $params,
             true
         );
-        if (!is_null($roleSlug) && !is_string($roleSlug)) {
-            throw new \InvalidArgumentException("roleSlug must be a string or null");
-        }
 
         return Resource\OrganizationMembership::constructFromResponse($response);
     }

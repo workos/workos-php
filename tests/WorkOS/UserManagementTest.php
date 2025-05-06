@@ -860,8 +860,7 @@ class UserManagementTest extends TestCase
         $organizationMembership = $this->organizationMembershipFixture();
 
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId, $roleSlug);
-        echo "Response from Create Org:";
-        print_r($response);
+
         $this->assertSame($organizationMembership, $response->toArray());
     }
 
