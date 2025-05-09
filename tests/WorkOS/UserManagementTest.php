@@ -837,13 +837,15 @@ class UserManagementTest extends TestCase
     {
         $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
         $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $roleSlug = "admin";
         $path = "user_management/organization_memberships";
 
         $result = $this->organizationMembershipResponseFixture();
 
         $params = [
             "organization_id" => $orgId,
-            "user_id" => $userId
+            "user_id" => $userId,
+            "role_slug" => $roleSlug
         ];
 
         $this->mockRequest(
@@ -857,7 +859,8 @@ class UserManagementTest extends TestCase
 
         $organizationMembership = $this->organizationMembershipFixture();
 
-        $response = $this->userManagement->createOrganizationMembership($userId, $orgId);
+        $response = $this->userManagement->createOrganizationMembership($userId, $orgId, $roleSlug);
+
         $this->assertSame($organizationMembership, $response->toArray());
     }
 

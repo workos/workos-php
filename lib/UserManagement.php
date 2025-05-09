@@ -218,18 +218,20 @@ class UserManagement
      *
      * @param string $userId User ID
      * @param string $organizationId Organization ID
+     * @param string|null $roleSlug Role Slug
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function createOrganizationMembership($userId, $organizationId)
+    public function createOrganizationMembership($userId, $organizationId, $roleSlug = null)
     {
         $path = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
-            "user_id" => $userId
+            "user_id" => $userId,
+            "role_slug" => $roleSlug
         ];
 
         $response = Client::request(
@@ -295,18 +297,18 @@ class UserManagement
      * Update a User organization membership.
      *
      * @param string $organizationMembershipId Organization Membership ID
-     * @param string $role_slug The unique role identifier.
+     * @param string|null $role_slug The unique role identifier.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function updateOrganizationMembership($organizationMembershipId, $role_slug)
+    public function updateOrganizationMembership($organizationMembershipId, $roleSlug = null)
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $params = [
-            "role_slug" => $role_slug
+            "role_slug" => $roleSlug
         ];
 
         $response = Client::request(
