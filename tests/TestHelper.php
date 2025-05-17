@@ -2,9 +2,18 @@
 
 namespace WorkOS;
 
+use WorkOS\Client;
+
 trait TestHelper
 {
+    /**
+     * @var \WorkOS\RequestClient\RequestClientInterface
+     */
     protected $defaultRequestClient;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject
+     */
     protected $requestClientMock;
 
     protected function setUp(): void
@@ -105,5 +114,35 @@ trait TestHelper
                 static::identicalTo($headers),
                 static::identicalTo($params)
             );
+    }
+
+    /**
+     * Asserts that a specific deprecation warning is triggered when callable is executed
+     *
+     * @param string $expected_warning The expected deprecation message
+     * @param callable $callable The function or method that should trigger the deprecation
+     * @return mixed The return value from the callable
+     */
+    protected function assertDeprecationTriggered(string $expected_warning, callable $callable)
+    {
+        $caught = false;
+
+        set_error_handler(function ($errno, $errstr) use ($expected_warning, &$caught) {
+            if ($errno === E_USER_DEPRECATED && $errstr === $expected_warning) {
+                $caught = true;
+                return true;
+            }
+            return false;
+        });
+
+        $result = $callable();
+
+        restore_error_handler();
+
+        if (!$caught) {
+            $this->fail('Expected deprecation warning was not triggered: ' . $expected_warning);
+        }
+
+        return $result;
     }
 }
