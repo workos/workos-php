@@ -111,6 +111,7 @@ class UserManagement
      * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
      * @param string|null $externalId The user's external ID.
      * @param array<string, string>|null $metadata The user's metadata.
+     * @param string|null $email The email address of the user.
      *
      * @throws Exception\WorkOSException
      *
@@ -125,7 +126,8 @@ class UserManagement
         $passwordHash = null,
         $passwordHashType = null,
         $externalId = null,
-        $metadata = null
+        $metadata = null,
+        $email = null
     ) {
         $path = "user_management/users/{$userId}";
 
@@ -137,7 +139,8 @@ class UserManagement
             "password_hash" => $passwordHash,
             "password_hash_type" => $passwordHashType,
             "external_id" => $externalId,
-            "metadata" => $metadata
+            "metadata" => $metadata,
+            "email" => $email
         ];
 
         $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
