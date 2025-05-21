@@ -56,7 +56,8 @@ class UserManagementTest extends TestCase
             "password_hash" => null,
             "password_hash_type" => null,
             "external_id" => null,
-            "metadata" => null
+            "metadata" => null,
+            "email" => null
         ];
 
         $this->mockRequest(
