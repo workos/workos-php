@@ -4,6 +4,15 @@ namespace WorkOS\Resource;
 
 /**
  * Class Role.
+ *
+ * @property string $id
+ * @property string $name
+ * @property string $slug
+ * @property string $description
+ * @property array<string> $permissions
+ * @property string $type
+ * @property string $created_at
+ * @property string $updated_at
  */
 
 class Role extends BaseWorkOSResource
