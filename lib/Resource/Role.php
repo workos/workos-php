@@ -15,6 +15,7 @@ class Role extends BaseWorkOSResource
         "name",
         "slug",
         "description",
+        "permissions",
         "type",
         "created_at",
         "updated_at"
@@ -25,6 +26,7 @@ class Role extends BaseWorkOSResource
         "name" => "name",
         "slug" => "slug",
         "description" => "description",
+        "permissions" => "permissions",
         "type" => "type",
         "created_at" => "created_at",
         "updated_at" => "updated_at"
