@@ -118,7 +118,9 @@ class UserManagementTest extends TestCase
             ["https://papagenos.com/auth/callback", null, null, "connection_123", null, null, "foo@workos.com"],
             ["https://papagenos.com/auth/callback", null, null, "connection_123"],
             [null, null, null, "connection_123"],
-            ["https://papagenos.com/auth/callback", ["toppings" => "ham"], null, "connection_123"]
+            ["https://papagenos.com/auth/callback", ["toppings" => "ham"], null, "connection_123"],
+            ["https://papagenos.com/auth/callback", null, null, "connection_123", null, null, null, null, ["read", "write"]],
+            [null, null, Resource\ConnectionType::GoogleOAuth, null, null, null, null, null, ["email", "profile"]]
         ];
     }
 
@@ -132,7 +134,9 @@ class UserManagementTest extends TestCase
         $connectionId,
         $organizationId = null,
         $domainHint = null,
-        $loginHint = null
+        $loginHint = null,
+        $screenHint = null,
+        $providerScopes = null
     ) {
         $expectedParams = [
             "client_id" => WorkOS::getClientId(),
@@ -167,6 +171,10 @@ class UserManagementTest extends TestCase
             $expectedParams["login_hint"] = $loginHint;
         }
 
+        if ($providerScopes && is_array($providerScopes)) {
+            $expectedParams["provider_scopes"] = implode(" ", $providerScopes);
+        }
+
         $authorizationUrl = $this->userManagement->getAuthorizationUrl(
             $redirectUri,
             $state,
@@ -174,7 +182,9 @@ class UserManagementTest extends TestCase
             $connectionId,
             $organizationId,
             $domainHint,
-            $loginHint
+            $loginHint,
+            $screenHint,
+            $providerScopes
         );
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
@@ -345,6 +355,43 @@ class UserManagementTest extends TestCase
             "email" => "admin@foocorp.com",
             "reason" => "Helping debug an account issue."
         ], $response->impersonator->toArray());
+    }
+
+    public function testAuthenticateWithOAuthTokensReturned()
+    {
+        $path = "user_management/authenticate";
+        WorkOS::setApiKey("sk_test_12345");
+        $result = $this->userAndOAuthTokensResponseFixture();
+
+        $params = [
+            "client_id" => "project_0123456",
+            "code" => "01E2RJ4C05B52KKZ8FSRDAP23J",
+            "ip_address" => null,
+            "user_agent" => null,
+            "grant_type" => "authorization_code",
+            "client_secret" => WorkOS::getApiKey()
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $userFixture = $this->userFixture();
+
+        $response = $this->userManagement->authenticateWithCode("project_0123456", "01E2RJ4C05B52KKZ8FSRDAP23J");
+        $this->assertSame($userFixture, $response->user->toArray());
+
+        // Test OAuth tokens
+        $this->assertNotNull($response->oauthTokens);
+        $this->assertSame("oauth_access_token_123", $response->oauthTokens->accessToken);
+        $this->assertSame("oauth_refresh_token_456", $response->oauthTokens->refreshToken);
+        $this->assertSame(1640995200, $response->oauthTokens->expiresAt);
+        $this->assertSame(["read", "write"], $response->oauthTokens->scopes);
     }
 
     public function testEnrollAuthFactor()
@@ -1487,6 +1534,34 @@ class UserManagementTest extends TestCase
             "impersonator" => [
                 "email" => "admin@foocorp.com",
                 "reason" => "Helping debug an account issue.",
+            ]
+        ]);
+    }
+
+    private function userAndOAuthTokensResponseFixture()
+    {
+        return json_encode([
+            "user" => [
+                "object" => "user",
+                "id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+                "email" => "test@test.com",
+                "first_name" => "Damien",
+                "last_name" => "Alabaster",
+                "email_verified" => true,
+                "profile_picture_url" => "https://example.com/photo.jpg",
+                "last_sign_in_at" => "2021-06-25T19:07:33.155Z",
+                "created_at" => "2021-06-25T19:07:33.155Z",
+                "updated_at" => "2021-06-25T19:07:33.155Z",
+                "external_id" => null,
+                "metadata" => []
+            ],
+            "access_token" => "01DMEK0J53CVMC32CK5SE0KZ8Q",
+            "refresh_token" => "refresh_token_123",
+            "oauth_tokens" => [
+                "access_token" => "oauth_access_token_123",
+                "refresh_token" => "oauth_refresh_token_456",
+                "expires_at" => 1640995200,
+                "scopes" => ["read", "write"]
             ]
         ]);
     }
