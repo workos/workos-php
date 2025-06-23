@@ -692,7 +692,7 @@ class UserManagement
         }
 
         if ($providerScopes && is_array($providerScopes)) {
-            $params["provider_scopes"] = implode(" ", $providerScopes);
+            $params["provider_scopes"] = implode(",", $providerScopes);
         }
 
         return Client::generateUrl($path, $params);

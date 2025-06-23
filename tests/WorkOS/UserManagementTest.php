@@ -172,7 +172,7 @@ class UserManagementTest extends TestCase
         }
 
         if ($providerScopes && is_array($providerScopes)) {
-            $expectedParams["provider_scopes"] = implode(" ", $providerScopes);
+            $expectedParams["provider_scopes"] = implode(",", $providerScopes);
         }
 
         $authorizationUrl = $this->userManagement->getAuthorizationUrl(
