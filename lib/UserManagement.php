@@ -613,6 +613,7 @@ class UserManagement
      * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      * @param null|string $screenHint The page that the user will be redirected to when the provider is authkit
+     * @param null|array $providerScopes An array of provider-specific scopes
      *
      * @throws Exception\UnexpectedValueException
      * @throws Exception\ConfigurationException
@@ -627,7 +628,8 @@ class UserManagement
         $organizationId = null,
         $domainHint = null,
         $loginHint = null,
-        $screenHint = null
+        $screenHint = null,
+        $providerScopes = null
     ) {
         $path = "user_management/authorize";
 
@@ -687,6 +689,10 @@ class UserManagement
                 throw new Exception\UnexpectedValueException("A 'screenHint' can only be provided when the provider is 'authkit'.");
             }
             $params["screen_hint"] = $screenHint;
+        }
+
+        if ($providerScopes && is_array($providerScopes)) {
+            $params["provider_scopes"] = implode(",", $providerScopes);
         }
 
         return Client::generateUrl($path, $params);

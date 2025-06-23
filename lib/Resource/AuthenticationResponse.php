@@ -10,6 +10,7 @@ namespace WorkOS\Resource;
  * @property string $accessToken
  * @property string $refreshToken
  * @property ?Impersonator $impersonator
+ * @property ?OAuthTokens $oauthTokens
  */
 class AuthenticationResponse extends BaseWorkOSResource
 {
@@ -19,12 +20,14 @@ class AuthenticationResponse extends BaseWorkOSResource
         "impersonator",
         "accessToken",
         "refreshToken",
+        "oauthTokens",
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
         "organization_id" => "organizationId",
         "access_token" => "accessToken",
         "refresh_token" => "refreshToken",
+        "oauth_tokens" => "oauthTokens",
     ];
 
     public static function constructFromResponse($response)
@@ -37,6 +40,10 @@ class AuthenticationResponse extends BaseWorkOSResource
             $instance->values["impersonator"] = Impersonator::constructFromResponse(
                 $response["impersonator"]
             );
+        }
+
+        if (isset($response["oauth_tokens"])) {
+            $instance->values["oauthTokens"] = OAuthTokens::constructFromResponse($response["oauth_tokens"]);
         }
 
         return $instance;
