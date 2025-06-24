@@ -97,7 +97,7 @@ class DirectorySync
             $params["directory"] = $directory;
         }
         if ($user) {
-            $params["user"] = $group;
+            $params["user"] = $user;
         }
 
         $response = Client::request(
