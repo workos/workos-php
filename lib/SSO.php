@@ -19,8 +19,8 @@ class SSO
      * @param null|string $provider Service provider that handles the identity of the user
      * @param null|string $connection Unique identifier for a WorkOS Connection
      * @param null|string $organization Unique identifier for a WorkOS Organization
-     * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
-     * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
+     * @param null|string $domainHint Domain hint that will be passed as a parameter to the IdP login page
+     * @param null|string $loginHint Username/email hint that will be passed as a parameter to the IdP login page
      *
      * @throws Exception\UnexpectedValueException
      * @throws Exception\ConfigurationException

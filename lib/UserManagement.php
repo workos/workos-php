@@ -610,7 +610,7 @@ class UserManagement
      * @param null|string $provider Service provider that handles the identity of the user
      * @param null|string $connectionId Unique identifier for a WorkOS Connection
      * @param null|string $organizationId Unique identifier for a WorkOS Organization
-     * @param null|string $domainHint DDomain hint that will be passed as a parameter to the IdP login page
+     * @param null|string $domainHint Domain hint that will be passed as a parameter to the IdP login page
      * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
      * @param null|string $screenHint The page that the user will be redirected to when the provider is authkit
      * @param null|array $providerScopes An array of provider-specific scopes
