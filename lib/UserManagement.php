@@ -82,6 +82,29 @@ class UserManagement
     }
 
     /**
+     * Get User's identity providers
+     *
+     * @param string $userId The unique ID of the user.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\UserIdentityProvider[]
+     */
+    public function getUserIdentityProviders($userId)
+    {
+        $path = "user_management/users/{$userId}/identities";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        $userIdentityProviders = [];
+        foreach ($response as $responseData) {
+            \array_push($userIdentityProviders, Resource\UserIdentityProvider::constructFromResponse($responseData));
+        }
+
+        return $userIdentityProviders;
+    }
+
+    /**
      * Get a User by external ID.
      *
      * @param string $externalId The external ID of the user.
