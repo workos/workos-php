@@ -139,7 +139,8 @@ class WorkOS
     }
 
     /**
-     * Get environment variable with fallback to cached config sources
+     * Get environment variable with fallback to cached config sources.
+     * Checks in order: getenv(), $_ENV, $_SERVER
      *
      * @param string $key Environment variable name
      * @return string|false The environment variable value or false if not found
