@@ -43,8 +43,9 @@ class WorkOS
             return self::$apiKey;
         }
 
-        if (getenv("WORKOS_API_KEY")) {
-            self::$apiKey = getenv("WORKOS_API_KEY");
+        $envValue = self::getEnvVariable("WORKOS_API_KEY");
+        if ($envValue) {
+            self::$apiKey = $envValue;
             return self::$apiKey;
         }
 
@@ -71,8 +72,9 @@ class WorkOS
             return self::$clientId;
         }
 
-        if (getenv("WORKOS_CLIENT_ID")) {
-            self::$clientId = getenv("WORKOS_CLIENT_ID");
+        $envValue = self::getEnvVariable("WORKOS_CLIENT_ID");
+        if ($envValue) {
+            self::$clientId = $envValue;
             return self::$clientId;
         }
 
@@ -134,5 +136,29 @@ class WorkOS
     public static function getVersion()
     {
         return self::$version;
+    }
+
+    /**
+     * Get environment variable with fallback to cached config sources
+     *
+     * @param string $key Environment variable name
+     * @return string|false The environment variable value or false if not found
+     */
+    private static function getEnvVariable($key)
+    {
+        $value = getenv($key);
+        if ($value !== false && $value !== '') {
+            return $value;
+        }
+
+        if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
+            return $_ENV[$key];
+        }
+
+        if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') {
+            return $_SERVER[$key];
+        }
+
+        return false;
     }
 }
