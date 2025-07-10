@@ -115,6 +115,27 @@ class SSOTest extends TestCase
         $this->assertEquals($profileFixture, $profileAndToken->profile->toArray());
     }
 
+    public function testGetProfileReturnsProfileWithExpectedValues()
+    {
+        $path = "sso/profile";
+
+        $result = $this->profileAndTokenResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $profile = $this->sso->getProfile();
+        $profileFixture = $this->profileFixture();
+
+        $this->assertEquals($profileFixture, $profile->toArray());
+    }
+
     public function testGetConnection()
     {
         $connection = "connection_id";
