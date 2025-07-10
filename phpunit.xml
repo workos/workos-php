@@ -1,4 +1,6 @@
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerWarnings="true">
     <testsuites>
         <testsuite name="WorkOS PHP Test Suite">
             <directory suffix="Test.php">tests</directory>
