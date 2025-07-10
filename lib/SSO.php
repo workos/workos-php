@@ -135,11 +135,7 @@ class SSO
             true
         );
 
-        if (!array_key_exists('profile', $response)) {
-            throw new Exception\GenericException('The profile was not found in the response.');
-        }
-
-        return Resource\Profile::constructFromResponse($response['profile']);
+        return Resource\Profile::constructFromResponse($response);
     }
 
     /**
