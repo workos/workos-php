@@ -125,21 +125,16 @@ class SSO
      *
      * @return Resource\Profile
      */
-    public function getProfile()
+    public function getProfile($accessToken)
     {
         $response = Client::request(
             Client::METHOD_GET,
             'sso/profile',
+            ["Authorization: Bearer " . $accessToken],
             null,
-            null,
-            true
         );
 
-        if (!array_key_exists('profile', $response)) {
-            throw new Exception\GenericException('The profile was not found in the response.');
-        }
-
-        return Resource\Profile::constructFromResponse($response['profile']);
+        return Resource\Profile::constructFromResponse($response);
     }
 
     /**
