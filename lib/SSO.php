@@ -125,32 +125,17 @@ class SSO
      *
      * @return Resource\Profile
      */
-    public function getProfile($accessToken)
+    public function getProfile()
     {
-        $getProfilePath = "sso/profile";
-
-        $params = [
-            "access_token" => $accessToken
-        ];
-
-        $method = Client::METHOD_GET;
-
-        $url = "https://api.workos.com/sso/profile";
-
-        $requestHeaders = ["Authorization: Bearer " . $accessToken];
-
-        list($result) = Client::requestClient()->request(
-            $method,
-            $url,
-            $requestHeaders,
-            null
+        $response = Client::request(
+            Client::METHOD_GET,
+            'sso/profile',
+            null,
+            null,
+            true
         );
 
-        $decodedResponse = json_decode($result, true);
-
-        $profile = Resource\Profile::constructFromResponse($decodedResponse);
-
-        return $profile->json();
+        return Resource\Profile::constructFromResponse($response);
     }
 
     /**

@@ -115,6 +115,27 @@ class SSOTest extends TestCase
         $this->assertEquals($profileFixture, $profileAndToken->profile->toArray());
     }
 
+    public function testGetProfileReturnsProfileWithExpectedValues()
+    {
+        $path = "sso/profile";
+
+        $result = $this->profileResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $profile = $this->sso->getProfile();
+        $profileFixture = $this->profileFixture();
+
+        $this->assertEquals($profileFixture, $profile->toArray());
+    }
+
     public function testGetConnection()
     {
         $connection = "connection_id";
@@ -257,6 +278,31 @@ class SSOTest extends TestCase
                 "license" => "professional"
             ),
         ];
+    }
+
+    private function profileResponseFixture()
+    {
+        return json_encode([
+            "id" => "prof_hen",
+            "email" => "hen@papagenos.com",
+            "first_name" => "hen",
+            "last_name" => "cha",
+            "organization_id" => "org_01FG7HGMY2CZZR2FWHTEE94VF0",
+            "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
+            "connection_type" => "GoogleOAuth",
+            "idp_id" => "randomalphanum",
+            "role" => new RoleResponse("admin"),
+            "groups" => array("Admins", "Developers"),
+            "custom_attributes" => array("license" => "professional"),
+            "raw_attributes" => array(
+                "email" => "hen@papagenos.com",
+                "first_name" => "hen",
+                "last_name" => "cha",
+                "ipd_id" => "randomalphanum",
+                "groups" => array("Admins", "Developers"),
+                "license" => "professional"
+            ),
+        ]);
     }
 
     private function connectionFixture()
