@@ -2,15 +2,20 @@
 
 namespace WorkOS;
 
-use PHPUnit\Framework\Attributes\DataProvider;
+use WorkOS\SSO;
 use PHPUnit\Framework\TestCase;
 use WorkOS\Resource\RoleResponse;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SSOTest extends TestCase
 {
     use TestHelper {
         setUp as traitSetUp;
     }
+    /**
+     * @var SSO
+     */
+    protected $sso;
 
     protected function setUp(): void
     {
@@ -37,7 +42,6 @@ class SSOTest extends TestCase
             "client_id" => WorkOS::getClientId(),
             "response_type" => "code"
         ];
-
         if ($domain) {
             $expectedParams["domain"] = $domain;
         }
@@ -70,7 +74,7 @@ class SSOTest extends TestCase
             $expectedParams["login_hint"] = $loginHint;
         }
 
-        $authorizationUrl = $this->sso->getAuthorizationUrl(
+        $fn = fn () => $this->sso->getAuthorizationUrl(
             $domain,
             $redirectUri,
             $state,
@@ -80,6 +84,16 @@ class SSOTest extends TestCase
             $domainHint,
             $loginHint
         );
+
+        if ($domain) {
+            $authorizationUrl = $this->assertDeprecationTriggered(
+                "'domain' is being deprecated, please switch to using 'connection' or 'organization'.",
+                $fn
+            );
+        } else {
+            $authorizationUrl = $fn();
+        }
+
         $paramsString = \parse_url($authorizationUrl, \PHP_URL_QUERY);
         \parse_str($paramsString, $paramsArray);
 
@@ -264,10 +278,10 @@ class SSOTest extends TestCase
         return [
             "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
             "domains" => [
-              [
-                "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
-                "domain" => "workos.com"
-              ]
+                [
+                    "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
+                    "domain" => "workos.com"
+                ]
             ],
             "state" => "active",
             "status" => "linked",
@@ -304,8 +318,8 @@ class SSOTest extends TestCase
                     "id" => "conn_01E0CG2C820RP4VS50PRJF8YPX",
                     "domains" => [
                         [
-                          "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
-                          "domain" => "workos.com"
+                            "id" => "conn_dom_01E2GCC7Q3KCNEFA2BW9MXR4T5",
+                            "domain" => "workos.com"
                         ]
                     ],
                     "state" => "active",
