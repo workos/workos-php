@@ -227,7 +227,7 @@ class UserManagement
      *
      * @return Resource\OrganizationMembership
      */
-    public function createOrganizationMembership($userId, $organizationId, $roleSlug = null)
+    public function createOrganizationMembership(string $userId, string $organizationId, ?string $roleSlug = null)
     {
         $path = "user_management/organization_memberships";
 
@@ -306,7 +306,7 @@ class UserManagement
      *
      * @return Resource\OrganizationMembership
      */
-    public function updateOrganizationMembership($organizationMembershipId, $roleSlug = null)
+    public function updateOrganizationMembership(string $organizationMembershipId, ?string $roleSlug = null)
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
@@ -711,7 +711,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
+    public function authenticateWithPassword(string $clientId, string $email, string $password, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -778,7 +778,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
+    public function authenticateWithCode(string $clientId, string $code, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -808,7 +808,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, $ipAddress = null, $userAgent = null)
+    public function authenticateWithEmailVerification(string $clientId, string $code, string $pendingAuthenticationToken, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -949,7 +949,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationFactorAndChallengeTotp
      */
-    public function enrollAuthFactor($userId, $type, $totpIssuer = null, $totpUser = null)
+    public function enrollAuthFactor(string $userId, string $type, ?string $totpIssuer = null, ?string $totpUser = null)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
@@ -1272,11 +1272,11 @@ class UserManagement
      * Returns the logout URL to end a user's session and redirect to your home page.
      *
      * @param string $sessionId The session ID of the user.
-     * @param string $return_to The URL to redirect to after the user logs out.
+     * @param null|string $return_to The URL to redirect to after the user logs out.
      *
      * @return string
      */
-    public function getLogoutUrl(string $sessionId, string $return_to = null)
+    public function getLogoutUrl(string $sessionId, ?string $return_to = null)
     {
         if (!isset($sessionId) || empty($sessionId)) {
             throw new Exception\UnexpectedValueException("sessionId must not be empty");

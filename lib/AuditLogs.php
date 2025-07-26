@@ -33,13 +33,13 @@ class AuditLogs
      *   - **version** (int, *optional*): Event version. Required if the version is not 1.
      *   - **metadata** (array, *optional*): Additional arbitrary key-value data for the event.
      *
-     * @param string $idempotencyKey A unique key ensuring idempotency of events for 24 hours.
+     * @param null|string $idempotencyKey A unique key ensuring idempotency of events for 24 hours.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\AuditLogCreateEventStatus
      */
-    public function createEvent($organizationId, $event, $idempotencyKey = null)
+    public function createEvent(string $organizationId, array $event, ?string $idempotencyKey = null)
     {
         $eventsPath = "audit_logs/events";
 
@@ -58,22 +58,23 @@ class AuditLogs
     }
 
     /**
-     * @param array $auditLogExportOptions Associative array containing the keys detailed below
-     * @var null|string $organizationId Description of the record.
-     * @var null|string $rangeStart ISO-8601 Timestamp of the start of Export's the date range.
-     * @var null|string $rangeEnd ISO-8601 Timestamp  of the end of Export's the date range.
-     * @var null|array $actions Actions that Audit Log Events will be filtered by.
-     * @var null|array $actors Actor names that Audit Log Events will be filtered by. @deprecated 3.3.0 Use $actorNames instead. This method will be removed in a future major version.
-     * @var null|array $targets Target types that Audit Log Events will be filtered by.
-     * @var null|array $actorNames Actor names that Audit Log Events will be filtered by.
-     * @var null|array $actorIds Actor IDs that Audit Log Events will be filtered by.
+     * Creates an export of audit log events for an organization.
+     *
+     * @param string $organizationId The unique identifier for the organization.
+     * @param string $rangeStart ISO-8601 Timestamp of the start of Export's the date range.
+     * @param string $rangeEnd ISO-8601 Timestamp  of the end of Export's the date range.
+     * @param null|array $actions Actions that Audit Log Events will be filtered by.
+     * @param null|array $actors Actor names that Audit Log Events will be filtered by. @deprecated 3.3.0 Use $actorNames instead. This method will be removed in a future major version.
+     * @param null|array $targets Target types that Audit Log Events will be filtered by.
+     * @param null|array $actorNames Actor names that Audit Log Events will be filtered by.
+     * @param null|array $actorIds Actor IDs that Audit Log Events will be filtered by.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\AuditLogExport
      */
 
-    public function createExport($organizationId, $rangeStart, $rangeEnd, $actions = null, $actors = null, $targets = null, $actorNames = null, $actorIds = null)
+    public function createExport(string $organizationId, string $rangeStart, string $rangeEnd, ?array $actions = null, ?array $actors = null, ?array $targets = null, ?array $actorNames = null, ?array $actorIds = null)
     {
         $createExportPath = "audit_logs/exports";
 
