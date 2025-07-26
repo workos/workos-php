@@ -17,7 +17,7 @@ class GenericException extends \Exception implements WorkOSException
      * @param string $message Exception message
      * @param null|array $data Blob
      */
-    public function __construct($message, $data = null)
+    public function __construct(string $message, ?array $data = null)
     {
         $this->message = $message;
 

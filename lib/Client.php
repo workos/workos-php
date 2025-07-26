@@ -105,7 +105,7 @@ class Client
      *
      * @return string
      */
-    public static function generateUrl($path, $params = null)
+    public static function generateUrl(string $path, ?array $params = null)
     {
         $url = WorkOS::getApiBaseUrl() . $path;
 

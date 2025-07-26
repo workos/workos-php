@@ -25,7 +25,7 @@ class BaseRequestException extends \Exception implements WorkOSException
      * @param Response $response
      * @param null|string $message Exception message
      */
-    public function __construct($response, $message = null)
+    public function __construct(Response $response, ?string $message = null)
     {
         $this->response = $response;
 

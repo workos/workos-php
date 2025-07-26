@@ -41,7 +41,7 @@ class WebhookResponse
      * @return self
      * @throws \InvalidArgumentException
      */
-    public static function create($type, $secret, $verdict, $errorMessage = null)
+    public static function create(string $type, string $secret, string $verdict, ?string $errorMessage = null)
     {
         if (!in_array($type, [self::USER_REGISTRATION_ACTION, self::AUTHENTICATION_ACTION])) {
             throw new \InvalidArgumentException('Invalid response type');
