@@ -250,4 +250,28 @@ class Organizations
 
         return [$roles];
     }
+
+    /**
+     * Get feature flags for an organization.
+     *
+     * @param string $organizationId WorkOS organization ID to fetch feature flags for
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array Feature flags for the organization
+     */
+    public function getFeatureFlags($organizationId)
+    {
+        $featureFlagsPath = "organizations/{$organizationId}/feature-flags";
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            null,
+            true
+        );
+
+        return $response;
+    }
 }
