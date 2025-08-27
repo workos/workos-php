@@ -1272,11 +1272,11 @@ class UserManagement
      * Returns the logout URL to end a user's session and redirect to your home page.
      *
      * @param string $sessionId The session ID of the user.
-     * @param string $return_to The URL to redirect to after the user logs out.
+     * @param string|null $return_to The URL to redirect to after the user logs out.
      *
      * @return string
      */
-    public function getLogoutUrl(string $sessionId, string $return_to = null)
+    public function getLogoutUrl(string $sessionId, ?string $return_to = null)
     {
         if (!isset($sessionId) || empty($sessionId)) {
             throw new Exception\UnexpectedValueException("sessionId must not be empty");

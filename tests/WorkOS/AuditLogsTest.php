@@ -10,6 +10,11 @@ class AuditLogsTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var AuditLogs
+     */
+    protected $al;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

@@ -10,6 +10,11 @@ class MFATest extends TestCase
         setUp as traitSetUp;
     }
 
+    /**
+     * @var MFA
+     */
+    protected $mfa;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

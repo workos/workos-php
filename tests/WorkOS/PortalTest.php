@@ -10,6 +10,11 @@ class PortalTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var Portal
+     */
+    protected $ap;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

@@ -12,6 +12,11 @@ class SSOTest extends TestCase
         setUp as traitSetUp;
     }
 
+    /**
+     * @var SSO
+     */
+    protected $sso;
+
     protected function setUp(): void
     {
         $this->traitSetUp();
