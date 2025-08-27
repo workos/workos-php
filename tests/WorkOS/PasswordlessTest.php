@@ -10,6 +10,11 @@ class PasswordlessTest extends TestCase
         setUp as traitSetUp;
     }
 
+    /**
+     * @var Passwordless
+     */
+    protected $passwordless;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

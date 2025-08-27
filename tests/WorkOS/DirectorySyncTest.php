@@ -10,6 +10,11 @@ class DirectorySyncTest extends TestCase
         setUp as traitSetUp;
     }
 
+    /**
+     * @var DirectorySync
+     */
+    protected $ds;
+
     protected function setUp(): void
     {
         $this->traitSetUp();
