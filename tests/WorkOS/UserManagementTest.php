@@ -893,7 +893,8 @@ class UserManagementTest extends TestCase
         $params = [
             "organization_id" => $orgId,
             "user_id" => $userId,
-            "role_slug" => $roleSlug
+            "role_slug" => $roleSlug,
+            "role_slugs" => null,
         ];
 
         $this->mockRequest(
@@ -908,6 +909,38 @@ class UserManagementTest extends TestCase
         $organizationMembership = $this->organizationMembershipFixture();
 
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId, $roleSlug);
+
+        $this->assertSame($organizationMembership, $response->toArray());
+    }
+
+    public function testCreateOrganizationMembershipWithRoleSlugs()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $roleSlugs = ["admin"];
+        $path = "user_management/organization_memberships";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId,
+            "role_slug" => null,
+            "role_slugs" => $roleSlugs,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->createOrganizationMembership($userId, $orgId, null, $roleSlugs);
 
         $this->assertSame($organizationMembership, $response->toArray());
     }
@@ -1071,7 +1104,7 @@ class UserManagementTest extends TestCase
             Client::METHOD_PUT,
             $path,
             null,
-            ["role_slug" => $roleSlug],
+            ["role_slug" => $roleSlug, "role_slugs" => null],
             true,
             $result
         );
@@ -1079,6 +1112,28 @@ class UserManagementTest extends TestCase
         $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, $roleSlug);
         $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
     }
+
+    public function testUpdateOrganizationMembershipWithRoleSlugs()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $roleSlugs = ["admin"];
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            ["role_slug" => null, "role_slugs" => $roleSlugs],
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, $roleSlugs);
+        $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
+    }
+
 
     public function testDeactivateOrganizationMembership()
     {
@@ -1396,6 +1451,11 @@ class UserManagementTest extends TestCase
             "role" => [
                 "slug" => "admin",
             ],
+            "roles" => [
+                [
+                    "slug" => "admin",
+                ],
+            ],
             "status" => $status,
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z",
@@ -1414,6 +1474,11 @@ class UserManagementTest extends TestCase
                         "organization_id" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
                         "role" => [
                             "slug" => "admin",
+                        ],
+                        "roles" => [
+                            [
+                                "slug" => "admin",
+                            ]
                         ],
                         "status" => "active",
                         "created_at" => "2021-06-25T19:07:33.155Z",
@@ -1437,6 +1502,11 @@ class UserManagementTest extends TestCase
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
             "role" => [
                 "slug" => "admin",
+            ],
+            "roles" => [
+                [
+                    "slug" => "admin",
+                ],
             ],
             "status" => "active",
             "createdAt" => "2021-06-25T19:07:33.155Z",

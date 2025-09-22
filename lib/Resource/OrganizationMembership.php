@@ -10,6 +10,7 @@ namespace WorkOS\Resource;
  * @property string $userId
  * @property string $organizationId
  * @property RoleResponse $role
+ * @property array<RoleResponse> $roles
  * @property 'active'|'inactive'|'pending' $status
  * @property string $createdAt
  * @property string $updatedAt
@@ -24,6 +25,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "userId",
         "organizationId",
         "role",
+        "roles",
         "status",
         "createdAt",
         "updatedAt"
@@ -35,6 +37,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "user_id" => "userId",
         "organization_id" => "organizationId",
         "role" => "role",
+        "roles" => "roles",
         "status" => "status",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
