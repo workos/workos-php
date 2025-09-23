@@ -234,10 +234,16 @@ class UserManagement
 
         $params = [
             "organization_id" => $organizationId,
-            "user_id" => $userId,
-            "role_slug" => $roleSlug,
-            "role_slugs" => $roleSlugs
+            "user_id" => $userId
         ];
+
+        if (!is_null($roleSlug)) {
+            $params["role_slug"] = $roleSlug;
+        }
+
+        if (!is_null($roleSlugs)) {
+            $params["role_slugs"] = $roleSlugs;
+        }
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -313,10 +319,15 @@ class UserManagement
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
-        $params = [
-            "role_slug" => $roleSlug,
-            "role_slugs" => $roleSlugs
-        ];
+        $params = [];
+
+        if (!is_null($roleSlug)) {
+            $params["role_slug"] = $roleSlug;
+        }
+
+        if (!is_null($roleSlugs)) {
+            $params["role_slugs"] = $roleSlugs;
+        }
 
         $response = Client::request(
             Client::METHOD_PUT,

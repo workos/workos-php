@@ -894,7 +894,6 @@ class UserManagementTest extends TestCase
             "organization_id" => $orgId,
             "user_id" => $userId,
             "role_slug" => $roleSlug,
-            "role_slugs" => null,
         ];
 
         $this->mockRequest(
@@ -925,7 +924,6 @@ class UserManagementTest extends TestCase
         $params = [
             "organization_id" => $orgId,
             "user_id" => $userId,
-            "role_slug" => null,
             "role_slugs" => $roleSlugs,
         ];
 
@@ -1104,7 +1102,7 @@ class UserManagementTest extends TestCase
             Client::METHOD_PUT,
             $path,
             null,
-            ["role_slug" => $roleSlug, "role_slugs" => null],
+            ["role_slug" => $roleSlug],
             true,
             $result
         );
@@ -1125,7 +1123,7 @@ class UserManagementTest extends TestCase
             Client::METHOD_PUT,
             $path,
             null,
-            ["role_slug" => null, "role_slugs" => $roleSlugs],
+            ["role_slugs" => $roleSlugs],
             true,
             $result
         );
