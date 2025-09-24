@@ -133,6 +133,136 @@ class AuditLogsTest extends TestCase
 
         $this->assertSame($getExportFixture, $auditLogGetExport->toArray());
     }
+
+    public function testCreateSchema()
+    {
+        $path = "audit_logs/actions/document.updated/schemas";
+
+        $action = "document.updated";
+        $schema = [
+            "targets" => [
+                [
+                    "type" => "document"
+                ],
+                [
+                    "type" => "user"
+                ]
+            ]
+        ];
+
+        $params = $schema;
+
+        $result = $this->createSchemaResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->al->createSchema($action, $schema);
+        $schemaFixture = $this->createSchemaFixture();
+
+        $this->assertSame($schemaFixture, $response);
+    }
+
+    public function testSchemaExists()
+    {
+        $path = "audit_logs/actions/document.updated/schemas";
+        $action = "document.updated";
+
+        $result = $this->schemaExistsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $exists = $this->al->schemaExists($action);
+
+        $this->assertTrue($exists);
+    }
+
+    public function testSchemaExistsNotFound()
+    {
+        $path = "audit_logs/actions/nonexistent.action/schemas";
+        $action = "nonexistent.action";
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            404
+        );
+
+        $exists = $this->al->schemaExists($action);
+
+        $this->assertFalse($exists);
+    }
+
+    public function testListActions()
+    {
+        $path = "audit_logs/actions";
+
+        $params = [
+            "limit" => 100
+        ];
+
+        $result = $this->listActionsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->al->listActions();
+        $actionsFixture = $this->listActionsFixture();
+
+        $this->assertSame($actionsFixture, $response);
+    }
+
+    public function testListActionsWithPagination()
+    {
+        $path = "audit_logs/actions";
+
+        $params = [
+            "limit" => 50,
+            "before" => "action_123",
+            "after" => "action_456",
+            "order" => "desc"
+        ];
+
+        $result = $this->listActionsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->al->listActions(50, "action_123", "action_456", "desc");
+        $actionsFixture = $this->listActionsFixture();
+
+        $this->assertSame($actionsFixture, $response);
+    }
     // Fixtures
 
     private function createEventFixture()
@@ -194,6 +324,110 @@ class AuditLogsTest extends TestCase
             "url" => "https://audit-logs.com/download.csv",
             "created_at" => "2022-08-18T18:07:10.822Z",
             "updated_at" => "2022-08-18T18:07:10.822Z",
+        ]);
+    }
+
+    private function createSchemaFixture()
+    {
+        return [
+            "object" => "audit_log_schema",
+            "id" => "schema_123",
+            "action" => "document.updated",
+            "targets" => [
+                ["type" => "document"],
+                ["type" => "user"]
+            ],
+            "created_at" => "2022-08-18T18:07:10.822Z",
+            "updated_at" => "2022-08-18T18:07:10.822Z",
+        ];
+    }
+
+    private function createSchemaResponseFixture()
+    {
+        return json_encode([
+            "object" => "audit_log_schema",
+            "id" => "schema_123",
+            "action" => "document.updated",
+            "targets" => [
+                ["type" => "document"],
+                ["type" => "user"]
+            ],
+            "created_at" => "2022-08-18T18:07:10.822Z",
+            "updated_at" => "2022-08-18T18:07:10.822Z",
+        ]);
+    }
+
+    private function schemaExistsResponseFixture()
+    {
+        return json_encode([
+            "object" => "audit_log_schema",
+            "id" => "schema_123",
+            "action" => "document.updated",
+            "targets" => [
+                ["type" => "document"]
+            ],
+            "created_at" => "2022-08-18T18:07:10.822Z",
+            "updated_at" => "2022-08-18T18:07:10.822Z",
+        ]);
+    }
+
+    private function listActionsFixture()
+    {
+        return [
+            "object" => "list",
+            "data" => [
+                [
+                    "object" => "audit_log_action",
+                    "id" => "action_123",
+                    "name" => "document.updated",
+                    "description" => "Document was updated",
+                    "created_at" => "2022-08-18T18:07:10.822Z",
+                    "updated_at" => "2022-08-18T18:07:10.822Z",
+                ],
+                [
+                    "object" => "audit_log_action",
+                    "id" => "action_456",
+                    "name" => "user.created",
+                    "description" => "User was created",
+                    "created_at" => "2022-08-18T18:07:10.822Z",
+                    "updated_at" => "2022-08-18T18:07:10.822Z",
+                ]
+            ],
+            "list_metadata" => [
+                "before" => null,
+                "after" => "action_456",
+                "limit" => 100
+            ]
+        ];
+    }
+
+    private function listActionsResponseFixture()
+    {
+        return json_encode([
+            "object" => "list",
+            "data" => [
+                [
+                    "object" => "audit_log_action",
+                    "id" => "action_123",
+                    "name" => "document.updated",
+                    "description" => "Document was updated",
+                    "created_at" => "2022-08-18T18:07:10.822Z",
+                    "updated_at" => "2022-08-18T18:07:10.822Z",
+                ],
+                [
+                    "object" => "audit_log_action",
+                    "id" => "action_456",
+                    "name" => "user.created",
+                    "description" => "User was created",
+                    "created_at" => "2022-08-18T18:07:10.822Z",
+                    "updated_at" => "2022-08-18T18:07:10.822Z",
+                ]
+            ],
+            "list_metadata" => [
+                "before" => null,
+                "after" => "action_456",
+                "limit" => 100
+            ]
         ]);
     }
 }
