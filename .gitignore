@@ -6,3 +6,6 @@ vendor/
 # PHPUnit
 /.phpunit.cache
 .phpunit.result.cache
+
+# IDEs
+.idea/

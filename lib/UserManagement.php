@@ -222,20 +222,28 @@ class UserManagement
      * @param string $userId User ID
      * @param string $organizationId Organization ID
      * @param string|null $roleSlug Role Slug
+     * @param string|null $roleSlugs Role Slugs
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function createOrganizationMembership($userId, $organizationId, $roleSlug = null)
+    public function createOrganizationMembership($userId, $organizationId, $roleSlug = null, $roleSlugs = null)
     {
         $path = "user_management/organization_memberships";
 
         $params = [
             "organization_id" => $organizationId,
-            "user_id" => $userId,
-            "role_slug" => $roleSlug
+            "user_id" => $userId
         ];
+
+        if (!is_null($roleSlug)) {
+            $params["role_slug"] = $roleSlug;
+        }
+
+        if (!is_null($roleSlugs)) {
+            $params["role_slugs"] = $roleSlugs;
+        }
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -300,19 +308,26 @@ class UserManagement
      * Update a User organization membership.
      *
      * @param string $organizationMembershipId Organization Membership ID
-     * @param string|null $role_slug The unique role identifier.
+     * @param string|null $role_slug The unique slug of the role to grant to this membership.
+     * @param string|null $role_slugs The unique slugs of the roles to grant to this membership.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function updateOrganizationMembership($organizationMembershipId, $roleSlug = null)
+    public function updateOrganizationMembership($organizationMembershipId, $roleSlug = null, $roleSlugs = null)
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
-        $params = [
-            "role_slug" => $roleSlug
-        ];
+        $params = [];
+
+        if (!is_null($roleSlug)) {
+            $params["role_slug"] = $roleSlug;
+        }
+
+        if (!is_null($roleSlugs)) {
+            $params["role_slugs"] = $roleSlugs;
+        }
 
         $response = Client::request(
             Client::METHOD_PUT,
