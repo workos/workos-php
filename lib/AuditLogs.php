@@ -137,7 +137,7 @@ class AuditLogs
      * Create an audit log action schema.
      *
      * @param string $action The action name for the schema
-     * @param array $schema Array containing the schema definition 
+     * @param array $schema Array containing the schema definition
      *
      * @throws Exception\WorkOSException
      * @throws \InvalidArgumentException
