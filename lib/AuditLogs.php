@@ -115,15 +115,110 @@ class AuditLogs
      * @param string $auditLogExportId Unique identifier of the Audit Log Export
      *
      * @throws Exception\WorkOSException
+     * @throws \InvalidArgumentException
      *
      * @return Resource\AuditLogExport
      */
     public function getExport($auditLogExportId)
     {
+        // Validate export ID parameter to prevent path traversal
+        if (!is_string($auditLogExportId) || !preg_match('/^[a-zA-Z0-9._-]+$/', $auditLogExportId)) {
+            throw new \InvalidArgumentException('Invalid export ID format. Export ID must be a string containing only alphanumeric characters, dots, underscores, and hyphens.');
+        }
+
         $getExportPath = "audit_logs/exports/{$auditLogExportId}";
 
         $response = Client::request(Client::METHOD_GET, $getExportPath, null, null, true);
 
         return Resource\AuditLogExport::constructFromResponse($response);
+    }
+
+    /**
+     * Create an audit log action schema.
+     *
+     * @param string $action The action name for the schema
+     * @param array $schema Array containing the schema definition
+     *
+     * @throws Exception\WorkOSException
+     * @throws \InvalidArgumentException
+     *
+     * @return array The created schema response
+     */
+    public function createSchema($action, $schema)
+    {
+        // Validate action parameter to prevent path traversal
+        if (!is_string($action) || !preg_match('/^[a-zA-Z0-9._-]+$/', $action)) {
+            throw new \InvalidArgumentException('Invalid action format. Action must be a string containing only alphanumeric characters, dots, underscores, and hyphens.');
+        }
+
+        $schemaPath = "audit_logs/actions/{$action}/schemas";
+
+        $response = Client::request(Client::METHOD_POST, $schemaPath, null, $schema, true);
+
+        return $response;
+    }
+
+    /**
+     * Check if an audit log action schema exists.
+     *
+     * @param string $action The action name to check
+     *
+     * @throws Exception\WorkOSException
+     * @throws \InvalidArgumentException
+     *
+     * @return bool True if schema exists, false if not found
+     */
+    public function schemaExists($action)
+    {
+        // Validate action parameter to prevent path traversal
+        if (!is_string($action) || !preg_match('/^[a-zA-Z0-9._-]+$/', $action)) {
+            throw new \InvalidArgumentException('Invalid action format. Action must be a string containing only alphanumeric characters, dots, underscores, and hyphens.');
+        }
+
+        $schemaPath = "audit_logs/actions/{$action}/schemas";
+
+        try {
+            Client::request(Client::METHOD_GET, $schemaPath, null, null, true);
+            return true;
+        } catch (Exception\NotFoundException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * List all registered audit log actions.
+     *
+     * @param int $limit Maximum number of actions to return (default: 100)
+     * @param null|string $before Action ID to look before
+     * @param null|string $after Action ID to look after
+     * @param null|string $order The order in which to paginate records ("asc" or "desc")
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array Array of registered actions
+     */
+    public function listActions($limit = 100, $before = null, $after = null, $order = null)
+    {
+        $actionsPath = "audit_logs/actions";
+
+        $params = [
+            "limit" => $limit
+        ];
+
+        if ($before !== null) {
+            $params["before"] = $before;
+        }
+
+        if ($after !== null) {
+            $params["after"] = $after;
+        }
+
+        if ($order !== null) {
+            $params["order"] = $order;
+        }
+
+        $response = Client::request(Client::METHOD_GET, $actionsPath, null, $params, true);
+
+        return $response;
     }
 }
