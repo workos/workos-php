@@ -88,9 +88,9 @@ class AuditLogs
         };
 
         if (!is_null($actors)) {
-            $msg = "'actors' is deprecated. Please use 'actorNames' instead'";
+            $msg = "'actors' is deprecated. Please use 'actorNames' instead.";
 
-            error_log($msg);
+            trigger_error($msg, E_USER_DEPRECATED);
 
             $params["actors"] = $actors;
         };

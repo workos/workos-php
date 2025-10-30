@@ -2,6 +2,7 @@
 
 namespace WorkOS;
 
+use WorkOS\Portal;
 use PHPUnit\Framework\TestCase;
 
 class PortalTest extends TestCase
@@ -9,13 +10,17 @@ class PortalTest extends TestCase
     use TestHelper {
         setUp as protected traitSetUp;
     }
+    /**
+     * @var Portal
+     */
+    protected $portal;
 
     protected function setUp(): void
     {
         $this->traitSetUp();
 
         $this->withApiKey();
-        $this->ap = new Portal();
+        $this->portal = new Portal();
     }
 
     public function testGenerateLinkSSO()
@@ -42,7 +47,7 @@ class PortalTest extends TestCase
 
         $expectation = "https://id.workos.com/portal/launch?secret=secret";
 
-        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "sso");
+        $response = $this->portal->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "sso");
         $this->assertSame($expectation, $response->link);
     }
 
@@ -70,7 +75,7 @@ class PortalTest extends TestCase
 
         $expectation = "https://id.workos.com/portal/launch?secret=secret";
 
-        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "dsync");
+        $response = $this->portal->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "dsync");
         $this->assertSame($expectation, $response->link);
     }
 
@@ -98,7 +103,7 @@ class PortalTest extends TestCase
 
         $expectation = "https://id.workos.com/portal/launch?secret=secret";
 
-        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "audit_logs");
+        $response = $this->portal->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "audit_logs");
         $this->assertSame($expectation, $response->link);
     }
 
@@ -126,7 +131,7 @@ class PortalTest extends TestCase
 
         $expectation = "https://id.workos.com/portal/launch?secret=secret";
 
-        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "log_streams");
+        $response = $this->portal->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "log_streams");
         $this->assertSame($expectation, $response->link);
     }
 

@@ -40,15 +40,15 @@ class SSO
         $authorizationPath = "sso/authorize";
 
         if (!isset($domain) && !isset($provider) && !isset($connection) && !isset($organization)) {
-            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required";
+            $msg = "Either \$domain, \$provider, \$connection, or \$organization is required.";
 
             throw new Exception\UnexpectedValueException($msg);
         }
 
         if (isset($domain)) {
-            $msg = "Domain is being deprecated, please switch to using Connection or Organization ID";
+            $msg = "'domain' is being deprecated, please switch to using 'connection' or 'organization'.";
 
-            error_log($msg);
+            trigger_error($msg, E_USER_DEPRECATED);
         }
 
         $params = [

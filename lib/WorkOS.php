@@ -49,7 +49,7 @@ class WorkOS
             return self::$apiKey;
         }
 
-        $msg = "\$apiKey is required";
+        $msg = "\$apiKey is required.";
         throw new \WorkOS\Exception\ConfigurationException($msg);
     }
 
@@ -78,7 +78,7 @@ class WorkOS
             return self::$clientId;
         }
 
-        $msg = "\$clientId is required";
+        $msg = "\$clientId is required.";
         throw new \WorkOS\Exception\ConfigurationException($msg);
     }
 
