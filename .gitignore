@@ -1,11 +1,6 @@
-# Composer
-composer.lock
-composer.phar
-vendor/
-
 # PHPUnit
 /.phpunit.cache
 .phpunit.result.cache
 
 # IDEs
-.idea/
+pad
