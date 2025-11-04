@@ -1,4 +1,5 @@
-# This workflow will build and push a new container image to Alibaba Cloud Container Registry (ACR),
+# go get -u github.com/workos/workos-go/...
+workflow will build and push a new container image to Alibaba Cloud Container Registry (ACR),
 # and then will deploy it to Alibaba Cloud Container Service for Kubernetes (ACK), when there is a push to the "main" branch.
 #
 # To use this workflow, you will need to complete the following set-up steps:
