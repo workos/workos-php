@@ -10,6 +10,11 @@ class OrganizationsTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var Organizations
+     */
+    protected $organizations;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

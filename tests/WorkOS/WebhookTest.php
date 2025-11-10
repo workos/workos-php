@@ -10,6 +10,41 @@ class WebhookTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var Webhook
+     */
+    protected $ap;
+
+    /**
+     * @var string
+     */
+    protected $payload;
+
+    /**
+     * @var string
+     */
+    protected $secret;
+
+    /**
+     * @var int
+     */
+    protected $tolerance;
+
+    /**
+     * @var int
+     */
+    protected $time;
+
+    /**
+     * @var string
+     */
+    protected $expectedSignature;
+
+    /**
+     * @var string
+     */
+    protected $sigHeader;
+
     protected function setUp(): void
     {
         $this->traitSetUp();
@@ -21,7 +56,7 @@ class WebhookTest extends TestCase
         $this->secret = 'secret';
         $this->tolerance = 180;
         $this->time = time();
-        $decodedBody = utf8_decode($this->payload);
+        $decodedBody = $this->payload;
         $signedPayload = $this->time . "." . $decodedBody;
         $this->expectedSignature = hash_hmac("sha256", $signedPayload, $this->secret, false);
         $this->sigHeader = 't=' . $this->time . ', v1=' . $this->expectedSignature;
