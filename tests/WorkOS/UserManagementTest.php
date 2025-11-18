@@ -1314,6 +1314,113 @@ class UserManagementTest extends TestCase
         $this->assertSame($response->toArray(), $expected);
     }
 
+    public function testResendInvitation()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $result = $this->invitationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->resendInvitation($invitationId);
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testResendInvitation404()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $this->expectException(Exception\NotFoundException::class);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            404
+        );
+
+        $this->userManagement->resendInvitation($invitationId);
+    }
+
+    public function testResendInvitationExpired()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $this->expectException(Exception\BadRequestException::class);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            400
+        );
+
+        $this->userManagement->resendInvitation($invitationId);
+    }
+
+    public function testResendInvitationRevoked()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $this->expectException(Exception\BadRequestException::class);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            400
+        );
+
+        $this->userManagement->resendInvitation($invitationId);
+    }
+
+    public function testResendInvitationAccepted()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $this->expectException(Exception\BadRequestException::class);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            400
+        );
+
+        $this->userManagement->resendInvitation($invitationId);
+    }
+
     public function testGetJwksUrl()
     {
         $clientId = "12345";
