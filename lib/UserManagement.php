@@ -618,6 +618,30 @@ class UserManagement
     }
 
     /**
+     * Resend an Invitation
+     *
+     * @param string $invitationId ID of the Invitation
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Invitation
+     */
+    public function resendInvitation($invitationId)
+    {
+        $path = "user_management/invitations/{$invitationId}/resend";
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Invitation::constructFromResponse($response);
+    }
+
+    /**
      * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
      *
      * @param string $redirectUri URI to direct the user to upon successful completion of SSO
