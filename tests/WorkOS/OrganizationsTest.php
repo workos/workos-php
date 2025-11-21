@@ -10,6 +10,11 @@ class OrganizationsTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var Organizations
+     */
+    protected $organizations;
+
     protected function setUp(): void
     {
         $this->traitSetUp();
@@ -190,6 +195,25 @@ class OrganizationsTest extends TestCase
         $this->assertSame($role, $roles[0]->toArray());
     }
 
+    public function testGetFeatureFlags()
+    {
+        $featureFlagsPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/feature-flags";
+
+        $result = $this->featureFlagsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->organizations->getFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame(json_decode($result, true), $response);
+    }
+
     // Fixtures
 
     private function createOrganizationResponseFixture()
@@ -341,5 +365,45 @@ class OrganizationsTest extends TestCase
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
         ];
+    }
+
+    private function featureFlagsResponseFixture()
+    {
+        return json_encode([
+            "object" => "list",
+            "data" => [
+                [
+                    "object" => "feature_flag",
+                    "id" => "flag_01K2QR5YSWRB8J7GGAG05Y24HQ",
+                    "slug" => "flag3",
+                    "name" => "Flag3",
+                    "description" => "",
+                    "created_at" => "2025-08-15T20:54:13.561Z",
+                    "updated_at" => "2025-08-15T20:54:13.561Z"
+                ],
+                [
+                    "object" => "feature_flag",
+                    "id" => "flag_01K2QR5HGK2HQVFDZ4T60GWGVD",
+                    "slug" => "flag2",
+                    "name" => "Flag2",
+                    "description" => "",
+                    "created_at" => "2025-08-15T20:53:59.952Z",
+                    "updated_at" => "2025-08-15T20:53:59.952Z"
+                ],
+                [
+                    "object" => "feature_flag",
+                    "id" => "flag_01K2QKSH38RF4P9FV917PE24R3",
+                    "slug" => "flag1",
+                    "name" => "Flag1",
+                    "description" => "",
+                    "created_at" => "2025-08-15T19:37:32.005Z",
+                    "updated_at" => "2025-08-15T19:37:32.005Z"
+                ],
+            ],
+            "list_metadata" => [
+                "before" => "",
+                "after" => ""
+            ]
+        ]);
     }
 }
