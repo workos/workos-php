@@ -20,10 +20,10 @@ class ActionsTest extends TestCase
     public function testAllowUserRegistration()
     {
         $response = $this->actions->allowUserRegistration($this->webhookSecret);
-        
+
         $this->assertInstanceOf(WebhookResponse::class, $response);
         $responseArray = $response->toArray();
-        
+
         $this->assertEquals(WebhookResponse::USER_REGISTRATION_ACTION, $responseArray['object']);
         $this->assertEquals(WebhookResponse::VERDICT_ALLOW, $responseArray['payload']['verdict']);
         $this->assertArrayHasKey('signature', $responseArray);
@@ -33,7 +33,7 @@ class ActionsTest extends TestCase
     {
         $reason = 'User meets all requirements';
         $response = $this->actions->allowUserRegistration($this->webhookSecret, $reason);
-        
+
         $responseArray = $response->toArray();
         $this->assertEquals(WebhookResponse::VERDICT_ALLOW, $responseArray['payload']['verdict']);
     }
@@ -42,10 +42,10 @@ class ActionsTest extends TestCase
     {
         $reason = 'Domain not allowed';
         $response = $this->actions->denyUserRegistration($this->webhookSecret, $reason);
-        
+
         $this->assertInstanceOf(WebhookResponse::class, $response);
         $responseArray = $response->toArray();
-        
+
         $this->assertEquals(WebhookResponse::USER_REGISTRATION_ACTION, $responseArray['object']);
         $this->assertEquals(WebhookResponse::VERDICT_DENY, $responseArray['payload']['verdict']);
         $this->assertEquals($reason, $responseArray['payload']['error_message']);
@@ -54,10 +54,10 @@ class ActionsTest extends TestCase
     public function testAllowAuthentication()
     {
         $response = $this->actions->allowAuthentication($this->webhookSecret);
-        
+
         $this->assertInstanceOf(WebhookResponse::class, $response);
         $responseArray = $response->toArray();
-        
+
         $this->assertEquals(WebhookResponse::AUTHENTICATION_ACTION, $responseArray['object']);
         $this->assertEquals(WebhookResponse::VERDICT_ALLOW, $responseArray['payload']['verdict']);
     }
@@ -66,10 +66,10 @@ class ActionsTest extends TestCase
     {
         $reason = 'User account is suspended';
         $response = $this->actions->denyAuthentication($this->webhookSecret, $reason);
-        
+
         $this->assertInstanceOf(WebhookResponse::class, $response);
         $responseArray = $response->toArray();
-        
+
         $this->assertEquals(WebhookResponse::AUTHENTICATION_ACTION, $responseArray['object']);
         $this->assertEquals(WebhookResponse::VERDICT_DENY, $responseArray['payload']['verdict']);
         $this->assertEquals($reason, $responseArray['payload']['error_message']);
@@ -88,18 +88,18 @@ class ActionsTest extends TestCase
         $timestamp = time();
         $signature = 'invalid_signature';
         $signatureHeader = 't=' . $timestamp . ',v1=' . $signature;
-        
+
         $result = $this->actions->verifyWebhook($signatureHeader, $payload, $this->webhookSecret);
-        
+
         $this->assertFalse($result);
     }
 
     public function testParseWebhook()
     {
         $payload = '{"object": "user_registration_action_context", "user_data": {"email": "test@example.com"}}';
-        
+
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $this->assertIsObject($webhook);
         $this->assertEquals('user_registration_action_context', $webhook->object);
     }
@@ -108,7 +108,7 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $this->assertTrue($this->actions->isUserRegistrationWebhook($webhook));
     }
 
@@ -116,7 +116,7 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "authentication_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $this->assertFalse($this->actions->isUserRegistrationWebhook($webhook));
     }
 
@@ -124,7 +124,7 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "authentication_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $this->assertTrue($this->actions->isAuthenticationWebhook($webhook));
     }
 
@@ -132,7 +132,7 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $this->assertFalse($this->actions->isAuthenticationWebhook($webhook));
     }
 
@@ -140,9 +140,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "authentication_action_context", "user": {"email": "user@example.com"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $email = $this->actions->extractEmail($webhook);
-        
+
         $this->assertEquals('user@example.com', $email);
     }
 
@@ -150,9 +150,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context", "user_data": {"email": "newuser@example.com"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $email = $this->actions->extractEmail($webhook);
-        
+
         $this->assertEquals('newuser@example.com', $email);
     }
 
@@ -160,9 +160,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $email = $this->actions->extractEmail($webhook);
-        
+
         $this->assertNull($email);
     }
 
@@ -170,9 +170,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "authentication_action_context", "user": {"id": "user_123", "email": "user@example.com"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $userId = $this->actions->extractUserId($webhook);
-        
+
         $this->assertEquals('user_123', $userId);
     }
 
@@ -180,9 +180,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context", "user_data": {"email": "newuser@example.com"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $userId = $this->actions->extractUserId($webhook);
-        
+
         $this->assertNull($userId);
     }
 
@@ -190,9 +190,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "authentication_action_context", "organization": {"id": "org_123"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $orgId = $this->actions->extractOrganizationId($webhook);
-        
+
         $this->assertEquals('org_123', $orgId);
     }
 
@@ -200,9 +200,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context", "invitation": {"organization_id": "org_456"}}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $orgId = $this->actions->extractOrganizationId($webhook);
-        
+
         $this->assertEquals('org_456', $orgId);
     }
 
@@ -210,9 +210,9 @@ class ActionsTest extends TestCase
     {
         $payload = '{"object": "user_registration_action_context"}';
         $webhook = $this->actions->parseWebhook($payload);
-        
+
         $orgId = $this->actions->extractOrganizationId($webhook);
-        
+
         $this->assertNull($orgId);
     }
 
@@ -221,7 +221,7 @@ class ActionsTest extends TestCase
         // Test that Actions class properly integrates with existing WebhookResponse
         $response = $this->actions->denyUserRegistration($this->webhookSecret, 'Test reason');
         $responseArray = $response->toArray();
-        
+
         $this->assertArrayHasKey('object', $responseArray);
         $this->assertArrayHasKey('payload', $responseArray);
         $this->assertArrayHasKey('signature', $responseArray);

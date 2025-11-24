@@ -142,7 +142,7 @@ class Actions
      * ```php
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($jsonPayload);
-     * 
+     *
      * if ($actions->isUserRegistrationWebhook($webhook)) {
      *     $email = $actions->extractEmail($webhook);
      * }
@@ -163,7 +163,7 @@ class Actions
      * ```php
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($payload);
-     * 
+     *
      * if ($actions->isUserRegistrationWebhook($webhook)) {
      *     // Handle user registration logic
      * }
@@ -184,7 +184,7 @@ class Actions
      * ```php
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($payload);
-     * 
+     *
      * if ($actions->isAuthenticationWebhook($webhook)) {
      *     // Handle authentication logic
      * }
@@ -206,7 +206,7 @@ class Actions
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($payload);
      * $email = $actions->extractEmail($webhook);
-     * 
+     *
      * if ($email) {
      *     // Process email
      * }
@@ -221,12 +221,12 @@ class Actions
         if (isset($webhook->user) && isset($webhook->user->email)) {
             return $webhook->user->email;
         }
-        
+
         // For registration webhooks
         if (isset($webhook->user_data) && isset($webhook->user_data->email)) {
             return $webhook->user_data->email;
         }
-        
+
         return null;
     }
 
@@ -238,7 +238,7 @@ class Actions
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($payload);
      * $userId = $actions->extractUserId($webhook);
-     * 
+     *
      * if ($userId) {
      *     // Process user ID
      * }
@@ -252,7 +252,7 @@ class Actions
         if (isset($webhook->user) && isset($webhook->user->id)) {
             return $webhook->user->id;
         }
-        
+
         return null;
     }
 
@@ -264,7 +264,7 @@ class Actions
      * $actions = new \WorkOS\Actions();
      * $webhook = $actions->parseWebhook($payload);
      * $orgId = $actions->extractOrganizationId($webhook);
-     * 
+     *
      * if ($orgId) {
      *     // Process organization ID
      * }
@@ -279,12 +279,12 @@ class Actions
         if (isset($webhook->organization) && isset($webhook->organization->id)) {
             return $webhook->organization->id;
         }
-        
+
         // For registration webhooks
         if (isset($webhook->invitation) && isset($webhook->invitation->organization_id)) {
             return $webhook->invitation->organization_id;
         }
-        
+
         return null;
     }
 }
