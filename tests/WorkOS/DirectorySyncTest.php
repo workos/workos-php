@@ -3,6 +3,7 @@
 namespace WorkOS;
 
 use PHPUnit\Framework\TestCase;
+use WorkOS\Resource\RoleResponse;
 
 class DirectorySyncTest extends TestCase
 {
@@ -143,7 +144,7 @@ class DirectorySyncTest extends TestCase
         $user = $this->ds->getUser($directoryUser);
         $userFixture = $this->userFixture();
 
-        $this->assertSame($userFixture, $user->toArray());
+        $this->assertEquals($userFixture, $user->toArray());
     }
 
     public function testGetUserPrimaryEmail()
@@ -214,7 +215,7 @@ class DirectorySyncTest extends TestCase
         $user = $this->userFixture();
 
         list($before, $after, $users) = $this->ds->listUsers();
-        $this->assertSame($user, $users[0]->toArray());
+        $this->assertEquals($user, $users[0]->toArray());
     }
 
     public function testDeleteDirectory()
@@ -397,6 +398,14 @@ class DirectorySyncTest extends TestCase
                     "custom_attributes" => [
                         "fullName" => "Yoon Seri"
                     ],
+                    "role" => [
+                        "slug" => "admin"
+                    ],
+                    "roles" => [
+                        [
+                            "slug" => "admin"
+                        ]
+                    ],
                     "id" => "directory_usr_id"
                 ]
             ]
@@ -453,6 +462,14 @@ class DirectorySyncTest extends TestCase
             "custom_attributes" => [
                 "fullName" => "Yoon Seri"
             ],
+            "role" => [
+                "slug" => "admin"
+            ],
+            "roles" => [
+                [
+                    "slug" => "admin"
+                ]
+            ],
             "id" => "directory_usr_id"
         ]);
     }
@@ -500,6 +517,14 @@ class DirectorySyncTest extends TestCase
             ],
             "custom_attributes" => [
                 "fullName" => "Yoon Seri"
+            ],
+            "role" => [
+                "slug" => "admin"
+            ],
+            "roles" => [
+                [
+                    "slug" => "admin"
+                ]
             ],
             "id" => "directory_usr_id"
         ]);
@@ -553,6 +578,10 @@ class DirectorySyncTest extends TestCase
             "jobTitle" => "Software Engineer",
             "state" => "active",
             "idpId" => null,
+            "role" => new RoleResponse("admin"),
+            "roles" => [
+                new RoleResponse("admin"),
+            ],
             "groups" => null,
             "directoryId" => "dir_123",
             "organizationId" => "org_123",
