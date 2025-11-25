@@ -20,7 +20,7 @@ class VaultObject extends BaseWorkOSResource
     public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
         "name" => "name",
-        "updated_at" => "updatedAt",    
+        "updated_at" => "updatedAt",
         "value" => "value",
         "metadata" => "metadata"
     ];

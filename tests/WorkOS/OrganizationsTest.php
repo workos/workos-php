@@ -195,23 +195,32 @@ class OrganizationsTest extends TestCase
         $this->assertSame($role, $roles[0]->toArray());
     }
 
-    public function testGetFeatureFlags()
+    public function testListOrganizationFeatureFlags()
     {
         $featureFlagsPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/feature-flags";
 
         $result = $this->featureFlagsResponseFixture();
 
+        $params = [
+            "limit" => 10,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
         $this->mockRequest(
             Client::METHOD_GET,
             $featureFlagsPath,
             null,
-            null,
+            $params,
             true,
             $result
         );
 
-        $response = $this->organizations->getFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
-        $this->assertSame(json_decode($result, true), $response);
+        $featureFlag = $this->featureFlagFixture();
+
+        list($before, $after, $featureFlags) = $this->organizations->listOrganizationFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame($featureFlag, $featureFlags[0]->toArray());
     }
 
     // Fixtures
@@ -364,6 +373,18 @@ class OrganizationsTest extends TestCase
             "type" => "EnvironmentRole",
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
+        ];
+    }
+
+    private function featureFlagFixture()
+    {
+        return [
+            "id" => "flag_01K2QR5YSWRB8J7GGAG05Y24HQ",
+            "slug" => "flag3",
+            "name" => "Flag3",
+            "description" => "",
+            "createdAt" => "2025-08-15T20:54:13.561Z",
+            "updatedAt" => "2025-08-15T20:54:13.561Z"
         ];
     }
 
