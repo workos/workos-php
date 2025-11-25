@@ -250,4 +250,49 @@ class Organizations
 
         return [$roles];
     }
+
+    /**
+     * List feature flags for an organization.
+     *
+     * @param string $organizationId WorkOS organization ID to fetch feature flags for
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before FeatureFlag ID to look before
+     * @param null|string $after FeatureFlag ID to look after
+     * @param Resource\Order $order The Order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array{?string, ?string, Resource\FeatureFlag[]} An array containing the FeatureFlag ID to use as before and after cursor, and an array of FeatureFlag instances
+     */
+    public function listOrganizationFeatureFlags(
+        $organizationId,
+        $limit = self::DEFAULT_PAGE_SIZE,
+        $before = null,
+        $after = null,
+        $order = null
+    ) {
+        $featureFlagsPath = "organizations/{$organizationId}/feature-flags";
+        $params = [
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "order" => $order
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            $params,
+            true
+        );
+
+        $featureFlags = [];
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+        foreach ($response["data"] as $responseData) {
+            \array_push($featureFlags, Resource\FeatureFlag::constructFromResponse($responseData));
+        }
+
+        return [$before, $after, $featureFlags];
+    }
 }
