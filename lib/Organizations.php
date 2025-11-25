@@ -26,11 +26,11 @@ class Organizations
      * @throws Exception\WorkOSException
      */
     public function listOrganizations(
-        $domains = null,
+        ?array $domains = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $organizationsPath = "organizations";
         $params = [
@@ -76,12 +76,12 @@ class Organizations
      */
     public function createOrganization(
         $name,
-        $domains = null,
-        $allowProfilesOutsideOrganization = null,
-        $idempotencyKey = null,
-        $domain_data = null,
-        $externalId = null,
-        $metadata = null
+        ?array $domains = null,
+        ?bool $allowProfilesOutsideOrganization = null,
+        ?string $idempotencyKey = null,
+        ?array $domain_data = null,
+        ?string $externalId = null,
+        ?array $metadata = null
     ) {
         $idempotencyKey ? $headers = array("Idempotency-Key: $idempotencyKey") : $headers = null;
         $organizationsPath = "organizations";
@@ -126,13 +126,13 @@ class Organizations
      */
     public function updateOrganization(
         $organization,
-        $domains = null,
-        $name = null,
-        $allowProfilesOutsideOrganization = null,
-        $domain_data = null,
-        $stripeCustomerId = null,
-        $externalId = null,
-        $metadata = null
+        ?array $domains = null,
+        ?string $name = null,
+        ?bool $allowProfilesOutsideOrganization = null,
+        ?array $domain_data = null,
+        ?string $stripeCustomerId = null,
+        ?string $externalId = null,
+        ?array $metadata = null
     ) {
         $organizationsPath = "organizations/{$organization}";
 

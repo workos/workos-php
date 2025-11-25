@@ -23,7 +23,7 @@ class Portal
      *
      * @return Resource\PortalLink
      */
-    public function generateLink($organization, $intent, $returnUrl = null, $successUrl = null)
+    public function generateLink($organization, $intent, ?string $returnUrl = null, ?string $successUrl = null)
     {
         $generateLinkPath = "portal/generate_link";
         $params = [

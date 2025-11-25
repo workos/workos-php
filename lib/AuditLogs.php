@@ -39,7 +39,7 @@ class AuditLogs
      *
      * @return Resource\AuditLogCreateEventStatus
      */
-    public function createEvent($organizationId, $event, $idempotencyKey = null)
+    public function createEvent($organizationId, $event, ?string $idempotencyKey = null)
     {
         $eventsPath = "audit_logs/events";
 
@@ -73,7 +73,7 @@ class AuditLogs
      * @return Resource\AuditLogExport
      */
 
-    public function createExport($organizationId, $rangeStart, $rangeEnd, $actions = null, $actors = null, $targets = null, $actorNames = null, $actorIds = null)
+    public function createExport($organizationId, $rangeStart, $rangeEnd, ?array $actions = null, ?array $actors = null, ?array $targets = null, ?array $actorNames = null, ?array $actorIds = null)
     {
         $createExportPath = "audit_logs/exports";
 

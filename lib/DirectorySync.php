@@ -27,13 +27,13 @@ class DirectorySync
      * @return array{?string, ?string, Resource\Directory[]} An array containing the Directory ID to use as before and after cursor, and an array of Directory instances
      */
     public function listDirectories(
-        $domain = null,
-        $search = null,
+        ?string $domain = null,
+        ?string $search = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $organizationId = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $organizationId = null,
+        ?string $order = null
     ) {
         $directoriesPath = "directories";
         $params = [
@@ -78,12 +78,12 @@ class DirectorySync
      * @return array{?string, ?string, Resource\DirectoryGroup[]} An array containing the Directory Group ID to use as before and after cursor, and an array of Directory Group instances
      */
     public function listGroups(
-        $directory = null,
-        $user = null,
+        ?string $directory = null,
+        ?string $user = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $groupsPath = "directory_groups";
 
@@ -156,12 +156,12 @@ class DirectorySync
      * @throws Exception\WorkOSException
      */
     public function listUsers(
-        $directory = null,
-        $group = null,
+        ?string $directory = null,
+        ?string $group = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $usersPath = "directory_users";
 
