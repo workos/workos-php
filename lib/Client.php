@@ -46,7 +46,7 @@ class Client
      *
      * @return array<string, mixed>
      */
-    public static function request($method, $path, $headers = null, $params = null, $withAuth = false)
+    public static function request($method, $path, ?array $headers = null, ?array $params = null, $withAuth = false)
     {
         $url = self::generateUrl($path);
 
@@ -105,7 +105,7 @@ class Client
      *
      * @return string
      */
-    public static function generateUrl($path, $params = null)
+    public static function generateUrl($path, ?array $params = null)
     {
         $url = WorkOS::getApiBaseUrl() . $path;
 

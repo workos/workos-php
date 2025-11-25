@@ -21,9 +21,9 @@ class MFA
      */
     public function enrollFactor(
         $type,
-        $totpIssuer = null,
-        $totpUser = null,
-        $phoneNumber = null
+        ?string $totpIssuer = null,
+        ?string $totpUser = null,
+        ?string $phoneNumber = null
     ) {
         $enrollPath = "auth/factors/enroll";
 
@@ -79,7 +79,7 @@ class MFA
      */
     public function challengeFactor(
         $authenticationFactorId,
-        $smsTemplate = null
+        ?string $smsTemplate = null
     ) {
         if (!isset($authenticationFactorId)) {
             $msg = "Incomplete arguments: 'authentication_factor_id' is a required parameter";

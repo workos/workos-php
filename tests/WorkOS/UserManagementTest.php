@@ -80,6 +80,40 @@ class UserManagementTest extends TestCase
         $this->assertSame($user, $response->toArray());
     }
 
+    public function testUpdateUserWithNullOptionalParams()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $path = "user_management/users/{$userId}";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "first_name" => null,
+            "last_name" => null,
+            "email_verified" => null,
+            "password" => null,
+            "password_hash" => null,
+            "password_hash_type" => null,
+            "external_id" => null,
+            "metadata" => null,
+            "email" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->updateUser("user_01H7X1M4TZJN5N4HG4XXMA1234", null, null, null, null, null, null, null, null, null);
+        $this->assertSame($user, $response->toArray());
+    }
+
     public function testAuthorizationURLInvalidInputs()
     {
         $this->expectException(Exception\UnexpectedValueException::class);
@@ -428,6 +462,35 @@ class UserManagementTest extends TestCase
         $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
     }
 
+    public function testEnrollAuthFactorWithNullOptionalParams()
+    {
+        $userId = "user_123456";
+        $path = "user_management/users/{$userId}/auth_factors";
+        $params = [
+            "type" => "totp",
+            "totp_user" => null,
+            "totp_issuer" => null
+        ];
+
+        $result = $this->enrollAuthFactorResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $enrollFactorTotp = $this->userManagement->enrollAuthFactor($userId, "totp", null, null);
+        $enrollUserAuthFactorFixture = $this->enrollAuthFactorFixture();
+        $enrollUserAuthChallengeFixture = $this->enrollAuthChallengeFixture();
+
+        $this->assertSame($enrollUserAuthFactorFixture, $enrollFactorTotp->authenticationFactor->toArray());
+        $this->assertSame($enrollUserAuthChallengeFixture, $enrollFactorTotp->authenticationChallenge->toArray());
+    }
+
     public function testAuthenticateWithRefreshToken()
     {
         $path = "user_management/authenticate";
@@ -552,6 +615,39 @@ class UserManagementTest extends TestCase
         $user = $this->userFixture();
 
         $response = $this->userManagement->createUser("test@test.com", "x^T!V23UN1@V", "Damien", "Alabaster", true);
+        $this->assertSame($user, $response->toArray());
+    }
+
+    public function testCreateUserWithNullOptionalParams()
+    {
+        $path = "user_management/users";
+
+        $result = $this->createUserResponseFixture();
+
+        $params = [
+            "email" => "test@test.com",
+            "password" => null,
+            "first_name" => null,
+            "last_name" => null,
+            "email_verified" => null,
+            "password_hash" => null,
+            "password_hash_type" => null,
+            "external_id" => null,
+            "metadata" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $user = $this->userFixture();
+
+        $response = $this->userManagement->createUser("test@test.com", null, null, null, null, null, null, null, null);
         $this->assertSame($user, $response->toArray());
     }
 
@@ -948,6 +1044,35 @@ class UserManagementTest extends TestCase
         $this->assertSame($organizationMembership, $response->toArray());
     }
 
+    public function testCreateOrganizationMembershipWithNullRoleParams()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $path = "user_management/organization_memberships";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        // When both roleSlug and roleSlugs are null, neither should be in params
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->createOrganizationMembership($userId, $orgId, null, null);
+        $this->assertSame($organizationMembership, $response->toArray());
+    }
+
     public function testGetOrganizationMembership()
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
@@ -1137,6 +1262,26 @@ class UserManagementTest extends TestCase
         $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
     }
 
+    public function testUpdateOrganizationMembershipWithNullRoleParams()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        // When both roleSlug and roleSlugs are null, params should be empty array
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            [],
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, null);
+        $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
+    }
 
     public function testDeactivateOrganizationMembership()
     {
@@ -1213,6 +1358,43 @@ class UserManagementTest extends TestCase
             10,
             "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "staff"
+        );
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testSendInvitationWithNullOptionalParams()
+    {
+        $path = "user_management/invitations";
+
+        $result = $this->invitationResponseFixture();
+
+        // The implementation includes null values in params
+        $params = [
+            "email" => "someemail@test.com",
+            "organization_id" => null,
+            "expires_in_days" => null,
+            "inviter_user_id" => null,
+            "role_slug" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->sendInvitation(
+            "someemail@test.com",
+            null,
+            null,
+            null,
+            null
         );
 
         $expected = $this->invitationFixture();

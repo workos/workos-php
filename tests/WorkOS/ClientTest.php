@@ -185,6 +185,46 @@ class ClientTest extends TestCase
         }
     }
 
+    public function testClientRequestWithNullHeadersAndParams()
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "some/place";
+        $result = json_encode(["data" => "test"]);
+
+        // Client::request always generates base headers even when null is passed
+        // When $withAuth is false (default), it still includes User-Agent header
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            false,
+            $result
+        );
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null);
+        $this->assertSame(["data" => "test"], $response);
+    }
+
+    public function testClientGenerateUrl()
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "test/path";
+        $url = Client::generateUrl($path);
+        $this->assertStringContainsString($path, $url);
+    }
+
+    public function testClientGenerateUrlWithNullParams()
+    {
+        $this->withApiKeyAndClientId();
+
+        $path = "test/path";
+        $url = Client::generateUrl($path, null);
+        $this->assertStringContainsString($path, $url);
+    }
+
     // Providers
     public static function requestExceptionTestProvider()
     {

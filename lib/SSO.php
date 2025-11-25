@@ -33,9 +33,9 @@ class SSO
         $state,
         $provider = null,
         $connection = null,
-        $organization = null,
-        $domainHint = null,
-        $loginHint = null
+        ?string $organization = null,
+        ?string $domainHint = null,
+        ?string $loginHint = null
     ) {
         $authorizationPath = "sso/authorize";
 
@@ -219,13 +219,13 @@ class SSO
      * @throws Exception\WorkOSException
      */
     public function listConnections(
-        $domain = null,
-        $connectionType = null,
-        $organizationId = null,
+        ?string $domain = null,
+        ?string $connectionType = null,
+        ?string $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $connectionsPath = "connections";
         $params = [

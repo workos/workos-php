@@ -36,14 +36,14 @@ class UserManagement
 
     public function createUser(
         $email,
-        $password = null,
-        $firstName = null,
-        $lastName = null,
-        $emailVerified = null,
-        $passwordHash = null,
-        $passwordHashType = null,
-        $externalId = null,
-        $metadata = null
+        ?string $password = null,
+        ?string $firstName = null,
+        ?string $lastName = null,
+        ?bool $emailVerified = null,
+        ?string $passwordHash = null,
+        ?string $passwordHashType = null,
+        ?string $externalId = null,
+        ?array $metadata = null
     ) {
         $path = "user_management/users";
         $params = [
@@ -119,15 +119,15 @@ class UserManagement
      */
     public function updateUser(
         $userId,
-        $firstName = null,
-        $lastName = null,
-        $emailVerified = null,
-        $password = null,
-        $passwordHash = null,
-        $passwordHashType = null,
-        $externalId = null,
-        $metadata = null,
-        $email = null
+        ?string $firstName = null,
+        ?string $lastName = null,
+        ?bool $emailVerified = null,
+        ?string $password = null,
+        ?string $passwordHash = null,
+        ?string $passwordHashType = null,
+        ?string $externalId = null,
+        ?array $metadata = null,
+        ?string $email = null
     ) {
         $path = "user_management/users/{$userId}";
 
@@ -163,12 +163,12 @@ class UserManagement
      * @throws Exception\WorkOSException
      */
     public function listUsers(
-        $email = null,
-        $organizationId = null,
+        ?string $email = null,
+        ?string $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $path = "user_management/users";
 
@@ -222,13 +222,13 @@ class UserManagement
      * @param string $userId User ID
      * @param string $organizationId Organization ID
      * @param string|null $roleSlug Role Slug
-     * @param string|null $roleSlugs Role Slugs
+     * @param array|null $roleSlugs Role Slugs
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function createOrganizationMembership($userId, $organizationId, $roleSlug = null, $roleSlugs = null)
+    public function createOrganizationMembership($userId, $organizationId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
         $path = "user_management/organization_memberships";
 
@@ -309,13 +309,13 @@ class UserManagement
      *
      * @param string $organizationMembershipId Organization Membership ID
      * @param string|null $role_slug The unique slug of the role to grant to this membership.
-     * @param string|null $role_slugs The unique slugs of the roles to grant to this membership.
+     * @param array|null $role_slugs The unique slugs of the roles to grant to this membership.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function updateOrganizationMembership($organizationMembershipId, $roleSlug = null, $roleSlugs = null)
+    public function updateOrganizationMembership($organizationMembershipId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
@@ -356,13 +356,13 @@ class UserManagement
      * @return array{?string, ?string, Resource\OrganizationMembership[]} An array containing the Organization Membership ID to use as before and after cursor, and a list of Organization Memberships instances
      */
     public function listOrganizationMemberships(
-        $userId = null,
-        $organizationId = null,
-        $statuses = null,
+        ?string $userId = null,
+        ?string $organizationId = null,
+        ?array $statuses = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $path = "user_management/organization_memberships";
 
@@ -467,10 +467,10 @@ class UserManagement
      */
     public function sendInvitation(
         $email,
-        $organizationId = null,
-        $expiresInDays = null,
-        $inviterUserId = null,
-        $roleSlug = null
+        ?string $organizationId = null,
+        ?int $expiresInDays = null,
+        ?string $inviterUserId = null,
+        ?string $roleSlug = null
     ) {
         $path = "user_management/invitations";
 
@@ -556,12 +556,12 @@ class UserManagement
      * @return array{?string, ?string, Resource\Invitation[]} An array containing the Invitation ID to use as before and after cursor, and a list of Invitations instances
      */
     public function listInvitations(
-        $email = null,
-        $organizationId = null,
+        ?string $email = null,
+        ?string $organizationId = null,
         $limit = self::DEFAULT_PAGE_SIZE,
-        $before = null,
-        $after = null,
-        $order = null
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
     ) {
         $path = "user_management/invitations";
 
@@ -663,12 +663,12 @@ class UserManagement
         $redirectUri,
         $state = null,
         $provider = null,
-        $connectionId = null,
-        $organizationId = null,
-        $domainHint = null,
-        $loginHint = null,
-        $screenHint = null,
-        $providerScopes = null
+        ?string $connectionId = null,
+        ?string $organizationId = null,
+        ?string $domainHint = null,
+        ?string $loginHint = null,
+        ?string $screenHint = null,
+        ?array $providerScopes = null
     ) {
         $path = "user_management/authorize";
 
@@ -750,7 +750,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithPassword($clientId, $email, $password, $ipAddress = null, $userAgent = null)
+    public function authenticateWithPassword($clientId, $email, $password, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -785,8 +785,8 @@ class UserManagement
         $clientId,
         $pendingAuthenticationToken,
         $organizationId,
-        $ipAddress = null,
-        $userAgent = null
+        ?string $ipAddress = null,
+        ?string $userAgent = null
     ) {
         $path = "user_management/authenticate";
         $params = [
@@ -817,7 +817,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithCode($clientId, $code, $ipAddress = null, $userAgent = null)
+    public function authenticateWithCode($clientId, $code, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -847,7 +847,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationResponse
      */
-    public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, $ipAddress = null, $userAgent = null)
+    public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, ?string $ipAddress = null, ?string $userAgent = null)
     {
         $path = "user_management/authenticate";
         $params = [
@@ -883,8 +883,8 @@ class UserManagement
         $clientId,
         $code,
         $userId,
-        $ipAddress = null,
-        $userAgent = null
+        ?string $ipAddress = null,
+        ?string $userAgent = null
     ) {
         $path = "user_management/authenticate";
         $params = [
@@ -917,9 +917,9 @@ class UserManagement
     public function authenticateWithRefreshToken(
         $clientId,
         $refreshToken,
-        $ipAddress = null,
-        $userAgent = null,
-        $organizationId = null
+        ?string $ipAddress = null,
+        ?string $userAgent = null,
+        ?string $organizationId = null
     ) {
         $path = "user_management/authenticate";
         $params = [
@@ -956,8 +956,8 @@ class UserManagement
         $pendingAuthenticationToken,
         $authenticationChallengeId,
         $code,
-        $ipAddress = null,
-        $userAgent = null
+        ?string $ipAddress = null,
+        ?string $userAgent = null
     ) {
         $path = "user_management/authenticate";
         $params = [
@@ -988,7 +988,7 @@ class UserManagement
      *
      * @return Resource\AuthenticationFactorAndChallengeTotp
      */
-    public function enrollAuthFactor($userId, $type, $totpIssuer = null, $totpUser = null)
+    public function enrollAuthFactor($userId, $type, ?string $totpIssuer = null, ?string $totpUser = null)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
@@ -1234,7 +1234,7 @@ class UserManagement
      */
     public function createMagicAuth(
         $email,
-        $invitationToken = null
+        ?string $invitationToken = null
     ) {
         $path = "user_management/magic_auth";
 

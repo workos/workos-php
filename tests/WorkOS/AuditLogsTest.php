@@ -116,6 +116,37 @@ class AuditLogsTest extends TestCase
         $this->assertSame($exportFixture, $auditLogExport->toArray());
     }
 
+    public function testCreateExportWithNullOptionalParams()
+    {
+        $path = "audit_logs/exports";
+
+        $organizationId = "org_123";
+        $rangeStart = "2022-08-18T18:07:10.822Z";
+        $rangeEnd = "2022-08-18T18:07:10.822Z";
+        // The implementation filters out null values, so they won't be in the params array
+        $params = [
+            "organization_id" => $organizationId,
+            "range_end" => $rangeEnd,
+            "range_start" => $rangeStart
+        ];
+
+        $result = $this->createExportResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $auditLogExport = $this->al->createExport($organizationId, $rangeStart, $rangeEnd, null, null, null, null, null);
+        $exportFixture = $this->createExportFixture();
+
+        $this->assertSame($exportFixture, $auditLogExport->toArray());
+    }
+
     public function testGetExport()
     {
         $auditLogExportId = "123";

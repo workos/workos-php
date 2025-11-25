@@ -20,7 +20,7 @@ class CurlRequestClient implements RequestClientInterface
      *
      * @return array An array composed of the result string, response headers and status code
      */
-    public function request($method, $url, $headers = null, $params = null)
+    public function request($method, $url, ?array $headers = null, ?array $params = null)
     {
         if (empty($headers)) {
             $headers = array();
