@@ -222,13 +222,13 @@ class UserManagement
      * @param string $userId User ID
      * @param string $organizationId Organization ID
      * @param string|null $roleSlug Role Slug
-     * @param string|null $roleSlugs Role Slugs
+     * @param array|null $roleSlugs Role Slugs
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function createOrganizationMembership($userId, $organizationId, ?string $roleSlug = null, ?string $roleSlugs = null)
+    public function createOrganizationMembership($userId, $organizationId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
         $path = "user_management/organization_memberships";
 
@@ -309,13 +309,13 @@ class UserManagement
      *
      * @param string $organizationMembershipId Organization Membership ID
      * @param string|null $role_slug The unique slug of the role to grant to this membership.
-     * @param string|null $role_slugs The unique slugs of the roles to grant to this membership.
+     * @param array|null $role_slugs The unique slugs of the roles to grant to this membership.
      *
      * @throws Exception\WorkOSException
      *
      * @return Resource\OrganizationMembership
      */
-    public function updateOrganizationMembership($organizationMembershipId, ?string $roleSlug = null, ?string $roleSlugs = null)
+    public function updateOrganizationMembership($organizationMembershipId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 

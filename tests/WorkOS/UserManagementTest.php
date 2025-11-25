@@ -1039,6 +1039,35 @@ class UserManagementTest extends TestCase
         $this->assertSame($organizationMembership, $response->toArray());
     }
 
+    public function testCreateOrganizationMembershipWithNullRoleParams()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $orgId = "org_01EHQMYV6MBK39QC5PZXHY59C3";
+        $path = "user_management/organization_memberships";
+
+        $result = $this->organizationMembershipResponseFixture();
+
+        // When both roleSlug and roleSlugs are null, neither should be in params
+        $params = [
+            "organization_id" => $orgId,
+            "user_id" => $userId,
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $organizationMembership = $this->organizationMembershipFixture();
+
+        $response = $this->userManagement->createOrganizationMembership($userId, $orgId, null, null);
+        $this->assertSame($organizationMembership, $response->toArray());
+    }
+
     public function testGetOrganizationMembership()
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
@@ -1207,16 +1236,10 @@ class UserManagementTest extends TestCase
         $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
     }
 
-<<<<<<< HEAD
     public function testUpdateOrganizationMembershipWithRoleSlugs()
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
         $roleSlugs = ["admin"];
-=======
-    public function testUpdateOrganizationMembershipWithNullRoleSlug()
-    {
-        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
->>>>>>> 560a945 (Fix PHP 8.4 deprecation: Add explicit nullable type hints)
         $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
         $result = $this->organizationMembershipResponseFixture();
@@ -1225,27 +1248,36 @@ class UserManagementTest extends TestCase
             Client::METHOD_PUT,
             $path,
             null,
-<<<<<<< HEAD
             ["role_slugs" => $roleSlugs],
-=======
-            ["role_slug" => null],
->>>>>>> 560a945 (Fix PHP 8.4 deprecation: Add explicit nullable type hints)
             true,
             $result
         );
 
-<<<<<<< HEAD
         $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, $roleSlugs);
         $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
     }
 
+    public function testUpdateOrganizationMembershipWithNullRoleParams()
+    {
+        $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/organization_memberships/{$organizationMembershipId}";
 
-=======
-        $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null);
+        $result = $this->organizationMembershipResponseFixture();
+
+        // When both roleSlug and roleSlugs are null, params should be empty array
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            [],
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, null);
         $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
     }
 
->>>>>>> 560a945 (Fix PHP 8.4 deprecation: Add explicit nullable type hints)
     public function testDeactivateOrganizationMembership()
     {
         $organizationMembershipId = "om_01E4ZCR3C56J083X43JQXF3JK5";
@@ -1321,6 +1353,43 @@ class UserManagementTest extends TestCase
             10,
             "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "staff"
+        );
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testSendInvitationWithNullOptionalParams()
+    {
+        $path = "user_management/invitations";
+
+        $result = $this->invitationResponseFixture();
+
+        // The implementation includes null values in params
+        $params = [
+            "email" => "someemail@test.com",
+            "organization_id" => null,
+            "expires_in_days" => null,
+            "inviter_user_id" => null,
+            "role_slug" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->sendInvitation(
+            "someemail@test.com",
+            null,
+            null,
+            null,
+            null
         );
 
         $expected = $this->invitationFixture();
