@@ -33,7 +33,6 @@ class UserManagement
      *
      * @return Resource\User
      */
-
     public function createUser(
         $email,
         $password = null,
@@ -673,7 +672,7 @@ class UserManagement
         $path = "user_management/authorize";
 
         if (!isset($provider) && !isset($connectionId) && !isset($organizationId)) {
-            $msg = "Either \$provider, \$connectionId, or \$organizationId is required";
+            $msg = "Either \$provider, \$connectionId, or \$organizationId is required.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -686,7 +685,7 @@ class UserManagement
         ];
 
         if (isset($provider) && !\in_array($provider, $supportedProviders)) {
-            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported";
+            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported.";
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -1160,7 +1159,7 @@ class UserManagement
     {
         $msg = "'sendPasswordResetEmail' is deprecated. Please use 'createPasswordReset' instead. This method will be removed in a future major version.";
 
-        error_log($msg);
+        trigger_error($msg, E_USER_DEPRECATED);
 
         $path = "user_management/password_reset/send";
 
@@ -1274,7 +1273,7 @@ class UserManagement
 
         $msg = "'sendMagicAuthCode' is deprecated. Please use 'createMagicAuth' instead. This method will be removed in a future major version.";
 
-        error_log($msg);
+        trigger_error($msg, E_USER_DEPRECATED);
 
         $response = Client::request(
             Client::METHOD_POST,
@@ -1311,17 +1310,17 @@ class UserManagement
      * Returns the logout URL to end a user's session and redirect to your home page.
      *
      * @param string $sessionId The session ID of the user.
-     * @param string $return_to The URL to redirect to after the user logs out.
+     * @param string|null $return_to The URL to redirect to after the user logs out.
      *
      * @return string
      */
-    public function getLogoutUrl(string $sessionId, string $return_to = null)
+    public function getLogoutUrl(string $sessionId, ?string $return_to = null)
     {
         if (!isset($sessionId) || empty($sessionId)) {
             throw new Exception\UnexpectedValueException("sessionId must not be empty");
         }
 
-        $params = [ "session_id" => $sessionId ];
+        $params = ["session_id" => $sessionId];
         if ($return_to) {
             $params["return_to"] = $return_to;
         }

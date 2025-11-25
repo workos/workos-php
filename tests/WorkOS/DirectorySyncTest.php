@@ -2,6 +2,7 @@
 
 namespace WorkOS;
 
+use WorkOS\DirectorySync;
 use PHPUnit\Framework\TestCase;
 
 class DirectorySyncTest extends TestCase
@@ -9,6 +10,10 @@ class DirectorySyncTest extends TestCase
     use TestHelper {
         setUp as traitSetUp;
     }
+    /**
+     * @var DirectorySync
+     */
+    protected $ds;
 
     protected function setUp(): void
     {
@@ -158,7 +163,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead.",
+            fn () => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }
@@ -180,7 +188,10 @@ class DirectorySyncTest extends TestCase
         );
 
         $user = $this->ds->getUser($directoryUser);
-        $userEmail = $user->primaryEmail();
+        $userEmail = $this->assertDeprecationTriggered(
+            "'primaryEmail' is deprecated. Please use 'email' instead.",
+            fn () => $user->primaryEmail(),
+        );
 
         $this->assertSame($userEmail, $expectedEmail);
     }

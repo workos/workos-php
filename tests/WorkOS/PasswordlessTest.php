@@ -2,6 +2,7 @@
 
 namespace WorkOS;
 
+use WorkOS\Passwordless;
 use PHPUnit\Framework\TestCase;
 
 class PasswordlessTest extends TestCase
@@ -9,6 +10,10 @@ class PasswordlessTest extends TestCase
     use TestHelper {
         setUp as traitSetUp;
     }
+    /**
+     * @var Passwordless
+     */
+    protected $passwordless;
 
     protected function setUp(): void
     {
