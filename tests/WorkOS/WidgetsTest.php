@@ -10,6 +10,11 @@ class WidgetsTest extends TestCase
         setUp as protected traitSetUp;
     }
 
+    /**
+     * @var Widgets
+     */
+    protected $ap;
+
     protected function setUp(): void
     {
         $this->traitSetUp();

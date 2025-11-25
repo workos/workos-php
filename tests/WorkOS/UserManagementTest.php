@@ -11,6 +11,11 @@ class UserManagementTest extends TestCase
         setUp as traitSetUp;
     }
 
+    /**
+     * @var UserManagement
+     */
+    protected $userManagement;
+
     protected function setUp(): void
     {
         $this->traitSetUp();
