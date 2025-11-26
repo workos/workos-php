@@ -2,8 +2,13 @@
 
 namespace WorkOS\Resource;
 
+use WorkOS\Resource\RoleResponse;
+
 /**
  * Class DirectoryUser.
+ *
+ * @property RoleResponse|null $role
+ * @property array<RoleResponse>|null $roles
  */
 class DirectoryUser extends BaseWorkOSResource
 {
@@ -36,6 +41,8 @@ class DirectoryUser extends BaseWorkOSResource
         "jobTitle",
         "state",
         "idpId",
+        "role",
+        "roles",
         "groups",
         "directoryId",
         "organizationId"
@@ -53,10 +60,31 @@ class DirectoryUser extends BaseWorkOSResource
         "job_title" => "jobTitle",
         "state" => "state",
         "idp_id" => "idpId",
+        "role" => "role",
+        "roles" => "roles",
         "groups" => "groups",
         "directory_id" => "directoryId",
         "organization_id" => "organizationId"
     ];
+
+    public static function constructFromResponse($response)
+    {
+        $instance = parent::constructFromResponse($response);
+
+        if (isset($response["role"])) {
+            $instance->values["role"] = new RoleResponse($response["role"]["slug"]);
+        }
+
+        if (isset($response["roles"])) {
+            $roles = [];
+            foreach ($response["roles"] as $role) {
+                $roles[] = new RoleResponse($role["slug"]);
+            }
+            $instance->values["roles"] = $roles;
+        }
+
+        return $instance;
+    }
 
     /**
      * @deprecated 4.22.0 Use `email` property instead.

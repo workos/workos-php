@@ -2,6 +2,8 @@
 
 namespace WorkOS\Resource;
 
+use WorkOS\Resource\RoleResponse;
+
 /**
  * Class OrganizationMembership.
  *
@@ -42,4 +44,23 @@ class OrganizationMembership extends BaseWorkOSResource
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];
+
+    public static function constructFromResponse($response)
+    {
+        $instance = parent::constructFromResponse($response);
+
+        if (isset($response["role"])) {
+            $instance->values["role"] = new RoleResponse($response["role"]["slug"]);
+        }
+
+        if (isset($response["roles"])) {
+            $roles = [];
+            foreach ($response["roles"] as $role) {
+                $roles[] = new RoleResponse($role["slug"]);
+            }
+            $instance->values["roles"] = $roles;
+        }
+
+        return $instance;
+    }
 }
