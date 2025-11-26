@@ -135,6 +135,70 @@ class PortalTest extends TestCase
         $this->assertSame($expectation, $response->link);
     }
 
+    public function testGenerateLinkCertificateRenewal()
+    {
+        $generateLinkPath = "portal/generate_link";
+
+        $result = $this->generatePortalLinkFixture();
+
+        $params = [
+            "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
+            "intent" => "certificate_renewal",
+            "return_url" => null,
+            "success_url" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $generateLinkPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $expectation = "https://id.workos.com/portal/launch?secret=secret";
+
+        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "certificate_renewal");
+        $this->assertSame($expectation, $response->link);
+    }
+
+    public function testGenerateLinkDomainVerification()
+    {
+        $generateLinkPath = "portal/generate_link";
+
+        $result = $this->generatePortalLinkFixture();
+
+        $params = [
+            "organization" => "org_01EHZNVPK3SFK441A1RGBFSHRT",
+            "intent" => "domain_verification",
+            "return_url" => null,
+            "success_url" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $generateLinkPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $expectation = "https://id.workos.com/portal/launch?secret=secret";
+
+        $response = $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "domain_verification");
+        $this->assertSame($expectation, $response->link);
+    }
+
+    public function testGenerateLinkWithInvalidIntent()
+    {
+        $this->expectException(Exception\UnexpectedValueException::class);
+        $this->expectExceptionMessage("Invalid intent. Valid values are:");
+
+        $this->ap->generateLink("org_01EHZNVPK3SFK441A1RGBFSHRT", "invalid_intent");
+    }
+
     // Fixtures
 
     private function generatePortalLinkFixture()
