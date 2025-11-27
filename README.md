@@ -44,3 +44,4 @@ can move to using the stable version.
 - [Directory Sync Guide](https://workos.com/docs/directory-sync/guide)
 - [Admin Portal Guide](https://workos.com/docs/admin-portal/guide)
 - [Magic Link Guide](https://workos.com/docs/magic-link/guide)
+- [Actions Guide](https://workos.com/docs/authkit/actions)
