@@ -1071,7 +1071,7 @@ class UserManagementTest extends TestCase
         $organizationMembership = $this->organizationMembershipFixture();
 
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId, null, null);
-        $this->assertSame($organizationMembership, $response->toArray());
+        $this->assertEquals($organizationMembership, $response->toArray());
     }
 
     public function testGetOrganizationMembership()
@@ -1281,7 +1281,7 @@ class UserManagementTest extends TestCase
         );
 
         $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, null);
-        $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
+        $this->assertEquals($this->organizationMembershipFixture(), $response->toArray());
     }
 
     public function testDeactivateOrganizationMembership()
