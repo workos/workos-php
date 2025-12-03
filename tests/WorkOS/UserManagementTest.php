@@ -4,6 +4,7 @@ namespace WorkOS;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use WorkOS\Resource\RoleResponse;
 
 class UserManagementTest extends TestCase
 {
@@ -1010,7 +1011,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId, $roleSlug);
 
-        $this->assertSame($organizationMembership, $response->toArray());
+        $this->assertEquals($organizationMembership, $response->toArray());
     }
 
     public function testCreateOrganizationMembershipWithRoleSlugs()
@@ -1041,7 +1042,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->userManagement->createOrganizationMembership($userId, $orgId, null, $roleSlugs);
 
-        $this->assertSame($organizationMembership, $response->toArray());
+        $this->assertEquals($organizationMembership, $response->toArray());
     }
 
     public function testCreateOrganizationMembershipWithNullRoleParams()
@@ -1093,7 +1094,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->userManagement->getOrganizationMembership($organizationMembershipId);
 
-        $this->assertSame($organizationMembership, $response->toArray());
+        $this->assertEquals($organizationMembership, $response->toArray());
     }
 
     public function testListOrganizationMemberships()
@@ -1127,7 +1128,7 @@ class UserManagementTest extends TestCase
 
         list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId);
 
-        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+        $this->assertEquals($organizationMembership, $organizationMemberships[0]->toArray());
     }
 
     public function testListOrganizationMembershipsWithStatuses()
@@ -1162,7 +1163,7 @@ class UserManagementTest extends TestCase
 
         list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId, $statuses);
 
-        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+        $this->assertEquals($organizationMembership, $organizationMemberships[0]->toArray());
     }
 
     public function testListOrganizationMembershipsWithStatus()
@@ -1197,7 +1198,7 @@ class UserManagementTest extends TestCase
 
         list($before, $after, $organizationMemberships) = $this->userManagement->listOrganizationMemberships($userId, $orgId, $statuses);
 
-        $this->assertSame($organizationMembership, $organizationMemberships[0]->toArray());
+        $this->assertEquals($organizationMembership, $organizationMemberships[0]->toArray());
     }
 
     public function testDeleteOrganizationMembership()
@@ -1238,7 +1239,7 @@ class UserManagementTest extends TestCase
         );
 
         $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, $roleSlug);
-        $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
+        $this->assertEquals($this->organizationMembershipFixture(), $response->toArray());
     }
 
     public function testUpdateOrganizationMembershipWithRoleSlugs()
@@ -1259,7 +1260,7 @@ class UserManagementTest extends TestCase
         );
 
         $response = $this->userManagement->updateOrganizationMembership($organizationMembershipId, null, $roleSlugs);
-        $this->assertSame($this->organizationMembershipFixture(), $response->toArray());
+        $this->assertEquals($this->organizationMembershipFixture(), $response->toArray());
     }
 
     public function testUpdateOrganizationMembershipWithNullRoleParams()
@@ -1303,7 +1304,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->userManagement->deactivateOrganizationMembership($organizationMembershipId);
 
-        $this->assertSame(array_merge($organizationMembership, array("status" => "inactive")), $response->toArray());
+        $this->assertEquals(array_merge($organizationMembership, array("status" => "inactive")), $response->toArray());
     }
 
     public function testReactivateOrganizationMembership()
@@ -1326,7 +1327,7 @@ class UserManagementTest extends TestCase
 
         $response = $this->userManagement->reactivateOrganizationMembership($organizationMembershipId);
 
-        $this->assertSame($organizationMembership, $response->toArray());
+        $this->assertEquals($organizationMembership, $response->toArray());
     }
 
     public function testSendInvitation()
@@ -1792,13 +1793,9 @@ class UserManagementTest extends TestCase
             "id" => "om_01E4ZCR3C56J083X43JQXF3JK5",
             "userId" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
             "organizationId" => "org_01EHQMYV6MBK39QC5PZXHY59C3",
-            "role" => [
-                "slug" => "admin",
-            ],
+            "role" => new RoleResponse("admin"),
             "roles" => [
-                [
-                    "slug" => "admin",
-                ],
+                new RoleResponse("admin"),
             ],
             "status" => "active",
             "createdAt" => "2021-06-25T19:07:33.155Z",

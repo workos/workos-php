@@ -16,6 +16,7 @@ use WorkOS\Resource\RoleResponse;
  * @property string $connectionType
  * @property string $idpId
  * @property RoleResponse|null $role
+ * @property array<RoleResponse>|null $roles
  * @property array  $groups
  * @property array  $rawAttributes
  */
@@ -33,6 +34,7 @@ class Profile extends BaseWorkOSResource
         "connectionType",
         "idpId",
         "role",
+        "roles",
         "groups",
         "customAttributes",
         "rawAttributes"
@@ -48,6 +50,7 @@ class Profile extends BaseWorkOSResource
         "connection_type" => "connectionType",
         "idp_id" => "idpId",
         "role" => "role",
+        "roles" => "roles",
         "groups" => "groups",
         "custom_attributes" => "customAttributes",
         "raw_attributes" => "rawAttributes"
@@ -59,6 +62,14 @@ class Profile extends BaseWorkOSResource
 
         if (isset($response["role"])) {
             $instance->values["role"] = new RoleResponse($response["role"]["slug"]);
+        }
+
+        if (isset($response["roles"])) {
+            $roles = [];
+            foreach ($response["roles"] as $role) {
+                $roles[] = new RoleResponse($role["slug"]);
+            }
+            $instance->values["roles"] = $roles;
         }
 
         return $instance;

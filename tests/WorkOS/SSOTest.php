@@ -224,7 +224,14 @@ class SSOTest extends TestCase
                 "connection_id" => "conn_01EMH8WAK20T42N2NBMNBCYHAG",
                 "connection_type" => "GoogleOAuth",
                 "idp_id" => "randomalphanum",
-                "role" => new RoleResponse("admin"),
+                "role" => [
+                    "slug" => "admin"
+                ],
+                "roles" => [
+                    [
+                        "slug" => "admin"
+                    ]
+                ],
                 "groups" => array("Admins", "Developers"),
                 "custom_attributes" => array("license" => "professional"),
                 "raw_attributes" => array(
@@ -251,6 +258,9 @@ class SSOTest extends TestCase
             "connectionType" => "GoogleOAuth",
             "idpId" => "randomalphanum",
             "role" => new RoleResponse("admin"),
+            "roles" => [
+                new RoleResponse("admin"),
+            ],
             "groups" => array("Admins", "Developers"),
             "customAttributes" => array("license" => "professional"),
             "rawAttributes" => array(
