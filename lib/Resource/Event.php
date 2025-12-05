@@ -16,12 +16,12 @@ class Event extends BaseWorkOSResource
         "object",
         "event",
         "data",
-        "created_at",
+        "createdAt",
     ];
 
     public const RESPONSE_TO_RESOURCE_KEY = [
         "id" => "id",
-        "object" => "object", 
+        "object" => "object",
         "event" => "event",
         "data" => "data",
         "created_at" => "createdAt",
@@ -152,11 +152,11 @@ class Event extends BaseWorkOSResource
     public function getDataField($key, $default = null)
     {
         $data = $this->values["data"];
-        
+
         if (is_array($data) && array_key_exists($key, $data)) {
             return $data[$key];
         }
-        
+
         return $default;
     }
 
