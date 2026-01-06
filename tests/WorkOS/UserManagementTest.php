@@ -881,6 +881,75 @@ class UserManagementTest extends TestCase
         $this->assertSame($user, $users[0]->toArray());
     }
 
+    public function testListUsersPaginatedResourceAccessPatterns()
+    {
+        $path = "user_management/users";
+        $params = [
+            "email" => null,
+            "organization_id" => null,
+            "limit" => UserManagement::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
+        $result = $this->listUsersResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $users1] = $this->userManagement->listUsers();
+        $this->assertNull($before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($users1);
+        $this->assertCount(1, $users1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "users" => $users2] = $this->userManagement->listUsers();
+        $this->assertNull($before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($users2);
+        $this->assertCount(1, $users2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->userManagement->listUsers();
+        $this->assertNull($response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->users);
+        $this->assertCount(1, $response->users);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->users, $response->data);
+    }
+
     public function testGetMagicAuth()
     {
         $magicAuthId = "magic_auth_01E4ZCR3C56J083X43JQXF3JK5";

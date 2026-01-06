@@ -37,7 +37,8 @@ class Vault
      * @param null|string $after Vault Object ID to look after
      * @param Resource\Order $order The Order in which to paginate records
      *
-     * @return array{?string, ?string, Resource\VaultObject[]} An array containing the Vault Object ID to use as before and after cursor, and an array of VaultObject instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and vault_objects array.
+     *         Supports: [$before, $after, $objects] = $result, ["vault_objects" => $objects] = $result, $result->vault_objects
      *
      * @throws Exception\WorkOSException
      */
@@ -63,13 +64,7 @@ class Vault
             true
         );
 
-        $vaultObjects = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($vaultObjects, Resource\VaultObject::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $vaultObjects];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\VaultObject::class, 'vault_objects');
     }
 
 

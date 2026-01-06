@@ -8,13 +8,18 @@ namespace WorkOS;
 class UserManagement
 {
     public const DEFAULT_PAGE_SIZE = 10;
+
     public const DEFAULT_TOKEN_EXPIRATION = 1440;
 
-    public const AUTHORIZATION_PROVIDER_AUTHKIT = "authkit";
-    public const AUTHORIZATION_PROVIDER_APPLE_OAUTH = "AppleOAuth";
-    public const AUTHORIZATION_PROVIDER_GITHUB_OAUTH = "GitHubOAuth";
-    public const AUTHORIZATION_PROVIDER_GOOGLE_OAUTH = "GoogleOAuth";
-    public const AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH = "MicrosoftOAuth";
+    public const AUTHORIZATION_PROVIDER_AUTHKIT = 'authkit';
+
+    public const AUTHORIZATION_PROVIDER_APPLE_OAUTH = 'AppleOAuth';
+
+    public const AUTHORIZATION_PROVIDER_GITHUB_OAUTH = 'GitHubOAuth';
+
+    public const AUTHORIZATION_PROVIDER_GOOGLE_OAUTH = 'GoogleOAuth';
+
+    public const AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH = 'MicrosoftOAuth';
 
     /**
      * @var Session\SessionEncryptionInterface|null
@@ -56,21 +61,19 @@ class UserManagement
     /**
      * Create User.
      *
-     * @param string $email The email address of the user.
-     * @param string|null $password The password of the user.
-     * @param string|null $firstName The first name of the user.
-     * @param string|null $lastName The last name of the user.
-     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
-     * @param string|null $passwordHash The hashed password to set for the user.
-     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
-     * @param string|null $externalId The user's external ID.
-     * @param array<string, string> $metadata The user's metadata.
+     * @param  string  $email  The email address of the user.
+     * @param  string|null  $password  The password of the user.
+     * @param  string|null  $firstName  The first name of the user.
+     * @param  string|null  $lastName  The last name of the user.
+     * @param  bool|null  $emailVerified  A boolean declaring if the user's email has been verified.
+     * @param  string|null  $passwordHash  The hashed password to set for the user.
+     * @param  string|null  $passwordHashType  The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
+     * @param  string|null  $externalId  The user's external ID.
+     * @param  array<string, string>  $metadata  The user's metadata.
+     * @return Resource\User
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\User
      */
-
     public function createUser(
         $email,
         ?string $password = null,
@@ -82,17 +85,17 @@ class UserManagement
         ?string $externalId = null,
         ?array $metadata = null
     ) {
-        $path = "user_management/users";
+        $path = 'user_management/users';
         $params = [
-            "email" => $email,
-            "password" => $password,
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "email_verified" => $emailVerified,
-            "password_hash" => $passwordHash,
-            "password_hash_type" => $passwordHashType,
-            "external_id" => $externalId,
-            "metadata" => $metadata
+            'email' => $email,
+            'password' => $password,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email_verified' => $emailVerified,
+            'password_hash' => $passwordHash,
+            'password_hash_type' => $passwordHashType,
+            'external_id' => $externalId,
+            'metadata' => $metadata,
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -103,11 +106,10 @@ class UserManagement
     /**
      * Get a User.
      *
-     * @param string $userId user ID
+     * @param  string  $userId  user ID
+     * @return Resource\User
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\User
      */
     public function getUser($userId)
     {
@@ -121,11 +123,10 @@ class UserManagement
     /**
      * Get a User by external ID.
      *
-     * @param string $externalId The external ID of the user.
+     * @param  string  $externalId  The external ID of the user.
+     * @return Resource\User
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\User
      */
     public function getUserByExternalId($externalId)
     {
@@ -139,20 +140,19 @@ class UserManagement
     /**
      * Update a User
      *
-     * @param string $userId The unique ID of the user.
-     * @param string|null $firstName The first name of the user.
-     * @param string|null $lastName The last name of the user.
-     * @param boolean|null $emailVerified A boolean declaring if the user's email has been verified.
-     * @param string|null $password The password to set for the user.
-     * @param string|null $passwordHash The hashed password to set for the user.
-     * @param string|null $passwordHashType The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
-     * @param string|null $externalId The user's external ID.
-     * @param array<string, string>|null $metadata The user's metadata.
-     * @param string|null $email The email address of the user.
+     * @param  string  $userId  The unique ID of the user.
+     * @param  string|null  $firstName  The first name of the user.
+     * @param  string|null  $lastName  The last name of the user.
+     * @param  bool|null  $emailVerified  A boolean declaring if the user's email has been verified.
+     * @param  string|null  $password  The password to set for the user.
+     * @param  string|null  $passwordHash  The hashed password to set for the user.
+     * @param  string|null  $passwordHashType  The algorithm originally used to hash the password. Valid values are `bcrypt`, `ssha`, and `firebase-scrypt`.
+     * @param  string|null  $externalId  The user's external ID.
+     * @param  array<string, string>|null  $metadata  The user's metadata.
+     * @param  string|null  $email  The email address of the user.
+     * @return Resource\User
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\User
      */
     public function updateUser(
         $userId,
@@ -169,15 +169,15 @@ class UserManagement
         $path = "user_management/users/{$userId}";
 
         $params = [
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "email_verified" => $emailVerified,
-            "password" => $password,
-            "password_hash" => $passwordHash,
-            "password_hash_type" => $passwordHashType,
-            "external_id" => $externalId,
-            "metadata" => $metadata,
-            "email" => $email
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email_verified' => $emailVerified,
+            'password' => $password,
+            'password_hash' => $passwordHash,
+            'password_hash_type' => $passwordHashType,
+            'external_id' => $externalId,
+            'metadata' => $metadata,
+            'email' => $email,
         ];
 
         $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
@@ -188,14 +188,13 @@ class UserManagement
     /**
      * List Users.
      *
-     * @param null|string $email
-     * @param null|string $organizationId Organization users are a member of
-     * @param int $limit Maximum number of records to return
-     * @param null|string $before User ID to look before
-     * @param null|string $after User ID to look after
-     * @param Resource\Order $order The Order in which to paginate records
-     *
-     * @return array{?string, ?string, Resource\User[]} An array containing the Directory User ID to use as before and after cursor, and an array of User instances
+     * @param  null|string  $organizationId  Organization users are a member of
+     * @param  int  $limit  Maximum number of records to return
+     * @param  null|string  $before  User ID to look before
+     * @param  null|string  $after  User ID to look after
+     * @param  Resource\Order  $order  The Order in which to paginate records
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and users array.
+     *                                    Supports: [$before, $after, $users] = $result, ["users" => $users] = $result, $result->users
      *
      * @throws Exception\WorkOSException
      */
@@ -207,15 +206,15 @@ class UserManagement
         ?string $after = null,
         ?string $order = null
     ) {
-        $path = "user_management/users";
+        $path = 'user_management/users';
 
         $params = [
-            "email" => $email,
-            "organization_id" => $organizationId,
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "order" => $order
+            'email' => $email,
+            'organization_id' => $organizationId,
+            'limit' => $limit,
+            'before' => $before,
+            'after' => $after,
+            'order' => $order,
         ];
 
         $response = Client::request(
@@ -226,23 +225,16 @@ class UserManagement
             true
         );
 
-        $users = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($users, Resource\User::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $users];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\User::class, 'users');
     }
 
     /**
      * Delete a user.
      *
-     * @param string $userId Unique ID of a user
+     * @param  string  $userId  Unique ID of a user
+     * @return Resource\Response
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Response
      */
     public function deleteUser($userId)
     {
@@ -256,30 +248,29 @@ class UserManagement
     /**
      * Add a User to an Organization.
      *
-     * @param string $userId User ID
-     * @param string $organizationId Organization ID
-     * @param string|null $roleSlug Role Slug
-     * @param array|null $roleSlugs Role Slugs
+     * @param  string  $userId  User ID
+     * @param  string  $organizationId  Organization ID
+     * @param  string|null  $roleSlug  Role Slug
+     * @param  array|null  $roleSlugs  Role Slugs
+     * @return Resource\OrganizationMembership
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\OrganizationMembership
      */
     public function createOrganizationMembership($userId, $organizationId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
-        $path = "user_management/organization_memberships";
+        $path = 'user_management/organization_memberships';
 
         $params = [
-            "organization_id" => $organizationId,
-            "user_id" => $userId
+            'organization_id' => $organizationId,
+            'user_id' => $userId,
         ];
 
-        if (!is_null($roleSlug)) {
-            $params["role_slug"] = $roleSlug;
+        if (! is_null($roleSlug)) {
+            $params['role_slug'] = $roleSlug;
         }
 
-        if (!is_null($roleSlugs)) {
-            $params["role_slugs"] = $roleSlugs;
+        if (! is_null($roleSlugs)) {
+            $params['role_slugs'] = $roleSlugs;
         }
 
         $response = Client::request(
@@ -296,11 +287,10 @@ class UserManagement
     /**
      * Get an Organization Membership.
      *
-     * @param string $organizationMembershipId Organization Membership ID
+     * @param  string  $organizationMembershipId  Organization Membership ID
+     * @return Resource\OrganizationMembership
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\OrganizationMembership
      */
     public function getOrganizationMembership($organizationMembershipId)
     {
@@ -320,11 +310,10 @@ class UserManagement
     /**
      * Remove a user from an organization.
      *
-     * @param string $organizationMembershipId Organization Membership ID
+     * @param  string  $organizationMembershipId  Organization Membership ID
+     * @return Resource\Response
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Response
      */
     public function deleteOrganizationMembership($organizationMembershipId)
     {
@@ -344,13 +333,12 @@ class UserManagement
     /**
      * Update a User organization membership.
      *
-     * @param string $organizationMembershipId Organization Membership ID
-     * @param string|null $role_slug The unique slug of the role to grant to this membership.
-     * @param array|null $role_slugs The unique slugs of the roles to grant to this membership.
+     * @param  string  $organizationMembershipId  Organization Membership ID
+     * @param  string|null  $role_slug  The unique slug of the role to grant to this membership.
+     * @param  array|null  $role_slugs  The unique slugs of the roles to grant to this membership.
+     * @return Resource\OrganizationMembership
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\OrganizationMembership
      */
     public function updateOrganizationMembership($organizationMembershipId, ?string $roleSlug = null, ?array $roleSlugs = null)
     {
@@ -358,12 +346,12 @@ class UserManagement
 
         $params = [];
 
-        if (!is_null($roleSlug)) {
-            $params["role_slug"] = $roleSlug;
+        if (! is_null($roleSlug)) {
+            $params['role_slug'] = $roleSlug;
         }
 
-        if (!is_null($roleSlugs)) {
-            $params["role_slugs"] = $roleSlugs;
+        if (! is_null($roleSlugs)) {
+            $params['role_slugs'] = $roleSlugs;
         }
 
         $response = Client::request(
@@ -380,17 +368,17 @@ class UserManagement
     /**
      * List organization memberships.
      *
-     * @param string|null $userId User ID
-     * @param string|null $organizationId Organization ID
-     * @param array|null $statuses Organization Membership statuses to filter
-     * @param int $limit Maximum number of records to return
-     * @param string|null $before Organization Membership ID to look before
-     * @param string|null $after Organization Membership ID to look after
-     * @param Resource\Order $order The Order in which to paginate records
+     * @param  string|null  $userId  User ID
+     * @param  string|null  $organizationId  Organization ID
+     * @param  array|null  $statuses  Organization Membership statuses to filter
+     * @param  int  $limit  Maximum number of records to return
+     * @param  string|null  $before  Organization Membership ID to look before
+     * @param  string|null  $after  Organization Membership ID to look after
+     * @param  Resource\Order  $order  The Order in which to paginate records
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and organization_memberships array.
+     *                                    Supports: [$before, $after, $memberships] = $result, ["organization_memberships" => $m] = $result, $result->organization_memberships
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array{?string, ?string, Resource\OrganizationMembership[]} An array containing the Organization Membership ID to use as before and after cursor, and a list of Organization Memberships instances
      */
     public function listOrganizationMemberships(
         ?string $userId = null,
@@ -401,25 +389,25 @@ class UserManagement
         ?string $after = null,
         ?string $order = null
     ) {
-        $path = "user_management/organization_memberships";
+        $path = 'user_management/organization_memberships';
 
         if (isset($statuses)) {
-            if (!is_array($statuses)) {
-                $msg = "Invalid argument: statuses must be an array or null.";
+            if (! is_array($statuses)) {
+                $msg = 'Invalid argument: statuses must be an array or null.';
                 throw new Exception\UnexpectedValueException($msg);
             }
 
-            $statuses = join(",", $statuses);
+            $statuses = implode(',', $statuses);
         }
 
         $params = [
-            "organization_id" => $organizationId,
-            "user_id" => $userId,
-            "statuses" => $statuses,
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "order" => $order
+            'organization_id' => $organizationId,
+            'user_id' => $userId,
+            'statuses' => $statuses,
+            'limit' => $limit,
+            'before' => $before,
+            'after' => $after,
+            'order' => $order,
         ];
 
         $response = Client::request(
@@ -430,25 +418,16 @@ class UserManagement
             true
         );
 
-        $organizationMemberships = [];
-
-        foreach ($response["data"] as $responseData) {
-            \array_push($organizationMemberships, Resource\OrganizationMembership::constructFromResponse($responseData));
-        }
-
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-
-        return [$before, $after, $organizationMemberships];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\OrganizationMembership::class, 'organization_memberships');
     }
 
     /**
      * Deactivate an Organization Membership.
      *
-     * @param string $organizationMembershipId Organization Membership ID
+     * @param  string  $organizationMembershipId  Organization Membership ID
+     * @return Resource\OrganizationMembership
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\OrganizationMembership
      */
     public function deactivateOrganizationMembership($organizationMembershipId)
     {
@@ -468,11 +447,10 @@ class UserManagement
     /**
      * Reactivate an Organization Membership.
      *
-     * @param string $organizationMembershipId Organization Membership ID
+     * @param  string  $organizationMembershipId  Organization Membership ID
+     * @return Resource\OrganizationMembership
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\OrganizationMembership
      */
     public function reactivateOrganizationMembership($organizationMembershipId)
     {
@@ -492,15 +470,14 @@ class UserManagement
     /**
      * Sends an Invitation
      *
-     * @param string $email The email address of the invitee
-     * @param string|null $organizationId Organization ID
-     * @param int|null $expiresInDays expiration delay in days
-     * @param string|null $inviterUserId User ID of the inviter
-     * @param string|null $roleSlug Slug of the role to assign to the invitee User
+     * @param  string  $email  The email address of the invitee
+     * @param  string|null  $organizationId  Organization ID
+     * @param  int|null  $expiresInDays  expiration delay in days
+     * @param  string|null  $inviterUserId  User ID of the inviter
+     * @param  string|null  $roleSlug  Slug of the role to assign to the invitee User
+     * @return Resource\Invitation
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Invitation
      */
     public function sendInvitation(
         $email,
@@ -509,14 +486,14 @@ class UserManagement
         ?string $inviterUserId = null,
         ?string $roleSlug = null
     ) {
-        $path = "user_management/invitations";
+        $path = 'user_management/invitations';
 
         $params = [
-            "email" => $email,
-            "organization_id" => $organizationId,
-            "expires_in_days" => $expiresInDays,
-            "inviter_user_id" => $inviterUserId,
-            "role_slug" => $roleSlug
+            'email' => $email,
+            'organization_id' => $organizationId,
+            'expires_in_days' => $expiresInDays,
+            'inviter_user_id' => $inviterUserId,
+            'role_slug' => $roleSlug,
         ];
 
         $response = Client::request(
@@ -533,11 +510,10 @@ class UserManagement
     /**
      * Get an Invitation
      *
-     * @param string $invitationId ID of the Invitation
+     * @param  string  $invitationId  ID of the Invitation
+     * @return Resource\Invitation
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Invitation
      */
     public function getInvitation($invitationId)
     {
@@ -557,11 +533,10 @@ class UserManagement
     /**
      * Find an Invitation by Token
      *
-     * @param string $invitationToken The token of the Invitation
+     * @param  string  $invitationToken  The token of the Invitation
+     * @return Resource\Invitation
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Invitation
      */
     public function findInvitationByToken($invitationToken)
     {
@@ -581,16 +556,16 @@ class UserManagement
     /**
      * List Invitations
      *
-     * @param string|null $email Email of the invitee
-     * @param string|null $organizationId Organization ID
-     * @param int $limit Maximum number of records to return
-     * @param string|null $before Organization Membership ID to look before
-     * @param string|null $after Organization Membership ID to look after
-     * @param Resource\Order $order The Order in which to paginate records
+     * @param  string|null  $email  Email of the invitee
+     * @param  string|null  $organizationId  Organization ID
+     * @param  int  $limit  Maximum number of records to return
+     * @param  string|null  $before  Organization Membership ID to look before
+     * @param  string|null  $after  Organization Membership ID to look after
+     * @param  Resource\Order  $order  The Order in which to paginate records
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and invitations array.
+     *                                    Supports: [$before, $after, $invitations] = $result, ["invitations" => $invitations] = $result, $result->invitations
      *
      * @throws Exception\WorkOSException
-     *
-     * @return array{?string, ?string, Resource\Invitation[]} An array containing the Invitation ID to use as before and after cursor, and a list of Invitations instances
      */
     public function listInvitations(
         ?string $email = null,
@@ -600,15 +575,15 @@ class UserManagement
         ?string $after = null,
         ?string $order = null
     ) {
-        $path = "user_management/invitations";
+        $path = 'user_management/invitations';
 
         $params = [
-            "email" => $email,
-            "organization_id" => $organizationId,
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "order" => $order
+            'email' => $email,
+            'organization_id' => $organizationId,
+            'limit' => $limit,
+            'before' => $before,
+            'after' => $after,
+            'order' => $order,
         ];
 
         $response = Client::request(
@@ -619,25 +594,16 @@ class UserManagement
             true
         );
 
-        $invitations = [];
-
-        foreach ($response["data"] as $responseData) {
-            \array_push($invitations, Resource\Invitation::constructFromResponse($responseData));
-        }
-
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-
-        return [$before, $after, $invitations];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Invitation::class, 'invitations');
     }
 
     /**
      * Revoke an Invitation
      *
-     * @param string $invitationId ID of the Invitation
+     * @param  string  $invitationId  ID of the Invitation
+     * @return Resource\Invitation
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Invitation
      */
     public function revokeInvitation($invitationId)
     {
@@ -657,11 +623,10 @@ class UserManagement
     /**
      * Resend an Invitation
      *
-     * @param string $invitationId ID of the Invitation
+     * @param  string  $invitationId  ID of the Invitation
+     * @return Resource\Invitation
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Invitation
      */
     public function resendInvitation($invitationId)
     {
@@ -681,20 +646,19 @@ class UserManagement
     /**
      * Generates an OAuth 2.0 authorization URL used to initiate the SSO flow with WorkOS.
      *
-     * @param string $redirectUri URI to direct the user to upon successful completion of SSO
-     * @param null|array $state Associative array containing state that will be returned from WorkOS as a json encoded string
-     * @param null|string $provider Service provider that handles the identity of the user
-     * @param null|string $connectionId Unique identifier for a WorkOS Connection
-     * @param null|string $organizationId Unique identifier for a WorkOS Organization
-     * @param null|string $domainHint Domain hint that will be passed as a parameter to the IdP login page
-     * @param null|string $loginHint Username/email hint that will be passed as a parameter to the to IdP login page
-     * @param null|string $screenHint The page that the user will be redirected to when the provider is authkit
-     * @param null|array $providerScopes An array of provider-specific scopes
+     * @param  string  $redirectUri  URI to direct the user to upon successful completion of SSO
+     * @param  null|array  $state  Associative array containing state that will be returned from WorkOS as a json encoded string
+     * @param  null|string  $provider  Service provider that handles the identity of the user
+     * @param  null|string  $connectionId  Unique identifier for a WorkOS Connection
+     * @param  null|string  $organizationId  Unique identifier for a WorkOS Organization
+     * @param  null|string  $domainHint  Domain hint that will be passed as a parameter to the IdP login page
+     * @param  null|string  $loginHint  Username/email hint that will be passed as a parameter to the to IdP login page
+     * @param  null|string  $screenHint  The page that the user will be redirected to when the provider is authkit
+     * @param  null|array  $providerScopes  An array of provider-specific scopes
+     * @return string
      *
      * @throws Exception\UnexpectedValueException
      * @throws Exception\ConfigurationException
-     *
-     * @return string
      */
     public function getAuthorizationUrl(
         $redirectUri,
@@ -707,10 +671,10 @@ class UserManagement
         ?string $screenHint = null,
         ?array $providerScopes = null
     ) {
-        $path = "user_management/authorize";
+        $path = 'user_management/authorize';
 
-        if (!isset($provider) && !isset($connectionId) && !isset($organizationId)) {
-            $msg = "Either \$provider, \$connectionId, or \$organizationId is required";
+        if (! isset($provider) && ! isset($connectionId) && ! isset($organizationId)) {
+            $msg = 'Either $provider, $connectionId, or $organizationId is required';
             throw new Exception\UnexpectedValueException($msg);
         }
 
@@ -719,56 +683,56 @@ class UserManagement
             self::AUTHORIZATION_PROVIDER_APPLE_OAUTH,
             self::AUTHORIZATION_PROVIDER_GITHUB_OAUTH,
             self::AUTHORIZATION_PROVIDER_GOOGLE_OAUTH,
-            self::AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH
+            self::AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH,
         ];
 
-        if (isset($provider) && !\in_array($provider, $supportedProviders)) {
-            $msg = "Only " . implode("','", $supportedProviders) . " providers are supported";
+        if (isset($provider) && ! \in_array($provider, $supportedProviders)) {
+            $msg = 'Only '.implode("','", $supportedProviders).' providers are supported';
             throw new Exception\UnexpectedValueException($msg);
         }
 
         $params = [
-            "client_id" => WorkOS::getClientId(),
-            "response_type" => "code"
+            'client_id' => WorkOS::getClientId(),
+            'response_type' => 'code',
         ];
 
         if ($redirectUri) {
-            $params["redirect_uri"] = $redirectUri;
+            $params['redirect_uri'] = $redirectUri;
         }
 
-        if (null !== $state && !empty($state)) {
-            $params["state"] = \json_encode($state);
+        if ($state !== null && ! empty($state)) {
+            $params['state'] = \json_encode($state);
         }
 
         if ($provider) {
-            $params["provider"] = $provider;
+            $params['provider'] = $provider;
         }
 
         if ($connectionId) {
-            $params["connection_id"] = $connectionId;
+            $params['connection_id'] = $connectionId;
         }
 
         if ($organizationId) {
-            $params["organization_id"] = $organizationId;
+            $params['organization_id'] = $organizationId;
         }
 
         if ($domainHint) {
-            $params["domain_hint"] = $domainHint;
+            $params['domain_hint'] = $domainHint;
         }
 
         if ($loginHint) {
-            $params["login_hint"] = $loginHint;
+            $params['login_hint'] = $loginHint;
         }
 
         if ($screenHint !== null) {
             if ($provider !== self::AUTHORIZATION_PROVIDER_AUTHKIT) {
                 throw new Exception\UnexpectedValueException("A 'screenHint' can only be provided when the provider is 'authkit'.");
             }
-            $params["screen_hint"] = $screenHint;
+            $params['screen_hint'] = $screenHint;
         }
 
         if ($providerScopes && is_array($providerScopes)) {
-            $params["provider_scopes"] = implode(",", $providerScopes);
+            $params['provider_scopes'] = implode(',', $providerScopes);
         }
 
         return Client::generateUrl($path, $params);
@@ -777,27 +741,26 @@ class UserManagement
     /**
      * Authenticate a User with Password
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $email The email address of the user.
-     * @param string $password The password of the user.
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $email  The email address of the user.
+     * @param  string  $password  The password of the user.
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithPassword($clientId, $email, $password, ?string $ipAddress = null, ?string $userAgent = null)
     {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "email" => $email,
-            "password" => $password,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "password",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'email' => $email,
+            'password' => $password,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'password',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -808,15 +771,14 @@ class UserManagement
     /**
      * Authenticate a User with Selected Organization
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
-     * @param string $organizationId The Organization ID the user selected.
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $pendingAuthenticationToken  Token returned from a failed authentication attempt due to organization selection being required.
+     * @param  string  $organizationId  The Organization ID the user selected.
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithSelectedOrganization(
         $clientId,
@@ -825,15 +787,15 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $userAgent = null
     ) {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "pending_authentication_token" => $pendingAuthenticationToken,
-            "organization_id" => $organizationId,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "urn:workos:oauth:grant-type:organization-selection",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'organization_id' => $organizationId,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'urn:workos:oauth:grant-type:organization-selection',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -845,25 +807,24 @@ class UserManagement
      * Authenticate an OAuth or SSO User with a Code
      * This should be used for "Hosted AuthKit" and "OAuth or SSO" UserAuthentications
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $code  The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithCode($clientId, $code, ?string $ipAddress = null, ?string $userAgent = null)
     {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "code" => $code,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "authorization_code",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'code' => $code,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'authorization_code',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -874,27 +835,26 @@ class UserManagement
     /**
      * Authenticates a user with an unverified email and verifies their email address.
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $pendingAuthenticationToken Token returned from a failed authentication attempt due to organization selection being required.
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $code  The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
+     * @param  string  $pendingAuthenticationToken  Token returned from a failed authentication attempt due to organization selection being required.
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithEmailVerification($clientId, $code, $pendingAuthenticationToken, ?string $ipAddress = null, ?string $userAgent = null)
     {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "code" => $code,
-            "pending_authentication_token" => $pendingAuthenticationToken,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "urn:workos:oauth:grant-type:email-verification:code",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'code' => $code,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'urn:workos:oauth:grant-type:email-verification:code',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -905,17 +865,15 @@ class UserManagement
     /**
      * Authenticate with Magic Auth
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $code The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
-     * @param string $userId The unique ID of the user.
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $code  The authorization value which was passed back as a query parameter in the callback to the Redirect URI.
+     * @param  string  $userId  The unique ID of the user.
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
-
     public function authenticateWithMagicAuth(
         $clientId,
         $code,
@@ -923,15 +881,15 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $userAgent = null
     ) {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "code" => $code,
-            "user_id" => $userId,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "urn:workos:oauth:grant-type:magic-auth:code",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'code' => $code,
+            'user_id' => $userId,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'urn:workos:oauth:grant-type:magic-auth:code',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -941,15 +899,15 @@ class UserManagement
 
     /**
      * Authenticate with Refresh Token
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $refreshToken The refresh token used to obtain a new access token
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
-     * @param string|null $organizationId The user agent of the request from the user who is attempting to authenticate.
+     *
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $refreshToken  The refresh token used to obtain a new access token
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @param  string|null  $organizationId  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithRefreshToken(
         $clientId,
@@ -958,15 +916,15 @@ class UserManagement
         ?string $userAgent = null,
         ?string $organizationId = null
     ) {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "refresh_token" => $refreshToken,
-            "organization_id" => $organizationId,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "refresh_token",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'refresh_token' => $refreshToken,
+            'organization_id' => $organizationId,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'refresh_token',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -977,16 +935,15 @@ class UserManagement
     /**
      * Authenticate with TOTP
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
-     * @param string $pendingAuthenticationToken
-     * @param string $authenticationChallengeId
-     * @param string $code
-     * @param string|null $ipAddress The IP address of the request from the user who is attempting to authenticate.
-     * @param string|null $userAgent The user agent of the request from the user who is attempting to authenticate.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $pendingAuthenticationToken
+     * @param  string  $authenticationChallengeId
+     * @param  string  $code
+     * @param  string|null  $ipAddress  The IP address of the request from the user who is attempting to authenticate.
+     * @param  string|null  $userAgent  The user agent of the request from the user who is attempting to authenticate.
+     * @return Resource\AuthenticationResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationResponse
      */
     public function authenticateWithTotp(
         $clientId,
@@ -996,16 +953,16 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $userAgent = null
     ) {
-        $path = "user_management/authenticate";
+        $path = 'user_management/authenticate';
         $params = [
-            "client_id" => $clientId,
-            "pending_authentication_token" => $pendingAuthenticationToken,
-            "authentication_challenge_id" => $authenticationChallengeId,
-            "code" => $code,
-            "ip_address" => $ipAddress,
-            "user_agent" => $userAgent,
-            "grant_type" => "urn:workos:oauth:grant-type:mfa-totp",
-            "client_secret" => WorkOS::getApiKey()
+            'client_id' => $clientId,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'authentication_challenge_id' => $authenticationChallengeId,
+            'code' => $code,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'grant_type' => 'urn:workos:oauth:grant-type:mfa-totp',
+            'client_secret' => WorkOS::getApiKey(),
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -1016,23 +973,22 @@ class UserManagement
     /**
      * Enroll An Authentication Factor.
      *
-     * @param string $userId The unique ID of the user.
-     * @param string $type The type of MFA factor used to authenticate.
-     * @param string|null $totpIssuer Your application or company name, this helps users distinguish between factors in authenticator apps.
-     * @param string|null $totpUser Used as the account name in authenticator apps.
+     * @param  string  $userId  The unique ID of the user.
+     * @param  string  $type  The type of MFA factor used to authenticate.
+     * @param  string|null  $totpIssuer  Your application or company name, this helps users distinguish between factors in authenticator apps.
+     * @param  string|null  $totpUser  Used as the account name in authenticator apps.
+     * @return Resource\AuthenticationFactorAndChallengeTotp
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\AuthenticationFactorAndChallengeTotp
      */
     public function enrollAuthFactor($userId, $type, ?string $totpIssuer = null, ?string $totpUser = null)
     {
         $path = "user_management/users/{$userId}/auth_factors";
 
         $params = [
-            "type" => $type,
-            "totp_user" => $totpUser,
-            "totp_issuer" => $totpIssuer
+            'type' => $type,
+            'totp_user' => $totpUser,
+            'totp_issuer' => $totpIssuer,
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -1043,11 +999,10 @@ class UserManagement
     /**
      * List a User's Authentication Factors.
      *
-     * @param string $userId The unique ID of the user.
+     * @param  string  $userId  The unique ID of the user.
+     * @return Resource\UserAuthenticationFactorTotp[] $authFactors A list of user's authentication factors
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\UserAuthenticationFactorTotp[] $authFactors A list of user's authentication factors
      */
     public function listAuthFactors($userId)
     {
@@ -1057,7 +1012,7 @@ class UserManagement
 
         $authFactors = [];
 
-        foreach ($response["data"] as $responseData) {
+        foreach ($response['data'] as $responseData) {
             \array_push($authFactors, Resource\UserAuthenticationFactorTotp::constructFromResponse($responseData));
         }
 
@@ -1067,11 +1022,10 @@ class UserManagement
     /**
      * Get an email verification object
      *
-     * @param string $emailVerificationId ID of the email verification object
+     * @param  string  $emailVerificationId  ID of the email verification object
+     * @return Resource\EmailVerification
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\EmailVerification
      */
     public function getEmailVerification($emailVerificationId)
     {
@@ -1091,11 +1045,10 @@ class UserManagement
     /**
      * Create Email Verification Challenge.
      *
-     * @param string $userId The unique ID of the User whose email address will be verified.
+     * @param  string  $userId  The unique ID of the User whose email address will be verified.
+     * @return Resource\UserResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\UserResponse
      */
     public function sendVerificationEmail($userId)
     {
@@ -1109,19 +1062,18 @@ class UserManagement
     /**
      * Complete Email Verification.
      *
-     * @param string $userId The unique ID of the user.
-     * @param string $code The one-time code emailed to the user.
+     * @param  string  $userId  The unique ID of the user.
+     * @param  string  $code  The one-time code emailed to the user.
+     * @return Resource\UserResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\UserResponse
      */
     public function verifyEmail($userId, $code)
     {
         $path = "user_management/users/{$userId}/email_verification/confirm";
 
         $params = [
-            "code" => $code
+            'code' => $code,
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -1132,11 +1084,10 @@ class UserManagement
     /**
      * Get a password reset object
      *
-     * @param string $passwordResetId ID of the password reset object
+     * @param  string  $passwordResetId  ID of the password reset object
+     * @return Resource\PasswordReset
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\PasswordReset
      */
     public function getPasswordReset($passwordResetId)
     {
@@ -1156,19 +1107,18 @@ class UserManagement
     /**
      * Creates a password reset token
      *
-     * @param string $email The email address of the user
+     * @param  string  $email  The email address of the user
+     * @return Resource\PasswordReset
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\PasswordReset
      */
     public function createPasswordReset(
         $email
     ) {
-        $path = "user_management/password_reset";
+        $path = 'user_management/password_reset';
 
         $params = [
-            "email" => $email
+            'email' => $email,
         ];
 
         $response = Client::request(
@@ -1186,12 +1136,11 @@ class UserManagement
      * @deprecated 4.9.0 Use `createPasswordReset` instead. This method will be removed in a future major version.
      * Create Password Reset Email.
      *
-     * @param string $email The email of the user that wishes to reset their password.
-     * @param string $passwordResetUrl The URL that will be linked to in the email.
+     * @param  string  $email  The email of the user that wishes to reset their password.
+     * @param  string  $passwordResetUrl  The URL that will be linked to in the email.
+     * @return Resource\Response
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Response
      */
     public function sendPasswordResetEmail($email, $passwordResetUrl)
     {
@@ -1199,11 +1148,11 @@ class UserManagement
 
         error_log($msg);
 
-        $path = "user_management/password_reset/send";
+        $path = 'user_management/password_reset/send';
 
         $params = [
-            "email" => $email,
-            "password_reset_url" => $passwordResetUrl
+            'email' => $email,
+            'password_reset_url' => $passwordResetUrl,
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -1214,20 +1163,19 @@ class UserManagement
     /**
      * Complete Password Reset.
      *
-     * @param string $token The reset token emailed to the user.
-     * @param string $newPassword The new password to be set for the user.
+     * @param  string  $token  The reset token emailed to the user.
+     * @param  string  $newPassword  The new password to be set for the user.
+     * @return Resource\UserResponse
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\UserResponse
      */
     public function resetPassword($token, $newPassword)
     {
-        $path = "user_management/password_reset/confirm";
+        $path = 'user_management/password_reset/confirm';
 
         $params = [
-            "token" => $token,
-            "new_password" => $newPassword
+            'token' => $token,
+            'new_password' => $newPassword,
         ];
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
@@ -1238,11 +1186,10 @@ class UserManagement
     /**
      * Get a Magic Auth object
      *
-     * @param string $magicAuthId ID of the Magic Auth object
+     * @param  string  $magicAuthId  ID of the Magic Auth object
+     * @return Resource\MagicAuth
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\MagicAuth
      */
     public function getMagicAuth($magicAuthId)
     {
@@ -1262,22 +1209,21 @@ class UserManagement
     /**
      * Creates a Magic Auth code
      *
-     * @param string $email The email address of the user
-     * @param string|null $invitationToken The token of an Invitation, if required.
+     * @param  string  $email  The email address of the user
+     * @param  string|null  $invitationToken  The token of an Invitation, if required.
+     * @return Resource\MagicAuth
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\MagicAuth
      */
     public function createMagicAuth(
         $email,
         ?string $invitationToken = null
     ) {
-        $path = "user_management/magic_auth";
+        $path = 'user_management/magic_auth';
 
         $params = [
-            "email" => $email,
-            "invitation_token" => $invitationToken
+            'email' => $email,
+            'invitation_token' => $invitationToken,
         ];
 
         $response = Client::request(
@@ -1295,18 +1241,17 @@ class UserManagement
      * @deprecated 4.6.0 Use `createMagicAuth` instead. This method will be removed in a future major version.
      * Creates a one-time Magic Auth code and emails it to the user.
      *
-     * @param string $email The email address the one-time code will be sent to.
+     * @param  string  $email  The email address the one-time code will be sent to.
+     * @return Resource\Response
      *
      * @throws Exception\WorkOSException
-     *
-     * @return Resource\Response
      */
     public function sendMagicAuthCode($email)
     {
-        $path = "user_management/magic_auth/send";
+        $path = 'user_management/magic_auth/send';
 
         $params = [
-            "email" => $email,
+            'email' => $email,
         ];
 
         $msg = "'sendMagicAuthCode' is deprecated. Please use 'createMagicAuth' instead. This method will be removed in a future major version.";
@@ -1327,16 +1272,15 @@ class UserManagement
     /**
      * Returns the public key host that is used for verifying access tokens.
      *
-     * @param string $clientId This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @param  string  $clientId  This value can be obtained from the API Keys page in the WorkOS dashboard.
+     * @return string
      *
      * @throws Exception\UnexpectedValueException
-     *
-     * @return string
      */
     public function getJwksUrl(string $clientId)
     {
-        if (!isset($clientId) || empty($clientId)) {
-            throw new Exception\UnexpectedValueException("clientId must not be empty");
+        if (! isset($clientId) || empty($clientId)) {
+            throw new Exception\UnexpectedValueException('clientId must not be empty');
         }
 
         $baseUrl = WorkOS::getApiBaseUrl();
@@ -1347,23 +1291,22 @@ class UserManagement
     /**
      * Returns the logout URL to end a user's session and redirect to your home page.
      *
-     * @param string $sessionId The session ID of the user.
-     * @param string|null $return_to The URL to redirect to after the user logs out.
-     *
+     * @param  string  $sessionId  The session ID of the user.
+     * @param  string|null  $return_to  The URL to redirect to after the user logs out.
      * @return string
      */
     public function getLogoutUrl(string $sessionId, ?string $return_to = null)
     {
-        if (!isset($sessionId) || empty($sessionId)) {
-            throw new Exception\UnexpectedValueException("sessionId must not be empty");
+        if (! isset($sessionId) || empty($sessionId)) {
+            throw new Exception\UnexpectedValueException('sessionId must not be empty');
         }
 
-        $params = [ "session_id" => $sessionId ];
+        $params = ['session_id' => $sessionId];
         if ($return_to) {
-            $params["return_to"] = $return_to;
+            $params['return_to'] = $return_to;
         }
 
-        return Client::generateUrl("user_management/sessions/logout", $params);
+        return Client::generateUrl('user_management/sessions/logout', $params);
     }
 
     /**
