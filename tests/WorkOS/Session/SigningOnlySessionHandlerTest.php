@@ -4,15 +4,21 @@ namespace WorkOS\Session;
 
 use PHPUnit\Framework\TestCase;
 use WorkOS\Exception\UnexpectedValueException;
+use WorkOS\Client;
+use WorkOS\Resource\Response;
+use WorkOS\Exception\ServerException;
+use WorkOS\WorkOS;
 
 class SigningOnlySessionHandlerTest extends TestCase
 {
     private $handler;
     private $password = "test-password-for-hmac-signing";
+    private $requestClientMock;
 
     protected function setUp(): void
     {
         $this->handler = new SigningOnlySessionHandler();
+        $this->requestClientMock = $this->createMock(\WorkOS\RequestClient\RequestClientInterface::class);
     }
 
     public function testSealAndUnseal()
@@ -235,6 +241,17 @@ class SigningOnlySessionHandlerTest extends TestCase
 
     public function testCanBeUsedWithUserManagement()
     {
+        // Set up required configuration
+        WorkOS::setApiKey('sk_test_12345');
+
+        // Set up mock to throw HTTP exception on API call
+        $response = new Response('{"error": "server_error"}', [], 500);
+        Client::setRequestClient($this->requestClientMock);
+        $this->requestClientMock
+            ->expects($this->atLeastOnce())
+            ->method('request')
+            ->willThrowException(new ServerException($response));
+
         // SigningOnlySessionHandler can be injected into UserManagement
         $userManagement = new \WorkOS\UserManagement($this->handler);
 

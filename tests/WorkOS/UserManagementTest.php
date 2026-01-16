@@ -2374,6 +2374,13 @@ class UserManagementTest extends TestCase
         $mockEncryptor->method('unseal')
             ->willReturn(['access_token' => 'test', 'refresh_token' => 'test']);
 
+        // Create fresh HTTP client mock to throw exception
+        $httpMock = $this->createMock(\WorkOS\RequestClient\RequestClientInterface::class);
+        $response = new Resource\Response('{"error": "server_error"}', [], 500);
+        $httpMock->method('request')
+            ->willThrowException(new Exception\ServerException($response));
+        Client::setRequestClient($httpMock);
+
         $userManagement = new UserManagement($mockEncryptor);
 
         // The custom encryptor should be used for authentication
@@ -2396,6 +2403,13 @@ class UserManagementTest extends TestCase
         $mockEncryptor = $this->createMock(Session\SessionEncryptionInterface::class);
         $mockEncryptor->method('unseal')
             ->willReturn(['access_token' => 'test', 'refresh_token' => 'test']);
+
+        // Create fresh HTTP client mock to throw exception
+        $httpMock = $this->createMock(\WorkOS\RequestClient\RequestClientInterface::class);
+        $response = new Resource\Response('{"error": "server_error"}', [], 500);
+        $httpMock->method('request')
+            ->willThrowException(new Exception\ServerException($response));
+        Client::setRequestClient($httpMock);
 
         $userManagement = new UserManagement();
         $userManagement->setSessionEncryptor($mockEncryptor);
@@ -2446,12 +2460,13 @@ class UserManagementTest extends TestCase
         $encryptor = new Session\HaliteSessionEncryption();
         $sealed = $encryptor->seal($sessionData, $cookiePassword);
 
-        // Set up mock to throw exception on API call
+        // Set up mock to throw HTTP exception on API call
+        $response = new Resource\Response('{"error": "server_error"}', [], 500);
         Client::setRequestClient($this->requestClientMock);
         $this->requestClientMock
             ->expects($this->atLeastOnce())
             ->method('request')
-            ->willThrowException(new \Exception('HTTP request failed'));
+            ->willThrowException(new Exception\ServerException($response));
 
         $result = $this->userManagement->authenticateWithSessionCookie($sealed, $cookiePassword);
 

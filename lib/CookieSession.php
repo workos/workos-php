@@ -96,7 +96,7 @@ class CookieSession
                 null,
                 $organizationId
             );
-        } catch (\Exception $e) {
+        } catch (Exception\BaseRequestException $e) {
             $failureResponse = new SessionAuthenticationFailureResponse(
                 SessionAuthenticationFailureResponse::REASON_HTTP_ERROR
             );

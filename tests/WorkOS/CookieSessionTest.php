@@ -229,9 +229,10 @@ class CookieSessionTest extends TestCase
         $userManagementMock->method('authenticateWithSessionCookie')
             ->willReturn($authResponse);
 
-        // Mock refresh to throw exception
+        // Mock refresh to throw HTTP exception
+        $response = new Resource\Response('{"error": "server_error"}', [], 500);
         $userManagementMock->method('authenticateWithRefreshToken')
-            ->willThrowException(new \Exception('HTTP request failed'));
+            ->willThrowException(new Exception\ServerException($response));
 
         $cookieSession = new CookieSession(
             $userManagementMock,

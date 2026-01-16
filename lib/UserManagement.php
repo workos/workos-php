@@ -1483,7 +1483,7 @@ class UserManagement
             );
 
             return Resource\SessionAuthenticationSuccessResponse::constructFromResponse($response);
-        } catch (\Exception $e) {
+        } catch (Exception\BaseRequestException $e) {
             return new Resource\SessionAuthenticationFailureResponse(
                 Resource\SessionAuthenticationFailureResponse::REASON_HTTP_ERROR
             );
