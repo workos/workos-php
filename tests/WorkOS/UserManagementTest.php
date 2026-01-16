@@ -2199,4 +2199,270 @@ class UserManagementTest extends TestCase
             "authenticationFactorId" => "auth_factor_01FXNWW32G7F3MG8MYK5D1HJJM"
         ];
     }
+
+    // Session Management Tests
+
+    public function testListSessions()
+    {
+        $userId = "user_01H7X1M4TZJN5N4HG4XXMA1234";
+        $path = "user_management/users/{$userId}/sessions";
+
+        $result = json_encode([
+            "data" => [
+                [
+                    "id" => "session_01H7X1M4TZJN5N4HG4XXMA1234",
+                    "user_id" => $userId,
+                    "ip_address" => "192.168.1.1",
+                    "user_agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                    "organization_id" => "org_01H7X1M4TZJN5N4HG4XXMA9876",
+                    "authentication_method" => "SSO",
+                    "status" => "active",
+                    "expires_at" => "2026-02-01T00:00:00.000Z",
+                    "ended_at" => null,
+                    "created_at" => "2026-01-01T00:00:00.000Z",
+                    "updated_at" => "2026-01-01T00:00:00.000Z",
+                    "object" => "session"
+                ],
+                [
+                    "id" => "session_01H7X1M4TZJN5N4HG4XXMA5678",
+                    "user_id" => $userId,
+                    "ip_address" => "192.168.1.2",
+                    "user_agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+                    "organization_id" => null,
+                    "authentication_method" => "Password",
+                    "status" => "active",
+                    "expires_at" => "2026-02-01T00:00:00.000Z",
+                    "ended_at" => null,
+                    "created_at" => "2026-01-01T00:00:00.000Z",
+                    "updated_at" => "2026-01-01T00:00:00.000Z",
+                    "object" => "session"
+                ]
+            ],
+            "list_metadata" => ["before" => null, "after" => null]
+        ]);
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            ["limit" => 10, "before" => null, "after" => null, "order" => null],
+            true,
+            $result
+        );
+
+        list($before, $after, $sessions) = $this->userManagement->listSessions($userId);
+
+        $this->assertCount(2, $sessions);
+        $this->assertInstanceOf(Resource\Session::class, $sessions[0]);
+        $this->assertEquals("session_01H7X1M4TZJN5N4HG4XXMA1234", $sessions[0]->id);
+        $this->assertEquals("active", $sessions[0]->status);
+        $this->assertEquals("192.168.1.1", $sessions[0]->ipAddress);
+        $this->assertEquals("SSO", $sessions[0]->authenticationMethod);
+    }
+
+    public function testRevokeSession()
+    {
+        $sessionId = "session_01H7X1M4TZJN5N4HG4XXMA1234";
+        $path = "user_management/sessions/{$sessionId}/revoke";
+
+        $result = json_encode([
+            "id" => $sessionId,
+            "user_id" => "user_01H7X1M4TZJN5N4HG4XXMA1234",
+            "ip_address" => "192.168.1.1",
+            "user_agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "organization_id" => null,
+            "authentication_method" => "Password",
+            "status" => "inactive",
+            "expires_at" => "2026-02-01T00:00:00.000Z",
+            "ended_at" => "2026-01-05T12:00:00.000Z",
+            "created_at" => "2026-01-01T00:00:00.000Z",
+            "updated_at" => "2026-01-05T12:00:00.000Z",
+            "object" => "session"
+        ]);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $session = $this->userManagement->revokeSession($sessionId);
+
+        $this->assertInstanceOf(Resource\Session::class, $session);
+        $this->assertEquals($sessionId, $session->id);
+        $this->assertEquals("inactive", $session->status);
+        $this->assertNotNull($session->endedAt);
+        $this->assertEquals("2026-01-05T12:00:00.000Z", $session->endedAt);
+    }
+
+    public function testAuthenticateWithSessionCookieNoSessionProvided()
+    {
+        $result = $this->userManagement->authenticateWithSessionCookie("", "password");
+
+        $this->assertInstanceOf(
+            Resource\SessionAuthenticationFailureResponse::class,
+            $result
+        );
+        $this->assertFalse($result->authenticated);
+        $this->assertEquals(
+            Resource\SessionAuthenticationFailureResponse::REASON_NO_SESSION_COOKIE_PROVIDED,
+            $result->reason
+        );
+    }
+
+    public function testLoadSealedSession()
+    {
+        $sessionData = [
+            'access_token' => 'test_access_token_12345',
+            'refresh_token' => 'test_refresh_token_67890',
+            'session_id' => 'session_01H7X1M4TZJN5N4HG4XXMA1234'
+        ];
+        $cookiePassword = 'test-password-for-encryption-with-minimum-length';
+
+        // Use encryptor directly (sealing is authkit-php's responsibility)
+        $encryptor = new Session\HaliteSessionEncryption();
+        $sealed = $encryptor->seal($sessionData, $cookiePassword);
+        $cookieSession = $this->userManagement->loadSealedSession($sealed, $cookiePassword);
+
+        $this->assertInstanceOf(CookieSession::class, $cookieSession);
+    }
+
+    public function testGetSessionFromCookieWithNoCookie()
+    {
+        $cookiePassword = 'test-password-for-encryption-with-minimum-length';
+
+        // Ensure no cookie is set
+        if (isset($_COOKIE['wos-session'])) {
+            unset($_COOKIE['wos-session']);
+        }
+
+        $result = $this->userManagement->getSessionFromCookie($cookiePassword);
+
+        $this->assertNull($result);
+    }
+
+    public function testGetSessionFromCookieWithCookie()
+    {
+        $sessionData = [
+            'access_token' => 'test_access_token_12345',
+            'refresh_token' => 'test_refresh_token_67890',
+            'session_id' => 'session_01H7X1M4TZJN5N4HG4XXMA1234'
+        ];
+        $cookiePassword = 'test-password-for-encryption-with-minimum-length';
+
+        // Use encryptor directly (sealing is authkit-php's responsibility)
+        $encryptor = new Session\HaliteSessionEncryption();
+        $sealed = $encryptor->seal($sessionData, $cookiePassword);
+
+        // Simulate cookie being set
+        $_COOKIE['wos-session'] = $sealed;
+
+        $cookieSession = $this->userManagement->getSessionFromCookie($cookiePassword);
+
+        $this->assertInstanceOf(CookieSession::class, $cookieSession);
+
+        // Cleanup
+        unset($_COOKIE['wos-session']);
+    }
+
+    public function testConstructorWithCustomEncryptor()
+    {
+        $mockEncryptor = $this->createMock(Session\SessionEncryptionInterface::class);
+        $mockEncryptor->method('unseal')
+            ->willReturn(['access_token' => 'test', 'refresh_token' => 'test']);
+
+        $userManagement = new UserManagement($mockEncryptor);
+
+        // The custom encryptor should be used for authentication
+        // Mock will succeed on unseal, but API call will fail - we just verify no encryption error
+        $result = $userManagement->authenticateWithSessionCookie('any_sealed_data', 'password');
+
+        // Should get past encryption (HTTP error expected, not encryption error)
+        $this->assertInstanceOf(
+            Resource\SessionAuthenticationFailureResponse::class,
+            $result
+        );
+        $this->assertEquals(
+            Resource\SessionAuthenticationFailureResponse::REASON_HTTP_ERROR,
+            $result->reason
+        );
+    }
+
+    public function testSetSessionEncryptor()
+    {
+        $mockEncryptor = $this->createMock(Session\SessionEncryptionInterface::class);
+        $mockEncryptor->method('unseal')
+            ->willReturn(['access_token' => 'test', 'refresh_token' => 'test']);
+
+        $userManagement = new UserManagement();
+        $userManagement->setSessionEncryptor($mockEncryptor);
+
+        // The custom encryptor should be used for authentication
+        $result = $userManagement->authenticateWithSessionCookie('any_sealed_data', 'password');
+
+        // Should get past encryption (HTTP error expected, not encryption error)
+        $this->assertInstanceOf(
+            Resource\SessionAuthenticationFailureResponse::class,
+            $result
+        );
+        $this->assertEquals(
+            Resource\SessionAuthenticationFailureResponse::REASON_HTTP_ERROR,
+            $result->reason
+        );
+    }
+
+    public function testAuthenticateWithSessionCookieEncryptionError()
+    {
+        $mockEncryptor = $this->createMock(Session\SessionEncryptionInterface::class);
+        $mockEncryptor->method('unseal')
+            ->willThrowException(new \Exception('Decryption failed'));
+
+        $userManagement = new UserManagement($mockEncryptor);
+        $result = $userManagement->authenticateWithSessionCookie('invalid_sealed_data', 'password');
+
+        $this->assertInstanceOf(
+            Resource\SessionAuthenticationFailureResponse::class,
+            $result
+        );
+        $this->assertFalse($result->authenticated);
+        $this->assertEquals(
+            Resource\SessionAuthenticationFailureResponse::REASON_ENCRYPTION_ERROR,
+            $result->reason
+        );
+    }
+
+    public function testAuthenticateWithSessionCookieHttpError()
+    {
+        $sessionData = [
+            'access_token' => 'test_access_token_12345',
+            'refresh_token' => 'test_refresh_token_67890'
+        ];
+        $cookiePassword = 'test-password-for-encryption-with-minimum-length';
+
+        // Use encryptor directly (sealing is authkit-php's responsibility)
+        $encryptor = new Session\HaliteSessionEncryption();
+        $sealed = $encryptor->seal($sessionData, $cookiePassword);
+
+        // Set up mock to throw exception on API call
+        Client::setRequestClient($this->requestClientMock);
+        $this->requestClientMock
+            ->expects($this->atLeastOnce())
+            ->method('request')
+            ->willThrowException(new \Exception('HTTP request failed'));
+
+        $result = $this->userManagement->authenticateWithSessionCookie($sealed, $cookiePassword);
+
+        $this->assertInstanceOf(
+            Resource\SessionAuthenticationFailureResponse::class,
+            $result
+        );
+        $this->assertFalse($result->authenticated);
+        $this->assertEquals(
+            Resource\SessionAuthenticationFailureResponse::REASON_HTTP_ERROR,
+            $result->reason
+        );
+    }
 }

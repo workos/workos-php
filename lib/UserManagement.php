@@ -17,6 +17,43 @@ class UserManagement
     public const AUTHORIZATION_PROVIDER_MICROSOFT_OAUTH = "MicrosoftOAuth";
 
     /**
+     * @var Session\SessionEncryptionInterface|null
+     */
+    private $sessionEncryptor = null;
+
+    /**
+     * @param Session\SessionEncryptionInterface|null $encryptor Optional encryption provider
+     */
+    public function __construct(?Session\SessionEncryptionInterface $encryptor = null)
+    {
+        $this->sessionEncryptor = $encryptor;
+    }
+
+    /**
+     * Set the session encryptor.
+     *
+     * @param Session\SessionEncryptionInterface $encryptor
+     * @return void
+     */
+    public function setSessionEncryptor(Session\SessionEncryptionInterface $encryptor): void
+    {
+        $this->sessionEncryptor = $encryptor;
+    }
+
+    /**
+     * Get the session encryptor, defaulting to Halite.
+     *
+     * @return Session\SessionEncryptionInterface
+     */
+    private function getSessionEncryptor(): Session\SessionEncryptionInterface
+    {
+        if ($this->sessionEncryptor === null) {
+            $this->sessionEncryptor = new Session\HaliteSessionEncryption();
+        }
+        return $this->sessionEncryptor;
+    }
+
+    /**
      * Create User.
      *
      * @param string $email The email address of the user.
@@ -1327,5 +1364,162 @@ class UserManagement
         }
 
         return Client::generateUrl("user_management/sessions/logout", $params);
+    }
+
+    /**
+     * List sessions for a user.
+     *
+     * @param string $userId User ID
+     * @param array $options Additional options
+     *   - 'limit' (int): Maximum number of records to return (default: 10)
+     *   - 'before' (string|null): Session ID to look before
+     *   - 'after' (string|null): Session ID to look after
+     *   - 'order' (string|null): The order in which to paginate records
+     *
+     * @return array{?string, ?string, Resource\Session[]}
+     *         An array containing before/after cursors and array of Session instances
+     * @throws Exception\WorkOSException
+     */
+    public function listSessions(string $userId, array $options = [])
+    {
+        $path = "user_management/users/{$userId}/sessions";
+
+        $params = [
+            "limit" => $options['limit'] ?? self::DEFAULT_PAGE_SIZE,
+            "before" => $options['before'] ?? null,
+            "after" => $options['after'] ?? null,
+            "order" => $options['order'] ?? null
+        ];
+
+        $response = Client::request(
+            Client::METHOD_GET,
+            $path,
+            null,
+            $params,
+            true
+        );
+
+        $sessions = [];
+        list($before, $after) = Util\Request::parsePaginationArgs($response);
+
+        foreach ($response["data"] as $responseData) {
+            \array_push($sessions, Resource\Session::constructFromResponse($responseData));
+        }
+
+        return [$before, $after, $sessions];
+    }
+
+    /**
+     * Revoke a session.
+     *
+     * @param string $sessionId Session ID
+     *
+     * @return Resource\Session The revoked session
+     * @throws Exception\WorkOSException
+     */
+    public function revokeSession(string $sessionId)
+    {
+        $path = "user_management/sessions/{$sessionId}/revoke";
+
+        $response = Client::request(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        return Resource\Session::constructFromResponse($response);
+    }
+
+    /**
+     * Authenticate with a sealed session cookie.
+     *
+     * @param string $sealedSession Encrypted session cookie data
+     * @param string $cookiePassword Password to decrypt the session
+     *
+     * @return Resource\SessionAuthenticationSuccessResponse|Resource\SessionAuthenticationFailureResponse
+     * @throws Exception\WorkOSException
+     */
+    public function authenticateWithSessionCookie(
+        string $sealedSession,
+        string $cookiePassword
+    ) {
+        if (empty($sealedSession)) {
+            return new Resource\SessionAuthenticationFailureResponse(
+                Resource\SessionAuthenticationFailureResponse::REASON_NO_SESSION_COOKIE_PROVIDED
+            );
+        }
+
+        // Tight try/catch for unsealing only
+        try {
+            $sessionData = $this->getSessionEncryptor()->unseal($sealedSession, $cookiePassword);
+        } catch (\Exception $e) {
+            return new Resource\SessionAuthenticationFailureResponse(
+                Resource\SessionAuthenticationFailureResponse::REASON_ENCRYPTION_ERROR
+            );
+        }
+
+        if (!isset($sessionData['access_token']) || !isset($sessionData['refresh_token'])) {
+            return new Resource\SessionAuthenticationFailureResponse(
+                Resource\SessionAuthenticationFailureResponse::REASON_INVALID_SESSION_COOKIE
+            );
+        }
+
+        // Separate try/catch for HTTP request
+        try {
+            $path = "user_management/sessions/authenticate";
+            $params = [
+                "access_token" => $sessionData['access_token'],
+                "refresh_token" => $sessionData['refresh_token']
+            ];
+
+            $response = Client::request(
+                Client::METHOD_POST,
+                $path,
+                null,
+                $params,
+                true
+            );
+
+            return Resource\SessionAuthenticationSuccessResponse::constructFromResponse($response);
+        } catch (\Exception $e) {
+            return new Resource\SessionAuthenticationFailureResponse(
+                Resource\SessionAuthenticationFailureResponse::REASON_HTTP_ERROR
+            );
+        }
+    }
+
+    /**
+     * Load a sealed session and return a CookieSession instance.
+     *
+     * @param string $sealedSession Encrypted session cookie data
+     * @param string $cookiePassword Password to decrypt the session
+     *
+     * @return CookieSession
+     */
+    public function loadSealedSession(string $sealedSession, string $cookiePassword)
+    {
+        return new CookieSession($this, $sealedSession, $cookiePassword);
+    }
+
+    /**
+     * Extract and decrypt a session from HTTP cookies.
+     *
+     * @param string $cookiePassword Password to decrypt the session
+     * @param string $cookieName Name of the session cookie (default: 'wos-session')
+     *
+     * @return CookieSession|null
+     */
+    public function getSessionFromCookie(
+        string $cookiePassword,
+        string $cookieName = 'wos-session'
+    ) {
+        if (!isset($_COOKIE[$cookieName])) {
+            return null;
+        }
+
+        $sealedSession = $_COOKIE[$cookieName];
+        return $this->loadSealedSession($sealedSession, $cookiePassword);
     }
 }
