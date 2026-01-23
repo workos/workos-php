@@ -1319,8 +1319,8 @@ class UserManagement
      *   - 'after' (string|null): Session ID to look after
      *   - 'order' (string|null): The order in which to paginate records
      *
-     * @return array{?string, ?string, Resource\Session[]}
-     *         An array containing before/after cursors and array of Session instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and sessions array.
+     *                                    Supports: [$before, $after, $sessions] = $result, ["sessions" => $sessions] = $result, $result->sessions
      * @throws Exception\WorkOSException
      */
     public function listSessions(string $userId, array $options = [])
@@ -1342,14 +1342,7 @@ class UserManagement
             true
         );
 
-        $sessions = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-
-        foreach ($response["data"] as $responseData) {
-            \array_push($sessions, Resource\Session::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $sessions];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Session::class, 'sessions');
     }
 
     /**
