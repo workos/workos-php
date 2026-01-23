@@ -214,7 +214,8 @@ class SSO
      * @param null|string $after Connection ID to look after
      * @param Resource\Order $order The Order in which to paginate records
      *
-     * @return array{?string, ?string, Resource\Connection[]} An array containing the Directory Connection ID to use as before and after cursor, and an array of Connection instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and connections array.
+     *         Supports: [$before, $after, $connections] = $result, ["connections" => $connections] = $result, $result->connections
      *
      * @throws Exception\WorkOSException
      */
@@ -246,12 +247,6 @@ class SSO
             true
         );
 
-        $connections = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($connections, Resource\Connection::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $connections];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Connection::class, 'connections');
     }
 }

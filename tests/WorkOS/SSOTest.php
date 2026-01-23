@@ -172,6 +172,76 @@ class SSOTest extends TestCase
         $this->assertSame($connection, $connections[0]->toArray());
     }
 
+    public function testListConnectionsPaginatedResourceAccessPatterns()
+    {
+        $connectionsPath = "connections";
+        $params = [
+            "limit" => SSO::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domain" => null,
+            "connection_type" => null,
+            "organization_id" => null,
+            "order" => null
+        ];
+
+        $result = $this->connectionsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $connectionsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $connections1] = $this->sso->listConnections();
+        $this->assertNull($before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($connections1);
+        $this->assertCount(1, $connections1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $connectionsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "connections" => $connections2] = $this->sso->listConnections();
+        $this->assertNull($before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($connections2);
+        $this->assertCount(1, $connections2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $connectionsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->sso->listConnections();
+        $this->assertNull($response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->connections);
+        $this->assertCount(1, $response->connections);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->connections, $response->data);
+    }
+
     public function testDeleteConnection()
     {
         $connection = "connection_id";

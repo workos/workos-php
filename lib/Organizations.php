@@ -21,7 +21,8 @@ class Organizations
      * @param null|string $after Organization ID to look after
      * @param Resource\Order $order The Order in which to paginate records
      *
-     * @return array{?string, ?string, Resource\Organization[]} An array containing the Organization ID to use as before and after cursor, and an array of Organization instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and organizations array.
+     *         Supports: [$before, $after, $organizations] = $result, ["organizations" => $orgs] = $result, $result->organizations
      *
      * @throws Exception\WorkOSException
      */
@@ -49,13 +50,7 @@ class Organizations
             true
         );
 
-        $organizations = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($organizations, Resource\Organization::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $organizations];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Organization::class, 'organizations');
     }
 
     /**
@@ -262,7 +257,8 @@ class Organizations
      *
      * @throws Exception\WorkOSException
      *
-     * @return array{?string, ?string, Resource\FeatureFlag[]} An array containing the FeatureFlag ID to use as before and after cursor, and an array of FeatureFlag instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and feature_flags array.
+     *         Supports: [$before, $after, $flags] = $result, ["feature_flags" => $flags] = $result, $result->feature_flags
      */
     public function listOrganizationFeatureFlags(
         $organizationId,
@@ -287,12 +283,6 @@ class Organizations
             true
         );
 
-        $featureFlags = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($featureFlags, Resource\FeatureFlag::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $featureFlags];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\FeatureFlag::class, 'feature_flags');
     }
 }
