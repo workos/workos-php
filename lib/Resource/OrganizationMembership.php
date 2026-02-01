@@ -14,6 +14,7 @@ use WorkOS\Resource\RoleResponse;
  * @property RoleResponse $role
  * @property array<RoleResponse> $roles
  * @property 'active'|'inactive'|'pending' $status
+ * @property array<string, mixed> $idpAttributes
  * @property string $createdAt
  * @property string $updatedAt
  */
@@ -29,6 +30,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "role",
         "roles",
         "status",
+        "idpAttributes",
         "createdAt",
         "updatedAt"
     ];
@@ -41,6 +43,7 @@ class OrganizationMembership extends BaseWorkOSResource
         "role" => "role",
         "roles" => "roles",
         "status" => "status",
+        "idp_attributes" => "idpAttributes",
         "created_at" => "createdAt",
         "updated_at" => "updatedAt"
     ];
