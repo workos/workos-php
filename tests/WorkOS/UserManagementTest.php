@@ -1750,6 +1750,7 @@ class UserManagementTest extends TestCase
                 ],
             ],
             "status" => $status,
+            "custom_attributes" => [],
             "created_at" => "2021-06-25T19:07:33.155Z",
             "updated_at" => "2021-06-25T19:07:33.155Z",
         ]);
@@ -1774,6 +1775,7 @@ class UserManagementTest extends TestCase
                             ]
                         ],
                         "status" => "active",
+                        "custom_attributes" => [],
                         "created_at" => "2021-06-25T19:07:33.155Z",
                         "updated_at" => "2021-06-25T19:07:33.155Z",
                     ]
@@ -1798,6 +1800,7 @@ class UserManagementTest extends TestCase
                 new RoleResponse("admin"),
             ],
             "status" => "active",
+            "customAttributes" => [],
             "createdAt" => "2021-06-25T19:07:33.155Z",
             "updatedAt" => "2021-06-25T19:07:33.155Z",
         ];
