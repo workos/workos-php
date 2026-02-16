@@ -2266,7 +2266,7 @@ class UserManagementTest extends TestCase
     public function testRevokeSession()
     {
         $sessionId = "session_01H7X1M4TZJN5N4HG4XXMA1234";
-        $path = "user_management/sessions/{$sessionId}/revoke";
+        $path = "user_management/sessions/revoke";
 
         $result = json_encode([
             "id" => $sessionId,
@@ -2287,7 +2287,7 @@ class UserManagementTest extends TestCase
             Client::METHOD_POST,
             $path,
             null,
-            null,
+            [ "session_id" => $sessionId ],
             true,
             $result
         );
