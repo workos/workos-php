@@ -1419,13 +1419,15 @@ class UserManagement
      */
     public function revokeSession(string $sessionId)
     {
-        $path = "user_management/sessions/{$sessionId}/revoke";
+        $path = "user_management/sessions/revoke";
 
         $response = Client::request(
             Client::METHOD_POST,
             $path,
             null,
-            null,
+            [
+                "session_id" => $sessionId,
+            ],
             true
         );
 
