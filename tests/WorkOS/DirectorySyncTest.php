@@ -54,6 +54,76 @@ class DirectorySyncTest extends TestCase
         $this->assertSame($directory, $directories[0]->toArray());
     }
 
+    public function testListDirectoriesPaginatedResourceAccessPatterns()
+    {
+        $directoriesPath = "directories";
+        $params = [
+            "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domain" => null,
+            "search" => null,
+            "organization_id" => null,
+            "order" => null
+        ];
+
+        $result = $this->directoriesResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoriesPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $directories1] = $this->ds->listDirectories();
+        $this->assertNull($before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($directories1);
+        $this->assertCount(1, $directories1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoriesPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "directories" => $directories2] = $this->ds->listDirectories();
+        $this->assertNull($before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($directories2);
+        $this->assertCount(1, $directories2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $directoriesPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->ds->listDirectories();
+        $this->assertNull($response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->directories);
+        $this->assertCount(1, $response->directories);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->directories, $response->data);
+    }
+
     public function testGetDirectory()
     {
         $directoryId = "directory_id";
@@ -123,6 +193,73 @@ class DirectorySyncTest extends TestCase
 
         list($before, $after, $groups) = $this->ds->listGroups();
         $this->assertSame($group, $groups[0]->toArray());
+    }
+
+    public function testListGroupsPaginatedResourceAccessPatterns()
+    {
+        $usersPath = "directory_groups";
+        $params = [
+            "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
+        $result = $this->groupsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $groups1] = $this->ds->listGroups();
+        $this->assertNull($before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($groups1);
+        $this->assertCount(1, $groups1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "groups" => $groups2] = $this->ds->listGroups();
+        $this->assertNull($before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($groups2);
+        $this->assertCount(1, $groups2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->ds->listGroups();
+        $this->assertNull($response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->groups);
+        $this->assertCount(1, $response->groups);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->groups, $response->data);
     }
 
     public function testGetUser()
@@ -216,6 +353,73 @@ class DirectorySyncTest extends TestCase
 
         list($before, $after, $users) = $this->ds->listUsers();
         $this->assertEquals($user, $users[0]->toArray());
+    }
+
+    public function testListUsersPaginatedResourceAccessPatterns()
+    {
+        $usersPath = "directory_users";
+        $params = [
+            "limit" => DirectorySync::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
+        $result = $this->usersResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $users1] = $this->ds->listUsers();
+        $this->assertNull($before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($users1);
+        $this->assertCount(1, $users1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "users" => $users2] = $this->ds->listUsers();
+        $this->assertNull($before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($users2);
+        $this->assertCount(1, $users2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $usersPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->ds->listUsers();
+        $this->assertNull($response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->users);
+        $this->assertCount(1, $response->users);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->users, $response->data);
     }
 
     public function testDeleteDirectory()

@@ -174,6 +174,74 @@ class OrganizationsTest extends TestCase
         $this->assertSame($organization, $organizations[0]->toArray());
     }
 
+    public function testListOrganizationsPaginatedResourceAccessPatterns()
+    {
+        $organizationsPath = "organizations";
+        $params = [
+            "limit" => Organizations::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "domains" => null,
+            "order" => null
+        ];
+
+        $result = $this->organizationsResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $organizations1] = $this->organizations->listOrganizations();
+        $this->assertSame("before-id", $before1);
+        $this->assertNull($after1);
+        $this->assertIsArray($organizations1);
+        $this->assertCount(3, $organizations1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "organizations" => $organizations2] = $this->organizations->listOrganizations();
+        $this->assertSame("before-id", $before2);
+        $this->assertNull($after2);
+        $this->assertIsArray($organizations2);
+        $this->assertCount(3, $organizations2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $organizationsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->organizations->listOrganizations();
+        $this->assertSame("before-id", $response->before);
+        $this->assertNull($response->after);
+        $this->assertIsArray($response->organizations);
+        $this->assertCount(3, $response->organizations);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->organizations, $response->data);
+    }
+
     public function testListOrganizationRoles()
     {
         $organizationRolesPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/roles";
@@ -221,6 +289,72 @@ class OrganizationsTest extends TestCase
 
         list($before, $after, $featureFlags) = $this->organizations->listOrganizationFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
         $this->assertSame($featureFlag, $featureFlags[0]->toArray());
+    }
+
+    public function testListOrganizationFeatureFlagsPaginatedResourceAccessPatterns()
+    {
+        $featureFlagsPath = "organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/feature-flags";
+        $result = $this->featureFlagsResponseFixture();
+        $params = [
+            "limit" => 10,
+            "before" => null,
+            "after" => null,
+            "order" => null
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 1: Bare destructuring (indexed)
+        [$before1, $after1, $flags1] = $this->organizations->listOrganizationFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame("", $before1);
+        $this->assertSame("", $after1);
+        $this->assertIsArray($flags1);
+        $this->assertCount(3, $flags1);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 2: Named destructuring
+        ["before" => $before2, "after" => $after2, "feature_flags" => $flags2] = $this->organizations->listOrganizationFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame("", $before2);
+        $this->assertSame("", $after2);
+        $this->assertIsArray($flags2);
+        $this->assertCount(3, $flags2);
+
+        // Mock the request again for the next test
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $featureFlagsPath,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        // Test 3: Fluent access
+        $response = $this->organizations->listOrganizationFeatureFlags("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $this->assertSame("", $response->before);
+        $this->assertSame("", $response->after);
+        $this->assertIsArray($response->feature_flags);
+        $this->assertCount(3, $response->feature_flags);
+
+        // Test 4: Generic data accessor
+        $this->assertIsArray($response->data);
+        $this->assertSame($response->feature_flags, $response->data);
     }
 
     // Fixtures
