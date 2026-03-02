@@ -1,4 +1,4 @@
-# WorkOS PHP Library
+# WorkOS HP Library
 
 ![Packagist Version](https://img.shields.io/packagist/v/workos/workos-php)
 [![CI](https://github.com/workos/workos-php/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/workos/workos-php/actions/workflows/ci.yml)
