@@ -4,8 +4,13 @@
     ".": {
       "release-type": "php",
       "package-name": "workos/workos-php",
-      "version-file": "lib/Version.php",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "lib/Version.php"
+        }
+      ]
     }
   }
 }
