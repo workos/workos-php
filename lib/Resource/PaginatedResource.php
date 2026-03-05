@@ -13,7 +13,7 @@ namespace WorkOS\Resource;
  * This class standardizes pagination across all WorkOS resources while maintaining
  * backwards compatibility with existing code.
  */
-class PaginatedResource implements \ArrayAccess, \IteratorAggregate
+class PaginatedResource implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * @var ?string Before cursor for pagination
@@ -210,5 +210,15 @@ class PaginatedResource implements \ArrayAccess, \IteratorAggregate
         }
 
         return false;
+    }
+
+    /**
+     * Countable: Get the number of data items
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->data);
     }
 }
