@@ -2,3 +2,6 @@
 # https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
 * @workos/php
+
+# DX Team
+* @workos/dx
