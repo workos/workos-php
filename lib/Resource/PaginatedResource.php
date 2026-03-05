@@ -45,6 +45,10 @@ class PaginatedResource implements \ArrayAccess, \IteratorAggregate
      */
     public function __construct(?string $before, ?string $after, array $data, string $dataKey)
     {
+        if (in_array($dataKey, ['before', 'after', 'data'], true)) {
+            throw new \InvalidArgumentException("dataKey '$dataKey' conflicts with reserved keys");
+        }
+
         $this->before = $before;
         $this->after = $after;
         $this->data = $data;
