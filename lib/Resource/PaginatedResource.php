@@ -193,6 +193,18 @@ class PaginatedResource implements \ArrayAccess, \IteratorAggregate
      */
     public function __isset(string $name): bool
     {
-        return in_array($name, ['before', 'after', 'data', $this->dataKey], true);
+        if ($name === 'before') {
+            return $this->before !== null;
+        }
+
+        if ($name === 'after') {
+            return $this->after !== null;
+        }
+
+        if ($name === 'data' || $name === $this->dataKey) {
+            return true;
+        }
+
+        return false;
     }
 }
