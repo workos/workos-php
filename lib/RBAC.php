@@ -6,6 +6,18 @@ class RBAC
 {
     public const DEFAULT_PAGE_SIZE = 10;
 
+    /**
+     * Create a Permission.
+     *
+     * @param string $slug The slug of the Permission
+     * @param string $name The name of the Permission
+     * @param null|string $description The description of the Permission
+     * @param null|string $resourceTypeSlug The resource type slug of the Permission
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Permission
+     */
     public function createPermission(
         $slug,
         $name,
@@ -31,6 +43,18 @@ class RBAC
         return Resource\Permission::constructFromResponse($response);
     }
 
+    /**
+     * List Permissions.
+     *
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Permission ID to look before
+     * @param null|string $after Permission ID to look after
+     * @param null|string $order The order in which to paginate records
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array{?string, ?string, Resource\Permission[]}
+     */
     public function listPermissions(
         $limit = self::DEFAULT_PAGE_SIZE,
         ?string $before = null,
@@ -57,6 +81,15 @@ class RBAC
         return [$before, $after, $permissions];
     }
 
+    /**
+     * Get a Permission.
+     *
+     * @param string $slug The slug of the Permission
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Permission
+     */
     public function getPermission($slug)
     {
         $path = "authorization/permissions/{$slug}";
@@ -66,6 +99,17 @@ class RBAC
         return Resource\Permission::constructFromResponse($response);
     }
 
+    /**
+     * Update a Permission.
+     *
+     * @param string $slug The slug of the Permission to update
+     * @param null|string $name The updated name of the Permission
+     * @param null|string $description The updated description of the Permission
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Permission
+     */
     public function updatePermission(
         $slug,
         ?string $name = null,
@@ -87,6 +131,15 @@ class RBAC
         return Resource\Permission::constructFromResponse($response);
     }
 
+    /**
+     * Delete a Permission.
+     *
+     * @param string $slug The slug of the Permission to delete
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array
+     */
     public function deletePermission($slug)
     {
         $path = "authorization/permissions/{$slug}";
