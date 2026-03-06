@@ -137,6 +137,150 @@ class RBACTest extends TestCase
         $this->assertSame([], $response);
     }
 
+    public function testCreateEnvironmentRole()
+    {
+        $path = "authorization/roles";
+
+        $result = $this->roleResponseFixture();
+
+        $params = [
+            "slug" => "admin",
+            "name" => "Admin",
+            "description" => "Admin role",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        $response = $this->rbac->createEnvironmentRole("admin", "Admin", "Admin role");
+        $this->assertSame($role, $response->toArray());
+    }
+
+    public function testListEnvironmentRoles()
+    {
+        $path = "authorization/roles";
+
+        $result = $this->rolesListResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        list($roles) = $this->rbac->listEnvironmentRoles();
+        $this->assertSame($role, $roles[0]->toArray());
+    }
+
+    public function testGetEnvironmentRole()
+    {
+        $path = "authorization/roles/admin";
+
+        $result = $this->roleResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_GET,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        $response = $this->rbac->getEnvironmentRole("admin");
+        $this->assertSame($role, $response->toArray());
+    }
+
+    public function testUpdateEnvironmentRole()
+    {
+        $path = "authorization/roles/admin";
+
+        $result = $this->roleResponseFixture();
+
+        $params = [
+            "name" => "Admin Updated",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PATCH,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        $response = $this->rbac->updateEnvironmentRole("admin", "Admin Updated");
+        $this->assertSame($role, $response->toArray());
+    }
+
+    public function testSetEnvironmentRolePermissions()
+    {
+        $path = "authorization/roles/admin/permissions";
+
+        $result = $this->roleResponseFixture();
+
+        $params = [
+            "permissions" => ["posts:read", "posts:write"],
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_PUT,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        $response = $this->rbac->setEnvironmentRolePermissions("admin", ["posts:read", "posts:write"]);
+        $this->assertSame($role, $response->toArray());
+    }
+
+    public function testAddEnvironmentRolePermission()
+    {
+        $path = "authorization/roles/admin/permissions";
+
+        $result = $this->roleResponseFixture();
+
+        $params = [
+            "slug" => "posts:read",
+        ];
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            $params,
+            true,
+            $result
+        );
+
+        $role = $this->roleFixture();
+
+        $response = $this->rbac->addEnvironmentRolePermission("admin", "posts:read");
+        $this->assertSame($role, $response->toArray());
+    }
+
     // Fixtures
 
     private function permissionResponseFixture()
@@ -187,6 +331,58 @@ class RBACTest extends TestCase
             "description" => "Allows reading posts",
             "resource_type_slug" => "organization",
             "system" => false,
+            "created_at" => "2024-01-01T00:00:00.000Z",
+            "updated_at" => "2024-01-01T00:00:00.000Z"
+        ];
+    }
+
+    private function roleResponseFixture()
+    {
+        return json_encode([
+            "object" => "role",
+            "id" => "role_01EHQMYV6MBK39QC5PZXHY59C2",
+            "name" => "Admin",
+            "slug" => "admin",
+            "description" => "Admin role",
+            "permissions" => ["posts:read", "posts:write"],
+            "resource_type_slug" => null,
+            "type" => "EnvironmentRole",
+            "created_at" => "2024-01-01T00:00:00.000Z",
+            "updated_at" => "2024-01-01T00:00:00.000Z"
+        ]);
+    }
+
+    private function rolesListResponseFixture()
+    {
+        return json_encode([
+            "object" => "list",
+            "data" => [
+                [
+                    "object" => "role",
+                    "id" => "role_01EHQMYV6MBK39QC5PZXHY59C2",
+                    "name" => "Admin",
+                    "slug" => "admin",
+                    "description" => "Admin role",
+                    "permissions" => ["posts:read", "posts:write"],
+                    "resource_type_slug" => null,
+                    "type" => "EnvironmentRole",
+                    "created_at" => "2024-01-01T00:00:00.000Z",
+                    "updated_at" => "2024-01-01T00:00:00.000Z"
+                ]
+            ]
+        ]);
+    }
+
+    private function roleFixture()
+    {
+        return [
+            "id" => "role_01EHQMYV6MBK39QC5PZXHY59C2",
+            "name" => "Admin",
+            "slug" => "admin",
+            "description" => "Admin role",
+            "permissions" => ["posts:read", "posts:write"],
+            "resource_type_slug" => null,
+            "type" => "EnvironmentRole",
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
         ];

@@ -148,4 +148,99 @@ class RBAC
 
         return $response;
     }
+
+    public function createEnvironmentRole(
+        $slug,
+        $name,
+        ?string $description = null,
+        ?string $resourceTypeSlug = null
+    ) {
+        $path = "authorization/roles";
+
+        $params = [
+            "slug" => $slug,
+            "name" => $name,
+        ];
+
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+        if (isset($resourceTypeSlug)) {
+            $params["resource_type_slug"] = $resourceTypeSlug;
+        }
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    public function listEnvironmentRoles()
+    {
+        $path = "authorization/roles";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        $roles = [];
+        foreach ($response["data"] as $responseData) {
+            \array_push($roles, Resource\Role::constructFromResponse($responseData));
+        }
+
+        return [$roles];
+    }
+
+    public function getEnvironmentRole($slug)
+    {
+        $path = "authorization/roles/{$slug}";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    public function updateEnvironmentRole(
+        $slug,
+        ?string $name = null,
+        ?string $description = null
+    ) {
+        $path = "authorization/roles/{$slug}";
+
+        $params = [];
+
+        if (isset($name)) {
+            $params["name"] = $name;
+        }
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+
+        $response = Client::request(Client::METHOD_PATCH, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    public function setEnvironmentRolePermissions($slug, array $permissions)
+    {
+        $path = "authorization/roles/{$slug}/permissions";
+
+        $params = [
+            "permissions" => $permissions,
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    public function addEnvironmentRolePermission($roleSlug, $permissionSlug)
+    {
+        $path = "authorization/roles/{$roleSlug}/permissions";
+
+        $params = [
+            "slug" => $permissionSlug,
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
 }
