@@ -53,7 +53,7 @@ class RBAC
      *
      * @throws Exception\WorkOSException
      *
-     * @return array{?string, ?string, Resource\Permission[]}
+     * @return Resource\PaginatedResource
      */
     public function listPermissions(
         int $limit = self::DEFAULT_PAGE_SIZE,
@@ -72,13 +72,7 @@ class RBAC
 
         $response = Client::request(Client::METHOD_GET, $path, null, $params, true);
 
-        $permissions = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($permissions, Resource\Permission::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $permissions];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Permission::class, 'permissions');
     }
 
     /**
@@ -189,22 +183,33 @@ class RBAC
     /**
      * List Environment Roles.
      *
+     * @param int $limit Maximum number of records to return
+     * @param null|string $before Role ID to look before
+     * @param null|string $after Role ID to look after
+     * @param null|string $order The order in which to paginate records
+     *
      * @throws Exception\WorkOSException
      *
-     * @return Resource\Role[]
+     * @return Resource\PaginatedResource
      */
-    public function listEnvironmentRoles()
-    {
+    public function listEnvironmentRoles(
+        int $limit = self::DEFAULT_PAGE_SIZE,
+        ?string $before = null,
+        ?string $after = null,
+        ?string $order = null
+    ) {
         $path = "authorization/roles";
 
-        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+        $params = [
+            "limit" => $limit,
+            "before" => $before,
+            "after" => $after,
+            "order" => $order,
+        ];
 
-        $roles = [];
-        foreach ($response["data"] as $responseData) {
-            \array_push($roles, Resource\Role::constructFromResponse($responseData));
-        }
+        $response = Client::request(Client::METHOD_GET, $path, null, $params, true);
 
-        return $roles;
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Role::class, 'roles');
     }
 
     /**

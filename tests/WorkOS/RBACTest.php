@@ -71,8 +71,8 @@ class RBACTest extends TestCase
 
         $permission = $this->permissionFixture();
 
-        list($before, $after, $permissions) = $this->rbac->listPermissions();
-        $this->assertSame($permission, $permissions[0]->toArray());
+        $response = $this->rbac->listPermissions();
+        $this->assertSame($permission, $response->permissions[0]->toArray());
     }
 
     public function testGetPermission()
@@ -170,19 +170,26 @@ class RBACTest extends TestCase
 
         $result = $this->rolesListResponseFixture();
 
+        $params = [
+            "limit" => RBAC::DEFAULT_PAGE_SIZE,
+            "before" => null,
+            "after" => null,
+            "order" => null,
+        ];
+
         $this->mockRequest(
             Client::METHOD_GET,
             $path,
             null,
-            null,
+            $params,
             true,
             $result
         );
 
         $role = $this->roleFixture();
 
-        $roles = $this->rbac->listEnvironmentRoles();
-        $this->assertSame($role, $roles[0]->toArray());
+        $response = $this->rbac->listEnvironmentRoles();
+        $this->assertSame($role, $response->roles[0]->toArray());
     }
 
     public function testGetEnvironmentRole()
@@ -369,6 +376,10 @@ class RBACTest extends TestCase
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
                 ]
+            ],
+            "list_metadata" => [
+                "before" => null,
+                "after" => null
             ]
         ]);
     }
