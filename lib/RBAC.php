@@ -302,4 +302,106 @@ class RBAC
 
         return Resource\Role::constructFromResponse($response);
     }
+
+    public function createOrganizationRole(
+        $organizationId,
+        $slug,
+        $name,
+        ?string $description = null
+    ) {
+        $path = "authorization/organizations/{$organizationId}/roles";
+
+        $params = [
+            "slug" => $slug,
+            "name" => $name,
+        ];
+
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\OrganizationRole::constructFromResponse($response);
+    }
+
+    public function listOrganizationRoles($organizationId)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        $roles = [];
+        foreach ($response["data"] as $responseData) {
+            \array_push($roles, Resource\Role::constructFromResponse($responseData));
+        }
+
+        return [$roles];
+    }
+
+    public function getOrganizationRole($organizationId, $slug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    public function updateOrganizationRole(
+        $organizationId,
+        $slug,
+        ?string $name = null,
+        ?string $description = null
+    ) {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
+
+        $params = [];
+
+        if (isset($name)) {
+            $params["name"] = $name;
+        }
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+
+        $response = Client::request(Client::METHOD_PATCH, $path, null, $params, true);
+
+        return Resource\OrganizationRole::constructFromResponse($response);
+    }
+
+    public function setOrganizationRolePermissions($organizationId, $slug, array $permissions)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}/permissions";
+
+        $params = [
+            "permissions" => $permissions,
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
+
+        return Resource\OrganizationRole::constructFromResponse($response);
+    }
+
+    public function addOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions";
+
+        $params = [
+            "slug" => $permissionSlug,
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\OrganizationRole::constructFromResponse($response);
+    }
+
+    public function removeOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions/{$permissionSlug}";
+
+        $response = Client::request(Client::METHOD_DELETE, $path, null, null, true);
+
+        return $response;
+    }
 }
