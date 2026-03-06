@@ -149,6 +149,18 @@ class RBAC
         return $response;
     }
 
+    /**
+     * Create an Environment Role.
+     *
+     * @param string $slug The slug of the Role
+     * @param string $name The name of the Role
+     * @param null|string $description The description of the Role
+     * @param null|string $resourceTypeSlug The resource type slug of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
     public function createEnvironmentRole(
         $slug,
         $name,
@@ -174,6 +186,13 @@ class RBAC
         return Resource\Role::constructFromResponse($response);
     }
 
+    /**
+     * List Environment Roles.
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array{0: Resource\Role[]}
+     */
     public function listEnvironmentRoles()
     {
         $path = "authorization/roles";
@@ -188,6 +207,15 @@ class RBAC
         return [$roles];
     }
 
+    /**
+     * Get an Environment Role.
+     *
+     * @param string $slug The slug of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
     public function getEnvironmentRole($slug)
     {
         $path = "authorization/roles/{$slug}";
@@ -197,6 +225,17 @@ class RBAC
         return Resource\Role::constructFromResponse($response);
     }
 
+    /**
+     * Update an Environment Role.
+     *
+     * @param string $slug The slug of the Role to update
+     * @param null|string $name The updated name of the Role
+     * @param null|string $description The updated description of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
     public function updateEnvironmentRole(
         $slug,
         ?string $name = null,
@@ -218,6 +257,16 @@ class RBAC
         return Resource\Role::constructFromResponse($response);
     }
 
+    /**
+     * Set permissions for an Environment Role.
+     *
+     * @param string $slug The slug of the Role
+     * @param array<string> $permissions The permission slugs to set on the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
     public function setEnvironmentRolePermissions($slug, array $permissions)
     {
         $path = "authorization/roles/{$slug}/permissions";
@@ -231,6 +280,16 @@ class RBAC
         return Resource\Role::constructFromResponse($response);
     }
 
+    /**
+     * Add a permission to an Environment Role.
+     *
+     * @param string $roleSlug The slug of the Role
+     * @param string $permissionSlug The slug of the Permission to add
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
     public function addEnvironmentRolePermission($roleSlug, $permissionSlug)
     {
         $path = "authorization/roles/{$roleSlug}/permissions";
