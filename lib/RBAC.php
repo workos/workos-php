@@ -307,4 +307,182 @@ class RBAC
 
         return Resource\Role::constructFromResponse($response);
     }
+
+    /**
+     * Create an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $slug The slug of the Role
+     * @param string $name The name of the Role
+     * @param null|string $description The description of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
+    public function createOrganizationRole(
+        $organizationId,
+        $slug,
+        $name,
+        ?string $description = null
+    ) {
+        $path = "authorization/organizations/{$organizationId}/roles";
+
+        $params = [
+            "slug" => $slug,
+            "name" => $name,
+        ];
+
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    /**
+     * List Organization Roles.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role[]
+     */
+    public function listOrganizationRoles($organizationId)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        $roles = [];
+        foreach ($response["data"] as $responseData) {
+            \array_push($roles, Resource\Role::constructFromResponse($responseData));
+        }
+
+        return $roles;
+    }
+
+    /**
+     * Get an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $slug The slug of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
+    public function getOrganizationRole($organizationId, $slug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
+
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    /**
+     * Update an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $slug The slug of the Role to update
+     * @param null|string $name The updated name of the Role
+     * @param null|string $description The updated description of the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
+    public function updateOrganizationRole(
+        $organizationId,
+        $slug,
+        ?string $name = null,
+        ?string $description = null
+    ) {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
+
+        $params = [];
+
+        if (isset($name)) {
+            $params["name"] = $name;
+        }
+        if (isset($description)) {
+            $params["description"] = $description;
+        }
+
+        $response = Client::request(Client::METHOD_PATCH, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    /**
+     * Set permissions for an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $slug The slug of the Role
+     * @param array<string> $permissions The permission slugs to set on the Role
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
+    public function setOrganizationRolePermissions($organizationId, $slug, array $permissions)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}/permissions";
+
+        $params = [
+            "permissions" => $permissions,
+        ];
+
+        $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    /**
+     * Add a permission to an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $roleSlug The slug of the Role
+     * @param string $permissionSlug The slug of the Permission to add
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return Resource\Role
+     */
+    public function addOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions";
+
+        $params = [
+            "slug" => $permissionSlug,
+        ];
+
+        $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
+
+        return Resource\Role::constructFromResponse($response);
+    }
+
+    /**
+     * Remove a permission from an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $roleSlug The slug of the Role
+     * @param string $permissionSlug The slug of the Permission to remove
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array
+     */
+    public function removeOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions/{$permissionSlug}";
+
+        $response = Client::request(Client::METHOD_DELETE, $path, null, null, true);
+
+        return $response;
+    }
 }
