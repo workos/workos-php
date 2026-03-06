@@ -325,7 +325,7 @@ class RBACTest extends TestCase
 
         $role = $this->organizationRoleFixture();
 
-        list($roles) = $this->rbac->listOrganizationRoles("org_01EHQMYV6MBK39QC5PZXHY59C3");
+        $roles = $this->rbac->listOrganizationRoles("org_01EHQMYV6MBK39QC5PZXHY59C3");
         $this->assertSame($role, $roles[0]->toArray());
     }
 
