@@ -557,7 +557,7 @@ class RBACTest extends TestCase
             "slug" => "org-admin",
             "description" => "Organization admin role",
             "permissions" => ["posts:read", "posts:write"],
-            "resource_type_slug" => null,
+            "resource_type_slug" => "organization",
             "type" => "OrganizationRole",
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -576,7 +576,7 @@ class RBACTest extends TestCase
                     "slug" => "org-admin",
                     "description" => "Organization admin role",
                     "permissions" => ["posts:read", "posts:write"],
-                    "resource_type_slug" => null,
+                    "resource_type_slug" => "organization",
                     "type" => "OrganizationRole",
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -593,7 +593,7 @@ class RBACTest extends TestCase
             "slug" => "org-admin",
             "description" => "Organization admin role",
             "permissions" => ["posts:read", "posts:write"],
-            "resource_type_slug" => null,
+            "resource_type_slug" => "organization",
             "type" => "OrganizationRole",
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
