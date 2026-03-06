@@ -71,6 +71,15 @@ class CurlRequestClient implements RequestClientInterface
                 }
 
                 break;
+
+            case Client::METHOD_PATCH:
+                \array_push($headers, "Content-Type: application/json");
+                $opts[\CURLOPT_CUSTOMREQUEST] = 'PATCH';
+                $opts[\CURLOPT_POST] = 1;
+                if (!empty($params)) {
+                    $opts[\CURLOPT_POSTFIELDS] = \json_encode($params);
+                }
+                break;
         }
 
         $opts[\CURLOPT_HTTPHEADER] = $headers;
