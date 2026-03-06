@@ -322,7 +322,7 @@ class RBAC
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\OrganizationRole::constructFromResponse($response);
+        return Resource\Role::constructFromResponse($response);
     }
 
     public function listOrganizationRoles($organizationId)
@@ -367,7 +367,7 @@ class RBAC
 
         $response = Client::request(Client::METHOD_PATCH, $path, null, $params, true);
 
-        return Resource\OrganizationRole::constructFromResponse($response);
+        return Resource\Role::constructFromResponse($response);
     }
 
     public function setOrganizationRolePermissions($organizationId, $slug, array $permissions)
@@ -380,7 +380,7 @@ class RBAC
 
         $response = Client::request(Client::METHOD_PUT, $path, null, $params, true);
 
-        return Resource\OrganizationRole::constructFromResponse($response);
+        return Resource\Role::constructFromResponse($response);
     }
 
     public function addOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
@@ -393,7 +393,7 @@ class RBAC
 
         $response = Client::request(Client::METHOD_POST, $path, null, $params, true);
 
-        return Resource\OrganizationRole::constructFromResponse($response);
+        return Resource\Role::constructFromResponse($response);
     }
 
     public function removeOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
