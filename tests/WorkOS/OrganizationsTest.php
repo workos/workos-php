@@ -466,7 +466,7 @@ class OrganizationsTest extends TestCase
                     "slug" => "admin",
                     "description" => "Admin role",
                     "permissions" => ["posts:read", "posts:write"],
-                    "resource_type_slug" => null,
+                    "resource_type_slug" => "organization",
                     "type" => "EnvironmentRole",
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -478,7 +478,7 @@ class OrganizationsTest extends TestCase
                     "slug" => "member",
                     "description" => "Member role",
                     "permissions" => [],
-                    "resource_type_slug" => null,
+                    "resource_type_slug" => "organization",
                     "type" => "EnvironmentRole",
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -490,7 +490,7 @@ class OrganizationsTest extends TestCase
                     "slug" => "org-member",
                     "description" => "Organization member role",
                     "permissions" => ["posts:read"],
-                    "resource_type_slug" => null,
+                    "resource_type_slug" => "organization",
                     "type" => "OrganizationRole",
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -507,7 +507,7 @@ class OrganizationsTest extends TestCase
             "slug" => "admin",
             "description" => "Admin role",
             "permissions" => ["posts:read", "posts:write"],
-            "resource_type_slug" => null,
+            "resource_type_slug" => "organization",
             "type" => "EnvironmentRole",
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
