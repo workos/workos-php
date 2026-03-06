@@ -382,6 +382,22 @@ class RBACTest extends TestCase
         $this->assertSame($role, $response->toArray());
     }
 
+    public function testDeleteOrganizationRole()
+    {
+        $path = "authorization/organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/roles/org-admin";
+
+        $this->mockRequest(
+            Client::METHOD_DELETE,
+            $path,
+            null,
+            null,
+            true
+        );
+
+        $response = $this->rbac->deleteOrganizationRole("org_01EHQMYV6MBK39QC5PZXHY59C3", "org-admin");
+        $this->assertSame([], $response);
+    }
+
     public function testSetOrganizationRolePermissions()
     {
         $path = "authorization/organizations/org_01EHQMYV6MBK39QC5PZXHY59C3/roles/org-admin/permissions";

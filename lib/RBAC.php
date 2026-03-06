@@ -156,8 +156,8 @@ class RBAC
      * @return Resource\Role
      */
     public function createEnvironmentRole(
-        $slug,
-        $name,
+        string $slug,
+        string $name,
         ?string $description = null,
         ?string $resourceTypeSlug = null
     ) {
@@ -221,7 +221,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function getEnvironmentRole($slug)
+    public function getEnvironmentRole(string $slug)
     {
         $path = "authorization/roles/{$slug}";
 
@@ -242,7 +242,7 @@ class RBAC
      * @return Resource\Role
      */
     public function updateEnvironmentRole(
-        $slug,
+        string $slug,
         ?string $name = null,
         ?string $description = null
     ) {
@@ -272,7 +272,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function setEnvironmentRolePermissions($slug, array $permissions)
+    public function setEnvironmentRolePermissions(string $slug, array $permissions)
     {
         $path = "authorization/roles/{$slug}/permissions";
 
@@ -295,7 +295,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function addEnvironmentRolePermission($roleSlug, $permissionSlug)
+    public function addEnvironmentRolePermission(string $roleSlug, string $permissionSlug)
     {
         $path = "authorization/roles/{$roleSlug}/permissions";
 
@@ -321,9 +321,9 @@ class RBAC
      * @return Resource\Role
      */
     public function createOrganizationRole(
-        $organizationId,
-        $slug,
-        $name,
+        string $organizationId,
+        string $slug,
+        string $name,
         ?string $description = null
     ) {
         $path = "authorization/organizations/{$organizationId}/roles";
@@ -351,7 +351,7 @@ class RBAC
      *
      * @return Resource\Role[]
      */
-    public function listOrganizationRoles($organizationId)
+    public function listOrganizationRoles(string $organizationId)
     {
         $path = "authorization/organizations/{$organizationId}/roles";
 
@@ -375,7 +375,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function getOrganizationRole($organizationId, $slug)
+    public function getOrganizationRole(string $organizationId, string $slug)
     {
         $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
 
@@ -397,8 +397,8 @@ class RBAC
      * @return Resource\Role
      */
     public function updateOrganizationRole(
-        $organizationId,
-        $slug,
+        string $organizationId,
+        string $slug,
         ?string $name = null,
         ?string $description = null
     ) {
@@ -419,6 +419,25 @@ class RBAC
     }
 
     /**
+     * Delete an Organization Role.
+     *
+     * @param string $organizationId WorkOS Organization ID
+     * @param string $slug The slug of the Role to delete
+     *
+     * @throws Exception\WorkOSException
+     *
+     * @return array
+     */
+    public function deleteOrganizationRole(string $organizationId, string $slug)
+    {
+        $path = "authorization/organizations/{$organizationId}/roles/{$slug}";
+
+        $response = Client::request(Client::METHOD_DELETE, $path, null, null, true);
+
+        return $response;
+    }
+
+    /**
      * Set permissions for an Organization Role.
      *
      * @param string $organizationId WorkOS Organization ID
@@ -429,7 +448,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function setOrganizationRolePermissions($organizationId, $slug, array $permissions)
+    public function setOrganizationRolePermissions(string $organizationId, string $slug, array $permissions)
     {
         $path = "authorization/organizations/{$organizationId}/roles/{$slug}/permissions";
 
@@ -453,7 +472,7 @@ class RBAC
      *
      * @return Resource\Role
      */
-    public function addOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    public function addOrganizationRolePermission(string $organizationId, string $roleSlug, string $permissionSlug)
     {
         $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions";
 
@@ -477,7 +496,7 @@ class RBAC
      *
      * @return array
      */
-    public function removeOrganizationRolePermission($organizationId, $roleSlug, $permissionSlug)
+    public function removeOrganizationRolePermission(string $organizationId, string $roleSlug, string $permissionSlug)
     {
         $path = "authorization/organizations/{$organizationId}/roles/{$roleSlug}/permissions/{$permissionSlug}";
 
