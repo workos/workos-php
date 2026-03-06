@@ -191,7 +191,7 @@ class RBAC
      *
      * @throws Exception\WorkOSException
      *
-     * @return array{0: Resource\Role[]}
+     * @return Resource\Role[]
      */
     public function listEnvironmentRoles()
     {
@@ -204,7 +204,7 @@ class RBAC
             \array_push($roles, Resource\Role::constructFromResponse($responseData));
         }
 
-        return [$roles];
+        return $roles;
     }
 
     /**
