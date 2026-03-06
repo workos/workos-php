@@ -35,7 +35,7 @@ class Webhook
      * @param  string  $payload  Body of the webhook
      * @param  string  $secret  Webhook secret from the WorkOS dashboard
      * @param  int  $tolerance  Number of seconds old the webhook can be before it's invalid
-     * @return bool true
+     * @return string 'pass' if valid, otherwise an error message
      */
     public function verifyHeader($sigHeader, $payload, $secret, $tolerance)
     {
