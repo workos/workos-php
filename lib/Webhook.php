@@ -37,7 +37,7 @@ class Webhook
      * @param  int  $tolerance  Number of seconds old the webhook can be before it's invalid
      * @return string 'pass' if valid, otherwise an error message
      */
-    public function verifyHeader($sigHeader, $payload, $secret, $tolerance)
+    public function verifyHeader($sigHeader, $payload, $secret, $tolerance): string
     {
         $timestamp = (int) $this->getTimeStamp($sigHeader);
         $signature = $this->getSignature($sigHeader);

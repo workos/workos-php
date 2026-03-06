@@ -10,6 +10,7 @@ namespace WorkOS\Resource;
  * @property string $slug
  * @property string $description
  * @property array<string> $permissions
+ * @property string $resource_type_slug
  * @property string $type
  * @property string $created_at
  * @property string $updated_at
@@ -25,6 +26,7 @@ class Role extends BaseWorkOSResource
         "slug",
         "description",
         "permissions",
+        "resource_type_slug",
         "type",
         "created_at",
         "updated_at"
@@ -36,6 +38,7 @@ class Role extends BaseWorkOSResource
         "slug" => "slug",
         "description" => "description",
         "permissions" => "permissions",
+        "resource_type_slug" => "resource_type_slug",
         "type" => "type",
         "created_at" => "created_at",
         "updated_at" => "updated_at"
