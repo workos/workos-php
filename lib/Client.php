@@ -13,6 +13,7 @@ class Client
     public const METHOD_POST = "post";
     public const METHOD_DELETE = "delete";
     public const METHOD_PUT = "put";
+    public const METHOD_PATCH = "patch";
 
     private static $_requestClient;
 
