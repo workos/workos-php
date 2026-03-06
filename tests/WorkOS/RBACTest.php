@@ -147,7 +147,7 @@ class RBACTest extends TestCase
             "slug" => "posts:read",
             "name" => "Read Posts",
             "description" => "Allows reading posts",
-            "resource_type_slug" => null,
+            "resource_type_slug" => "organization",
             "system" => false,
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -165,7 +165,7 @@ class RBACTest extends TestCase
                     "slug" => "posts:read",
                     "name" => "Read Posts",
                     "description" => "Allows reading posts",
-                    "resource_type_slug" => null,
+                    "resource_type_slug" => "organization",
                     "system" => false,
                     "created_at" => "2024-01-01T00:00:00.000Z",
                     "updated_at" => "2024-01-01T00:00:00.000Z"
@@ -185,7 +185,7 @@ class RBACTest extends TestCase
             "slug" => "posts:read",
             "name" => "Read Posts",
             "description" => "Allows reading posts",
-            "resource_type_slug" => null,
+            "resource_type_slug" => "organization",
             "system" => false,
             "created_at" => "2024-01-01T00:00:00.000Z",
             "updated_at" => "2024-01-01T00:00:00.000Z"
