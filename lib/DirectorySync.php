@@ -24,7 +24,8 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return array{?string, ?string, Resource\Directory[]} An array containing the Directory ID to use as before and after cursor, and an array of Directory instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and directories array.
+     *         Supports: [$before, $after, $directories] = $result, ["directories" => $dirs] = $result, $result->directories
      */
     public function listDirectories(
         ?string $domain = null,
@@ -54,13 +55,7 @@ class DirectorySync
             true
         );
 
-        $directories = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $responseData) {
-            \array_push($directories, Resource\Directory::constructFromResponse($responseData));
-        }
-
-        return [$before, $after, $directories];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\Directory::class, 'directories');
     }
 
     /**
@@ -75,7 +70,8 @@ class DirectorySync
      *
      * @throws Exception\WorkOSException
      *
-     * @return array{?string, ?string, Resource\DirectoryGroup[]} An array containing the Directory Group ID to use as before and after cursor, and an array of Directory Group instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and groups array.
+     *         Supports: [$before, $after, $groups] = $result, ["groups" => $groups] = $result, $result->groups
      */
     public function listGroups(
         ?string $directory = null,
@@ -108,13 +104,7 @@ class DirectorySync
             true
         );
 
-        $groups = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $response) {
-            \array_push($groups, Resource\DirectoryGroup::constructFromResponse($response));
-        }
-
-        return [$before, $after, $groups];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\DirectoryGroup::class, 'groups');
     }
 
     /**
@@ -151,7 +141,8 @@ class DirectorySync
      * @param null|string $after Directory User ID to look after
      * @param Resource\Order $order The Order in which to paginate records
      *
-     * @return array{?string, ?string, Resource\DirectoryUser[]} An array containing the Directory User ID to use as before and after cursor, and an array of Directory User instances
+     * @return Resource\PaginatedResource A paginated resource containing before/after cursors and users array.
+     *         Supports: [$before, $after, $users] = $result, ["users" => $users] = $result, $result->users
      *
      * @throws Exception\WorkOSException
      */
@@ -186,13 +177,7 @@ class DirectorySync
             true
         );
 
-        $users = [];
-        list($before, $after) = Util\Request::parsePaginationArgs($response);
-        foreach ($response["data"] as $response) {
-            \array_push($users, Resource\DirectoryUser::constructFromResponse($response));
-        }
-
-        return [$before, $after, $users];
+        return Resource\PaginatedResource::constructFromResponse($response, Resource\DirectoryUser::class, 'users');
     }
 
     /**
