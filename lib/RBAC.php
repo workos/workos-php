@@ -19,8 +19,8 @@ class RBAC
      * @return Resource\Permission
      */
     public function createPermission(
-        $slug,
-        $name,
+        string $slug,
+        string $name,
         ?string $description = null,
         ?string $resourceTypeSlug = null
     ) {
@@ -56,7 +56,7 @@ class RBAC
      * @return array{?string, ?string, Resource\Permission[]}
      */
     public function listPermissions(
-        $limit = self::DEFAULT_PAGE_SIZE,
+        int $limit = self::DEFAULT_PAGE_SIZE,
         ?string $before = null,
         ?string $after = null,
         ?string $order = null
@@ -90,7 +90,7 @@ class RBAC
      *
      * @return Resource\Permission
      */
-    public function getPermission($slug)
+    public function getPermission(string $slug)
     {
         $path = "authorization/permissions/{$slug}";
 
@@ -111,7 +111,7 @@ class RBAC
      * @return Resource\Permission
      */
     public function updatePermission(
-        $slug,
+        string $slug,
         ?string $name = null,
         ?string $description = null
     ) {
@@ -140,7 +140,7 @@ class RBAC
      *
      * @return array
      */
-    public function deletePermission($slug)
+    public function deletePermission(string $slug)
     {
         $path = "authorization/permissions/{$slug}";
 
