@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.32.0](https://github.com/workos/workos-php/compare/workos/workos-php-v4.31.0...workos/workos-php-v4.32.0) (2026-03-09)
+
+
+### Features
+
+* Add accept invitation endpoint ([#343](https://github.com/workos/workos-php/issues/343)) ([36e9322](https://github.com/workos/workos-php/commit/36e93227cda5e81211bec2fad27a46b74dbc7ab0))
+
+
+### Bug Fixes
+
+* listEnvironmentRoles should not use PaginatedResource ([#341](https://github.com/workos/workos-php/issues/341)) ([52f0602](https://github.com/workos/workos-php/commit/52f0602921c4e985c281ad13d67b0a24e4db176c))
+
 ## [4.31.0](https://github.com/workos/workos-php/compare/workos/workos-php-v4.30.1...workos/workos-php-v4.31.0) (2026-03-06)
 
 
