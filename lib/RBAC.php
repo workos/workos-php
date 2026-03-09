@@ -183,33 +183,22 @@ class RBAC
     /**
      * List Environment Roles.
      *
-     * @param int $limit Maximum number of records to return
-     * @param null|string $before Role ID to look before
-     * @param null|string $after Role ID to look after
-     * @param null|string $order The order in which to paginate records
-     *
      * @throws Exception\WorkOSException
      *
-     * @return Resource\PaginatedResource
+     * @return Resource\Role[]
      */
-    public function listEnvironmentRoles(
-        int $limit = self::DEFAULT_PAGE_SIZE,
-        ?string $before = null,
-        ?string $after = null,
-        ?string $order = null
-    ) {
+    public function listEnvironmentRoles()
+    {
         $path = "authorization/roles";
 
-        $params = [
-            "limit" => $limit,
-            "before" => $before,
-            "after" => $after,
-            "order" => $order,
-        ];
+        $response = Client::request(Client::METHOD_GET, $path, null, null, true);
 
-        $response = Client::request(Client::METHOD_GET, $path, null, $params, true);
+        $roles = [];
+        foreach ($response["data"] as $responseData) {
+            \array_push($roles, Resource\Role::constructFromResponse($responseData));
+        }
 
-        return Resource\PaginatedResource::constructFromResponse($response, Resource\Role::class, 'roles');
+        return $roles;
     }
 
     /**
