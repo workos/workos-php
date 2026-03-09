@@ -4,6 +4,8 @@
     ".": {
       "release-type": "php",
       "package-name": "workos/workos-php",
+      "include-component-in-tag": false,
+      "include-v-in-tag": false,
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
