@@ -1678,6 +1678,50 @@ class UserManagementTest extends TestCase
         $this->userManagement->resendInvitation($invitationId);
     }
 
+    public function testAcceptInvitation()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/accept";
+
+        $result = $this->invitationResponseFixture();
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            $result
+        );
+
+        $response = $this->userManagement->acceptInvitation($invitationId);
+
+        $expected = $this->invitationFixture();
+
+        $this->assertSame($response->toArray(), $expected);
+    }
+
+    public function testAcceptInvitation404()
+    {
+        $invitationId = "invitation_01E4ZCR3C56J083X43JQXF3JK5";
+        $path = "user_management/invitations/{$invitationId}/accept";
+
+        $this->expectException(Exception\NotFoundException::class);
+
+        $this->mockRequest(
+            Client::METHOD_POST,
+            $path,
+            null,
+            null,
+            true,
+            null,
+            null,
+            404
+        );
+
+        $this->userManagement->acceptInvitation($invitationId);
+    }
+
     public function testGetJwksUrl()
     {
         $clientId = "12345";
