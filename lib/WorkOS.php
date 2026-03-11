@@ -162,4 +162,5 @@ class WorkOS
 
         return false;
     }
+
 }
