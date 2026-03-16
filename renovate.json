@@ -10,6 +10,12 @@
   "rebaseWhen": "conflicted",
   "packageRules": [
     {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "extractVersion": "^v(?<version>\\d+\\.\\d+\\.\\d+)$"
+    },
+    {
       "matchUpdateTypes": [
         "minor",
         "patch"
