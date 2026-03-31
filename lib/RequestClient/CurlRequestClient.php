@@ -113,14 +113,18 @@ class CurlRequestClient implements RequestClientInterface
         if ($result === false) {
             $errno = \curl_errno($curl);
             $msg = \curl_error($curl);
-            \curl_close($curl);
+            if (PHP_VERSION_ID < 80500) {
+                \curl_close($curl);
+            }
 
             throw new GenericException($msg, ["curlErrno" => $errno]);
         } else {
             // Unsure how versions of cURL and PHP correlate so using the legacy
             // reference for getting the last response code
             $statusCode = \curl_getinfo($curl, \CURLINFO_RESPONSE_CODE);
-            \curl_close($curl);
+            if (PHP_VERSION_ID < 80500) {
+                \curl_close($curl);
+            }
 
             return [$result, $headers, $statusCode];
         }
