@@ -1,109 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WorkOS;
+
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 
 trait TestHelper
 {
-    protected $defaultRequestClient;
-    protected $requestClientMock;
+    private ?MockHandler $mockHandler = null;
 
-    protected function setUp(): void
+    protected function loadFixture(string $name): array
     {
-        $this->defaultRequestClient = Client::requestClient();
-        $this->requestClientMock = $this->createMock("\WorkOS\RequestClient\RequestClientInterface");
+        $path = __DIR__ . '/Fixtures/' . $name . '.json';
+        if (!file_exists($path)) {
+            $this->markTestSkipped("Fixture not found: {$name}.json");
+        }
+        return json_decode(file_get_contents($path), true);
     }
 
-    protected function tearDown(): void
+    protected function createMockClient(array $responses): WorkOS
     {
-        WorkOS::setApiKey(null);
-        WorkOS::setClientId(null);
+        $mockResponses = array_map(
+            fn (array $response) => new Response(
+                $response['status'] ?? 200,
+                $response['headers'] ?? [],
+                json_encode($response['body'] ?? [])
+            ),
+            $responses,
+        );
 
-        Client::setRequestClient($this->defaultRequestClient);
+        $this->mockHandler = new MockHandler($mockResponses);
+        $handler = HandlerStack::create($this->mockHandler);
+
+        return new WorkOS(
+            apiKey: 'test_api_key',
+            handler: $handler,
+        );
     }
 
-    // Configuration
-
-    protected function withApiKey($apiKey = "pk_secretsauce")
+    protected function getLastRequest(): \Psr\Http\Message\RequestInterface
     {
-        WorkOS::setApiKey($apiKey);
-    }
-
-    protected function withApiKeyAndClientId($apiKey = "pk_secretsauce", $clientId = "client_pizza")
-    {
-        WorkOS::setApiKey($apiKey);
-        WorkOS::setClientId($clientId);
-    }
-
-    // Requests
-
-    protected function mockRequest(
-        $method,
-        $path,
-        $headers = null,
-        $params = null,
-        $withAuth = false,
-        $result = null,
-        $responseHeaders = null,
-        $responseCode = 200
-    ) {
-        Client::setRequestClient($this->requestClientMock);
-
-        $url = Client::generateUrl($path);
-        if (!$headers) {
-            $requestHeaders = Client::generateBaseHeaders($withAuth);
-        } else {
-            $requestHeaders = \array_merge(Client::generateBaseHeaders($withAuth), $headers);
-        }
-
-        if (!$result) {
-            $result = "{}";
-        }
-        if (!$responseHeaders) {
-            $responseHeaders = [];
-        }
-
-        $this->prepareRequestMock($method, $url, $requestHeaders, $params)
-            ->willReturn([$result, $responseHeaders, $responseCode]);
-    }
-
-    protected function secondMockRequest(
-        $method,
-        $path,
-        $headers = null,
-        $params = null,
-        $withAuth = false,
-        $result = null,
-        $responseHeaders = null,
-        $responseCode = 200
-    ) {
-        Client::setRequestClient($this->requestClientMock);
-        $url = Client::generateUrl($path);
-        if (!$headers) {
-            $requestHeaders = Client::generateBaseHeaders($withAuth);
-        } else {
-            $requestHeaders = \array_merge(Client::generateBaseHeaders(), $headers);
-        }
-
-        if (!$result) {
-            $result = "{}";
-        }
-        if (!$responseHeaders) {
-            $responseHeaders = [];
-        }
-
-        $this->prepareRequestMock($method, $url, $requestHeaders, $params)
-            ->willReturn([$result, $responseHeaders, $responseCode]);
-    }
-
-    private function prepareRequestMock($method, $url, $headers, $params)
-    {
-        return $this->requestClientMock
-            ->expects(static::atLeastOnce())->method('request')
-            ->with(
-                static::identicalTo($method),
-                static::identicalTo($url),
-                static::identicalTo($headers),
-                static::identicalTo($params)
-            );
+        return $this->mockHandler->getLastRequest();
     }
 }
