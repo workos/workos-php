@@ -15,7 +15,17 @@ class RadarTest extends TestCase
 
     public function testCreateAttempts(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('radar_standalone_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->radar()->createAttempts(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::Login);
+        $this->assertInstanceOf(\WorkOS\Resource\RadarStandaloneResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('radar/attempts', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['ip_address']);
+        $this->assertSame('test_value', $body['user_agent']);
+        $this->assertSame('test_value', $body['email']);
     }
 
     public function testUpdateAttempt(): void

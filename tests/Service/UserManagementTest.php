@@ -37,7 +37,11 @@ class UserManagementTest extends TestCase
 
     public function testGetAuthorizationUrl(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
+        $client->userManagement()->getAuthorizationUrl(responseType: 'test_value', redirectUri: 'test_value', clientId: 'test_value');
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/authorize', $request->getUri()->getPath());
     }
 
     public function testCreateDevice(): void

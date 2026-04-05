@@ -28,7 +28,13 @@ class AuthorizationTest extends TestCase
 
     public function testListOrganizationMembershipResources(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('list_authorization_resource');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->listOrganizationMembershipResources('test_organization_membership_id', permissionSlug: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/resources', $request->getUri()->getPath());
     }
 
     public function testListOrganizationMembershipRoleAssignments(): void
@@ -86,7 +92,15 @@ class AuthorizationTest extends TestCase
 
     public function testCreateOrganizationRoles(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('role');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->createOrganizationRoles('test_organizationId', name: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['name']);
     }
 
     public function testGetOrganizationRole(): void
@@ -184,7 +198,13 @@ class AuthorizationTest extends TestCase
 
     public function testListResourceOrganizationMemberships(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->listResourceOrganizationMemberships('test_organization_id', 'test_resource_type_slug', 'test_external_id', permissionSlug: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id/organization_memberships', $request->getUri()->getPath());
     }
 
     public function testListResources(): void
@@ -200,7 +220,18 @@ class AuthorizationTest extends TestCase
 
     public function testCreateResources(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('authorization_resource');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->createResources(externalId: 'test_value', name: 'test_value', resourceTypeSlug: 'test_value', organizationId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('authorization/resources', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['external_id']);
+        $this->assertSame('test_value', $body['name']);
+        $this->assertSame('test_value', $body['resource_type_slug']);
+        $this->assertSame('test_value', $body['organization_id']);
     }
 
     public function testGetResource(): void

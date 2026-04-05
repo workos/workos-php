@@ -46,7 +46,13 @@ class SSOTest extends TestCase
 
     public function testGetAuthorizationUrl(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('sso_authorize_url_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->getAuthorizationUrl(clientId: 'test_value', redirectUri: 'test_value', responseType: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\SSOAuthorizeUrlResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('sso/authorize', $request->getUri()->getPath());
     }
 
     public function testGetLogoutUrl(): void

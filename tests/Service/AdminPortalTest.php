@@ -15,6 +15,14 @@ class AdminPortalTest extends TestCase
 
     public function testGenerateLink(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('portal_link_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->adminPortal()->generateLink(organization: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\PortalLinkResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('portal/generate_link', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['organization']);
     }
 }

@@ -15,7 +15,15 @@ class ConnectTest extends TestCase
 
     public function testCompleteOAuth2(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('external_auth_complete_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->connect()->completeOAuth2(externalAuthId: 'test_value', user: \WorkOS\Resource\UserObject::fromArray($this->loadFixture('user_object')));
+        $this->assertInstanceOf(\WorkOS\Resource\ExternalAuthCompleteResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('authkit/oauth2/complete', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['external_auth_id']);
     }
 
     public function testListApplications(): void

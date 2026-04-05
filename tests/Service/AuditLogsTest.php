@@ -61,12 +61,26 @@ class AuditLogsTest extends TestCase
 
     public function testCreateActionSchemas(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('audit_log_schema_json');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->auditLogs()->createActionSchemas('test_actionName', targets: []);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchemaJson::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('audit_logs/actions/test_actionName/schemas', $request->getUri()->getPath());
     }
 
     public function testCreateEvents(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('audit_log_event_create_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->auditLogs()->createEvents(organizationId: 'test_value', event: \WorkOS\Resource\AuditLogEvent::fromArray($this->loadFixture('audit_log_event')));
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogEventCreateResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('audit_logs/events', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['organization_id']);
     }
 
     public function testCreateExports(): void

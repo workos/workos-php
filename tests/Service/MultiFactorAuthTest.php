@@ -28,7 +28,13 @@ class MultiFactorAuthTest extends TestCase
 
     public function testEnrollFactor(): void
     {
-        $this->markTestSkipped('Complex parameter requirements - tested via smoke tests');
+        $fixture = $this->loadFixture('authentication_factor_enrolled');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->multiFactorAuth()->enrollFactor(type: \WorkOS\Resource\AuthenticationFactorsCreateRequestType::GenericOtp);
+        $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactorEnrolled::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('auth/factors/enroll', $request->getUri()->getPath());
     }
 
     public function testGetFactor(): void
