@@ -325,7 +325,7 @@ class SessionManager
             throw new \InvalidArgumentException('Invalid JWT format');
         }
 
-        $payload = base64_decode(strtr($parts[1], '-_', '+/'));
+        $payload = base64_decode(strtr($parts[1], '-_', '+/'), true);
         if ($payload === false) {
             throw new \InvalidArgumentException('Invalid JWT payload encoding');
         }

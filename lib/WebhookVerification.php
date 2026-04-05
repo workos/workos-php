@@ -12,8 +12,11 @@ class WebhookVerification
 {
     private const DEFAULT_TOLERANCE = 180; // seconds
 
+    /**
+     * @param HttpClient $client Reserved for future use.
+     */
     public function __construct(
-        private readonly HttpClient $client,
+        private readonly HttpClient $client, // @phpstan-ignore property.onlyWritten
     ) {
     }
 

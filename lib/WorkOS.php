@@ -66,6 +66,12 @@ class WorkOS
     private ?Service\Webhooks $webhooks = null;
     private ?Service\Widgets $widgets = null;
     private ?Service\AuditLogs $auditLogs = null;
+    private ?Passwordless $passwordless = null;
+    private ?Vault $vault = null;
+    private ?WebhookVerification $webhookVerification = null;
+    private ?Actions $actions = null;
+    private ?SessionManager $sessionManager = null;
+    private ?PKCEHelper $pkce = null;
 
     public function __construct(
         ?string $apiKey = null,
@@ -165,5 +171,35 @@ class WorkOS
     public function auditLogs(): AuditLogs
     {
         return $this->auditLogs ??= new Service\AuditLogs($this->httpClient);
+    }
+
+    public function passwordless(): Passwordless
+    {
+        return $this->passwordless ??= new Passwordless($this->httpClient);
+    }
+
+    public function vault(): Vault
+    {
+        return $this->vault ??= new Vault($this->httpClient);
+    }
+
+    public function webhookVerification(): WebhookVerification
+    {
+        return $this->webhookVerification ??= new WebhookVerification($this->httpClient);
+    }
+
+    public function actions(): Actions
+    {
+        return $this->actions ??= new Actions($this->httpClient);
+    }
+
+    public function sessionManager(): SessionManager
+    {
+        return $this->sessionManager ??= new SessionManager($this->httpClient);
+    }
+
+    public function pkce(): PKCEHelper
+    {
+        return $this->pkce ??= new PKCEHelper($this->httpClient);
     }
 }

@@ -18,8 +18,11 @@ class Actions
         'user_registration' => 'user_registration_action_response',
     ];
 
+    /**
+     * @param HttpClient $client Reserved for future use (e.g. server-side action endpoints).
+     */
     public function __construct(
-        private readonly HttpClient $client,
+        private readonly HttpClient $client, // @phpstan-ignore property.onlyWritten
     ) {
     }
 
