@@ -12,7 +12,7 @@ if [ ! -d vendor ]; then
 fi
 
 echo "==> Checking formatting (php-cs-fixer)..."
-php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .
+php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-fixer.dist.php
 
 echo ""
 echo "==> Running typecheck (PHPStan)..."
