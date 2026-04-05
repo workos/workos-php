@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class EmailChangeConfirmation implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public EmailChangeConfirmationUser $user,
@@ -28,10 +30,5 @@ readonly class EmailChangeConfirmation implements \JsonSerializable
             'object' => $this->object,
             'user' => $this->user->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

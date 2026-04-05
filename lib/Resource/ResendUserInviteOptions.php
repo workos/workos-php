@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ResendUserInviteOptions implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?ResendUserInviteOptionsLocale $locale = null,
     ) {
@@ -16,7 +18,7 @@ readonly class ResendUserInviteOptions implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            locale: isset($data['locale']) ? ResendUserInviteOptionsLocale::tryFrom($data['locale']) ?? $data['locale'] : null,
+            locale: isset($data['locale']) ? ResendUserInviteOptionsLocale::from($data['locale']) : null,
         );
     }
 
@@ -25,10 +27,5 @@ readonly class ResendUserInviteOptions implements \JsonSerializable
         return [
             'locale' => $this->locale instanceof \BackedEnum ? $this->locale->value : $this->locale,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

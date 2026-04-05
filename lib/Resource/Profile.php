@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class Profile implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -31,13 +33,13 @@ readonly class Profile implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            organizationId: $data['organization_id'],
+            organizationId: $data['organization_id'] ?? null,
             connectionId: $data['connection_id'],
-            connectionType: ProfileConnectionType::tryFrom($data['connection_type']) ?? $data['connection_type'],
+            connectionType: ProfileConnectionType::from($data['connection_type']),
             idpId: $data['idp_id'],
             email: $data['email'],
-            firstName: $data['first_name'],
-            lastName: $data['last_name'],
+            firstName: $data['first_name'] ?? null,
+            lastName: $data['last_name'] ?? null,
             rawAttributes: $data['raw_attributes'],
             role: isset($data['role']) ? SlimRole::fromArray($data['role']) : null,
             roles: $data['roles'] ?? null,
@@ -64,10 +66,5 @@ readonly class Profile implements \JsonSerializable
             'groups' => $this->groups,
             'custom_attributes' => $this->customAttributes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -68,6 +68,8 @@ class AuthorizationTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/role_assignments', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['role_slug']);
     }
 
     public function testDeleteOrganizationMembershipRoleAssignment(): void
@@ -138,7 +140,7 @@ class AuthorizationTest extends TestCase
     {
         $fixture = $this->loadFixture('role');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->createRolePermissions('test_organizationId', 'test_slug');
+        $result = $client->authorization()->createRolePermissions('test_organizationId', 'test_slug', bodySlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());

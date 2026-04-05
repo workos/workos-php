@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogEventContext implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $location,
         public ?string $userAgent = null,
@@ -28,10 +30,5 @@ readonly class AuditLogEventContext implements \JsonSerializable
             'location' => $this->location,
             'user_agent' => $this->userAgent,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

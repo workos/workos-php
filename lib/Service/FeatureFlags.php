@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\FeatureFlag;
 use WorkOS\Resource\Flag;
 
@@ -30,13 +29,13 @@ class FeatureFlags
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'feature-flags',
             query: $query,
+            modelClass: Flag::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Flag::class);
     }
 
     public function getFeatureFlag(
@@ -114,13 +113,13 @@ class FeatureFlags
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "organizations/{$organizationId}/feature-flags",
             query: $query,
+            modelClass: Flag::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Flag::class);
     }
 
     public function listUserFeatureFlags(
@@ -137,12 +136,12 @@ class FeatureFlags
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "user_management/users/{$userId}/feature-flags",
             query: $query,
+            modelClass: Flag::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Flag::class);
     }
 }

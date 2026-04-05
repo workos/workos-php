@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ValidateApiKey implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $value,
     ) {
@@ -25,10 +27,5 @@ readonly class ValidateApiKey implements \JsonSerializable
         return [
             'value' => $this->value,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

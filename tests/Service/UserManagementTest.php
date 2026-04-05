@@ -256,9 +256,10 @@ class UserManagementTest extends TestCase
     public function testListUserIdentities(): void
     {
         $fixture = $this->loadFixture('user_identities_get_item');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $client = $this->createMockClient([['status' => 200, 'body' => [$fixture]]]);
         $result = $client->userManagement()->listUserIdentities('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\UserIdentitiesGetItem::class, $result);
+        $this->assertIsArray($result);
+        $this->assertInstanceOf(\WorkOS\Resource\UserIdentitiesGetItem::class, $result[0]);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/identities', $request->getUri()->getPath());

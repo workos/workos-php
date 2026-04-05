@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateUser implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $email,
         public ?string $password = null,
@@ -27,7 +29,7 @@ readonly class CreateUser implements \JsonSerializable
             email: $data['email'],
             password: $data['password'] ?? null,
             passwordHash: $data['password_hash'] ?? null,
-            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::tryFrom($data['password_hash_type']) ?? $data['password_hash_type'] : null,
+            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
             emailVerified: $data['email_verified'] ?? null,
@@ -49,10 +51,5 @@ readonly class CreateUser implements \JsonSerializable
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

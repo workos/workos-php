@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class FeatureFlagOwner implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $email,
         public ?string $firstName,
@@ -19,8 +21,8 @@ readonly class FeatureFlagOwner implements \JsonSerializable
     {
         return new self(
             email: $data['email'],
-            firstName: $data['first_name'],
-            lastName: $data['last_name'],
+            firstName: $data['first_name'] ?? null,
+            lastName: $data['last_name'] ?? null,
         );
     }
 
@@ -31,10 +33,5 @@ readonly class FeatureFlagOwner implements \JsonSerializable
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

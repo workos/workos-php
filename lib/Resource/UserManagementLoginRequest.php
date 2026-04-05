@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserManagementLoginRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $externalAuthId,
         public UserObject $user,
@@ -31,10 +33,5 @@ readonly class UserManagementLoginRequest implements \JsonSerializable
             'user' => $this->user->toArray(),
             'user_consent_options' => array_map(fn ($item) => $item->toArray(), $this->userConsentOptions ?? []),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class WidgetSessionTokenResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $token,
     ) {
@@ -25,10 +27,5 @@ readonly class WidgetSessionTokenResponse implements \JsonSerializable
         return [
             'token' => $this->token,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

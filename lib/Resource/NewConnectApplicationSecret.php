@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class NewConnectApplicationSecret implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -25,9 +27,9 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             secretHint: $data['secret_hint'],
-            lastUsedAt: $data['last_used_at'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            lastUsedAt: $data['last_used_at'] ?? null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             secret: $data['secret'],
         );
     }
@@ -43,10 +45,5 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'secret' => $this->secret,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

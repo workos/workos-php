@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DirectoryUserWithGroups implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -39,12 +41,12 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             directoryId: $data['directory_id'],
             organizationId: $data['organization_id'],
             idpId: $data['idp_id'],
-            email: $data['email'],
-            state: DirectoryUserWithGroupsState::tryFrom($data['state']) ?? $data['state'],
+            email: $data['email'] ?? null,
+            state: DirectoryUserWithGroupsState::from($data['state']),
             rawAttributes: $data['raw_attributes'],
             customAttributes: $data['custom_attributes'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             groups: array_map(fn ($item) => DirectoryGroup::fromArray($item), $data['groups']),
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
@@ -79,10 +81,5 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             'role' => $this->role?->toArray(),
             'roles' => array_map(fn ($item) => $item->toArray(), $this->roles ?? []),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

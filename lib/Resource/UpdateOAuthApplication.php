@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UpdateOAuthApplication implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $name = null,
         public ?string $description = null,
@@ -34,10 +36,5 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
             'scopes' => $this->scopes,
             'redirect_uris' => array_map(fn ($item) => $item->toArray(), $this->redirectUris ?? []),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

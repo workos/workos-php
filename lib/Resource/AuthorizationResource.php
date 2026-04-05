@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthorizationResource implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $name,
@@ -27,14 +29,14 @@ readonly class AuthorizationResource implements \JsonSerializable
         return new self(
             object: $data['object'],
             name: $data['name'],
-            description: $data['description'],
+            description: $data['description'] ?? null,
             organizationId: $data['organization_id'],
-            parentResourceId: $data['parent_resource_id'],
+            parentResourceId: $data['parent_resource_id'] ?? null,
             id: $data['id'],
             externalId: $data['external_id'],
             resourceTypeSlug: $data['resource_type_slug'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
     }
 
@@ -52,10 +54,5 @@ readonly class AuthorizationResource implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

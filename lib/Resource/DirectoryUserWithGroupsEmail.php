@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DirectoryUserWithGroupsEmail implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?bool $primary = null,
         public ?string $type = null,
@@ -31,10 +33,5 @@ readonly class DirectoryUserWithGroupsEmail implements \JsonSerializable
             'type' => $this->type,
             'value' => $this->value,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

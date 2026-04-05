@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\AuditLogConfiguration;
 use WorkOS\Resource\Organization;
 
@@ -34,13 +33,13 @@ class Organizations
             'domains' => $domains,
             'search' => $search,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'organizations',
             query: $query,
+            modelClass: Organization::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Organization::class);
     }
 
     public function createOrganizations(

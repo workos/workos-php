@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class OrganizationDomainStandAlone implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -29,12 +31,12 @@ readonly class OrganizationDomainStandAlone implements \JsonSerializable
             id: $data['id'],
             organizationId: $data['organization_id'],
             domain: $data['domain'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
-            state: isset($data['state']) ? OrganizationDomainStandAloneState::tryFrom($data['state']) ?? $data['state'] : null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
+            state: isset($data['state']) ? OrganizationDomainStandAloneState::from($data['state']) : null,
             verificationPrefix: $data['verification_prefix'] ?? null,
             verificationToken: $data['verification_token'] ?? null,
-            verificationStrategy: isset($data['verification_strategy']) ? OrganizationDomainStandAloneVerificationStrategy::tryFrom($data['verification_strategy']) ?? $data['verification_strategy'] : null,
+            verificationStrategy: isset($data['verification_strategy']) ? OrganizationDomainStandAloneVerificationStrategy::from($data['verification_strategy']) : null,
         );
     }
 
@@ -52,10 +54,5 @@ readonly class OrganizationDomainStandAlone implements \JsonSerializable
             'verification_token' => $this->verificationToken,
             'verification_strategy' => $this->verificationStrategy instanceof \BackedEnum ? $this->verificationStrategy->value : $this->verificationStrategy,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

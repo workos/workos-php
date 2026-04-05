@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class Invitation implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -32,15 +34,15 @@ readonly class Invitation implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             email: $data['email'],
-            state: InvitationState::tryFrom($data['state']) ?? $data['state'],
-            acceptedAt: new \DateTimeImmutable($data['accepted_at'] ?? 'now'),
-            revokedAt: new \DateTimeImmutable($data['revoked_at'] ?? 'now'),
-            expiresAt: new \DateTimeImmutable($data['expires_at'] ?? 'now'),
-            organizationId: $data['organization_id'],
-            inviterUserId: $data['inviter_user_id'],
-            acceptedUserId: $data['accepted_user_id'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            state: InvitationState::from($data['state']),
+            acceptedAt: isset($data['accepted_at']) ? new \DateTimeImmutable($data['accepted_at']) : null,
+            revokedAt: isset($data['revoked_at']) ? new \DateTimeImmutable($data['revoked_at']) : null,
+            expiresAt: new \DateTimeImmutable($data['expires_at']),
+            organizationId: $data['organization_id'] ?? null,
+            inviterUserId: $data['inviter_user_id'] ?? null,
+            acceptedUserId: $data['accepted_user_id'] ?? null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             token: $data['token'],
             acceptInvitationUrl: $data['accept_invitation_url'],
         );
@@ -64,10 +66,5 @@ readonly class Invitation implements \JsonSerializable
             'token' => $this->token,
             'accept_invitation_url' => $this->acceptInvitationUrl,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

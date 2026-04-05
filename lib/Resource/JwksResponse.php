@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class JwksResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public array $keys,
     ) {
@@ -25,10 +27,5 @@ readonly class JwksResponse implements \JsonSerializable
         return [
             'keys' => array_map(fn ($item) => $item->toArray(), $this->keys),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

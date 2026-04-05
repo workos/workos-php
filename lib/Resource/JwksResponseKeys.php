@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class JwksResponseKeys implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $alg,
         public string $kty,
@@ -46,10 +48,5 @@ readonly class JwksResponseKeys implements \JsonSerializable
             'kid' => $this->kid,
             'x5t#S256' => $this->x5TS256,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

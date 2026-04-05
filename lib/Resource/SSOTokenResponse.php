@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSOTokenResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $tokenType,
         public string $accessToken,
@@ -37,10 +39,5 @@ readonly class SSOTokenResponse implements \JsonSerializable
             'profile' => $this->profile->toArray(),
             'oauth_tokens' => $this->oauthTokens?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DeviceAuthorizationResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $deviceCode,
         public string $userCode,
@@ -40,10 +42,5 @@ readonly class DeviceAuthorizationResponse implements \JsonSerializable
             'verification_uri_complete' => $this->verificationUriComplete,
             'interval' => $this->interval,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

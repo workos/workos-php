@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DataIntegrationsListResponseData implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,15 +32,15 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             name: $data['name'],
-            description: $data['description'],
+            description: $data['description'] ?? null,
             slug: $data['slug'],
             integrationType: $data['integration_type'],
             credentialsType: $data['credentials_type'],
-            scopes: $data['scopes'],
-            ownership: DataIntegrationsListResponseDataOwnership::tryFrom($data['ownership']) ?? $data['ownership'],
+            scopes: $data['scopes'] ?? null,
+            ownership: DataIntegrationsListResponseDataOwnership::from($data['ownership']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
-            connectedAccount: DataIntegrationsListResponseDataConnectedAccount::fromArray($data['connected_account']),
+            connectedAccount: isset($data['connected_account']) ? DataIntegrationsListResponseDataConnectedAccount::fromArray($data['connected_account']) : null,
         );
     }
 
@@ -58,10 +60,5 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             'updated_at' => $this->updatedAt,
             'connected_account' => $this->connectedAccount?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

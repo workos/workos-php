@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UpdateAuditLogsRetention implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public int $retentionPeriodInDays,
     ) {
@@ -25,10 +27,5 @@ readonly class UpdateAuditLogsRetention implements \JsonSerializable
         return [
             'retention_period_in_days' => $this->retentionPeriodInDays,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

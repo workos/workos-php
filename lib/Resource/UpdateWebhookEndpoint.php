@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UpdateWebhookEndpoint implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $endpointUrl = null,
         public ?UpdateWebhookEndpointStatus $status = null,
@@ -19,7 +21,7 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
     {
         return new self(
             endpointUrl: $data['endpoint_url'] ?? null,
-            status: isset($data['status']) ? UpdateWebhookEndpointStatus::tryFrom($data['status']) ?? $data['status'] : null,
+            status: isset($data['status']) ? UpdateWebhookEndpointStatus::from($data['status']) : null,
             events: $data['events'] ?? null,
         );
     }
@@ -31,10 +33,5 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
             'status' => $this->status instanceof \BackedEnum ? $this->status->value : $this->status,
             'events' => $this->events,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

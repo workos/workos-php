@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class VerifyEmailResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public User $user,
     ) {
@@ -25,10 +27,5 @@ readonly class VerifyEmailResponse implements \JsonSerializable
         return [
             'user' => $this->user->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

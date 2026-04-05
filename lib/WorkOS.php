@@ -83,9 +83,7 @@ class WorkOS
     ) {
         $apiKey ??= getenv('WORKOS_API_KEY') ?: self::$apiKey ?? '';
         $clientId ??= getenv('WORKOS_CLIENT_ID') ?: self::$clientId;
-        self::$apiKey = $apiKey;
-        self::$clientId = $clientId;
-        $this->httpClient = new HttpClient($apiKey, $baseUrl, $timeout, $maxRetries, $handler);
+        $this->httpClient = new HttpClient($apiKey, $clientId, $baseUrl, $timeout, $maxRetries, $handler);
     }
 
     public function apiKeys(): ApiKeys

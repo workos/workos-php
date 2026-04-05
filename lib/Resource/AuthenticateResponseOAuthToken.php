@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticateResponseOAuthToken implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $provider,
         public string $refreshToken,
@@ -37,10 +39,5 @@ readonly class AuthenticateResponseOAuthToken implements \JsonSerializable
             'expires_at' => $this->expiresAt,
             'scopes' => $this->scopes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class User implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,15 +32,15 @@ readonly class User implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            firstName: $data['first_name'],
-            lastName: $data['last_name'],
-            profilePictureUrl: $data['profile_picture_url'],
+            firstName: $data['first_name'] ?? null,
+            lastName: $data['last_name'] ?? null,
+            profilePictureUrl: $data['profile_picture_url'] ?? null,
             email: $data['email'],
             emailVerified: $data['email_verified'],
-            externalId: $data['external_id'],
-            lastSignInAt: new \DateTimeImmutable($data['last_sign_in_at'] ?? 'now'),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            externalId: $data['external_id'] ?? null,
+            lastSignInAt: isset($data['last_sign_in_at']) ? new \DateTimeImmutable($data['last_sign_in_at']) : null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             metadata: $data['metadata'] ?? null,
             locale: $data['locale'] ?? null,
         );
@@ -61,10 +63,5 @@ readonly class User implements \JsonSerializable
             'metadata' => $this->metadata,
             'locale' => $this->locale,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

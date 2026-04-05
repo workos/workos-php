@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AddRolePermission implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $slug,
     ) {
@@ -25,10 +27,5 @@ readonly class AddRolePermission implements \JsonSerializable
         return [
             'slug' => $this->slug,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

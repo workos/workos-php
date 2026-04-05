@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserConsentOptionChoice implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $value = null,
         public ?string $label = null,
@@ -28,10 +30,5 @@ readonly class UserConsentOptionChoice implements \JsonSerializable
             'value' => $this->value,
             'label' => $this->label,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

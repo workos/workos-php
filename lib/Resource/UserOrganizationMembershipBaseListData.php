@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserOrganizationMembershipBaseListData implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -29,10 +31,10 @@ readonly class UserOrganizationMembershipBaseListData implements \JsonSerializab
             id: $data['id'],
             userId: $data['user_id'],
             organizationId: $data['organization_id'],
-            status: UserOrganizationMembershipBaseListDataStatus::tryFrom($data['status']) ?? $data['status'],
+            status: UserOrganizationMembershipBaseListDataStatus::from($data['status']),
             directoryManaged: $data['directory_managed'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             organizationName: $data['organization_name'] ?? null,
             customAttributes: $data['custom_attributes'] ?? null,
         );
@@ -52,10 +54,5 @@ readonly class UserOrganizationMembershipBaseListData implements \JsonSerializab
             'organization_name' => $this->organizationName,
             'custom_attributes' => $this->customAttributes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UpdateOrganization implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $name = null,
         public ?bool $allowProfilesOutsideOrganization = null,
@@ -43,10 +45,5 @@ readonly class UpdateOrganization implements \JsonSerializable
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

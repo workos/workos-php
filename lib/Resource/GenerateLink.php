@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class GenerateLink implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $organization,
         public ?string $returnUrl = null,
@@ -23,7 +25,7 @@ readonly class GenerateLink implements \JsonSerializable
             organization: $data['organization'],
             returnUrl: $data['return_url'] ?? null,
             successUrl: $data['success_url'] ?? null,
-            intent: isset($data['intent']) ? GenerateLinkIntent::tryFrom($data['intent']) ?? $data['intent'] : null,
+            intent: isset($data['intent']) ? GenerateLinkIntent::from($data['intent']) : null,
             intentOptions: isset($data['intent_options']) ? IntentOptions::fromArray($data['intent_options']) : null,
         );
     }
@@ -37,10 +39,5 @@ readonly class GenerateLink implements \JsonSerializable
             'intent' => $this->intent instanceof \BackedEnum ? $this->intent->value : $this->intent,
             'intent_options' => $this->intentOptions?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

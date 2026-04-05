@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $clientId,
         public string $clientSecret,
@@ -49,10 +51,5 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

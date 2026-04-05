@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateOAuthApplication implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $name,
         public string $applicationType,
@@ -46,10 +48,5 @@ readonly class CreateOAuthApplication implements \JsonSerializable
             'uses_pkce' => $this->usesPkce,
             'organization_id' => $this->organizationId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

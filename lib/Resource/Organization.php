@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class Organization implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,9 +32,9 @@ readonly class Organization implements \JsonSerializable
             name: $data['name'],
             domains: array_map(fn ($item) => OrganizationDomain::fromArray($item), $data['domains']),
             metadata: $data['metadata'],
-            externalId: $data['external_id'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            externalId: $data['external_id'] ?? null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             stripeCustomerId: $data['stripe_customer_id'] ?? null,
             allowProfilesOutsideOrganization: $data['allow_profiles_outside_organization'] ?? null,
         );
@@ -52,10 +54,5 @@ readonly class Organization implements \JsonSerializable
             'stripe_customer_id' => $this->stripeCustomerId,
             'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

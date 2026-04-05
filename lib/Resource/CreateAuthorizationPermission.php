@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateAuthorizationPermission implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $slug,
         public string $name,
@@ -34,10 +36,5 @@ readonly class CreateAuthorizationPermission implements \JsonSerializable
             'description' => $this->description,
             'resource_type_slug' => $this->resourceTypeSlug,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationFactorSms implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $phoneNumber,
     ) {
@@ -25,10 +27,5 @@ readonly class AuthenticationFactorSms implements \JsonSerializable
         return [
             'phone_number' => $this->phoneNumber,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

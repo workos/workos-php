@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ChallengeAuthenticationFactor implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $smsTemplate = null,
     ) {
@@ -25,10 +27,5 @@ readonly class ChallengeAuthenticationFactor implements \JsonSerializable
         return [
             'sms_template' => $this->smsTemplate,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

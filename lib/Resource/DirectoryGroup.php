@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DirectoryGroup implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,8 +32,8 @@ readonly class DirectoryGroup implements \JsonSerializable
             directoryId: $data['directory_id'],
             organizationId: $data['organization_id'],
             name: $data['name'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             rawAttributes: $data['raw_attributes'] ?? null,
         );
     }
@@ -49,10 +51,5 @@ readonly class DirectoryGroup implements \JsonSerializable
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'raw_attributes' => $this->rawAttributes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RoleAssignmentResource implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $id,
         public string $externalId,
@@ -31,10 +33,5 @@ readonly class RoleAssignmentResource implements \JsonSerializable
             'external_id' => $this->externalId,
             'resource_type_slug' => $this->resourceTypeSlug,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

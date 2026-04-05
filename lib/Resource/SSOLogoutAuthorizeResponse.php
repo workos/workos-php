@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSOLogoutAuthorizeResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $logoutUrl,
         public string $logoutToken,
@@ -28,10 +30,5 @@ readonly class SSOLogoutAuthorizeResponse implements \JsonSerializable
             'logout_url' => $this->logoutUrl,
             'logout_token' => $this->logoutToken,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

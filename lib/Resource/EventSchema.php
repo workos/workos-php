@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class EventSchema implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -25,7 +27,7 @@ readonly class EventSchema implements \JsonSerializable
             id: $data['id'],
             event: $data['event'],
             data: $data['data'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
             context: $data['context'] ?? null,
         );
     }
@@ -40,10 +42,5 @@ readonly class EventSchema implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'context' => $this->context,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

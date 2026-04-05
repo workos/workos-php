@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationChallenge implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -25,8 +27,8 @@ readonly class AuthenticationChallenge implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             authenticationFactorId: $data['authentication_factor_id'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
             code: $data['code'] ?? null,
         );
@@ -43,10 +45,5 @@ readonly class AuthenticationChallenge implements \JsonSerializable
             'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'code' => $this->code,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

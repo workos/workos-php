@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogEventIngestion implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $organizationId,
         public AuditLogEvent $event,
@@ -28,10 +30,5 @@ readonly class AuditLogEventIngestion implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'event' => $this->event->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

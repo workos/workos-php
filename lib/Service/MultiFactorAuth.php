@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\AuthenticationChallenge;
 use WorkOS\Resource\AuthenticationChallengeVerifyResponse;
 use WorkOS\Resource\AuthenticationFactor;
@@ -115,13 +114,13 @@ class MultiFactorAuth
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "user_management/users/{$userlandUserId}/auth_factors",
             query: $query,
+            modelClass: AuthenticationFactor::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuthenticationFactor::class);
     }
 
     public function createUserAuthFactors(

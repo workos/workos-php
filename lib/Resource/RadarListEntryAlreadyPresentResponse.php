@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarListEntryAlreadyPresentResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $message,
     ) {
@@ -25,10 +27,5 @@ readonly class RadarListEntryAlreadyPresentResponse implements \JsonSerializable
         return [
             'message' => $this->message,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

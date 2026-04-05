@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateOrganizationRole implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $name,
         public ?string $slug = null,
@@ -31,10 +33,5 @@ readonly class CreateOrganizationRole implements \JsonSerializable
             'slug' => $this->slug,
             'description' => $this->description,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

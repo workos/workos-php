@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class IntentOptions implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public SSOIntentOptions $sso,
     ) {
@@ -25,10 +27,5 @@ readonly class IntentOptions implements \JsonSerializable
         return [
             'sso' => $this->sso->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UpdateJWTTemplate implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $content,
     ) {
@@ -25,10 +27,5 @@ readonly class UpdateJWTTemplate implements \JsonSerializable
         return [
             'content' => $this->content,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

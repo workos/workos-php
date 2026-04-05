@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateCORSOrigin implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $origin,
     ) {
@@ -25,10 +27,5 @@ readonly class CreateCORSOrigin implements \JsonSerializable
         return [
             'origin' => $this->origin,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

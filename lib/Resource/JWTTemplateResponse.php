@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class JWTTemplateResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $content,
@@ -34,10 +36,5 @@ readonly class JWTTemplateResponse implements \JsonSerializable
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

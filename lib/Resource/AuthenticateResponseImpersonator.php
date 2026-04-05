@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticateResponseImpersonator implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $email,
         public ?string $reason,
@@ -18,7 +20,7 @@ readonly class AuthenticateResponseImpersonator implements \JsonSerializable
     {
         return new self(
             email: $data['email'],
-            reason: $data['reason'],
+            reason: $data['reason'] ?? null,
         );
     }
 
@@ -28,10 +30,5 @@ readonly class AuthenticateResponseImpersonator implements \JsonSerializable
             'email' => $this->email,
             'reason' => $this->reason,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

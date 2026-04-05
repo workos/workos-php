@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ApplicationCredentialsListItem implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -24,9 +26,9 @@ readonly class ApplicationCredentialsListItem implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             secretHint: $data['secret_hint'],
-            lastUsedAt: $data['last_used_at'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            lastUsedAt: $data['last_used_at'] ?? null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
     }
 
@@ -40,10 +42,5 @@ readonly class ApplicationCredentialsListItem implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

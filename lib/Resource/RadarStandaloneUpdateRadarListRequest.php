@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarStandaloneUpdateRadarListRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $entry,
     ) {
@@ -25,10 +27,5 @@ readonly class RadarStandaloneUpdateRadarListRequest implements \JsonSerializabl
         return [
             'entry' => $this->entry,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ExternalAuthCompleteResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $redirectUri,
     ) {
@@ -25,10 +27,5 @@ readonly class ExternalAuthCompleteResponse implements \JsonSerializable
         return [
             'redirect_uri' => $this->redirectUri,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

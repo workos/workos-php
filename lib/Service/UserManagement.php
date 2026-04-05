@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\AuthenticateResponse;
 use WorkOS\Resource\AuthorizedConnectApplicationListData;
 use WorkOS\Resource\CORSOriginResponse;
@@ -69,23 +68,14 @@ class UserManagement
         ?string $invitationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'password';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($email !== null) {
-            $body['email'] = $email;
-        }
-        if ($password !== null) {
-            $body['password'] = $password;
-        }
-        if ($invitationToken !== null) {
-            $body['invitation_token'] = $invitationToken;
-        }
+        $body = array_filter([
+            'grant_type' => 'password',
+            'email' => $email,
+            'password' => $password,
+            'invitation_token' => $invitationToken,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -100,17 +90,12 @@ class UserManagement
         ?string $code = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'authorization_code';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($code !== null) {
-            $body['code'] = $code;
-        }
+        $body = array_filter([
+            'grant_type' => 'authorization_code',
+            'code' => $code,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -126,20 +111,13 @@ class UserManagement
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'refresh_token';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($refreshToken !== null) {
-            $body['refresh_token'] = $refreshToken;
-        }
-        if ($organizationId !== null) {
-            $body['organization_id'] = $organizationId;
-        }
+        $body = array_filter([
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $refreshToken,
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -156,23 +134,14 @@ class UserManagement
         ?string $invitationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'urn:workos:oauth:grant-type:magic-auth:code';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($code !== null) {
-            $body['code'] = $code;
-        }
-        if ($email !== null) {
-            $body['email'] = $email;
-        }
-        if ($invitationToken !== null) {
-            $body['invitation_token'] = $invitationToken;
-        }
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:magic-auth:code',
+            'code' => $code,
+            'email' => $email,
+            'invitation_token' => $invitationToken,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -188,20 +157,13 @@ class UserManagement
         ?string $pendingAuthenticationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'urn:workos:oauth:grant-type:email-verification:code';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($code !== null) {
-            $body['code'] = $code;
-        }
-        if ($pendingAuthenticationToken !== null) {
-            $body['pending_authentication_token'] = $pendingAuthenticationToken;
-        }
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:email-verification:code',
+            'code' => $code,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -218,23 +180,14 @@ class UserManagement
         ?string $authenticationChallengeId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'urn:workos:oauth:grant-type:mfa-totp';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($code !== null) {
-            $body['code'] = $code;
-        }
-        if ($pendingAuthenticationToken !== null) {
-            $body['pending_authentication_token'] = $pendingAuthenticationToken;
-        }
-        if ($authenticationChallengeId !== null) {
-            $body['authentication_challenge_id'] = $authenticationChallengeId;
-        }
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:mfa-totp',
+            'code' => $code,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'authentication_challenge_id' => $authenticationChallengeId,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -250,20 +203,13 @@ class UserManagement
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'urn:workos:oauth:grant-type:organization-selection';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if (\WorkOS\WorkOS::getApiKey() !== null) {
-            $body['client_secret'] = \WorkOS\WorkOS::getApiKey();
-        }
-        if ($pendingAuthenticationToken !== null) {
-            $body['pending_authentication_token'] = $pendingAuthenticationToken;
-        }
-        if ($organizationId !== null) {
-            $body['organization_id'] = $organizationId;
-        }
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:organization-selection',
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',
@@ -278,14 +224,11 @@ class UserManagement
         ?string $deviceCode = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [];
-        $body['grant_type'] = 'urn:ietf:params:oauth:grant-type:device_code';
-        if (\WorkOS\WorkOS::getClientId() !== null) {
-            $body['client_id'] = \WorkOS\WorkOS::getClientId();
-        }
-        if ($deviceCode !== null) {
-            $body['device_code'] = $deviceCode;
-        }
+        $body = array_filter([
+            'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
+            'device_code' => $deviceCode,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
 
         $response = $this->client->request(
             method: 'POST',
@@ -487,13 +430,13 @@ class UserManagement
             'organization_id' => $organizationId,
             'email' => $email,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'user_management/users',
             query: $query,
+            modelClass: User::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, User::class);
     }
 
     public function createUsers(
@@ -664,13 +607,13 @@ class UserManagement
     public function listUserIdentities(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\UserIdentitiesGetItem {
+    ): array {
         $response = $this->client->request(
             method: 'GET',
             path: "user_management/users/{$id}/identities",
             options: $options,
         );
-        return UserIdentitiesGetItem::fromArray($response);
+        return array_map(fn ($item) => UserIdentitiesGetItem::fromArray($item), $response);
     }
 
     public function listUserSessions(
@@ -687,13 +630,13 @@ class UserManagement
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "user_management/users/{$id}/sessions",
             query: $query,
+            modelClass: UserSessionsListItem::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, UserSessionsListItem::class);
     }
 
     public function listInvitations(
@@ -713,13 +656,13 @@ class UserManagement
             'organization_id' => $organizationId,
             'email' => $email,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'user_management/invitations',
             query: $query,
+            modelClass: UserInvite::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, UserInvite::class);
     }
 
     public function createInvitations(
@@ -878,13 +821,13 @@ class UserManagement
             'statuses' => $statuses,
             'user_id' => $userId,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'user_management/organization_memberships',
             query: $query,
+            modelClass: UserOrganizationMembership::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, UserOrganizationMembership::class);
     }
 
     public function createOrganizationMemberships(
@@ -1005,13 +948,13 @@ class UserManagement
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "user_management/users/{$userId}/authorized_applications",
             query: $query,
+            modelClass: AuthorizedConnectApplicationListData::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuthorizedConnectApplicationListData::class);
     }
 
     public function deleteUserAuthorizedApplication(

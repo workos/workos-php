@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -34,10 +36,5 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
             'granted_scopes' => $this->grantedScopes,
             'application' => $this->application->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

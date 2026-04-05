@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateRedirectUri implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $uri,
     ) {
@@ -25,10 +27,5 @@ readonly class CreateRedirectUri implements \JsonSerializable
         return [
             'uri' => $this->uri,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

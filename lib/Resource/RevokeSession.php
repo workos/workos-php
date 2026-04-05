@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RevokeSession implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $sessionId,
         public ?string $returnTo = null,
@@ -28,10 +30,5 @@ readonly class RevokeSession implements \JsonSerializable
             'session_id' => $this->sessionId,
             'return_to' => $this->returnTo,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

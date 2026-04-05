@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\ApiKey;
 use WorkOS\Resource\ApiKeyValidationResponse;
 use WorkOS\Resource\ApiKeyWithValue;
@@ -59,13 +58,13 @@ class ApiKeys
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "organizations/{$organizationId}/api_keys",
             query: $query,
+            modelClass: ApiKey::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, ApiKey::class);
     }
 
     public function createOrganizationApiKeys(

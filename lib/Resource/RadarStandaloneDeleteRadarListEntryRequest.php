@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarStandaloneDeleteRadarListEntryRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $entry,
     ) {
@@ -25,10 +27,5 @@ readonly class RadarStandaloneDeleteRadarListEntryRequest implements \JsonSerial
         return [
             'entry' => $this->entry,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

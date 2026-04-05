@@ -15,13 +15,13 @@ class PaginatedResponse implements \IteratorAggregate
     ) {
     }
 
-    public static function fromArray(array $response, ?string $modelClass = null): self
+    public static function fromArray(array $response, ?string $modelClass = null, ?\Closure $fetchPage = null): self
     {
         $data = $response['data'] ?? [];
         if ($modelClass !== null) {
             $data = array_map(fn ($item) => $modelClass::fromArray($item), $data);
         }
-        return new self($data, $response['list_metadata'] ?? []);
+        return new self($data, $response['list_metadata'] ?? [], $fetchPage);
     }
 
     public function hasMore(): bool
@@ -39,6 +39,9 @@ class PaginatedResponse implements \IteratorAggregate
         $page = $this;
         while (true) {
             yield from $page->data;
+            if ($page->data === []) {
+                break;
+            }
             if (!$page->hasMore() || $page->fetchPage === null) {
                 break;
             }

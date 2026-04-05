@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateMagicCodeAndReturn implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $email,
         public ?string $invitationToken = null,
@@ -28,10 +30,5 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
             'email' => $this->email,
             'invitation_token' => $this->invitationToken,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

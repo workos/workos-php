@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreatePasswordReset implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $token,
         public string $newPassword,
@@ -28,10 +30,5 @@ readonly class CreatePasswordReset implements \JsonSerializable
             'token' => $this->token,
             'new_password' => $this->newPassword,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

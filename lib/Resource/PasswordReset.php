@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class PasswordReset implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -27,8 +29,8 @@ readonly class PasswordReset implements \JsonSerializable
             id: $data['id'],
             userId: $data['user_id'],
             email: $data['email'],
-            expiresAt: new \DateTimeImmutable($data['expires_at'] ?? 'now'),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
+            expiresAt: new \DateTimeImmutable($data['expires_at']),
+            createdAt: new \DateTimeImmutable($data['created_at']),
             passwordResetToken: $data['password_reset_token'],
             passwordResetUrl: $data['password_reset_url'],
         );
@@ -46,10 +48,5 @@ readonly class PasswordReset implements \JsonSerializable
             'password_reset_token' => $this->passwordResetToken,
             'password_reset_url' => $this->passwordResetUrl,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

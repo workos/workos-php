@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\WebhookEndpointJson;
 
 class Webhooks
@@ -29,13 +28,13 @@ class Webhooks
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'webhook_endpoints',
             query: $query,
+            modelClass: WebhookEndpointJson::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, WebhookEndpointJson::class);
     }
 
     public function createWebhookEndpoints(

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserSessionsListItem implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,15 +32,15 @@ readonly class UserSessionsListItem implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            ipAddress: $data['ip_address'],
-            userAgent: $data['user_agent'],
+            ipAddress: $data['ip_address'] ?? null,
+            userAgent: $data['user_agent'] ?? null,
             userId: $data['user_id'],
-            authMethod: UserSessionsAuthMethod::tryFrom($data['auth_method']) ?? $data['auth_method'],
-            status: UserSessionsStatus::tryFrom($data['status']) ?? $data['status'],
-            expiresAt: new \DateTimeImmutable($data['expires_at'] ?? 'now'),
-            endedAt: new \DateTimeImmutable($data['ended_at'] ?? 'now'),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            authMethod: UserSessionsAuthMethod::from($data['auth_method']),
+            status: UserSessionsStatus::from($data['status']),
+            expiresAt: new \DateTimeImmutable($data['expires_at']),
+            endedAt: isset($data['ended_at']) ? new \DateTimeImmutable($data['ended_at']) : null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             impersonator: isset($data['impersonator']) ? UserSessionsImpersonator::fromArray($data['impersonator']) : null,
             organizationId: $data['organization_id'] ?? null,
         );
@@ -61,10 +63,5 @@ readonly class UserSessionsListItem implements \JsonSerializable
             'impersonator' => $this->impersonator?->toArray(),
             'organization_id' => $this->organizationId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

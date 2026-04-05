@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationFactorEnrolled implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -25,9 +27,9 @@ readonly class AuthenticationFactorEnrolled implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            type: AuthenticationFactorEnrolledType::tryFrom($data['type']) ?? $data['type'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            type: AuthenticationFactorEnrolledType::from($data['type']),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             userId: $data['user_id'] ?? null,
             sms: isset($data['sms']) ? AuthenticationFactorEnrolledSms::fromArray($data['sms']) : null,
             totp: isset($data['totp']) ? AuthenticationFactorEnrolledTotp::fromArray($data['totp']) : null,
@@ -46,10 +48,5 @@ readonly class AuthenticationFactorEnrolled implements \JsonSerializable
             'sms' => $this->sms?->toArray(),
             'totp' => $this->totp?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

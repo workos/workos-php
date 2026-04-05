@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationChallengeVerifyResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public AuthenticationChallenge $challenge,
         public bool $valid,
@@ -28,10 +30,5 @@ readonly class AuthenticationChallengeVerifyResponse implements \JsonSerializabl
             'challenge' => $this->challenge->toArray(),
             'valid' => $this->valid,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

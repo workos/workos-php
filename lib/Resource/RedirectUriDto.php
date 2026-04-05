@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RedirectUriDto implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $uri,
         public ?bool $default = null,
@@ -28,10 +30,5 @@ readonly class RedirectUriDto implements \JsonSerializable
             'uri' => $this->uri,
             'default' => $this->default,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

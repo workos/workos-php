@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class Connection implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -28,13 +30,13 @@ readonly class Connection implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            connectionType: ConnectionType::tryFrom($data['connection_type']) ?? $data['connection_type'],
+            connectionType: ConnectionType::from($data['connection_type']),
             name: $data['name'],
-            state: ConnectionState::tryFrom($data['state']) ?? $data['state'],
-            status: ConnectionStatus::tryFrom($data['status']) ?? $data['status'],
+            state: ConnectionState::from($data['state']),
+            status: ConnectionStatus::from($data['status']),
             domains: array_map(fn ($item) => ConnectionDomain::fromArray($item), $data['domains']),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             organizationId: $data['organization_id'] ?? null,
             options: isset($data['options']) ? ConnectionOption::fromArray($data['options']) : null,
         );
@@ -55,10 +57,5 @@ readonly class Connection implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'options' => $this->options?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

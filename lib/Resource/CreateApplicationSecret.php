@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateApplicationSecret implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
     ) {
     }
@@ -22,10 +24,5 @@ readonly class CreateApplicationSecret implements \JsonSerializable
     {
         return [
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

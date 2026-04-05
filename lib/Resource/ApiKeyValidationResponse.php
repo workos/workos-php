@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ApiKeyValidationResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?ApiKey $apiKey,
     ) {
@@ -16,7 +18,7 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            apiKey: ApiKey::fromArray($data['api_key']),
+            apiKey: isset($data['api_key']) ? ApiKey::fromArray($data['api_key']) : null,
         );
     }
 
@@ -25,10 +27,5 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
         return [
             'api_key' => $this->apiKey?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

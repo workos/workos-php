@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthorizationCheck implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public bool $authorized,
     ) {
@@ -25,10 +27,5 @@ readonly class AuthorizationCheck implements \JsonSerializable
         return [
             'authorized' => $this->authorized,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

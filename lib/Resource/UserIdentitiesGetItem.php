@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserIdentitiesGetItem implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $idpId,
         public string $type,
@@ -20,7 +22,7 @@ readonly class UserIdentitiesGetItem implements \JsonSerializable
         return new self(
             idpId: $data['idp_id'],
             type: $data['type'],
-            provider: UserIdentitiesGetItemProvider::tryFrom($data['provider']) ?? $data['provider'],
+            provider: UserIdentitiesGetItemProvider::from($data['provider']),
         );
     }
 
@@ -31,10 +33,5 @@ readonly class UserIdentitiesGetItem implements \JsonSerializable
             'type' => $this->type,
             'provider' => $this->provider->value,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

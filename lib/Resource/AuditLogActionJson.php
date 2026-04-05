@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogActionJson implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $name,
@@ -23,8 +25,8 @@ readonly class AuditLogActionJson implements \JsonSerializable
             object: $data['object'],
             name: $data['name'],
             schema: AuditLogSchemaJson::fromArray($data['schema']),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
     }
 
@@ -37,10 +39,5 @@ readonly class AuditLogActionJson implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

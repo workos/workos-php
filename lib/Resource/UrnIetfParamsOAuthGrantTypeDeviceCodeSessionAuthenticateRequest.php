@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UrnIetfParamsOAuthGrantTypeDeviceCodeSessionAuthenticateRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $clientId,
         public string $grantType,
@@ -40,10 +42,5 @@ readonly class UrnIetfParamsOAuthGrantTypeDeviceCodeSessionAuthenticateRequest i
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

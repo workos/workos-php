@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UrnWorkOSOAuthGrantTypeOrganizationSelectionSessionAuthenticateRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $clientId,
         public string $clientSecret,
@@ -46,10 +48,5 @@ readonly class UrnWorkOSOAuthGrantTypeOrganizationSelectionSessionAuthenticateRe
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

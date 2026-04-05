@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class WidgetSessionToken implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $organizationId,
         public ?string $userId = null,
@@ -31,10 +33,5 @@ readonly class WidgetSessionToken implements \JsonSerializable
             'user_id' => $this->userId,
             'scopes' => $this->scopes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

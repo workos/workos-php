@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateAuthorizationResource implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $externalId,
         public string $name,
@@ -46,10 +48,5 @@ readonly class CreateAuthorizationResource implements \JsonSerializable
             'parent_resource_external_id' => $this->parentResourceExternalId,
             'parent_resource_type_slug' => $this->parentResourceTypeSlug,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

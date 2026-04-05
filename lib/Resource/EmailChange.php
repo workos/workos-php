@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class EmailChange implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public User $user,
@@ -23,8 +25,8 @@ readonly class EmailChange implements \JsonSerializable
             object: $data['object'],
             user: User::fromArray($data['user']),
             newEmail: $data['new_email'],
-            expiresAt: new \DateTimeImmutable($data['expires_at'] ?? 'now'),
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
+            expiresAt: new \DateTimeImmutable($data['expires_at']),
+            createdAt: new \DateTimeImmutable($data['created_at']),
         );
     }
 
@@ -37,10 +39,5 @@ readonly class EmailChange implements \JsonSerializable
             'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

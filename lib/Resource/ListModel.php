@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ListModel implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public array $data,
@@ -28,10 +30,5 @@ readonly class ListModel implements \JsonSerializable
             'object' => $this->object,
             'data' => array_map(fn ($item) => $item->toArray(), $this->data),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

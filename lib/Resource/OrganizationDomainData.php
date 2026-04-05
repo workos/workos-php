@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class OrganizationDomainData implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $domain,
         public OrganizationDomainDataState $state,
@@ -18,7 +20,7 @@ readonly class OrganizationDomainData implements \JsonSerializable
     {
         return new self(
             domain: $data['domain'],
-            state: OrganizationDomainDataState::tryFrom($data['state']) ?? $data['state'],
+            state: OrganizationDomainDataState::from($data['state']),
         );
     }
 
@@ -28,10 +30,5 @@ readonly class OrganizationDomainData implements \JsonSerializable
             'domain' => $this->domain,
             'state' => $this->state->value,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

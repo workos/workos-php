@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $userId,
         public ?string $organizationId = null,
@@ -31,10 +33,5 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             'organization_id' => $this->organizationId,
             'return_to' => $this->returnTo,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

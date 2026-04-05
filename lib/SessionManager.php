@@ -206,7 +206,7 @@ class SessionManager
             $body = [
                 'grant_type' => 'refresh_token',
                 'client_id' => $clientId,
-                'client_secret' => WorkOS::getApiKey(),
+                'client_secret' => $this->client->requireApiKey(),
                 'refresh_token' => $session['refresh_token'],
                 'session' => [
                     'seal_session' => true,

@@ -82,9 +82,10 @@ class ConnectTest extends TestCase
     public function testListApplicationClientSecrets(): void
     {
         $fixture = $this->loadFixture('application_credentials_list_item');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $client = $this->createMockClient([['status' => 200, 'body' => [$fixture]]]);
         $result = $client->connect()->listApplicationClientSecrets('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\ApplicationCredentialsListItem::class, $result);
+        $this->assertIsArray($result);
+        $this->assertInstanceOf(\WorkOS\Resource\ApplicationCredentialsListItem::class, $result[0]);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id/client_secrets', $request->getUri()->getPath());

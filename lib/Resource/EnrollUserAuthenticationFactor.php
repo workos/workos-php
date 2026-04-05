@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class EnrollUserAuthenticationFactor implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $type,
         public ?string $totpIssuer = null,
@@ -34,10 +36,5 @@ readonly class EnrollUserAuthenticationFactor implements \JsonSerializable
             'totp_user' => $this->totpUser,
             'totp_secret' => $this->totpSecret,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSOIntentOptions implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $bookmarkSlug = null,
         public ?string $providerType = null,
@@ -28,10 +30,5 @@ readonly class SSOIntentOptions implements \JsonSerializable
             'bookmark_slug' => $this->bookmarkSlug,
             'provider_type' => $this->providerType,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

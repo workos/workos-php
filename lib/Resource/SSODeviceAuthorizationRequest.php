@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSODeviceAuthorizationRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $clientId,
     ) {
@@ -25,10 +27,5 @@ readonly class SSODeviceAuthorizationRequest implements \JsonSerializable
         return [
             'client_id' => $this->clientId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

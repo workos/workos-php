@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarStandaloneResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public RadarStandaloneResponseVerdict $verdict,
         public string $reason,
@@ -20,11 +22,11 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            verdict: RadarStandaloneResponseVerdict::tryFrom($data['verdict']) ?? $data['verdict'],
+            verdict: RadarStandaloneResponseVerdict::from($data['verdict']),
             reason: $data['reason'],
             attemptId: $data['attempt_id'],
-            control: isset($data['control']) ? RadarStandaloneResponseControl::tryFrom($data['control']) ?? $data['control'] : null,
-            blocklistType: isset($data['blocklist_type']) ? RadarStandaloneResponseBlocklistType::tryFrom($data['blocklist_type']) ?? $data['blocklist_type'] : null,
+            control: isset($data['control']) ? RadarStandaloneResponseControl::from($data['control']) : null,
+            blocklistType: isset($data['blocklist_type']) ? RadarStandaloneResponseBlocklistType::from($data['blocklist_type']) : null,
         );
     }
 
@@ -37,10 +39,5 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
             'control' => $this->control instanceof \BackedEnum ? $this->control->value : $this->control,
             'blocklist_type' => $this->blocklistType instanceof \BackedEnum ? $this->blocklistType->value : $this->blocklistType,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

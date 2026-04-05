@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class PortalLinkResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $link,
     ) {
@@ -25,10 +27,5 @@ readonly class PortalLinkResponse implements \JsonSerializable
         return [
             'link' => $this->link,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

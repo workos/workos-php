@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateUserOrganizationMembership implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $userId,
         public string $organizationId,
@@ -34,10 +36,5 @@ readonly class CreateUserOrganizationMembership implements \JsonSerializable
             'role_slug' => $this->roleSlug,
             'role_slugs' => $this->roleSlugs,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

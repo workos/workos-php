@@ -12,6 +12,8 @@ class RequestOptions
         public readonly ?array $extraHeaders = null,
         public readonly ?string $idempotencyKey = null,
         public readonly ?int $timeout = null,
+        public readonly ?string $baseUrl = null,
+        public readonly ?int $maxRetries = null,
     ) {
     }
 }

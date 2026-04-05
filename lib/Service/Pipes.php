@@ -82,9 +82,13 @@ class Pipes
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
+        $query = array_filter([
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
             path: "user_management/users/{$userId}/connected_accounts/{$slug}",
+            query: $query,
             options: $options,
         );
     }

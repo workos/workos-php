@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticateResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public User $user,
         public string $accessToken,
@@ -28,7 +30,7 @@ readonly class AuthenticateResponse implements \JsonSerializable
             refreshToken: $data['refresh_token'],
             organizationId: $data['organization_id'] ?? null,
             authkitAuthorizationCode: $data['authkit_authorization_code'] ?? null,
-            authenticationMethod: isset($data['authentication_method']) ? AuthenticateResponseAuthenticationMethod::tryFrom($data['authentication_method']) ?? $data['authentication_method'] : null,
+            authenticationMethod: isset($data['authentication_method']) ? AuthenticateResponseAuthenticationMethod::from($data['authentication_method']) : null,
             impersonator: isset($data['impersonator']) ? AuthenticateResponseImpersonator::fromArray($data['impersonator']) : null,
             oauthTokens: isset($data['oauth_tokens']) ? AuthenticateResponseOAuthToken::fromArray($data['oauth_tokens']) : null,
         );
@@ -46,10 +48,5 @@ readonly class AuthenticateResponse implements \JsonSerializable
             'impersonator' => $this->impersonator?->toArray(),
             'oauth_tokens' => $this->oauthTokens?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

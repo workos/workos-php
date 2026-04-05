@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarStandaloneUpdateRadarAttemptRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $challengeStatus = null,
         public ?string $attemptStatus = null,
@@ -28,10 +30,5 @@ readonly class RadarStandaloneUpdateRadarAttemptRequest implements \JsonSerializ
             'challenge_status' => $this->challengeStatus,
             'attempt_status' => $this->attemptStatus,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

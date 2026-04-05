@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationFactorEnrolledTotp implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $issuer,
         public string $user,
@@ -37,10 +39,5 @@ readonly class AuthenticationFactorEnrolledTotp implements \JsonSerializable
             'qr_code' => $this->qrCode,
             'uri' => $this->uri,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

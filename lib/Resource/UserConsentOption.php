@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserConsentOption implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $claim,
         public string $type,
@@ -34,10 +36,5 @@ readonly class UserConsentOption implements \JsonSerializable
             'label' => $this->label,
             'choices' => array_map(fn ($item) => $item->toArray(), $this->choices),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

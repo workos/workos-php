@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ConnectionOption implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public ?string $signingCert,
     ) {
@@ -16,7 +18,7 @@ readonly class ConnectionOption implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            signingCert: $data['signing_cert'],
+            signingCert: $data['signing_cert'] ?? null,
         );
     }
 
@@ -25,10 +27,5 @@ readonly class ConnectionOption implements \JsonSerializable
         return [
             'signing_cert' => $this->signingCert,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

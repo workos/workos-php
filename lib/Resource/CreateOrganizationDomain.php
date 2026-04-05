@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateOrganizationDomain implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $domain,
         public string $organizationId,
@@ -28,10 +30,5 @@ readonly class CreateOrganizationDomain implements \JsonSerializable
             'domain' => $this->domain,
             'organization_id' => $this->organizationId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

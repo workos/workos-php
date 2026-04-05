@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateOrganizationApiKey implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $name,
         public ?array $permissions = null,
@@ -28,10 +30,5 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
             'name' => $this->name,
             'permissions' => $this->permissions,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogConfigurationLogStream implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $id,
         public AuditLogConfigurationLogStreamType $type,
@@ -21,10 +23,10 @@ readonly class AuditLogConfigurationLogStream implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            type: AuditLogConfigurationLogStreamType::tryFrom($data['type']) ?? $data['type'],
-            state: AuditLogConfigurationLogStreamState::tryFrom($data['state']) ?? $data['state'],
-            lastSyncedAt: $data['last_synced_at'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
+            type: AuditLogConfigurationLogStreamType::from($data['type']),
+            state: AuditLogConfigurationLogStreamState::from($data['state']),
+            lastSyncedAt: $data['last_synced_at'] ?? null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
         );
     }
 
@@ -37,10 +39,5 @@ readonly class AuditLogConfigurationLogStream implements \JsonSerializable
             'last_synced_at' => $this->lastSyncedAt,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

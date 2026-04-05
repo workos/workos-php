@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserAuthenticationFactorEnrollResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public AuthenticationFactorEnrolled $authenticationFactor,
         public AuthenticationChallenge $authenticationChallenge,
@@ -28,10 +30,5 @@ readonly class UserAuthenticationFactorEnrollResponse implements \JsonSerializab
             'authentication_factor' => $this->authenticationFactor->toArray(),
             'authentication_challenge' => $this->authenticationChallenge->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

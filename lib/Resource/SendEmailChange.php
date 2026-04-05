@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SendEmailChange implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $newEmail,
     ) {
@@ -25,10 +27,5 @@ readonly class SendEmailChange implements \JsonSerializable
         return [
             'new_email' => $this->newEmail,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

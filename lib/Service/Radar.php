@@ -87,9 +87,13 @@ class Radar
         string $entry,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
+        $body = [
+            'entry' => $entry,
+        ];
         $this->client->request(
             method: 'DELETE',
             path: "radar/lists/{$type->value}/{$action->value}",
+            body: $body,
             options: $options,
         );
     }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ApiKeyWithValue implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,10 +32,10 @@ readonly class ApiKeyWithValue implements \JsonSerializable
             owner: ApiKeyWithValueOwner::fromArray($data['owner']),
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
-            lastUsedAt: $data['last_used_at'],
+            lastUsedAt: $data['last_used_at'] ?? null,
             permissions: $data['permissions'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             value: $data['value'],
         );
     }
@@ -52,10 +54,5 @@ readonly class ApiKeyWithValue implements \JsonSerializable
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'value' => $this->value,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

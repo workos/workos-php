@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\Connection;
 use WorkOS\Resource\Profile;
 use WorkOS\Resource\SSOAuthorizeUrlResponse;
@@ -41,13 +40,13 @@ class SSO
             'organization_id' => $organizationId,
             'search' => $search,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'connections',
             query: $query,
+            modelClass: Connection::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Connection::class);
     }
 
     public function getConnection(

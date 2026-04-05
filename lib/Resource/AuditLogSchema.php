@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogSchema implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public array $targets,
         public ?AuditLogSchemaActor $actor = null,
@@ -31,10 +33,5 @@ readonly class AuditLogSchema implements \JsonSerializable
             'actor' => $this->actor?->toArray(),
             'metadata' => $this->metadata,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

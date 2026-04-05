@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class Directory implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -30,11 +32,11 @@ readonly class Directory implements \JsonSerializable
             id: $data['id'],
             organizationId: $data['organization_id'],
             externalKey: $data['external_key'],
-            type: DirectoryType::tryFrom($data['type']) ?? $data['type'],
-            state: DirectoryState::tryFrom($data['state']) ?? $data['state'],
+            type: DirectoryType::from($data['type']),
+            state: DirectoryState::from($data['state']),
             name: $data['name'],
-            createdAt: new \DateTimeImmutable($data['created_at'] ?? 'now'),
-            updatedAt: new \DateTimeImmutable($data['updated_at'] ?? 'now'),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
             domain: $data['domain'] ?? null,
             metadata: isset($data['metadata']) ? DirectoryMetadata::fromArray($data['metadata']) : null,
         );
@@ -55,10 +57,5 @@ readonly class Directory implements \JsonSerializable
             'domain' => $this->domain,
             'metadata' => $this->metadata?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

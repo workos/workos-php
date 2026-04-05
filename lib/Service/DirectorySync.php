@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\Directory;
 use WorkOS\Resource\DirectoryGroup;
 use WorkOS\Resource\DirectoryUserWithGroups;
@@ -37,13 +36,13 @@ class DirectorySync
             'search' => $search,
             'domain' => $domain,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'directories',
             query: $query,
+            modelClass: Directory::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, Directory::class);
     }
 
     public function getDirectory(
@@ -86,13 +85,13 @@ class DirectorySync
             'directory' => $directory,
             'user' => $user,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'directory_groups',
             query: $query,
+            modelClass: DirectoryGroup::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, DirectoryGroup::class);
     }
 
     public function getDirectoryGroup(
@@ -124,13 +123,13 @@ class DirectorySync
             'directory' => $directory,
             'group' => $group,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'directory_users',
             query: $query,
+            modelClass: DirectoryUserWithGroups::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, DirectoryUserWithGroups::class);
     }
 
     public function getDirectoryUser(

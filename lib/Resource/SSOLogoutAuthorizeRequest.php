@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSOLogoutAuthorizeRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $profileId,
     ) {
@@ -25,10 +27,5 @@ readonly class SSOLogoutAuthorizeRequest implements \JsonSerializable
         return [
             'profile_id' => $this->profileId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

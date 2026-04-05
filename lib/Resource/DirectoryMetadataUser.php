@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class DirectoryMetadataUser implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public int $active,
         public int $inactive,
@@ -28,10 +30,5 @@ readonly class DirectoryMetadataUser implements \JsonSerializable
             'active' => $this->active,
             'inactive' => $this->inactive,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

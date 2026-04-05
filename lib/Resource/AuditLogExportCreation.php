@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogExportCreation implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $organizationId,
         public string $rangeStart,
@@ -46,10 +48,5 @@ readonly class AuditLogExportCreation implements \JsonSerializable
             'actor_ids' => $this->actorIds,
             'targets' => $this->targets,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

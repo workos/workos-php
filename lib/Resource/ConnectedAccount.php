@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ConnectedAccount implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $object,
         public string $id,
@@ -25,10 +27,10 @@ readonly class ConnectedAccount implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            userId: $data['user_id'],
-            organizationId: $data['organization_id'],
+            userId: $data['user_id'] ?? null,
+            organizationId: $data['organization_id'] ?? null,
             scopes: $data['scopes'],
-            state: ConnectedAccountState::tryFrom($data['state']) ?? $data['state'],
+            state: ConnectedAccountState::from($data['state']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
         );
@@ -46,10 +48,5 @@ readonly class ConnectedAccount implements \JsonSerializable
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

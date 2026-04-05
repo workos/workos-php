@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogEventCreateResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public bool $success,
     ) {
@@ -25,10 +27,5 @@ readonly class AuditLogEventCreateResponse implements \JsonSerializable
         return [
             'success' => $this->success,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

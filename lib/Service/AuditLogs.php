@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\AuditLogActionJson;
 use WorkOS\Resource\AuditLogEventCreateResponse;
 use WorkOS\Resource\AuditLogExportJson;
@@ -62,13 +61,13 @@ class AuditLogs
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'audit_logs/actions',
             query: $query,
+            modelClass: AuditLogActionJson::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuditLogActionJson::class);
     }
 
     public function listActionSchemas(
@@ -85,13 +84,13 @@ class AuditLogs
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "audit_logs/actions/{$actionName}/schemas",
             query: $query,
+            modelClass: AuditLogSchemaJson::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuditLogSchemaJson::class);
     }
 
     public function createActionSchemas(

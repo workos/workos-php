@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateM2MApplication implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $name,
         public string $applicationType,
@@ -37,10 +39,5 @@ readonly class CreateM2MApplication implements \JsonSerializable
             'description' => $this->description,
             'scopes' => $this->scopes,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

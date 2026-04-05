@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuditLogConfiguration implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $organizationId,
         public int $retentionPeriodInDays,
@@ -21,7 +23,7 @@ readonly class AuditLogConfiguration implements \JsonSerializable
         return new self(
             organizationId: $data['organization_id'],
             retentionPeriodInDays: $data['retention_period_in_days'],
-            state: AuditLogConfigurationState::tryFrom($data['state']) ?? $data['state'],
+            state: AuditLogConfigurationState::from($data['state']),
             logStream: isset($data['log_stream']) ? AuditLogConfigurationLogStream::fromArray($data['log_stream']) : null,
         );
     }
@@ -34,10 +36,5 @@ readonly class AuditLogConfiguration implements \JsonSerializable
             'state' => $this->state->value,
             'log_stream' => $this->logStream?->toArray(),
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

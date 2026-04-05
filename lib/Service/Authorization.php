@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\AuthorizationCheck;
 use WorkOS\Resource\AuthorizationPermission;
 use WorkOS\Resource\AuthorizationResource;
@@ -69,13 +68,13 @@ class Authorization
             'parent_resource_type_slug' => $parentResourceTypeSlug,
             'parent_resource_external_id' => $parentResourceExternalId,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "authorization/organization_memberships/{$organizationMembershipId}/resources",
             query: $query,
+            modelClass: AuthorizationResource::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuthorizationResource::class);
     }
 
     public function listOrganizationMembershipRoleAssignments(
@@ -92,13 +91,13 @@ class Authorization
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
             query: $query,
+            modelClass: RoleAssignment::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, RoleAssignment::class);
     }
 
     public function createOrganizationMembershipRoleAssignments(
@@ -132,9 +131,16 @@ class Authorization
         ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
+        $body = array_filter([
+            'role_slug' => $roleSlug,
+            'resource_id' => $resourceId,
+            'resource_external_id' => $resourceExternalId,
+            'resource_type_slug' => $resourceTypeSlug,
+        ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
             path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            body: $body,
             options: $options,
         );
     }
@@ -232,10 +238,11 @@ class Authorization
     public function createRolePermissions(
         string $organizationId,
         string $slug,
+        string $bodySlug,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\Role {
         $body = [
-            'slug' => $slug,
+            'slug' => $bodySlug,
         ];
         $response = $this->client->request(
             method: 'POST',
@@ -325,9 +332,13 @@ class Authorization
         ?bool $cascadeDelete = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
+        $query = array_filter([
+            'cascade_delete' => $cascadeDelete,
+        ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
             path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            query: $query,
             options: $options,
         );
     }
@@ -352,13 +363,13 @@ class Authorization
             'permission_slug' => $permissionSlug,
             'assignment' => $assignment,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}/organization_memberships",
             query: $query,
+            modelClass: UserOrganizationMembershipBaseListData::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, UserOrganizationMembershipBaseListData::class);
     }
 
     public function listResources(
@@ -386,13 +397,13 @@ class Authorization
             'parent_external_id' => $parentExternalId,
             'search' => $search,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'authorization/resources',
             query: $query,
+            modelClass: AuthorizationResource::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuthorizationResource::class);
     }
 
     public function createResources(
@@ -467,9 +478,13 @@ class Authorization
         ?bool $cascadeDelete = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
+        $query = array_filter([
+            'cascade_delete' => $cascadeDelete,
+        ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
             path: "authorization/resources/{$resourceId}",
+            query: $query,
             options: $options,
         );
     }
@@ -551,13 +566,13 @@ class Authorization
             'limit' => $limit,
             'order' => $order,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'authorization/permissions',
             query: $query,
+            modelClass: AuthorizationPermission::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, AuthorizationPermission::class);
     }
 
     public function createPermissions(

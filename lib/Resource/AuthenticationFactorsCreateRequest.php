@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class AuthenticationFactorsCreateRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public AuthenticationFactorsCreateRequestType $type,
         public ?string $phoneNumber = null,
@@ -20,7 +22,7 @@ readonly class AuthenticationFactorsCreateRequest implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            type: AuthenticationFactorsCreateRequestType::tryFrom($data['type']) ?? $data['type'],
+            type: AuthenticationFactorsCreateRequestType::from($data['type']),
             phoneNumber: $data['phone_number'] ?? null,
             totpIssuer: $data['totp_issuer'] ?? null,
             totpUser: $data['totp_user'] ?? null,
@@ -37,10 +39,5 @@ readonly class AuthenticationFactorsCreateRequest implements \JsonSerializable
             'totp_user' => $this->totpUser,
             'user_id' => $this->userId,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

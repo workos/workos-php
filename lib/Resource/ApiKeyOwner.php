@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class ApiKeyOwner implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $type,
         public string $id,
@@ -28,10 +30,5 @@ readonly class ApiKeyOwner implements \JsonSerializable
             'type' => $this->type,
             'id' => $this->id,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class UserObject implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $id,
         public string $email,
@@ -37,10 +39,5 @@ readonly class UserObject implements \JsonSerializable
             'last_name' => $this->lastName,
             'metadata' => $this->metadata,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

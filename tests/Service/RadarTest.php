@@ -57,5 +57,7 @@ class RadarTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('radar/lists/ip_address/block', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['entry']);
     }
 }

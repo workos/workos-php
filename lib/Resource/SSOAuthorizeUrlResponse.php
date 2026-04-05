@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class SSOAuthorizeUrlResponse implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $url,
     ) {
@@ -25,10 +27,5 @@ readonly class SSOAuthorizeUrlResponse implements \JsonSerializable
         return [
             'url' => $this->url,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

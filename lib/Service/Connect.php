@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\ApplicationCredentialsListItem;
 use WorkOS\Resource\ConnectApplication;
 use WorkOS\Resource\ExternalAuthCompleteResponse;
@@ -54,13 +53,13 @@ class Connect
             'order' => $order,
             'organization_id' => $organizationId,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'connect/applications',
             query: $query,
+            modelClass: ConnectApplication::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, ConnectApplication::class);
     }
 
     public function createApplications(
@@ -87,29 +86,16 @@ class Connect
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
-        $body = [];
-        $body['application_type'] = 'oauth';
-        if ($name !== null) {
-            $body['name'] = $name;
-        }
-        if ($isFirstParty !== null) {
-            $body['is_first_party'] = $isFirstParty;
-        }
-        if ($description !== null) {
-            $body['description'] = $description;
-        }
-        if ($scopes !== null) {
-            $body['scopes'] = $scopes;
-        }
-        if ($redirectUris !== null) {
-            $body['redirect_uris'] = $redirectUris;
-        }
-        if ($usesPkce !== null) {
-            $body['uses_pkce'] = $usesPkce;
-        }
-        if ($organizationId !== null) {
-            $body['organization_id'] = $organizationId;
-        }
+        $body = array_filter([
+            'application_type' => 'oauth',
+            'name' => $name,
+            'is_first_party' => $isFirstParty,
+            'description' => $description,
+            'scopes' => $scopes,
+            'redirect_uris' => $redirectUris,
+            'uses_pkce' => $usesPkce,
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
 
         $response = $this->client->request(
             method: 'POST',
@@ -127,20 +113,13 @@ class Connect
         ?string $scopes = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
-        $body = [];
-        $body['application_type'] = 'm2m';
-        if ($name !== null) {
-            $body['name'] = $name;
-        }
-        if ($organizationId !== null) {
-            $body['organization_id'] = $organizationId;
-        }
-        if ($description !== null) {
-            $body['description'] = $description;
-        }
-        if ($scopes !== null) {
-            $body['scopes'] = $scopes;
-        }
+        $body = array_filter([
+            'application_type' => 'm2m',
+            'name' => $name,
+            'organization_id' => $organizationId,
+            'description' => $description,
+            'scopes' => $scopes,
+        ], fn ($v) => $v !== null);
 
         $response = $this->client->request(
             method: 'POST',
@@ -200,13 +179,13 @@ class Connect
     public function listApplicationClientSecrets(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ApplicationCredentialsListItem {
+    ): array {
         $response = $this->client->request(
             method: 'GET',
             path: "connect/applications/{$id}/client_secrets",
             options: $options,
         );
-        return ApplicationCredentialsListItem::fromArray($response);
+        return array_map(fn ($item) => ApplicationCredentialsListItem::fromArray($item), $response);
     }
 
     public function createApplicationClientSecrets(

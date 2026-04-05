@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\PaginatedResponse;
 use WorkOS\Resource\EventSchema;
 
 class Events
@@ -37,12 +36,12 @@ class Events
             'range_end' => $rangeEnd,
             'organization_id' => $organizationId,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
+        return $this->client->requestPage(
             method: 'GET',
             path: 'events',
             query: $query,
+            modelClass: EventSchema::class,
             options: $options,
         );
-        return PaginatedResponse::fromArray($response, EventSchema::class);
     }
 }

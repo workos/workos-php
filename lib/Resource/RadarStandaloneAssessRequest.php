@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class RadarStandaloneAssessRequest implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $ipAddress,
         public string $userAgent,
@@ -25,8 +27,8 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             ipAddress: $data['ip_address'],
             userAgent: $data['user_agent'],
             email: $data['email'],
-            authMethod: RadarStandaloneAssessRequestAuthMethod::tryFrom($data['auth_method']) ?? $data['auth_method'],
-            action: RadarStandaloneAssessRequestAction::tryFrom($data['action']) ?? $data['action'],
+            authMethod: RadarStandaloneAssessRequestAuthMethod::from($data['auth_method']),
+            action: RadarStandaloneAssessRequestAction::from($data['action']),
             deviceFingerprint: $data['device_fingerprint'] ?? null,
             botScore: $data['bot_score'] ?? null,
         );
@@ -43,10 +45,5 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             'device_fingerprint' => $this->deviceFingerprint,
             'bot_score' => $this->botScore,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }

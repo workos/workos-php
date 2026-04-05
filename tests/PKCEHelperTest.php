@@ -149,7 +149,8 @@ class PKCEHelperTest extends TestCase
     {
         $client = PKCEHelper::createPublicClient('client_123');
         $this->assertInstanceOf(WorkOS::class, $client);
-        $this->assertSame('client_123', WorkOS::getClientId());
+        $httpClientProperty = new \ReflectionProperty($client, 'httpClient');
+        $this->assertSame('client_123', $httpClientProperty->getValue($client)->getClientId());
     }
 
     public function testPkceAccessibleFromClient(): void

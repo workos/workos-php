@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 readonly class CreateWebhookEndpoint implements \JsonSerializable
 {
+    use JsonSerializableTrait;
+
     public function __construct(
         public string $endpointUrl,
         public array $events,
@@ -28,10 +30,5 @@ readonly class CreateWebhookEndpoint implements \JsonSerializable
             'endpoint_url' => $this->endpointUrl,
             'events' => $this->events,
         ];
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 }
