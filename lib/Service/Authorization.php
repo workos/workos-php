@@ -734,6 +734,46 @@ class Authorization
     }
 
     /**
+     * List organization memberships for resource
+     *
+     * Returns all organization memberships that have a specific permission on a resource instance. This is useful for answering "Who can access this resource?".
+     * @param string $resourceId The ID of the authorization resource.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuthorizationOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
+     * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
+     * @return \WorkOS\PaginatedResponse
+     */
+    public function listMembershipsForResource(
+        string $resourceId,
+        string $permissionSlug,
+        ?string $before = null,
+        ?string $after = null,
+        ?float $limit = null,
+        ?\WorkOS\Resource\AuthorizationOrder $order = null,
+        ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order,
+            'permission_slug' => $permissionSlug,
+            'assignment' => $assignment,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: "authorization/resources/{$resourceId}/organization_memberships",
+            query: $query,
+            modelClass: UserOrganizationMembershipBaseListData::class,
+            options: $options,
+        );
+    }
+
+    /**
      * List environment roles
      *
      * List all environment roles in priority order.
@@ -823,6 +863,56 @@ class Authorization
         $response = $this->client->request(
             method: 'PATCH',
             path: "authorization/roles/{$slug}",
+            body: $body,
+            options: $options,
+        );
+        return Role::fromArray($response);
+    }
+
+    /**
+     * Add a permission to an environment role
+     *
+     * Add a single permission to an environment role. If the permission is already assigned to the role, this operation has no effect.
+     * @param string $slug The slug of the environment role.
+     * @param string $bodySlug The slug of the permission to add to the role.
+     * @return \WorkOS\Resource\Role
+     */
+    public function addRolePermission(
+        string $slug,
+        string $bodySlug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\Role {
+        $body = [
+            'slug' => $bodySlug,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: "authorization/roles/{$slug}/permissions",
+            body: $body,
+            options: $options,
+        );
+        return Role::fromArray($response);
+    }
+
+    /**
+     * Set permissions for an environment role
+     *
+     * Replace all permissions on an environment role with the provided list.
+     * @param string $slug The slug of the environment role.
+     * @param array<string> $permissions The permission slugs to assign to the role.
+     * @return \WorkOS\Resource\Role
+     */
+    public function setRolePermissions(
+        string $slug,
+        array $permissions,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\Role {
+        $body = [
+            'permissions' => $permissions,
+        ];
+        $response = $this->client->request(
+            method: 'PUT',
+            path: "authorization/roles/{$slug}/permissions",
             body: $body,
             options: $options,
         );

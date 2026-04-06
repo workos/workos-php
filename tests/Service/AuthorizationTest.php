@@ -267,6 +267,17 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/resources/test_resource_id', $request->getUri()->getPath());
     }
 
+    public function testListMembershipsForResource(): void
+    {
+        $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->listMembershipsForResource('test_resource_id', permissionSlug: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('authorization/resources/test_resource_id/organization_memberships', $request->getUri()->getPath());
+    }
+
     public function testListRoles(): void
     {
         $fixture = $this->loadFixture('role_list');
@@ -312,6 +323,28 @@ class AuthorizationTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testAddRolePermission(): void
+    {
+        $fixture = $this->loadFixture('role');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->addRolePermission('test_slug', bodySlug: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('authorization/roles/test_slug/permissions', $request->getUri()->getPath());
+    }
+
+    public function testSetRolePermissions(): void
+    {
+        $fixture = $this->loadFixture('role');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->setRolePermissions('test_slug', permissions: []);
+        $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('authorization/roles/test_slug/permissions', $request->getUri()->getPath());
     }
 
     public function testListPermissions(): void
