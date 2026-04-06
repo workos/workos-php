@@ -11,18 +11,31 @@ readonly class UserSessionsListItem implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the session object. */
         public string $object,
+        /** The unique ID of the session. */
         public string $id,
+        /** The IP address from which the session was created. */
         public ?string $ipAddress,
+        /** The user agent string from the device that created the session. */
         public ?string $userAgent,
+        /** The ID of the user this session belongs to. */
         public string $userId,
+        /** The authentication method used to create this session. */
         public UserSessionsAuthMethod $authMethod,
+        /** The current status of the session. */
         public UserSessionsStatus $status,
+        /** The timestamp when the session expires. */
         public \DateTimeImmutable $expiresAt,
+        /** The timestamp when the session ended. */
         public ?\DateTimeImmutable $endedAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** Information about the impersonator if this session was created via impersonation. */
         public ?UserSessionsImpersonator $impersonator = null,
+        /** The ID of the organization this session is associated with. */
         public ?string $organizationId = null,
     ) {
     }

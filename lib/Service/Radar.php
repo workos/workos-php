@@ -16,6 +16,19 @@ class Radar
     ) {
     }
 
+    /**
+     * Create an attempt
+     *
+     * Assess a request for risk using the Radar engine and receive a verdict.
+     * @param string $ipAddress The IP address of the request to assess.
+     * @param string $userAgent The user agent string of the request to assess.
+     * @param string $email The email address of the user making the request.
+     * @param \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod The authentication method being used.
+     * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $action The action being performed.
+     * @param string|null $deviceFingerprint An optional device fingerprint for the request.
+     * @param string|null $botScore An optional bot detection score for the request.
+     * @return \WorkOS\Resource\RadarStandaloneResponse
+     */
     public function createAttempts(
         string $ipAddress,
         string $userAgent,
@@ -44,6 +57,15 @@ class Radar
         return RadarStandaloneResponse::fromArray($response);
     }
 
+    /**
+     * Update a Radar attempt
+     *
+     * You may optionally inform Radar that an authentication attempt or challenge was successful using this endpoint. Some Radar controls depend on tracking recent successful attempts, such as impossible travel.
+     * @param string $id The unique identifier of the Radar attempt to update.
+     * @param string|null $challengeStatus Set to `"success"` to mark the challenge as completed.
+     * @param string|null $attemptStatus Set to `"success"` to mark the authentication attempt as successful.
+     * @return mixed
+     */
     public function updateAttempt(
         string $id,
         ?string $challengeStatus = null,
@@ -63,6 +85,15 @@ class Radar
         return $response;
     }
 
+    /**
+     * Add an entry to a Radar list
+     *
+     * Add an entry to a Radar list.
+     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to add the entry to the allow or block list.
+     * @param string $entry The value to add to the list. Must match the format of the list type (e.g. a valid IP address for `ip_address`, a valid email for `email`).
+     * @return \WorkOS\Resource\RadarListEntryAlreadyPresentResponse
+     */
     public function addListEntry(
         \WorkOS\Resource\RadarType $type,
         \WorkOS\Resource\RadarAction $action,
@@ -81,6 +112,15 @@ class Radar
         return RadarListEntryAlreadyPresentResponse::fromArray($response);
     }
 
+    /**
+     * Remove an entry from a Radar list
+     *
+     * Remove an entry from a Radar list.
+     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to remove the entry from the allow or block list.
+     * @param string $entry The value to remove from the list. Must match an existing entry.
+     * @return void
+     */
     public function removeListEntry(
         \WorkOS\Resource\RadarType $type,
         \WorkOS\Resource\RadarAction $action,

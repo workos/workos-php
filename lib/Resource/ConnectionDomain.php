@@ -11,8 +11,11 @@ readonly class ConnectionDomain implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Unique identifier for the Connection Domain. */
         public string $id,
+        /** Distinguishes the Connection Domain object. */
         public string $object,
+        /** The domain value. */
         public string $domain,
     ) {
     }

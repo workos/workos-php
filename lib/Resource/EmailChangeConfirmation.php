@@ -11,7 +11,9 @@ readonly class EmailChangeConfirmation implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the email change confirmation object. */
         public string $object,
+        /** The user object. */
         public EmailChangeConfirmationUser $user,
     ) {
     }

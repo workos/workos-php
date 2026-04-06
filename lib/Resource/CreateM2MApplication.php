@@ -11,10 +11,15 @@ readonly class CreateM2MApplication implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The name of the application. */
         public string $name,
+        /** The type of application to create. */
         public string $applicationType,
+        /** The organization ID this application belongs to. */
         public string $organizationId,
+        /** A description for the application. */
         public ?string $description = null,
+        /** The OAuth scopes granted to the application. */
         public ?array $scopes = null,
     ) {
     }

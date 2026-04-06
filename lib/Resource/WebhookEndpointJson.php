@@ -11,13 +11,21 @@ readonly class WebhookEndpointJson implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Webhook Endpoint object. */
         public string $object,
+        /** Unique identifier of the Webhook Endpoint. */
         public string $id,
+        /** The URL to which webhooks are sent. */
         public string $endpointUrl,
+        /** The secret used to sign webhook payloads. */
         public string $secret,
+        /** Whether the Webhook Endpoint is enabled or disabled. */
         public WebhookEndpointJsonStatus $status,
+        /** The events that the Webhook Endpoint is subscribed to. */
         public array $events,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

@@ -6,12 +6,15 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Counts of active and inactive directory users. */
 readonly class DirectoryMetadataUser implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Count of active directory users. */
         public int $active,
+        /** Count of inactive directory users. */
         public int $inactive,
     ) {
     }

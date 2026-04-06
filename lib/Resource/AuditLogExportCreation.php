@@ -11,13 +11,24 @@ readonly class AuditLogExportCreation implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The unique ID of the Organization. */
         public string $organizationId,
+        /** ISO-8601 value for start of the export range. */
         public string $rangeStart,
+        /** ISO-8601 value for end of the export range. */
         public string $rangeEnd,
+        /** List of actions to filter against. */
         public ?array $actions = null,
+        /**
+         * Deprecated. Use `actor_names` instead.
+         * @deprecated
+         */
         public ?array $actors = null,
+        /** List of actor names to filter against. */
         public ?array $actorNames = null,
+        /** List of actor IDs to filter against. */
         public ?array $actorIds = null,
+        /** List of target types to filter against. */
         public ?array $targets = null,
     ) {
     }

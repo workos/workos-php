@@ -11,16 +11,27 @@ readonly class Directory implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Directory object. */
         public string $object,
+        /** Unique identifier for the Directory. */
         public string $id,
+        /** The unique identifier for the Organization in which the directory resides. */
         public string $organizationId,
+        /** External Key for the Directory. */
         public string $externalKey,
+        /** The type of external Directory Provider integrated with. */
         public DirectoryType $type,
+        /** Describes whether the Directory has been successfully connected to an external provider. */
         public DirectoryState $state,
+        /** The name of the directory. */
         public string $name,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The URL associated with an Enterprise Client. */
         public ?string $domain = null,
+        /** Aggregate counts of directory users and groups synced from the provider. */
         public ?DirectoryMetadata $metadata = null,
     ) {
     }

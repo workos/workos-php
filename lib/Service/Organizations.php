@@ -16,6 +16,18 @@ class Organizations
     ) {
     }
 
+    /**
+     * List Organizations
+     *
+     * Get a list of all of your existing organizations matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\OrganizationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param array<string>|null $domains The domains of an Organization. Any Organization with a matching domain will be returned.
+     * @param string|null $search Searchable text for an Organization. Matches against the organization name.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizations(
         ?string $before = null,
         ?string $after = null,
@@ -42,6 +54,18 @@ class Organizations
         );
     }
 
+    /**
+     * Create an Organization
+     *
+     * Creates a new organization in the current environment.
+     * @param string $name The name of the organization.
+     * @param bool|null $allowProfilesOutsideOrganization Whether the organization allows profiles from outside the organization to sign in.
+     * @param array<string>|null $domains The domains associated with the organization. Deprecated in favor of `domain_data`.
+     * @param array<\WorkOS\Resource\OrganizationDomainData>|null $domainData The domains associated with the organization, including verification state.
+     * @param array<string, string>|null|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+     * @param string|null|null $externalId An external identifier for the Organization.
+     * @return \WorkOS\Resource\Organization
+     */
     public function createOrganizations(
         string $name,
         ?bool $allowProfilesOutsideOrganization = null,
@@ -68,6 +92,13 @@ class Organizations
         return Organization::fromArray($response);
     }
 
+    /**
+     * Get an Organization by External ID
+     *
+     * Get the details of an existing organization by an [external identifier](https://workos.com/docs/authkit/metadata/external-identifiers).
+     * @param string $externalId The external ID of the Organization.
+     * @return \WorkOS\Resource\Organization
+     */
     public function getOrganizationByExternalId(
         string $externalId,
         ?\WorkOS\RequestOptions $options = null,
@@ -80,6 +111,13 @@ class Organizations
         return Organization::fromArray($response);
     }
 
+    /**
+     * Get an Organization
+     *
+     * Get the details of an existing organization.
+     * @param string $id Unique identifier of the Organization.
+     * @return \WorkOS\Resource\Organization
+     */
     public function getOrganization(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -92,6 +130,20 @@ class Organizations
         return Organization::fromArray($response);
     }
 
+    /**
+     * Update an Organization
+     *
+     * Updates an organization in the current environment.
+     * @param string $id Unique identifier of the Organization.
+     * @param string|null $name The name of the organization.
+     * @param bool|null $allowProfilesOutsideOrganization Whether the organization allows profiles from outside the organization to sign in.
+     * @param array<string>|null $domains (deprecated) The domains associated with the organization. Deprecated in favor of `domain_data`.
+     * @param array<\WorkOS\Resource\OrganizationDomainData>|null $domainData The domains associated with the organization, including verification state.
+     * @param string|null $stripeCustomerId The Stripe customer ID associated with the organization.
+     * @param array<string, string>|null|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+     * @param string|null|null $externalId An external identifier for the Organization.
+     * @return \WorkOS\Resource\Organization
+     */
     public function updateOrganization(
         string $id,
         ?string $name = null,
@@ -121,6 +173,13 @@ class Organizations
         return Organization::fromArray($response);
     }
 
+    /**
+     * Delete an Organization
+     *
+     * Permanently deletes an organization in the current environment. It cannot be undone.
+     * @param string $id Unique identifier of the Organization.
+     * @return void
+     */
     public function deleteOrganization(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -132,6 +191,13 @@ class Organizations
         );
     }
 
+    /**
+     * Get Audit Log Configuration
+     *
+     * Get the unified view of audit log trail and stream configuration for an organization.
+     * @param string $id Unique identifier of the Organization.
+     * @return \WorkOS\Resource\AuditLogConfiguration
+     */
     public function listOrganizationAuditLogConfiguration(
         string $id,
         ?\WorkOS\RequestOptions $options = null,

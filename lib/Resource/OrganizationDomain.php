@@ -11,15 +11,25 @@ readonly class OrganizationDomain implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the organization domain object. */
         public string $object,
+        /** Unique identifier of the organization domain. */
         public string $id,
+        /** ID of the parent Organization. */
         public string $organizationId,
+        /** Domain for the organization domain. */
         public string $domain,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** Verification state of the domain. */
         public ?OrganizationDomainState $state = null,
+        /** The prefix used in DNS verification. */
         public ?string $verificationPrefix = null,
+        /** Validation token to be used in DNS TXT record. */
         public ?string $verificationToken = null,
+        /** Strategy used to verify the domain. */
         public ?OrganizationDomainVerificationStrategy $verificationStrategy = null,
     ) {
     }

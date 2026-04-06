@@ -11,10 +11,25 @@ readonly class GenerateLink implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** An [Organization](https://workos.com/docs/reference/organization) identifier. */
         public string $organization,
+        /** The URL to go to when an admin clicks on your logo in the Admin Portal. If not specified, the return URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used. */
         public ?string $returnUrl = null,
+        /** The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used. */
         public ?string $successUrl = null,
+        /**
+         *
+         *       The intent of the Admin Portal.
+         *         - `sso` - Launch Admin Portal for creating SSO connections
+         *         - `dsync` - Launch Admin Portal for creating Directory Sync connections
+         *         - `audit_logs` - Launch Admin Portal for viewing Audit Logs
+         *         - `log_streams` - Launch Admin Portal for creating Log Streams
+         *         - `domain_verification` - Launch Admin Portal for Domain Verification
+         *         - `certificate_renewal` - Launch Admin Portal for renewing SAML Certificates
+         *         - `bring_your_own_key` - Launch Admin Portal for configuring Bring Your Own Key
+         */
         public ?GenerateLinkIntent $intent = null,
+        /** Options to configure the Admin Portal based on the intent. */
         public ?IntentOptions $intentOptions = null,
     ) {
     }

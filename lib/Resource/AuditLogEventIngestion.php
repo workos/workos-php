@@ -11,7 +11,9 @@ readonly class AuditLogEventIngestion implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The unique ID of the Organization. */
         public string $organizationId,
+        /** The audit log event to create. */
         public AuditLogEvent $event,
     ) {
     }

@@ -11,13 +11,20 @@ readonly class UrnWorkOSOAuthGrantTypeEmailVerificationCodeSessionAuthenticateRe
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The client ID of the application. */
         public string $clientId,
+        /** The client secret of the application. */
         public string $clientSecret,
         public string $grantType,
+        /** The email verification code. */
         public string $code,
+        /** The pending authentication token from a previous authentication attempt. */
         public string $pendingAuthenticationToken,
+        /** The IP address of the user's request. */
         public ?string $ipAddress = null,
+        /** A unique identifier for the device. */
         public ?string $deviceId = null,
+        /** The user agent string from the user's browser. */
         public ?string $userAgent = null,
     ) {
     }

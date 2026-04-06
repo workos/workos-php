@@ -11,10 +11,15 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The verdict of the risk assessment. */
         public RadarStandaloneResponseVerdict $verdict,
+        /** A human-readable reason for the verdict. */
         public string $reason,
+        /** Unique identifier of the authentication attempt. */
         public string $attemptId,
+        /** The Radar control that triggered the verdict. Only present if the verdict is `block` or `challenge`. */
         public ?RadarStandaloneResponseControl $control = null,
+        /** The type of blocklist entry that triggered the verdict. Only present if the control is `restriction`. */
         public ?RadarStandaloneResponseBlocklistType $blocklistType = null,
     ) {
     }

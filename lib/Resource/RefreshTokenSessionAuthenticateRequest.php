@@ -11,13 +11,20 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The client ID of the application. */
         public string $clientId,
+        /** The client secret of the application. */
         public string $clientSecret,
         public string $grantType,
+        /** The refresh token to exchange for new tokens. */
         public string $refreshToken,
+        /** The ID of the organization to scope the session to. */
         public ?string $organizationId = null,
+        /** The IP address of the user's request. */
         public ?string $ipAddress = null,
+        /** A unique identifier for the device. */
         public ?string $deviceId = null,
+        /** The user agent string from the user's browser. */
         public ?string $userAgent = null,
     ) {
     }

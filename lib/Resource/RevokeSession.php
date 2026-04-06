@@ -11,7 +11,9 @@ readonly class RevokeSession implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The ID of the session to revoke. This can be extracted from the `sid` claim of the access token. */
         public string $sessionId,
+        /** The URL to redirect the user to after session revocation. */
         public ?string $returnTo = null,
     ) {
     }

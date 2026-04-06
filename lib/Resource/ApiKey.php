@@ -6,19 +6,29 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The API Key object if the value is valid, or `null` if invalid. */
 readonly class ApiKey implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the API Key object. */
         public string $object,
+        /** Unique identifier of the API Key. */
         public string $id,
+        /** The entity that owns the API Key. */
         public ApiKeyOwner $owner,
+        /** A descriptive name for the API Key. */
         public string $name,
+        /** An obfuscated representation of the API Key value. */
         public string $obfuscatedValue,
+        /** Timestamp of when the API Key was last used. */
         public ?string $lastUsedAt,
+        /** The permission slugs assigned to the API Key. */
         public array $permissions,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

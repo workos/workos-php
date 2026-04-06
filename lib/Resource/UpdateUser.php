@@ -11,15 +11,25 @@ readonly class UpdateUser implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address of the user. */
         public ?string $email = null,
+        /** The first name of the user. */
         public ?string $firstName = null,
+        /** The last name of the user. */
         public ?string $lastName = null,
+        /** Whether the user's email has been verified. */
         public ?bool $emailVerified = null,
+        /** The password to set for the user. */
         public ?string $password = null,
+        /** The hashed password to set for the user. Mutually exclusive with `password`. */
         public ?string $passwordHash = null,
+        /** The algorithm originally used to hash the password, used when providing a `password_hash`. */
         public ?UpdateUserPasswordHashType $passwordHashType = null,
+        /** Object containing metadata key/value pairs associated with the user. */
         public ?array $metadata = null,
+        /** The external ID of the user. */
         public ?string $externalId = null,
+        /** The user's preferred locale. */
         public ?string $locale = null,
     ) {
     }

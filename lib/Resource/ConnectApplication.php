@@ -11,13 +11,21 @@ readonly class ConnectApplication implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the connect application object. */
         public string $object,
+        /** The unique ID of the connect application. */
         public string $id,
+        /** The client ID of the connect application. */
         public string $clientId,
+        /** A description of the connect application. */
         public ?string $description,
+        /** The name of the connect application. */
         public string $name,
+        /** The scopes available for this application. */
         public array $scopes,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

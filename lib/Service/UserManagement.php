@@ -36,6 +36,13 @@ class UserManagement
     ) {
     }
 
+    /**
+     * Get JWKS
+     *
+     * Returns the JSON Web Key Set (JWKS) containing the public keys used for verifying access tokens.
+     * @param string $clientId Identifies the application making the request to the WorkOS server. You can obtain your client ID from the [API Keys](https://dashboard.workos.com/api-keys) page in the dashboard.
+     * @return \WorkOS\Resource\JwksResponse
+     */
     public function getJwks(
         string $clientId,
         ?\WorkOS\RequestOptions $options = null,
@@ -48,6 +55,12 @@ class UserManagement
         return JwksResponse::fromArray($response);
     }
 
+    /**
+     * Authenticate
+     *
+     * Authenticate a user with a specified [authentication method](https://workos.com/docs/reference/authkit/authentication).
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function createAuthenticate(
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
@@ -62,6 +75,12 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $email
+     * @param string|null $password
+     * @param string|null $invitationToken
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithPassword(
         ?string $email = null,
         ?string $password = null,
@@ -86,6 +105,10 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $code
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithCode(
         ?string $code = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -106,6 +129,11 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $refreshToken
+     * @param string|null $organizationId
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithRefreshToken(
         ?string $refreshToken = null,
         ?string $organizationId = null,
@@ -128,6 +156,12 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $code
+     * @param string|null $email
+     * @param string|null $invitationToken
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithMagicAuth(
         ?string $code = null,
         ?string $email = null,
@@ -152,6 +186,11 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $code
+     * @param string|null $pendingAuthenticationToken
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithEmailVerification(
         ?string $code = null,
         ?string $pendingAuthenticationToken = null,
@@ -174,6 +213,12 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $code
+     * @param string|null $pendingAuthenticationToken
+     * @param string|null $authenticationChallengeId
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithTotp(
         ?string $code = null,
         ?string $pendingAuthenticationToken = null,
@@ -198,6 +243,11 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $pendingAuthenticationToken
+     * @param string|null $organizationId
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithOrganizationSelection(
         ?string $pendingAuthenticationToken = null,
         ?string $organizationId = null,
@@ -220,6 +270,10 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * @param string|null $deviceCode
+     * @return \WorkOS\Resource\AuthenticateResponse
+     */
     public function authenticateWithDeviceCode(
         ?string $deviceCode = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -239,6 +293,28 @@ class UserManagement
         return AuthenticateResponse::fromArray($response);
     }
 
+    /**
+     * Get an authorization URL
+     *
+     * Generates an OAuth 2.0 authorization URL to authenticate a user with AuthKit or SSO.
+     * @param string|null $codeChallengeMethod The only valid PKCE code challenge method is `"S256"`. Required when specifying a `code_challenge`.
+     * @param string|null $codeChallenge Code challenge derived from the code verifier used for the PKCE flow.
+     * @param string|null $domainHint A domain hint for SSO connection lookup.
+     * @param string|null $connectionId The ID of an SSO connection to use for authentication.
+     * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider.
+     * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider.
+     * @param string|null $invitationToken A token representing a user invitation to redeem during authentication.
+     * @param \WorkOS\Resource\UserManagementAuthenticationScreenHint|null $screenHint Used to specify which screen to display when the provider is `authkit`.
+     * @param string|null $loginHint A hint to the authorization server about the login identifier the user might use.
+     * @param \WorkOS\Resource\UserManagementAuthenticationProvider|null $provider The OAuth provider to authenticate with (e.g., GoogleOAuth, MicrosoftOAuth, GitHubOAuth).
+     * @param string|null $prompt Controls the authentication flow behavior for the user.
+     * @param string|null $state An opaque value used to maintain state between the request and the callback.
+     * @param string|null $organizationId The ID of the organization to authenticate the user against.
+     * @param string $responseType The response type of the application.
+     * @param string $redirectUri The callback URI where the authorization code will be sent after authentication.
+     * @param string $clientId The unique identifier of the WorkOS environment client.
+     * @return mixed
+     */
     public function getAuthorizationUrl(
         string $responseType,
         string $redirectUri,
@@ -285,6 +361,13 @@ class UserManagement
         return $response;
     }
 
+    /**
+     * Get device authorization URL
+     *
+     * Initiates the CLI Auth flow by requesting a device code and verification URLs. This endpoint implements the OAuth 2.0 Device Authorization Flow ([RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628)) and is designed for command-line applications or other devices with limited input capabilities.
+     * @param string $clientId The WorkOS client ID for your application.
+     * @return \WorkOS\Resource\DeviceAuthorizationResponse
+     */
     public function createDevice(
         string $clientId,
         ?\WorkOS\RequestOptions $options = null,
@@ -301,6 +384,14 @@ class UserManagement
         return DeviceAuthorizationResponse::fromArray($response);
     }
 
+    /**
+     * Logout
+     *
+     * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
+     * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
+     * @param string|null $returnTo The URL to redirect the user to after session revocation.
+     * @return mixed
+     */
     public function getLogoutUrl(
         string $sessionId,
         ?string $returnTo = null,
@@ -319,6 +410,14 @@ class UserManagement
         return $response;
     }
 
+    /**
+     * Revoke Session
+     *
+     * Revoke a [user session](https://workos.com/docs/reference/authkit/session).
+     * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
+     * @param string|null $returnTo The URL to redirect the user to after session revocation.
+     * @return mixed
+     */
     public function revokeSession(
         string $sessionId,
         ?string $returnTo = null,
@@ -337,6 +436,13 @@ class UserManagement
         return $response;
     }
 
+    /**
+     * Create a CORS origin
+     *
+     * Creates a new CORS origin for the current environment. CORS origins allow browser-based applications to make requests to the WorkOS API.
+     * @param string $origin The origin URL to allow for CORS requests.
+     * @return \WorkOS\Resource\CORSOriginResponse
+     */
     public function createCorsOrigins(
         string $origin,
         ?\WorkOS\RequestOptions $options = null,
@@ -353,6 +459,13 @@ class UserManagement
         return CORSOriginResponse::fromArray($response);
     }
 
+    /**
+     * Get an email verification code
+     *
+     * Get the details of an existing email verification code that can be used to send an email to a user for verification.
+     * @param string $id The ID of the email verification code.
+     * @return \WorkOS\Resource\EmailVerification
+     */
     public function getEmailVerification(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -365,6 +478,13 @@ class UserManagement
         return EmailVerification::fromArray($response);
     }
 
+    /**
+     * Create a password reset token
+     *
+     * Creates a one-time token that can be used to reset a user's password.
+     * @param string $email The email address of the user requesting a password reset.
+     * @return \WorkOS\Resource\PasswordReset
+     */
     public function createPasswordReset(
         string $email,
         ?\WorkOS\RequestOptions $options = null,
@@ -381,6 +501,14 @@ class UserManagement
         return PasswordReset::fromArray($response);
     }
 
+    /**
+     * Reset the password
+     *
+     * Sets a new password using the `token` query parameter from the link that the user received. Successfully resetting the password will verify a user's email, if it hasn't been verified yet.
+     * @param string $token The password reset token.
+     * @param string $newPassword The new password to set for the user.
+     * @return \WorkOS\Resource\ResetPasswordResponse
+     */
     public function confirmPasswordReset(
         string $token,
         string $newPassword,
@@ -399,6 +527,13 @@ class UserManagement
         return ResetPasswordResponse::fromArray($response);
     }
 
+    /**
+     * Get a password reset token
+     *
+     * Get the details of an existing password reset token that can be used to reset a user's password.
+     * @param string $id The ID of the password reset token.
+     * @return \WorkOS\Resource\PasswordReset
+     */
     public function getPasswordReset(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -411,6 +546,19 @@ class UserManagement
         return PasswordReset::fromArray($response);
     }
 
+    /**
+     * List users
+     *
+     * Get a list of all of your existing users matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $organization (deprecated) Filter users by the organization they are a member of. Deprecated in favor of `organization_id`.
+     * @param string|null $organizationId Filter users by the organization they are a member of.
+     * @param string|null $email Filter users by their email address.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listUsers(
         ?string $before = null,
         ?string $after = null,
@@ -439,6 +587,21 @@ class UserManagement
         );
     }
 
+    /**
+     * Create a user
+     *
+     * Create a new user in the current environment.
+     * @param string $email The email address of the user.
+     * @param string|null|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
+     * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
+     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
+     * @param string|null|null $firstName The first name of the user.
+     * @param string|null|null $lastName The last name of the user.
+     * @param bool|null|null $emailVerified Whether the user's email has been verified.
+     * @param array<string, string>|null|null $metadata Object containing metadata key/value pairs associated with the user.
+     * @param string|null|null $externalId The external ID of the user.
+     * @return \WorkOS\Resource\User
+     */
     public function createUsers(
         string $email,
         ?string $password = null,
@@ -471,6 +634,13 @@ class UserManagement
         return User::fromArray($response);
     }
 
+    /**
+     * Get a user by external ID
+     *
+     * Get the details of an existing user by an [external identifier](https://workos.com/docs/authkit/metadata/external-identifiers).
+     * @param string $externalId The external ID of the user.
+     * @return \WorkOS\Resource\User
+     */
     public function getUserByExternalId(
         string $externalId,
         ?\WorkOS\RequestOptions $options = null,
@@ -483,6 +653,13 @@ class UserManagement
         return User::fromArray($response);
     }
 
+    /**
+     * Get a user
+     *
+     * Get the details of an existing user.
+     * @param string $id The unique ID of the user.
+     * @return \WorkOS\Resource\User
+     */
     public function getUser(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -495,6 +672,23 @@ class UserManagement
         return User::fromArray($response);
     }
 
+    /**
+     * Update a user
+     *
+     * Updates properties of a user. The omitted properties will be left unchanged.
+     * @param string $id The unique ID of the user.
+     * @param string|null $email The email address of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param bool|null $emailVerified Whether the user's email has been verified.
+     * @param string|null $password The password to set for the user.
+     * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
+     * @param \WorkOS\Resource\UpdateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
+     * @param array<string, string>|null|null $metadata Object containing metadata key/value pairs associated with the user.
+     * @param string|null|null $externalId The external ID of the user.
+     * @param string|null|null $locale The user's preferred locale.
+     * @return \WorkOS\Resource\User
+     */
     public function updateUser(
         string $id,
         ?string $email = null,
@@ -530,6 +724,13 @@ class UserManagement
         return User::fromArray($response);
     }
 
+    /**
+     * Delete a user
+     *
+     * Permanently deletes a user in the current environment. It cannot be undone.
+     * @param string $id The unique ID of the user.
+     * @return void
+     */
     public function deleteUser(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -541,6 +742,14 @@ class UserManagement
         );
     }
 
+    /**
+     * Confirm email change
+     *
+     * Confirms an email change using the one-time code received by the user.
+     * @param string $id The unique ID of the user.
+     * @param string $code The one-time code used to confirm the email change.
+     * @return \WorkOS\Resource\EmailChangeConfirmation
+     */
     public function confirmEmailChange(
         string $id,
         string $code,
@@ -558,6 +767,14 @@ class UserManagement
         return EmailChangeConfirmation::fromArray($response);
     }
 
+    /**
+     * Send email change code
+     *
+     * Sends an email that contains a one-time code used to change a user's email address.
+     * @param string $id The unique ID of the user.
+     * @param string $newEmail The new email address to change to.
+     * @return \WorkOS\Resource\EmailChange
+     */
     public function sendEmailChange(
         string $id,
         string $newEmail,
@@ -575,6 +792,14 @@ class UserManagement
         return EmailChange::fromArray($response);
     }
 
+    /**
+     * Verify email
+     *
+     * Verifies an email address using the one-time code received by the user.
+     * @param string $id The ID of the user.
+     * @param string $code The one-time email verification code.
+     * @return \WorkOS\Resource\VerifyEmailResponse
+     */
     public function confirmEmailVerification(
         string $id,
         string $code,
@@ -592,6 +817,13 @@ class UserManagement
         return VerifyEmailResponse::fromArray($response);
     }
 
+    /**
+     * Send verification email
+     *
+     * Sends an email that contains a one-time code used to verify a user’s email address.
+     * @param string $id The ID of the user.
+     * @return \WorkOS\Resource\SendVerificationEmailResponse
+     */
     public function sendEmailVerification(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -604,6 +836,13 @@ class UserManagement
         return SendVerificationEmailResponse::fromArray($response);
     }
 
+    /**
+     * Get user identities
+     *
+     * Get a list of identities associated with the user. A user can have multiple associated identities after going through [identity linking](https://workos.com/docs/authkit/identity-linking). Currently only OAuth identities are supported. More provider types may be added in the future.
+     * @param string $id The unique ID of the user.
+     * @return array
+     */
     public function listUserIdentities(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -616,6 +855,17 @@ class UserManagement
         return array_map(fn ($item) => UserIdentitiesGetItem::fromArray($item), $response);
     }
 
+    /**
+     * List sessions
+     *
+     * Get a list of all active sessions for a specific user.
+     * @param string $id The ID of the user.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listUserSessions(
         string $id,
         ?string $before = null,
@@ -639,6 +889,18 @@ class UserManagement
         );
     }
 
+    /**
+     * List invitations
+     *
+     * Get a list of all of invitations matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementInvitationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
+     * @param string|null $email The email address of the recipient.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listInvitations(
         ?string $before = null,
         ?string $after = null,
@@ -665,6 +927,18 @@ class UserManagement
         );
     }
 
+    /**
+     * Send an invitation
+     *
+     * Sends an invitation email to the recipient.
+     * @param string $email The email address of the recipient.
+     * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
+     * @param string|null $roleSlug The [role](https://workos.com/docs/authkit/roles) that the recipient will receive when they join the organization in the invitation.
+     * @param int|null $expiresInDays How many days the invitations will be valid for. Must be between 1 and 30 days. Defaults to 7 days if not specified.
+     * @param string|null $inviterUserId The ID of the [user](https://workos.com/docs/reference/authkit/user) who invites the recipient. The invitation email will mention the name of this user.
+     * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
+     * @return \WorkOS\Resource\UserInvite
+     */
     public function createInvitations(
         string $email,
         ?string $organizationId = null,
@@ -691,6 +965,13 @@ class UserManagement
         return UserInvite::fromArray($response);
     }
 
+    /**
+     * Find an invitation by token
+     *
+     * Retrieve an existing invitation using the token.
+     * @param string $token The token used to accept the invitation.
+     * @return \WorkOS\Resource\UserInvite
+     */
     public function getByToken(
         string $token,
         ?\WorkOS\RequestOptions $options = null,
@@ -703,6 +984,13 @@ class UserManagement
         return UserInvite::fromArray($response);
     }
 
+    /**
+     * Get an invitation
+     *
+     * Get the details of an existing invitation.
+     * @param string $id The unique ID of the invitation.
+     * @return \WorkOS\Resource\UserInvite
+     */
     public function getInvitation(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -715,6 +1003,13 @@ class UserManagement
         return UserInvite::fromArray($response);
     }
 
+    /**
+     * Accept an invitation
+     *
+     * Accepts an invitation and, if linked to an organization, activates the user's membership in that organization.
+     * @param string $id The unique ID of the invitation.
+     * @return \WorkOS\Resource\Invitation
+     */
     public function acceptInvitation(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -727,6 +1022,14 @@ class UserManagement
         return Invitation::fromArray($response);
     }
 
+    /**
+     * Resend an invitation
+     *
+     * Resends an invitation email to the recipient. The invitation must be in a pending state.
+     * @param string $id The unique ID of the invitation.
+     * @param \WorkOS\Resource\ResendUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
+     * @return \WorkOS\Resource\UserInvite
+     */
     public function resendInvitation(
         string $id,
         ?\WorkOS\Resource\ResendUserInviteOptionsLocale $locale = null,
@@ -744,6 +1047,13 @@ class UserManagement
         return UserInvite::fromArray($response);
     }
 
+    /**
+     * Revoke an invitation
+     *
+     * Revokes an existing invitation.
+     * @param string $id The unique ID of the invitation.
+     * @return \WorkOS\Resource\Invitation
+     */
     public function revokeInvitation(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -756,6 +1066,13 @@ class UserManagement
         return Invitation::fromArray($response);
     }
 
+    /**
+     * Update JWT template
+     *
+     * Update the JWT template for the current environment.
+     * @param string $content The JWT template content as a Liquid template string.
+     * @return \WorkOS\Resource\JWTTemplateResponse
+     */
     public function updateJWTTemplate(
         string $content,
         ?\WorkOS\RequestOptions $options = null,
@@ -772,6 +1089,14 @@ class UserManagement
         return JWTTemplateResponse::fromArray($response);
     }
 
+    /**
+     * Create a Magic Auth code
+     *
+     * Creates a one-time authentication code that can be sent to the user's email address. The code expires in 10 minutes. To verify the code, [authenticate the user with Magic Auth](https://workos.com/docs/reference/authkit/authentication/magic-auth).
+     * @param string $email The email address to send the magic code to.
+     * @param string|null $invitationToken The invitation token to associate with this magic code.
+     * @return \WorkOS\Resource\MagicAuth
+     */
     public function createMagicAuth(
         string $email,
         ?string $invitationToken = null,
@@ -790,6 +1115,13 @@ class UserManagement
         return MagicAuth::fromArray($response);
     }
 
+    /**
+     * Get Magic Auth code details
+     *
+     * Get the details of an existing [Magic Auth](https://workos.com/docs/reference/authkit/magic-auth) code that can be used to send an email to a user for authentication.
+     * @param string $id The unique ID of the Magic Auth code.
+     * @return \WorkOS\Resource\MagicAuth
+     */
     public function getMagicAuth(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -802,6 +1134,19 @@ class UserManagement
         return MagicAuth::fromArray($response);
     }
 
+    /**
+     * List organization memberships
+     *
+     * Get a list of all organization memberships matching the criteria specified. At least one of `user_id` or `organization_id` must be provided. By default only active memberships are returned. Use the `statuses` parameter to filter by other statuses.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementOrganizationMembershipOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
+     * @param array<\WorkOS\Resource\UserManagementOrganizationMembershipStatuses>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
+     * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizationMemberships(
         ?string $before = null,
         ?string $after = null,
@@ -830,6 +1175,18 @@ class UserManagement
         );
     }
 
+    /**
+     * Create an organization membership
+     *
+     * Creates a new `active` organization membership for the given organization and user.
+     *
+     * Calling this API with an organization and user that match an `inactive` organization membership will activate the membership with the specified role(s).
+     * @param string $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
+     * @param string $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
+     * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
+     * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
+     * @return \WorkOS\Resource\OrganizationMembership
+     */
     public function createOrganizationMemberships(
         string $userId,
         string $organizationId,
@@ -852,6 +1209,13 @@ class UserManagement
         return OrganizationMembership::fromArray($response);
     }
 
+    /**
+     * Get an organization membership
+     *
+     * Get the details of an existing organization membership.
+     * @param string $id The unique ID of the organization membership.
+     * @return \WorkOS\Resource\UserOrganizationMembership
+     */
     public function getOrganizationMembership(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -864,6 +1228,15 @@ class UserManagement
         return UserOrganizationMembership::fromArray($response);
     }
 
+    /**
+     * Update an organization membership
+     *
+     * Update the details of an existing organization membership.
+     * @param string $id The unique ID of the organization membership.
+     * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
+     * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
+     * @return \WorkOS\Resource\UserOrganizationMembership
+     */
     public function updateOrganizationMembership(
         string $id,
         ?string $roleSlug = null,
@@ -883,6 +1256,13 @@ class UserManagement
         return UserOrganizationMembership::fromArray($response);
     }
 
+    /**
+     * Delete an organization membership
+     *
+     * Permanently deletes an existing organization membership. It cannot be undone.
+     * @param string $id The unique ID of the organization membership.
+     * @return void
+     */
     public function deleteOrganizationMembership(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -894,6 +1274,18 @@ class UserManagement
         );
     }
 
+    /**
+     * Deactivate an organization membership
+     *
+     * Deactivates an `active` organization membership. Emits an [organization_membership.updated](https://workos.com/docs/events/organization-membership) event upon successful deactivation.
+     *
+     * - Deactivating an `inactive` membership is a no-op and does not emit an event.
+     * - Deactivating a `pending` membership returns an error. This membership should be [deleted](https://workos.com/docs/reference/authkit/organization-membership/delete) instead.
+     *
+     * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
+     * @param string $id The unique ID of the organization membership.
+     * @return \WorkOS\Resource\OrganizationMembership
+     */
     public function deactivateOrganizationMembership(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -906,6 +1298,18 @@ class UserManagement
         return OrganizationMembership::fromArray($response);
     }
 
+    /**
+     * Reactivate an organization membership
+     *
+     * Reactivates an `inactive` organization membership, retaining the pre-existing role(s). Emits an [organization_membership.updated](https://workos.com/docs/events/organization-membership) event upon successful reactivation.
+     *
+     * - Reactivating an `active` membership is a no-op and does not emit an event.
+     * - Reactivating a `pending` membership returns an error. The user needs to [accept the invitation](https://workos.com/docs/authkit/invitations) instead.
+     *
+     * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
+     * @param string $id The unique ID of the organization membership.
+     * @return \WorkOS\Resource\UserOrganizationMembership
+     */
     public function reactivateOrganizationMembership(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -918,6 +1322,13 @@ class UserManagement
         return UserOrganizationMembership::fromArray($response);
     }
 
+    /**
+     * Create a redirect URI
+     *
+     * Creates a new redirect URI for an environment.
+     * @param string $uri The redirect URI to create.
+     * @return \WorkOS\Resource\RedirectUri
+     */
     public function createRedirectUris(
         string $uri,
         ?\WorkOS\RequestOptions $options = null,
@@ -934,6 +1345,17 @@ class UserManagement
         return RedirectUri::fromArray($response);
     }
 
+    /**
+     * List authorized applications
+     *
+     * Get a list of all Connect applications that the user has authorized.
+     * @param string $userId The ID of the user.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementUsersAuthorizedApplicationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listUserAuthorizedApplications(
         string $userId,
         ?string $before = null,
@@ -957,6 +1379,14 @@ class UserManagement
         );
     }
 
+    /**
+     * Delete an authorized application
+     *
+     * Delete an existing Authorized Connect Application.
+     * @param string $applicationId The ID or client ID of the application.
+     * @param string $userId The ID of the user.
+     * @return void
+     */
     public function deleteUserAuthorizedApplication(
         string $applicationId,
         string $userId,

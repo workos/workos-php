@@ -11,7 +11,9 @@ readonly class CreatePasswordReset implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The password reset token. */
         public string $token,
+        /** The new password to set for the user. */
         public string $newPassword,
     ) {
     }

@@ -11,9 +11,13 @@ readonly class JWTTemplateResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The object type. */
         public string $object,
+        /** The JWT template content as a Liquid template string. */
         public string $content,
+        /** The timestamp when the JWT template was created. */
         public string $createdAt,
+        /** The timestamp when the JWT template was last updated. */
         public string $updatedAt,
     ) {
     }

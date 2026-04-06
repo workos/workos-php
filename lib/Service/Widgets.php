@@ -15,6 +15,15 @@ class Widgets
     ) {
     }
 
+    /**
+     * Generate a widget token
+     *
+     * Generate a widget token scoped to an organization and user with the specified scopes.
+     * @param string $organizationId The ID of the organization to scope the widget session to.
+     * @param string|null $userId The ID of the user to issue the widget session token for.
+     * @param array<\WorkOS\Resource\WidgetSessionTokenScopes>|null $scopes The scopes to grant the widget session.
+     * @return \WorkOS\Resource\WidgetSessionTokenResponse
+     */
     public function createToken(
         string $organizationId,
         ?string $userId = null,

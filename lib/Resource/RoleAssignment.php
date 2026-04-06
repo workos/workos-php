@@ -11,11 +11,17 @@ readonly class RoleAssignment implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the role assignment object. */
         public string $object,
+        /** Unique identifier of the role assignment. */
         public string $id,
+        /** The role included in the assignment. */
         public SlimRole $role,
+        /** The resource to which the role is assigned. */
         public RoleAssignmentResource $resource,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

@@ -11,9 +11,13 @@ readonly class EnrollUserAuthenticationFactor implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The type of the factor to enroll. */
         public string $type,
+        /** Your application or company name displayed in the user's authenticator app. */
         public ?string $totpIssuer = null,
+        /** The user's account name displayed in their authenticator app. */
         public ?string $totpUser = null,
+        /** The Base32-encoded shared secret for TOTP factors. This can be provided when creating the auth factor, otherwise it will be generated. The algorithm used to derive TOTP codes is SHA-1, the code length is 6 digits, and the timestep is 30 seconds – the secret must be compatible with these parameters. */
         public ?string $totpSecret = null,
     ) {
     }

@@ -11,11 +11,17 @@ readonly class DeviceAuthorizationResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The device verification code. */
         public string $deviceCode,
+        /** The end-user verification code. */
         public string $userCode,
+        /** The end-user verification URI. */
         public string $verificationUri,
+        /** Lifetime in seconds of the codes. */
         public float $expiresIn,
+        /** Verification URI that includes the user code. */
         public ?string $verificationUriComplete = null,
+        /** Minimum polling interval in seconds. */
         public ?float $interval = null,
     ) {
     }

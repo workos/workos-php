@@ -11,6 +11,7 @@ readonly class ResetPasswordResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The user whose password was reset. */
         public User $user,
     ) {
     }

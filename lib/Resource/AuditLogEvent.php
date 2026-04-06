@@ -11,12 +11,19 @@ readonly class AuditLogEvent implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Identifier of what happened. */
         public string $action,
+        /** ISO-8601 value of when the action occurred. */
         public string $occurredAt,
+        /** The entity that performed the action. */
         public AuditLogEventActor $actor,
+        /** The resources affected by the action. */
         public array $targets,
+        /** Additional context about where and how the action occurred. */
         public AuditLogEventContext $context,
+        /** Additional data associated with the event or entity. */
         public ?array $metadata = null,
+        /** What schema version the event is associated with. */
         public ?float $version = null,
     ) {
     }

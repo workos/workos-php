@@ -11,17 +11,29 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the data provider object. */
         public string $object,
+        /** The unique identifier of the provider. */
         public string $id,
+        /** The display name of the provider (e.g., "GitHub", "Slack"). */
         public string $name,
+        /** A description of the provider explaining how it will be used, if configured. */
         public ?string $description,
+        /** The slug identifier used in API calls (e.g., `github`, `slack`, `notion`). */
         public string $slug,
+        /** The type of integration (e.g., `github`, `slack`). */
         public string $integrationType,
+        /** The type of credentials used by the provider (e.g., `oauth2`). */
         public string $credentialsType,
+        /** The OAuth scopes configured for this provider, or `null` if none are configured. */
         public ?array $scopes,
+        /** Whether the provider is owned by a user or organization. */
         public DataIntegrationsListResponseDataOwnership $ownership,
+        /** The timestamp when the provider was created. */
         public string $createdAt,
+        /** The timestamp when the provider was last updated. */
         public string $updatedAt,
+        /** The user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` if the user has not connected. */
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
     ) {
     }

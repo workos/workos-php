@@ -18,6 +18,16 @@ class Pipes
     ) {
     }
 
+    /**
+     * Get authorization URL
+     *
+     * Generates an OAuth authorization URL to initiate the connection flow for a user. Redirect the user to the returned URL to begin the OAuth flow with the third-party provider.
+     * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
+     * @param string $userId The ID of the user to authorize.
+     * @param string|null $organizationId An organization ID to scope the authorization to a specific organization.
+     * @param string|null $returnTo The URL to redirect the user to after authorization.
+     * @return \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse
+     */
     public function authorizeDataIntegration(
         string $slug,
         string $userId,
@@ -39,6 +49,15 @@ class Pipes
         return DataIntegrationAuthorizeUrlResponse::fromArray($response);
     }
 
+    /**
+     * Get an access token for a connected account
+     *
+     * Fetches a valid OAuth access token for a user's connected account. WorkOS automatically handles token refresh, ensuring you always receive a valid, non-expired token.
+     * @param string $slug The identifier of the integration.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @return \WorkOS\Resource\DataIntegrationAccessTokenResponse
+     */
     public function createDataIntegrationToken(
         string $slug,
         string $userId,
@@ -58,6 +77,15 @@ class Pipes
         return DataIntegrationAccessTokenResponse::fromArray($response);
     }
 
+    /**
+     * Get a connected account
+     *
+     * Retrieves a user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for a specific provider.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @return \WorkOS\Resource\ConnectedAccount
+     */
     public function getUserConnectedAccount(
         string $userId,
         string $slug,
@@ -76,6 +104,15 @@ class Pipes
         return ConnectedAccount::fromArray($response);
     }
 
+    /**
+     * Delete a connected account
+     *
+     * Disconnects WorkOS's account for the user, including removing any stored access and refresh tokens. The user will need to reauthorize if they want to reconnect. This does not revoke access on the provider side.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @return void
+     */
     public function deleteUserConnectedAccount(
         string $userId,
         string $slug,
@@ -93,6 +130,14 @@ class Pipes
         );
     }
 
+    /**
+     * List providers
+     *
+     * Retrieves a list of available providers and the user's connection status for each. Returns all providers configured for your environment, along with the user's [connected account](https://workos.com/docs/reference/pipes/connected-account) information where applicable.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier to list providers and connected accounts for.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to filter connections for a specific organization.
+     * @return \WorkOS\Resource\DataIntegrationsListResponse
+     */
     public function listUserDataProviders(
         string $userId,
         ?string $organizationId = null,

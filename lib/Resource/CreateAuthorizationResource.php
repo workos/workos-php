@@ -11,13 +11,21 @@ readonly class CreateAuthorizationResource implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** An external identifier for the resource. */
         public string $externalId,
+        /** A display name for the resource. */
         public string $name,
+        /** The slug of the resource type. */
         public string $resourceTypeSlug,
+        /** The ID of the organization this resource belongs to. */
         public string $organizationId,
+        /** An optional description of the resource. */
         public ?string $description = null,
+        /** The ID of the parent resource. */
         public ?string $parentResourceId = null,
+        /** The external ID of the parent resource. */
         public ?string $parentResourceExternalId = null,
+        /** The resource type slug of the parent resource. */
         public ?string $parentResourceTypeSlug = null,
     ) {
     }

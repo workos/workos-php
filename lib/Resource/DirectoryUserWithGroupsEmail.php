@@ -11,8 +11,11 @@ readonly class DirectoryUserWithGroupsEmail implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Whether this is the primary email address. */
         public ?bool $primary = null,
+        /** The type of email address. */
         public ?string $type = null,
+        /** The email address value. */
         public ?string $value = null,
     ) {
     }

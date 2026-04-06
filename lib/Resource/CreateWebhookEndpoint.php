@@ -11,7 +11,9 @@ readonly class CreateWebhookEndpoint implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The HTTPS URL where webhooks will be sent. */
         public string $endpointUrl,
+        /** The events that the Webhook Endpoint is subscribed to. */
         public array $events,
     ) {
     }

@@ -11,16 +11,27 @@ readonly class Flag implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Feature Flag object. */
         public string $object,
+        /** Unique identifier of the Feature Flag. */
         public string $id,
+        /** A unique key to reference the Feature Flag. */
         public string $slug,
+        /** A descriptive name for the Feature Flag. This field does not need to be unique. */
         public string $name,
+        /** A description for the Feature Flag. */
         public ?string $description,
+        /** The owner of the Feature Flag. */
         public ?FlagOwner $owner,
+        /** Labels assigned to the Feature Flag for categorizing and filtering. */
         public array $tags,
+        /** Specifies whether the Feature Flag is active for the current environment. */
         public bool $enabled,
+        /** The value returned for users and organizations who don't match any configured targeting rules. */
         public bool $defaultValue,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

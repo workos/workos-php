@@ -17,6 +17,13 @@ class ApiKeys
     ) {
     }
 
+    /**
+     * Validate API key
+     *
+     * Validate an API key value and return the API key object if valid.
+     * @param string $value The value for an API key.
+     * @return \WorkOS\Resource\ApiKeyValidationResponse
+     */
     public function createValidations(
         string $value,
         ?\WorkOS\RequestOptions $options = null,
@@ -33,6 +40,13 @@ class ApiKeys
         return ApiKeyValidationResponse::fromArray($response);
     }
 
+    /**
+     * Delete an API key
+     *
+     * Permanently deletes an API key. This action cannot be undone. Once deleted, any requests using this API key will fail authentication.
+     * @param string $id The unique ID of the API key.
+     * @return void
+     */
     public function deleteApiKey(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -44,6 +58,17 @@ class ApiKeys
         );
     }
 
+    /**
+     * List API keys for an organization
+     *
+     * Get a list of all API keys for an organization.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\OrganizationsApiKeysOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizationApiKeys(
         string $organizationId,
         ?string $before = null,
@@ -67,6 +92,15 @@ class ApiKeys
         );
     }
 
+    /**
+     * Create an API key for an organization
+     *
+     * Create a new API key for an organization.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string $name The name for the API key.
+     * @param array<string>|null $permissions The permission slugs to assign to the API key.
+     * @return \WorkOS\Resource\ApiKeyWithValue
+     */
     public function createOrganizationApiKeys(
         string $organizationId,
         string $name,

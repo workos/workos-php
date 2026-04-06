@@ -11,6 +11,7 @@ readonly class PortalLinkResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** An ephemeral link to initiate the Admin Portal. */
         public string $link,
     ) {
     }

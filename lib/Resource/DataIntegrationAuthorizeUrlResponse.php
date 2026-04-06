@@ -11,6 +11,7 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The OAuth authorization URL to redirect the user to. */
         public string $url,
     ) {
     }

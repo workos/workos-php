@@ -6,12 +6,15 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Aggregate counts of directory users and groups synced from the provider. */
 readonly class DirectoryMetadata implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Counts of active and inactive directory users. */
         public DirectoryMetadataUser $users,
+        /** Count of directory groups. */
         public int $groups,
     ) {
     }

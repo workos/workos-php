@@ -11,8 +11,11 @@ readonly class FeatureFlagOwner implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address of the flag owner. */
         public string $email,
+        /** The first name of the flag owner. */
         public ?string $firstName,
+        /** The last name of the flag owner. */
         public ?string $lastName,
     ) {
     }

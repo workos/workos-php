@@ -11,6 +11,7 @@ readonly class AuditLogEventCreateResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Whether the Audit Log event was created successfully. */
         public bool $success,
     ) {
     }

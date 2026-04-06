@@ -11,6 +11,7 @@ readonly class UpdateJWTTemplate implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The JWT template content as a Liquid template string. */
         public string $content,
     ) {
     }

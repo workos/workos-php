@@ -11,6 +11,7 @@ readonly class RadarStandaloneDeleteRadarListEntryRequest implements \JsonSerial
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The value to remove from the list. Must match an existing entry. */
         public string $entry,
     ) {
     }

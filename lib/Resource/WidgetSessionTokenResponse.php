@@ -11,6 +11,7 @@ readonly class WidgetSessionTokenResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The widget session token. */
         public string $token,
     ) {
     }

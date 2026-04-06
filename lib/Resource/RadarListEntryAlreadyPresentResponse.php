@@ -11,6 +11,7 @@ readonly class RadarListEntryAlreadyPresentResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A message indicating the entry already exists. */
         public string $message,
     ) {
     }

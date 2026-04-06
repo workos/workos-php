@@ -11,6 +11,7 @@ readonly class SendEmailChange implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The new email address to change to. */
         public string $newEmail,
     ) {
     }

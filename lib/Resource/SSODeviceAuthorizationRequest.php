@@ -11,6 +11,7 @@ readonly class SSODeviceAuthorizationRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The WorkOS client ID for your application. */
         public string $clientId,
     ) {
     }

@@ -11,6 +11,7 @@ readonly class ExternalAuthCompleteResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** URI to redirect the user back to AuthKit to complete the OAuth flow. */
         public string $redirectUri,
     ) {
     }

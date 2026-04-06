@@ -16,6 +16,14 @@ class OrganizationDomains
     ) {
     }
 
+    /**
+     * Create an Organization Domain
+     *
+     * Creates a new Organization Domain.
+     * @param string $domain The domain to add to the organization.
+     * @param string $organizationId The ID of the organization to add the domain to.
+     * @return \WorkOS\Resource\OrganizationDomain
+     */
     public function createOrganizationDomains(
         string $domain,
         string $organizationId,
@@ -34,6 +42,13 @@ class OrganizationDomains
         return OrganizationDomain::fromArray($response);
     }
 
+    /**
+     * Get an Organization Domain
+     *
+     * Get the details of an existing organization domain.
+     * @param string $id Unique identifier of the organization domain.
+     * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     */
     public function getOrganizationDomain(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -46,6 +61,13 @@ class OrganizationDomains
         return OrganizationDomainStandAlone::fromArray($response);
     }
 
+    /**
+     * Delete an Organization Domain
+     *
+     * Permanently deletes an organization domain. It cannot be undone.
+     * @param string $id Unique identifier of the organization domain.
+     * @return void
+     */
     public function deleteOrganizationDomain(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -57,6 +79,13 @@ class OrganizationDomains
         );
     }
 
+    /**
+     * Verify an Organization Domain
+     *
+     * Initiates verification process for an Organization Domain.
+     * @param string $id Unique identifier of the organization domain.
+     * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     */
     public function verifyOrganizationDomain(
         string $id,
         ?\WorkOS\RequestOptions $options = null,

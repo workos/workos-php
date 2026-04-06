@@ -11,7 +11,9 @@ readonly class UserConsentOptionChoice implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The value of this choice. */
         public ?string $value = null,
+        /** A human-readable label for this choice. */
         public ?string $label = null,
     ) {
     }

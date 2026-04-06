@@ -6,12 +6,15 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Information about the impersonator if this session was created via impersonation. */
 readonly class UserSessionsImpersonator implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address of the WorkOS Dashboard user who is impersonating the user. */
         public string $email,
+        /** The justification the impersonator gave for impersonating the user. */
         public ?string $reason,
     ) {
     }

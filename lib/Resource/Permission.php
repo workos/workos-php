@@ -11,14 +11,23 @@ readonly class Permission implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Permission object. */
         public string $object,
+        /** Unique identifier of the Permission. */
         public string $id,
+        /** A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks. */
         public string $slug,
+        /** A descriptive name for the Permission. */
         public string $name,
+        /** An optional description of the Permission. */
         public ?string $description,
+        /** Whether the permission is a system permission. System permissions are managed by WorkOS and cannot be deleted. */
         public bool $system,
+        /** The slug of the resource type associated with the permission. */
         public string $resourceTypeSlug,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

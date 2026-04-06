@@ -11,6 +11,7 @@ readonly class SendVerificationEmailResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The user to whom the verification email was sent. */
         public User $user,
     ) {
     }

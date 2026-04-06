@@ -19,6 +19,14 @@ class MultiFactorAuth
     ) {
     }
 
+    /**
+     * Verify Challenge
+     *
+     * Verifies an Authentication Challenge.
+     * @param string $id The unique ID of the Authentication Challenge.
+     * @param string $code The one-time code to verify.
+     * @return \WorkOS\Resource\AuthenticationChallengeVerifyResponse
+     */
     public function verifyChallenge(
         string $id,
         string $code,
@@ -36,6 +44,17 @@ class MultiFactorAuth
         return AuthenticationChallengeVerifyResponse::fromArray($response);
     }
 
+    /**
+     * Enroll Factor
+     *
+     * Enrolls an Authentication Factor to be used as an additional factor of authentication. The returned ID should be used to create an authentication Challenge.
+     * @param \WorkOS\Resource\AuthenticationFactorsCreateRequestType $type The type of factor to enroll.
+     * @param string|null $phoneNumber Required when type is 'sms'.
+     * @param string|null $totpIssuer Required when type is 'totp'.
+     * @param string|null $totpUser Required when type is 'totp'.
+     * @param string|null $userId The ID of the user to associate the factor with.
+     * @return \WorkOS\Resource\AuthenticationFactorEnrolled
+     */
     public function enrollFactor(
         \WorkOS\Resource\AuthenticationFactorsCreateRequestType $type,
         ?string $phoneNumber = null,
@@ -60,6 +79,13 @@ class MultiFactorAuth
         return AuthenticationFactorEnrolled::fromArray($response);
     }
 
+    /**
+     * Get Factor
+     *
+     * Gets an Authentication Factor.
+     * @param string $id The unique ID of the Factor.
+     * @return \WorkOS\Resource\AuthenticationFactor
+     */
     public function getFactor(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -72,6 +98,13 @@ class MultiFactorAuth
         return AuthenticationFactor::fromArray($response);
     }
 
+    /**
+     * Delete Factor
+     *
+     * Permanently deletes an Authentication Factor. It cannot be undone.
+     * @param string $id The unique ID of the Factor.
+     * @return void
+     */
     public function deleteFactor(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -83,6 +116,14 @@ class MultiFactorAuth
         );
     }
 
+    /**
+     * Challenge Factor
+     *
+     * Creates a Challenge for an Authentication Factor.
+     * @param string $id The unique ID of the Authentication Factor to be challenged.
+     * @param string|null $smsTemplate A custom template for the SMS message. Use the {{code}} placeholder to include the verification code.
+     * @return \WorkOS\Resource\AuthenticationChallenge
+     */
     public function challengeFactor(
         string $id,
         ?string $smsTemplate = null,
@@ -100,6 +141,17 @@ class MultiFactorAuth
         return AuthenticationChallenge::fromArray($response);
     }
 
+    /**
+     * List authentication factors
+     *
+     * Lists the [authentication factors](https://workos.com/docs/reference/authkit/mfa/authentication-factor) for a user.
+     * @param string $userlandUserId The ID of the [user](https://workos.com/docs/reference/authkit/user).
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementMultiFactorAuthenticationOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listUserAuthFactors(
         string $userlandUserId,
         ?string $before = null,
@@ -123,6 +175,17 @@ class MultiFactorAuth
         );
     }
 
+    /**
+     * Enroll an authentication factor
+     *
+     * Enrolls a user in a new [authentication factor](https://workos.com/docs/reference/authkit/mfa/authentication-factor).
+     * @param string $userlandUserId The ID of the [user](https://workos.com/docs/reference/authkit/user).
+     * @param string $type The type of the factor to enroll.
+     * @param string|null $totpIssuer Your application or company name displayed in the user's authenticator app.
+     * @param string|null $totpUser The user's account name displayed in their authenticator app.
+     * @param string|null $totpSecret The Base32-encoded shared secret for TOTP factors. This can be provided when creating the auth factor, otherwise it will be generated. The algorithm used to derive TOTP codes is SHA-1, the code length is 6 digits, and the timestep is 30 seconds – the secret must be compatible with these parameters.
+     * @return \WorkOS\Resource\UserAuthenticationFactorEnrollResponse
+     */
     public function createUserAuthFactors(
         string $userlandUserId,
         string $type,

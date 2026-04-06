@@ -11,12 +11,22 @@ readonly class UpdateOrganization implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The name of the organization. */
         public ?string $name = null,
+        /** Whether the organization allows profiles from outside the organization to sign in. */
         public ?bool $allowProfilesOutsideOrganization = null,
+        /**
+         * The domains associated with the organization. Deprecated in favor of `domain_data`.
+         * @deprecated
+         */
         public ?array $domains = null,
+        /** The domains associated with the organization, including verification state. */
         public ?array $domainData = null,
+        /** The Stripe customer ID associated with the organization. */
         public ?string $stripeCustomerId = null,
+        /** Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization. */
         public ?array $metadata = null,
+        /** An external identifier for the Organization. */
         public ?string $externalId = null,
     ) {
     }

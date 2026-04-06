@@ -11,8 +11,11 @@ readonly class CreateOrganizationRole implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A descriptive name for the role. */
         public string $name,
+        /** A unique identifier for the role within the organization. When provided, must begin with 'org-' and contain only lowercase letters, numbers, hyphens, and underscores. When omitted, a slug is auto-generated from the role name and a random suffix. */
         public ?string $slug = null,
+        /** An optional description of the role's purpose. */
         public ?string $description = null,
     ) {
     }

@@ -23,6 +23,17 @@ class Authorization
     ) {
     }
 
+    /**
+     * Check authorization
+     *
+     * Check if an organization membership has a specific permission on a resource. Supports identification by resource_id OR by resource_external_id + resource_type_slug.
+     * @param string $organizationMembershipId The ID of the organization membership to check.
+     * @param string $permissionSlug The slug of the permission to check.
+     * @param string|null $resourceId The ID of the resource.
+     * @param string|null $resourceExternalId The external ID of the resource.
+     * @param string|null $resourceTypeSlug The slug of the resource type.
+     * @return \WorkOS\Resource\AuthorizationCheck
+     */
     public function checkOrganizationMembership(
         string $organizationMembershipId,
         string $permissionSlug,
@@ -46,6 +57,23 @@ class Authorization
         return AuthorizationCheck::fromArray($response);
     }
 
+    /**
+     * List resources for organization membership
+     *
+     * Returns all child resources of a parent resource where the organization membership has a specific permission. This is useful for resource discovery—answering "What projects can this user access in this workspace?"
+     *
+     * You must provide either `parent_resource_id` or both `parent_resource_external_id` and `parent_resource_type_slug` to identify the parent resource.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuthorizationOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string $permissionSlug The permission slug to filter by. Only child resources where the organization membership has this permission are returned.
+     * @param string|null $parentResourceId The WorkOS ID of the parent resource. Provide this or both `parent_resource_external_id` and `parent_resource_type_slug`, but not both.
+     * @param string|null $parentResourceTypeSlug The slug of the parent resource type. Must be provided together with `parent_resource_external_id`.
+     * @param string|null $parentResourceExternalId The application-specific external identifier of the parent resource. Must be provided together with `parent_resource_type_slug`.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizationMembershipResources(
         string $organizationMembershipId,
         string $permissionSlug,
@@ -77,6 +105,17 @@ class Authorization
         );
     }
 
+    /**
+     * List role assignments
+     *
+     * List all role assignments for an organization membership. This returns all roles that have been assigned to the user on resources, including organization-level and sub-resource roles.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuthorizationOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizationMembershipRoleAssignments(
         string $organizationMembershipId,
         ?string $before = null,
@@ -100,6 +139,17 @@ class Authorization
         );
     }
 
+    /**
+     * Assign a role
+     *
+     * Assign a role to an organization membership on a specific resource.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string $roleSlug The slug of the role to assign.
+     * @param string|null $resourceId The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
+     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
+     * @return \WorkOS\Resource\RoleAssignment
+     */
     public function createOrganizationMembershipRoleAssignments(
         string $organizationMembershipId,
         string $roleSlug,
@@ -123,6 +173,17 @@ class Authorization
         return RoleAssignment::fromArray($response);
     }
 
+    /**
+     * Remove a role assignment
+     *
+     * Remove a role assignment by role slug and resource.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string $roleSlug The slug of the role to remove.
+     * @param string|null $resourceId The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
+     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
+     * @return void
+     */
     public function deleteOrganizationMembershipRoleAssignments(
         string $organizationMembershipId,
         string $roleSlug,
@@ -145,6 +206,14 @@ class Authorization
         );
     }
 
+    /**
+     * Remove a role assignment by ID
+     *
+     * Remove a role assignment using its ID.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string $roleAssignmentId The ID of the role assignment to remove.
+     * @return void
+     */
     public function deleteOrganizationMembershipRoleAssignment(
         string $organizationMembershipId,
         string $roleAssignmentId,
@@ -157,6 +226,13 @@ class Authorization
         );
     }
 
+    /**
+     * List organization roles
+     *
+     * Get a list of all roles that apply to an organization. This includes both environment roles and organization-specific roles, returned in priority order.
+     * @param string $organizationId The ID of the organization.
+     * @return \WorkOS\Resource\ListModel
+     */
     public function listOrganizationRoles(
         string $organizationId,
         ?\WorkOS\RequestOptions $options = null,
@@ -169,6 +245,16 @@ class Authorization
         return ListModel::fromArray($response);
     }
 
+    /**
+     * Create a custom organization role
+     *
+     * Create a new custom organization role. When slug is omitted, it is auto-generated from the role name.
+     * @param string $organizationId The ID of the organization.
+     * @param string|null $slug A unique identifier for the role within the organization. When provided, must begin with 'org-' and contain only lowercase letters, numbers, hyphens, and underscores. When omitted, a slug is auto-generated from the role name and a random suffix.
+     * @param string $name A descriptive name for the role.
+     * @param string|null|null $description An optional description of the role's purpose.
+     * @return \WorkOS\Resource\Role
+     */
     public function createOrganizationRoles(
         string $organizationId,
         string $name,
@@ -190,6 +276,14 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Get an organization role
+     *
+     * Retrieve a role that applies to an organization by its slug. This can return either an environment role or an organization-specific role.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @return \WorkOS\Resource\Role
+     */
     public function getOrganizationRole(
         string $organizationId,
         string $slug,
@@ -203,6 +297,16 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Update an organization role
+     *
+     * Update an existing custom organization role. Only the fields provided in the request body will be updated.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @param string|null $name A descriptive name for the role.
+     * @param string|null|null $description An optional description of the role's purpose.
+     * @return \WorkOS\Resource\Role
+     */
     public function updateOrganizationRole(
         string $organizationId,
         string $slug,
@@ -223,6 +327,14 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Delete a custom organization role
+     *
+     * Delete an existing custom organization role.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @return void
+     */
     public function deleteOrganizationRole(
         string $organizationId,
         string $slug,
@@ -235,6 +347,15 @@ class Authorization
         );
     }
 
+    /**
+     * Add a permission to an organization role
+     *
+     * Add a single permission to an organization role. If the permission is already assigned to the role, this operation has no effect.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @param string $bodySlug The slug of the permission to add to the role.
+     * @return \WorkOS\Resource\Role
+     */
     public function createRolePermissions(
         string $organizationId,
         string $slug,
@@ -253,6 +374,15 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Set permissions for a role
+     *
+     * Replace all permissions on a role with the provided list.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @param array<string> $permissions The permission slugs to assign to the role.
+     * @return \WorkOS\Resource\Role
+     */
     public function updateRolePermissions(
         string $organizationId,
         string $slug,
@@ -271,6 +401,15 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Remove a permission from an organization role
+     *
+     * Remove a single permission from an organization role by its slug.
+     * @param string $organizationId The ID of the organization.
+     * @param string $slug The slug of the role.
+     * @param string $permissionSlug The slug of the permission to remove.
+     * @return void
+     */
     public function deleteRolePermission(
         string $organizationId,
         string $slug,
@@ -284,6 +423,15 @@ class Authorization
         );
     }
 
+    /**
+     * Get a resource by external ID
+     *
+     * Retrieve the details of an authorization resource by its external ID, organization, and resource type. This is useful when you only have the external ID from your system and need to fetch the full resource details.
+     * @param string $organizationId The ID of the organization that owns the resource.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @return \WorkOS\Resource\AuthorizationResource
+     */
     public function getOrganizationResource(
         string $organizationId,
         string $resourceTypeSlug,
@@ -298,6 +446,20 @@ class Authorization
         return AuthorizationResource::fromArray($response);
     }
 
+    /**
+     * Update a resource by external ID
+     *
+     * Update an existing authorization resource using its external ID.
+     * @param string $organizationId The ID of the organization that owns the resource.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @param string|null $name A display name for the resource.
+     * @param string|null|null $description An optional description of the resource.
+     * @param string|null $parentResourceId The ID of the parent resource.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @return \WorkOS\Resource\AuthorizationResource
+     */
     public function updateOrganizationResource(
         string $organizationId,
         string $resourceTypeSlug,
@@ -325,6 +487,16 @@ class Authorization
         return AuthorizationResource::fromArray($response);
     }
 
+    /**
+     * Delete an authorization resource by external ID
+     *
+     * Delete an authorization resource by organization, resource type, and external ID. This also deletes all descendant resources.
+     * @param string $organizationId The ID of the organization that owns the resource.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @param bool|null $cascadeDelete If true, deletes all descendant resources and role assignments. If not set and the resource has children or assignments, the request will fail.
+     * @return void
+     */
     public function deleteOrganizationResource(
         string $organizationId,
         string $resourceTypeSlug,
@@ -343,6 +515,21 @@ class Authorization
         );
     }
 
+    /**
+     * List memberships for a resource by external ID
+     *
+     * Returns all organization memberships that have a specific permission on a resource, using the resource's external ID. This is useful for answering "Who can access this resource?" when you only have the external ID.
+     * @param string $organizationId The ID of the organization that owns the resource.
+     * @param string $resourceTypeSlug The slug of the resource type this resource belongs to.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuthorizationOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
+     * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listResourceOrganizationMemberships(
         string $organizationId,
         string $resourceTypeSlug,
@@ -372,6 +559,22 @@ class Authorization
         );
     }
 
+    /**
+     * List resources
+     *
+     * Get a paginated list of authorization resources.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuthorizationOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $organizationId Filter resources by organization ID.
+     * @param string|null $resourceTypeSlug Filter resources by resource type slug.
+     * @param string|null $parentResourceId Filter resources by parent resource ID.
+     * @param string|null $parentResourceTypeSlug Filter resources by parent resource type slug.
+     * @param string|null $parentExternalId Filter resources by parent external ID.
+     * @param string|null $search Search resources by name.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listResources(
         ?string $before = null,
         ?string $after = null,
@@ -406,6 +609,20 @@ class Authorization
         );
     }
 
+    /**
+     * Create an authorization resource
+     *
+     * Create a new authorization resource.
+     * @param string $externalId An external identifier for the resource.
+     * @param string $name A display name for the resource.
+     * @param string|null|null $description An optional description of the resource.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $organizationId The ID of the organization this resource belongs to.
+     * @param string|null|null $parentResourceId The ID of the parent resource.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @return \WorkOS\Resource\AuthorizationResource
+     */
     public function createResources(
         string $externalId,
         string $name,
@@ -436,6 +653,13 @@ class Authorization
         return AuthorizationResource::fromArray($response);
     }
 
+    /**
+     * Get a resource
+     *
+     * Retrieve the details of an authorization resource by its ID.
+     * @param string $resourceId The ID of the authorization resource.
+     * @return \WorkOS\Resource\AuthorizationResource
+     */
     public function getResource(
         string $resourceId,
         ?\WorkOS\RequestOptions $options = null,
@@ -448,6 +672,18 @@ class Authorization
         return AuthorizationResource::fromArray($response);
     }
 
+    /**
+     * Update a resource
+     *
+     * Update an existing authorization resource.
+     * @param string $resourceId The ID of the authorization resource.
+     * @param string|null $name A display name for the resource.
+     * @param string|null|null $description An optional description of the resource.
+     * @param string|null $parentResourceId The ID of the parent resource.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @return \WorkOS\Resource\AuthorizationResource
+     */
     public function updateResource(
         string $resourceId,
         ?string $name = null,
@@ -473,6 +709,14 @@ class Authorization
         return AuthorizationResource::fromArray($response);
     }
 
+    /**
+     * Delete an authorization resource
+     *
+     * Delete an authorization resource and all its descendants.
+     * @param string $resourceId The ID of the authorization resource.
+     * @param bool|null $cascadeDelete If true, deletes all descendant resources and role assignments. If not set and the resource has children or assignments, the request will fail.
+     * @return void
+     */
     public function deleteResource(
         string $resourceId,
         ?bool $cascadeDelete = null,
@@ -489,6 +733,12 @@ class Authorization
         );
     }
 
+    /**
+     * List environment roles
+     *
+     * List all environment roles in priority order.
+     * @return \WorkOS\Resource\RoleList
+     */
     public function listRoles(
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RoleList {
@@ -500,6 +750,16 @@ class Authorization
         return RoleList::fromArray($response);
     }
 
+    /**
+     * Create an environment role
+     *
+     * Create a new environment role.
+     * @param string $slug A unique slug for the role.
+     * @param string $name A descriptive name for the role.
+     * @param string|null|null $description An optional description of the role.
+     * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
+     * @return \WorkOS\Resource\Role
+     */
     public function createRoles(
         string $slug,
         string $name,
@@ -522,6 +782,13 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Get an environment role
+     *
+     * Get an environment role by its slug.
+     * @param string $slug The slug of the environment role.
+     * @return \WorkOS\Resource\Role
+     */
     public function getRole(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -534,6 +801,15 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * Update an environment role
+     *
+     * Update an existing environment role.
+     * @param string $slug The slug of the environment role.
+     * @param string|null $name A descriptive name for the role.
+     * @param string|null|null $description An optional description of the role.
+     * @return \WorkOS\Resource\Role
+     */
     public function updateRole(
         string $slug,
         ?string $name = null,
@@ -553,6 +829,16 @@ class Authorization
         return Role::fromArray($response);
     }
 
+    /**
+     * List permissions
+     *
+     * Get a list of all permissions in your WorkOS environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\PermissionsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listPermissions(
         ?string $before = null,
         ?string $after = null,
@@ -575,6 +861,16 @@ class Authorization
         );
     }
 
+    /**
+     * Create a permission
+     *
+     * Create a new permission in your WorkOS environment. The permission can then be assigned to environment roles and organization roles.
+     * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
+     * @param string $name A descriptive name for the Permission.
+     * @param string|null|null $description An optional description of the Permission.
+     * @param string|null $resourceTypeSlug The slug of the resource type this permission is scoped to.
+     * @return \WorkOS\Resource\Permission
+     */
     public function createPermissions(
         string $slug,
         string $name,
@@ -597,6 +893,13 @@ class Authorization
         return Permission::fromArray($response);
     }
 
+    /**
+     * Get a permission
+     *
+     * Retrieve a permission by its unique slug.
+     * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
+     * @return \WorkOS\Resource\AuthorizationPermission
+     */
     public function getPermission(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -609,6 +912,15 @@ class Authorization
         return AuthorizationPermission::fromArray($response);
     }
 
+    /**
+     * Update a permission
+     *
+     * Update an existing permission. Only the fields provided in the request body will be updated.
+     * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
+     * @param string|null $name A descriptive name for the Permission.
+     * @param string|null|null $description An optional description of the Permission.
+     * @return \WorkOS\Resource\AuthorizationPermission
+     */
     public function updatePermission(
         string $slug,
         ?string $name = null,
@@ -628,6 +940,13 @@ class Authorization
         return AuthorizationPermission::fromArray($response);
     }
 
+    /**
+     * Delete a permission
+     *
+     * Delete an existing permission. System permissions cannot be deleted.
+     * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
+     * @return void
+     */
     public function deletePermission(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,

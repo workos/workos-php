@@ -11,12 +11,19 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The IP address of the request to assess. */
         public string $ipAddress,
+        /** The user agent string of the request to assess. */
         public string $userAgent,
+        /** The email address of the user making the request. */
         public string $email,
+        /** The authentication method being used. */
         public RadarStandaloneAssessRequestAuthMethod $authMethod,
+        /** The action being performed. */
         public RadarStandaloneAssessRequestAction $action,
+        /** An optional device fingerprint for the request. */
         public ?string $deviceFingerprint = null,
+        /** An optional bot detection score for the request. */
         public ?string $botScore = null,
     ) {
     }

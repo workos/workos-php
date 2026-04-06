@@ -11,15 +11,25 @@ readonly class AuthorizationResource implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Resource object. */
         public string $object,
+        /** A human-readable name for the Resource. */
         public string $name,
+        /** An optional description of the Resource. */
         public ?string $description,
+        /** The ID of the organization that owns the resource. */
         public string $organizationId,
+        /** The ID of the parent resource, if this resource is nested. */
         public ?string $parentResourceId,
+        /** The unique ID of the Resource. */
         public string $id,
+        /** An identifier you provide to reference the resource in your system. */
         public string $externalId,
+        /** The slug of the resource type this resource belongs to. */
         public string $resourceTypeSlug,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

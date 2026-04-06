@@ -6,23 +6,37 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The user object. */
 readonly class EmailChangeConfirmationUser implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the user object. */
         public string $object,
+        /** The unique ID of the user. */
         public string $id,
+        /** The first name of the user. */
         public ?string $firstName,
+        /** The last name of the user. */
         public ?string $lastName,
+        /** A URL reference to an image representing the user. */
         public ?string $profilePictureUrl,
+        /** The email address of the user. */
         public string $email,
+        /** Whether the user's email has been verified. */
         public bool $emailVerified,
+        /** The external ID of the user. */
         public ?string $externalId,
+        /** The timestamp when the user last signed in. */
         public ?\DateTimeImmutable $lastSignInAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** Object containing metadata key/value pairs associated with the user. */
         public ?array $metadata = null,
+        /** The user's preferred locale. */
         public ?string $locale = null,
     ) {
     }

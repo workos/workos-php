@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The primary role assigned to the user. */
 readonly class SlimRole implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The slug of the assigned role. */
         public string $slug,
     ) {
     }

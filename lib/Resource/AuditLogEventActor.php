@@ -11,9 +11,13 @@ readonly class AuditLogEventActor implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Actor identifier. */
         public string $id,
+        /** Actor type. */
         public string $type,
+        /** Optional actor name. */
         public ?string $name = null,
+        /** Additional data associated with the event or entity. */
         public ?array $metadata = null,
     ) {
     }

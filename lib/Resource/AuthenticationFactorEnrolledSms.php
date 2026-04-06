@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** SMS-based authentication factor details. */
 readonly class AuthenticationFactorEnrolledSms implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The user's phone number for SMS-based authentication. */
         public string $phoneNumber,
     ) {
     }

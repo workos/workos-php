@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Configuration options for SAML connections. Only present for SAML connection types. */
 readonly class ConnectionOption implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The signing certificate of the SAML connection. */
         public ?string $signingCert,
     ) {
     }

@@ -11,8 +11,11 @@ readonly class UserManagementLoginRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Identifier provided when AuthKit redirected to your login page. */
         public string $externalAuthId,
+        /** The user to create or update in AuthKit. */
         public UserObject $user,
+        /** Array of [User Consent Options](https://workos.com/docs/reference/workos-connect/standalone/user-consent-options) to store with the session. */
         public ?array $userConsentOptions = null,
     ) {
     }

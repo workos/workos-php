@@ -19,6 +19,20 @@ class SSO
     ) {
     }
 
+    /**
+     * List Connections
+     *
+     * Get a list of all of your existing connections matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\ConnectionsOrder|null $order Order the results by the creation time.
+     * @param \WorkOS\Resource\ConnectionsConnectionType|null $connectionType Filter Connections by their type.
+     * @param string|null $domain Filter Connections by their associated domain.
+     * @param string|null $organizationId Filter Connections by their associated organization.
+     * @param string|null $search Searchable text to match against Connection names.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listConnections(
         ?string $before = null,
         ?string $after = null,
@@ -49,6 +63,13 @@ class SSO
         );
     }
 
+    /**
+     * Get a Connection
+     *
+     * Get the details of an existing connection.
+     * @param string $id Unique identifier for the Connection.
+     * @return \WorkOS\Resource\Connection
+     */
     public function getConnection(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -61,6 +82,13 @@ class SSO
         return Connection::fromArray($response);
     }
 
+    /**
+     * Delete a Connection
+     *
+     * Permanently deletes an existing connection. It cannot be undone.
+     * @param string $id Unique identifier for the Connection.
+     * @return void
+     */
     public function deleteConnection(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -72,6 +100,31 @@ class SSO
         );
     }
 
+    /**
+     * Initiate SSO
+     *
+     * Initiates the single sign-on flow.
+     * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider. Only applicable when using OAuth connections.
+     * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider. Only applicable when using OAuth connections.
+     * @param string $clientId The unique identifier of the WorkOS environment client.
+     * @param string|null $domain (deprecated) Deprecated. Use `connection` or `organization` instead. Used to initiate SSO for a connection by domain. The domain must be associated with a connection in your WorkOS environment.
+     * @param \WorkOS\Resource\SSOProvider|null $provider Used to initiate OAuth authentication with Google, Microsoft, GitHub, or Apple.
+     * @param string $redirectUri Where to redirect the user after they complete the authentication process. You must use one of the redirect URIs configured via the [Redirects](https://dashboard.workos.com/redirects) page on the dashboard.
+     * @param string $responseType The only valid option for the response type parameter is `"code"`.
+     *
+     * The `"code"` parameter value initiates an [authorization code grant type](https://tools.ietf.org/html/rfc6749#section-4.1). This grant type allows you to exchange an authorization code for an access token during the redirect that takes place after a user has authenticated with an identity provider.
+     * @param string|null $state An optional parameter that can be used to encode arbitrary information to help restore application state between redirects. If included, the redirect URI received from WorkOS will contain the exact `state` that was passed.
+     * @param string|null $connection Used to initiate SSO for a connection. The value should be a WorkOS connection ID.
+     *
+     * You can persist the WorkOS connection ID with application user or team identifiers. WorkOS will use the connection indicated by the connection parameter to direct the user to the corresponding IdP for authentication.
+     * @param string|null $organization Used to initiate SSO for an organization. The value should be a WorkOS organization ID.
+     *
+     * You can persist the WorkOS organization ID with application user or team identifiers. WorkOS will use the organization ID to determine the appropriate connection and the IdP to direct the user to for authentication.
+     * @param string|null $domainHint Can be used to pre-fill the domain field when initiating authentication with Microsoft OAuth or with a Google SAML connection type.
+     * @param string|null $loginHint Can be used to pre-fill the username/email address field of the IdP sign-in page for the user, if you know their username ahead of time. Currently supported for OAuth, OpenID Connect, Okta, and Entra ID connections.
+     * @param string|null $nonce A random string generated by the client that is used to mitigate replay attacks.
+     * @return \WorkOS\Resource\SSOAuthorizeUrlResponse
+     */
     public function getAuthorizationUrl(
         string $clientId,
         string $redirectUri,
@@ -112,6 +165,15 @@ class SSO
         return SSOAuthorizeUrlResponse::fromArray($response);
     }
 
+    /**
+     * Logout Redirect
+     *
+     * Logout allows to sign out a user from your application by triggering the identity provider sign out flow. This `GET` endpoint should be a redirection, since the identity provider user will be identified in the browser session.
+     *
+     * Before redirecting to this endpoint, you need to generate a short-lived logout token using the [Logout Authorize](https://workos.com/docs/reference/sso/logout/authorize) endpoint.
+     * @param string $token The logout token returned from the [Logout Authorize](https://workos.com/docs/reference/sso/logout/authorize) endpoint.
+     * @return mixed
+     */
     public function getLogoutUrl(
         string $token,
         ?\WorkOS\RequestOptions $options = null,
@@ -128,6 +190,13 @@ class SSO
         return $response;
     }
 
+    /**
+     * Logout Authorize
+     *
+     * You should call this endpoint from your server to generate a logout token which is required for the [Logout Redirect](https://workos.com/docs/reference/sso/logout) endpoint.
+     * @param string $profileId The unique ID of the profile to log out.
+     * @return \WorkOS\Resource\SSOLogoutAuthorizeResponse
+     */
     public function authorizeLogout(
         string $profileId,
         ?\WorkOS\RequestOptions $options = null,
@@ -144,6 +213,12 @@ class SSO
         return SSOLogoutAuthorizeResponse::fromArray($response);
     }
 
+    /**
+     * Get a User Profile
+     *
+     * Exchange an access token for a user's [Profile](https://workos.com/docs/reference/sso/profile). Because this profile is returned in the [Get a Profile and Token endpoint](https://workos.com/docs/reference/sso/profile/get-profile-and-token) your application usually does not need to call this endpoint. It is available for any authentication flows that require an additional endpoint to retrieve a user's profile.
+     * @return \WorkOS\Resource\Profile
+     */
     public function getProfile(
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\Profile {
@@ -155,6 +230,20 @@ class SSO
         return Profile::fromArray($response);
     }
 
+    /**
+     * Get a Profile and Token
+     *
+     * Get an access token along with the user [Profile](https://workos.com/docs/reference/sso/profile) using the code passed to your [Redirect URI](https://workos.com/docs/reference/sso/get-authorization-url/redirect-uri).
+     * @param string $clientId The client ID of the WorkOS environment.
+     * @param string $clientSecret The client secret of the WorkOS environment.
+     * @param string $code The authorization code received from the authorization callback.
+     * @param string $grantType The grant type for the token request.
+     * @param string $clientId The client ID of the WorkOS environment.
+     * @param string $clientSecret The client secret of the WorkOS environment.
+     * @param string $code The authorization code received from the authorization callback.
+     * @param string $grantType The grant type for the token request.
+     * @return \WorkOS\Resource\SSOTokenResponse
+     */
     public function getProfileAndToken(
         string $clientId,
         string $clientSecret,

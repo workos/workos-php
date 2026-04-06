@@ -11,13 +11,21 @@ readonly class AuthenticationFactor implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the authentication factor object. */
         public string $object,
+        /** The unique ID of the factor. */
         public string $id,
+        /** The type of the factor to enroll. */
         public AuthenticationFactorType $type,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The ID of the [user](https://workos.com/docs/reference/authkit/user). */
         public ?string $userId = null,
+        /** SMS-based authentication factor details. */
         public ?AuthenticationFactorSms $sms = null,
+        /** TOTP-based authentication factor details. */
         public ?AuthenticationFactorTotp $totp = null,
     ) {
     }

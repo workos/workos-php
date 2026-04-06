@@ -11,7 +11,9 @@ readonly class AuthenticationChallengeVerifyResponse implements \JsonSerializabl
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The authentication challenge object. */
         public AuthenticationChallenge $challenge,
+        /** Whether the code was valid. */
         public bool $valid,
     ) {
     }

@@ -11,19 +11,33 @@ readonly class Invitation implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the invitation object. */
         public string $object,
+        /** The unique ID of the invitation. */
         public string $id,
+        /** The email address of the recipient. */
         public string $email,
+        /** The state of the invitation. */
         public InvitationState $state,
+        /** The timestamp when the invitation was accepted, or null if not yet accepted. */
         public ?\DateTimeImmutable $acceptedAt,
+        /** The timestamp when the invitation was revoked, or null if not revoked. */
         public ?\DateTimeImmutable $revokedAt,
+        /** The timestamp when the invitation expires. */
         public \DateTimeImmutable $expiresAt,
+        /** The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join. */
         public ?string $organizationId,
+        /** The ID of the user who invited the recipient, if provided. */
         public ?string $inviterUserId,
+        /** The ID of the user who accepted the invitation, once accepted. */
         public ?string $acceptedUserId,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The token used to accept the invitation. */
         public string $token,
+        /** The URL where the recipient can accept the invitation. */
         public string $acceptInvitationUrl,
     ) {
     }

@@ -11,7 +11,9 @@ readonly class UpdateOrganizationRole implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A descriptive name for the role. */
         public ?string $name = null,
+        /** An optional description of the role's purpose. */
         public ?string $description = null,
     ) {
     }

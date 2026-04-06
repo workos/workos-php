@@ -11,7 +11,9 @@ readonly class SSOIntentOptions implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The bookmark slug to use for SSO. */
         public ?string $bookmarkSlug = null,
+        /** The SSO provider type to configure. */
         public ?string $providerType = null,
     ) {
     }

@@ -11,7 +11,9 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address to send the magic code to. */
         public string $email,
+        /** The invitation token to associate with this magic code. */
         public ?string $invitationToken = null,
     ) {
     }

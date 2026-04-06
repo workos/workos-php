@@ -11,9 +11,13 @@ readonly class RemoveRole implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The slug of the role to remove. */
         public string $roleSlug,
+        /** The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`. */
         public ?string $resourceId = null,
+        /** The external ID of the resource. Requires `resource_type_slug`. */
         public ?string $resourceExternalId = null,
+        /** The resource type slug. Required with `resource_external_id`. */
         public ?string $resourceTypeSlug = null,
     ) {
     }

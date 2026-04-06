@@ -6,12 +6,15 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** TOTP-based authentication factor details. */
 readonly class AuthenticationFactorTotp implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Your application or company name displayed in the user's authenticator app. Defaults to your WorkOS team name. */
         public string $issuer,
+        /** The user's account name displayed in their authenticator app. Defaults to the user's email. */
         public string $user,
     ) {
     }

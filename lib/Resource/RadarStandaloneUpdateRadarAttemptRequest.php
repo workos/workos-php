@@ -11,7 +11,9 @@ readonly class RadarStandaloneUpdateRadarAttemptRequest implements \JsonSerializ
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Set to `"success"` to mark the challenge as completed. */
         public ?string $challengeStatus = null,
+        /** Set to `"success"` to mark the authentication attempt as successful. */
         public ?string $attemptStatus = null,
     ) {
     }

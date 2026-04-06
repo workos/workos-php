@@ -11,9 +11,13 @@ readonly class TokenQuery implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The client ID of the WorkOS environment. */
         public string $clientId,
+        /** The client secret of the WorkOS environment. */
         public string $clientSecret,
+        /** The authorization code received from the authorization callback. */
         public string $code,
+        /** The grant type for the token request. */
         public string $grantType,
     ) {
     }

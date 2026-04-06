@@ -16,6 +16,16 @@ class FeatureFlags
     ) {
     }
 
+    /**
+     * List feature flags
+     *
+     * Get a list of all of your existing feature flags matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\FeatureFlagsOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listFeatureFlags(
         ?string $before = null,
         ?string $after = null,
@@ -38,6 +48,13 @@ class FeatureFlags
         );
     }
 
+    /**
+     * Get a feature flag
+     *
+     * Get the details of an existing feature flag by its slug.
+     * @param string $slug A unique key to reference the Feature Flag.
+     * @return \WorkOS\Resource\Flag
+     */
     public function getFeatureFlag(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -50,6 +67,13 @@ class FeatureFlags
         return Flag::fromArray($response);
     }
 
+    /**
+     * Disable a feature flag
+     *
+     * Disables a feature flag in the current environment.
+     * @param string $slug A unique key to reference the Feature Flag.
+     * @return \WorkOS\Resource\FeatureFlag
+     */
     public function disableFeatureFlag(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -62,6 +86,13 @@ class FeatureFlags
         return FeatureFlag::fromArray($response);
     }
 
+    /**
+     * Enable a feature flag
+     *
+     * Enables a feature flag in the current environment.
+     * @param string $slug A unique key to reference the Feature Flag.
+     * @return \WorkOS\Resource\FeatureFlag
+     */
     public function enableFeatureFlag(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -74,6 +105,14 @@ class FeatureFlags
         return FeatureFlag::fromArray($response);
     }
 
+    /**
+     * Add a feature flag target
+     *
+     * Enables a feature flag for a specific target in the current environment. Currently, supported targets include users and organizations.
+     * @param string $resourceId The resource ID in format "user_<id>" or "org_<id>".
+     * @param string $slug The unique slug identifier of the feature flag.
+     * @return mixed
+     */
     public function createFeatureFlagTarget(
         string $resourceId,
         string $slug,
@@ -87,6 +126,14 @@ class FeatureFlags
         return $response;
     }
 
+    /**
+     * Remove a feature flag target
+     *
+     * Removes a target from the feature flag's target list in the current environment. Currently, supported targets include users and organizations.
+     * @param string $resourceId The resource ID in format "user_<id>" or "org_<id>".
+     * @param string $slug The unique slug identifier of the feature flag.
+     * @return void
+     */
     public function deleteFeatureFlagTarget(
         string $resourceId,
         string $slug,
@@ -99,6 +146,17 @@ class FeatureFlags
         );
     }
 
+    /**
+     * List enabled feature flags for an organization
+     *
+     * Get a list of all enabled feature flags for an organization.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\OrganizationsFeatureFlagsOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listOrganizationFeatureFlags(
         string $organizationId,
         ?string $before = null,
@@ -122,6 +180,17 @@ class FeatureFlags
         );
     }
 
+    /**
+     * List enabled feature flags for a user
+     *
+     * Get a list of all enabled feature flags for the provided user. This includes feature flags enabled specifically for the user as well as any organizations that the user is a member of.
+     * @param string $userId The ID of the user.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\UserManagementUsersFeatureFlagsOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listUserFeatureFlags(
         string $userId,
         ?string $before = null,

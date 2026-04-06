@@ -11,15 +11,25 @@ readonly class Organization implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Organization object. */
         public string $object,
+        /** Unique identifier of the Organization. */
         public string $id,
+        /** A descriptive name for the Organization. This field does not need to be unique. */
         public string $name,
+        /** List of Organization Domains. */
         public array $domains,
+        /** Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization. */
         public array $metadata,
+        /** The external ID of the Organization. */
         public ?string $externalId,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The Stripe customer ID of the Organization. */
         public ?string $stripeCustomerId = null,
+        /** Whether the Organization allows profiles outside of its managed domains. */
         public ?bool $allowProfilesOutsideOrganization = null,
     ) {
     }

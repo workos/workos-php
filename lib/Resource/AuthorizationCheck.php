@@ -11,6 +11,7 @@ readonly class AuthorizationCheck implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Whether the organization membership has the specified permission on the resource. */
         public bool $authorized,
     ) {
     }

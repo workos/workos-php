@@ -11,10 +11,15 @@ readonly class AuditLogActionJson implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Audit Log Action object. */
         public string $object,
+        /** Identifier of what action was taken. */
         public string $name,
+        /** The schema associated with the action. */
         public AuditLogSchemaJson $schema,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

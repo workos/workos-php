@@ -11,9 +11,13 @@ readonly class AuditLogConfiguration implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Unique identifier of the Organization. */
         public string $organizationId,
+        /** The number of days Audit Log events will be retained before being permanently deleted. */
         public int $retentionPeriodInDays,
+        /** The current state of the audit log configuration for the organization. */
         public AuditLogConfigurationState $state,
+        /** The Audit Log Stream currently configured for the organization, if any. */
         public ?AuditLogConfigurationLogStream $logStream = null,
     ) {
     }

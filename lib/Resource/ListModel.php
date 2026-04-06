@@ -12,6 +12,7 @@ readonly class ListModel implements \JsonSerializable
 
     public function __construct(
         public string $object,
+        /** The list of records for the current page. */
         public array $data,
     ) {
     }

@@ -11,8 +11,11 @@ readonly class UserIdentitiesGetItem implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The unique ID of the user in the external identity provider. */
         public string $idpId,
+        /** The type of the identity. */
         public string $type,
+        /** The type of OAuth provider for the identity. */
         public UserIdentitiesGetItemProvider $provider,
     ) {
     }

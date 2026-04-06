@@ -11,7 +11,9 @@ readonly class UpdateUserOrganizationMembership implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`. */
         public ?string $roleSlug = null,
+        /** An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`. */
         public ?array $roleSlugs = null,
     ) {
     }

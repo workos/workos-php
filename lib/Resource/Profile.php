@@ -11,19 +11,33 @@ readonly class Profile implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the profile object. */
         public string $object,
+        /** Unique identifier of the profile. */
         public string $id,
+        /** The ID of the organization the user belongs to. */
         public ?string $organizationId,
+        /** The ID of the SSO connection used for authentication. */
         public string $connectionId,
+        /** The type of SSO connection. */
         public ProfileConnectionType $connectionType,
+        /** The user's unique identifier from the identity provider. */
         public string $idpId,
+        /** The user's email address. */
         public string $email,
+        /** The user's first name. */
         public ?string $firstName,
+        /** The user's last name. */
         public ?string $lastName,
+        /** The complete set of raw attributes returned by the identity provider. */
         public array $rawAttributes,
+        /** The role assigned to the user within the organization, if applicable. */
         public ?SlimRole $role = null,
+        /** The roles assigned to the user within the organization, if applicable. */
         public ?array $roles = null,
+        /** The groups the user belongs to, as returned by the identity provider. */
         public ?array $groups = null,
+        /** Custom attribute mappings defined for the connection, returned as key-value pairs. */
         public ?array $customAttributes = null,
     ) {
     }

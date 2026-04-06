@@ -11,10 +11,14 @@ readonly class EmailChange implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the email change object. */
         public string $object,
         public User $user,
+        /** The new email address the user is changing to. */
         public string $newEmail,
+        /** The timestamp when the email change code expires. */
         public \DateTimeImmutable $expiresAt,
+        /** The timestamp when the email change challenge was created. */
         public \DateTimeImmutable $createdAt,
     ) {
     }

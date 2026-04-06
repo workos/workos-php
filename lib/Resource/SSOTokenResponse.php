@@ -11,10 +11,15 @@ readonly class SSOTokenResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The type of token issued. */
         public string $tokenType,
+        /** An access token that can be exchanged for a user profile. Access tokens are short-lived — see the `expires_in` field for the exact lifetime. */
         public string $accessToken,
+        /** The lifetime of the access token in seconds. */
         public int $expiresIn,
+        /** The user profile returned by the identity provider. */
         public Profile $profile,
+        /** OAuth tokens issued by the identity provider, if available. */
         public ?SSOTokenResponseOAuthToken $oauthTokens = null,
     ) {
     }

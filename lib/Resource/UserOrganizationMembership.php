@@ -11,16 +11,27 @@ readonly class UserOrganizationMembership implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the organization membership object. */
         public string $object,
+        /** The unique ID of the organization membership. */
         public string $id,
+        /** The ID of the user. */
         public string $userId,
+        /** The ID of the organization which the user belongs to. */
         public string $organizationId,
+        /** The status of the organization membership. One of `active`, `inactive`, or `pending`. */
         public UserOrganizationMembershipStatus $status,
+        /** Whether this organization membership is managed by a directory sync connection. */
         public bool $directoryManaged,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The primary role assigned to the user within the organization. */
         public SlimRole $role,
+        /** The name of the organization which the user belongs to. */
         public ?string $organizationName = null,
+        /** An object containing IdP-sourced attributes from the linked [Directory User](https://workos.com/docs/reference/directory-sync/directory-user) or [SSO Profile](https://workos.com/docs/reference/sso/profile). Directory User attributes take precedence when both are linked. */
         public ?array $customAttributes = null,
     ) {
     }

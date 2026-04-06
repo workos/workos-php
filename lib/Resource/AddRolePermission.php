@@ -11,6 +11,7 @@ readonly class AddRolePermission implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The slug of the permission to add to the role. */
         public string $slug,
     ) {
     }

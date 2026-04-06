@@ -11,7 +11,9 @@ readonly class DataIntegrationsGetUserTokenRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A [User](https://workos.com/docs/reference/authkit/user) identifier. */
         public string $userId,
+        /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. */
         public ?string $organizationId = null,
     ) {
     }

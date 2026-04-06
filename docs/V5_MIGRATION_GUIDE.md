@@ -381,16 +381,16 @@ The old `new UserManagement($encryptor)` customization point was also removed.
 
 #### Several User Management methods were renamed
 
-| v4 | v5 |
-| --- | --- |
-| `createUser()` | `userManagement()->createUsers()` |
-| `createOrganizationMembership()` | `userManagement()->createOrganizationMemberships()` |
-| `sendInvitation()` | `userManagement()->createInvitations()` |
-| `findInvitationByToken()` | `userManagement()->getByToken()` |
+| v4                                       | v5                                                          |
+| ---------------------------------------- | ----------------------------------------------------------- |
+| `createUser()`                           | `userManagement()->createUsers()`                           |
+| `createOrganizationMembership()`         | `userManagement()->createOrganizationMemberships()`         |
+| `sendInvitation()`                       | `userManagement()->createInvitations()`                     |
+| `findInvitationByToken()`                | `userManagement()->getByToken()`                            |
 | `authenticateWithSelectedOrganization()` | `userManagement()->authenticateWithOrganizationSelection()` |
-| `verifyEmail()` | `userManagement()->confirmEmailVerification()` |
-| `resetPassword()` | `userManagement()->confirmPasswordReset()` |
-| `listSessions()` | `userManagement()->listUserSessions()` |
+| `verifyEmail()`                          | `userManagement()->confirmEmailVerification()`              |
+| `resetPassword()`                        | `userManagement()->confirmPasswordReset()`                  |
+| `listSessions()`                         | `userManagement()->listUserSessions()`                      |
 
 #### Deprecated methods were removed
 
@@ -414,12 +414,12 @@ Notable differences:
 
 #### `DirectorySync` method names are more explicit
 
-| v4 | v5 |
-| --- | --- |
+| v4             | v5                                       |
+| -------------- | ---------------------------------------- |
 | `listGroups()` | `directorySync()->listDirectoryGroups()` |
-| `getGroup()` | `directorySync()->getDirectoryGroup()` |
-| `listUsers()` | `directorySync()->listDirectoryUsers()` |
-| `getUser()` | `directorySync()->getDirectoryUser()` |
+| `getGroup()`   | `directorySync()->getDirectoryGroup()`   |
+| `listUsers()`  | `directorySync()->listDirectoryUsers()`  |
+| `getUser()`    | `directorySync()->getDirectoryUser()`    |
 
 The API also moved from direct construction to `$workos->directorySync()`.
 
@@ -452,10 +452,10 @@ $result = $workos->multiFactorAuth()->verifyChallenge(
 
 #### User-scoped MFA APIs moved here from `UserManagement`
 
-| v4 | v5 |
-| --- | --- |
+| v4                   | v5                                           |
+| -------------------- | -------------------------------------------- |
 | `enrollAuthFactor()` | `multiFactorAuth()->createUserAuthFactors()` |
-| `listAuthFactors()` | `multiFactorAuth()->listUserAuthFactors()` |
+| `listAuthFactors()`  | `multiFactorAuth()->listUserAuthFactors()`   |
 
 ### Organizations, Admin Portal, Feature Flags, and Authorization
 
@@ -497,14 +497,14 @@ $authorization = $workos->authorization();
 
 The environment-role method names were renamed:
 
-| v4 | v5 |
-| --- | --- |
-| `createEnvironmentRole()` | `authorization()->createRoles()` |
-| `listEnvironmentRoles()` | `authorization()->listRoles()` |
-| `getEnvironmentRole()` | `authorization()->getRole()` |
-| `updateEnvironmentRole()` | `authorization()->updateRole()` |
+| v4                                | v5                                         |
+| --------------------------------- | ------------------------------------------ |
+| `createEnvironmentRole()`         | `authorization()->createRoles()`           |
+| `listEnvironmentRoles()`          | `authorization()->listRoles()`             |
+| `getEnvironmentRole()`            | `authorization()->getRole()`               |
+| `updateEnvironmentRole()`         | `authorization()->updateRole()`            |
 | `setEnvironmentRolePermissions()` | `authorization()->updateRolePermissions()` |
-| `addEnvironmentRolePermission()` | `authorization()->createRolePermissions()` |
+| `addEnvironmentRolePermission()`  | `authorization()->createRolePermissions()` |
 
 Organization-role APIs also moved from `Organizations` / `RBAC` into `authorization()`.
 
@@ -547,12 +547,12 @@ The same pattern applies anywhere the new runtime uses `RequestOptions`.
 
 #### `AuditLogs` is now accessed through the client, and several methods were renamed
 
-| v4 | v5 |
-| --- | --- |
-| `createEvent()` | `auditLogs()->createEvents()` |
-| `createExport()` | `auditLogs()->createExports()` |
+| v4               | v5                                   |
+| ---------------- | ------------------------------------ |
+| `createEvent()`  | `auditLogs()->createEvents()`        |
+| `createExport()` | `auditLogs()->createExports()`       |
 | `createSchema()` | `auditLogs()->createActionSchemas()` |
-| `schemaExists()` | removed |
+| `schemaExists()` | removed                              |
 
 There is no direct `schemaExists()` helper in v5. Call `listActionSchemas()` and handle `NotFoundException` if you need equivalent behavior.
 
@@ -608,9 +608,9 @@ $workos->passwordless()->sendSession($session['id']);
 
 The Vault API was expanded and renamed around "objects" instead of "vault objects".
 
-| v4 | v5 |
-| --- | --- |
-| `getVaultObject()` | `vault()->readObject()` |
+| v4                   | v5                       |
+| -------------------- | ------------------------ |
+| `getVaultObject()`   | `vault()->readObject()`  |
 | `listVaultObjects()` | `vault()->listObjects()` |
 
 Additional Vault capabilities were added in v5, including object version listing, object creation/update/delete, data-key APIs, and local encrypt/decrypt helpers.

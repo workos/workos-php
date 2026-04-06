@@ -11,6 +11,7 @@ readonly class AuditLogsRetentionJson implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The number of days Audit Log events will be retained before being permanently deleted. Valid values are 30 and 365. */
         public ?int $retentionPeriodInDays,
     ) {
     }

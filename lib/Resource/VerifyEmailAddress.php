@@ -11,6 +11,7 @@ readonly class VerifyEmailAddress implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The one-time email verification code. */
         public string $code,
     ) {
     }

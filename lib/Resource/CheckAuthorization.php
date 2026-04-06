@@ -11,9 +11,13 @@ readonly class CheckAuthorization implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The slug of the permission to check. */
         public string $permissionSlug,
+        /** The ID of the resource. */
         public ?string $resourceId = null,
+        /** The external ID of the resource. */
         public ?string $resourceExternalId = null,
+        /** The slug of the resource type. */
         public ?string $resourceTypeSlug = null,
     ) {
     }

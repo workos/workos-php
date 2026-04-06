@@ -11,6 +11,7 @@ readonly class CreatePasswordResetToken implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address of the user requesting a password reset. */
         public string $email,
     ) {
     }

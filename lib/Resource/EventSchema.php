@@ -6,16 +6,23 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** An event emitted by WorkOS. */
 readonly class EventSchema implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Event object. */
         public string $object,
+        /** Unique identifier for the Event. */
         public string $id,
+        /** The type of event that occurred. */
         public string $event,
+        /** The event payload. */
         public array $data,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** Additional context about the event. */
         public ?array $context = null,
     ) {
     }

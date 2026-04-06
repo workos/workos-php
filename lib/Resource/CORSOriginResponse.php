@@ -11,10 +11,15 @@ readonly class CORSOriginResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the CORS origin object. */
         public string $object,
+        /** Unique identifier of the CORS origin. */
         public string $id,
+        /** The origin URL. */
         public string $origin,
+        /** Timestamp when the CORS origin was created. */
         public \DateTimeImmutable $createdAt,
+        /** Timestamp when the CORS origin was last updated. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

@@ -11,13 +11,21 @@ readonly class EmailVerification implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the email verification object. */
         public string $object,
+        /** The unique ID of the email verification code. */
         public string $id,
+        /** The unique ID of the user. */
         public string $userId,
+        /** The email address of the user. */
         public string $email,
+        /** The timestamp when the email verification code expires. */
         public \DateTimeImmutable $expiresAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The code used to verify the email. */
         public string $code,
     ) {
     }

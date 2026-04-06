@@ -11,10 +11,15 @@ readonly class AuthenticationFactorsCreateRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The type of factor to enroll. */
         public AuthenticationFactorsCreateRequestType $type,
+        /** Required when type is 'sms'. */
         public ?string $phoneNumber = null,
+        /** Required when type is 'totp'. */
         public ?string $totpIssuer = null,
+        /** Required when type is 'totp'. */
         public ?string $totpUser = null,
+        /** The ID of the user to associate the factor with. */
         public ?string $userId = null,
     ) {
     }

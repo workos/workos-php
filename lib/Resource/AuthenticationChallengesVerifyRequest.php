@@ -11,6 +11,7 @@ readonly class AuthenticationChallengesVerifyRequest implements \JsonSerializabl
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The one-time code to verify. */
         public string $code,
     ) {
     }

@@ -11,7 +11,9 @@ readonly class OrganizationDomainData implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The domain value. */
         public string $domain,
+        /** The verification state of the domain. */
         public OrganizationDomainDataState $state,
     ) {
     }

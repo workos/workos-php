@@ -6,15 +6,21 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** TOTP-based authentication factor details. Includes enrollment secrets only available at creation time. */
 readonly class AuthenticationFactorEnrolledTotp implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Your application or company name displayed in the user's authenticator app. Defaults to your WorkOS team name. */
         public string $issuer,
+        /** The user's account name displayed in their authenticator app. Defaults to the user's email. */
         public string $user,
+        /** TOTP secret that can be manually entered into some authenticator apps in place of scanning a QR code. */
         public string $secret,
+        /** Base64 encoded image containing scannable QR code. */
         public string $qrCode,
+        /** The `otpauth` URI that is encoded by the provided `qr_code`. */
         public string $uri,
     ) {
     }

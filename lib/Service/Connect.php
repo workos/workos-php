@@ -18,6 +18,24 @@ class Connect
     ) {
     }
 
+    /**
+     * Complete external authentication
+     *
+     * Completes an external authentication flow and returns control to AuthKit. This endpoint is used with [Standalone Connect](https://workos.com/docs/authkit/connect/standalone) to bridge your existing authentication system with the Connect OAuth API infrastructure.
+     *
+     * After successfully authenticating a user in your application, calling this endpoint will:
+     *
+     * - Create or update the user in AuthKit, using the given `id` as its `external_id`.
+     * - Return a `redirect_uri` your application should redirect to in order for AuthKit to complete the flow
+     *
+     * Users are automatically created or updated based on the `id` and `email` provided. If a user with the same `id` exists, their information is updated. Otherwise, a new user is created.
+     *
+     * If you provide a new `id` with an `email` that already belongs to an existing user, the request will fail with an error as email addresses are unique to a user.
+     * @param string $externalAuthId Identifier provided when AuthKit redirected to your login page.
+     * @param \WorkOS\Resource\UserObject $user The user to create or update in AuthKit.
+     * @param array<\WorkOS\Resource\UserConsentOption>|null $userConsentOptions Array of [User Consent Options](https://workos.com/docs/reference/workos-connect/standalone/user-consent-options) to store with the session.
+     * @return \WorkOS\Resource\ExternalAuthCompleteResponse
+     */
     public function completeOAuth2(
         string $externalAuthId,
         \WorkOS\Resource\UserObject $user,
@@ -38,6 +56,17 @@ class Connect
         return ExternalAuthCompleteResponse::fromArray($response);
     }
 
+    /**
+     * List Connect Applications
+     *
+     * List all Connect Applications in the current environment with optional filtering.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\ApplicationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $organizationId Filter Connect Applications by organization ID.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listApplications(
         ?string $before = null,
         ?string $after = null,
@@ -62,6 +91,12 @@ class Connect
         );
     }
 
+    /**
+     * Create a Connect Application
+     *
+     * Create a new Connect Application. Supports both OAuth and Machine-to-Machine (M2M) application types.
+     * @return \WorkOS\Resource\ConnectApplication
+     */
     public function createApplications(
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
@@ -76,6 +111,16 @@ class Connect
         return ConnectApplication::fromArray($response);
     }
 
+    /**
+     * @param string|null $name
+     * @param string|null $isFirstParty
+     * @param string|null $description
+     * @param string|null $scopes
+     * @param string|null $redirectUris
+     * @param string|null $usesPkce
+     * @param string|null $organizationId
+     * @return \WorkOS\Resource\ConnectApplication
+     */
     public function createOAuthApplication(
         ?string $name = null,
         ?string $isFirstParty = null,
@@ -106,6 +151,13 @@ class Connect
         return ConnectApplication::fromArray($response);
     }
 
+    /**
+     * @param string|null $name
+     * @param string|null $organizationId
+     * @param string|null $description
+     * @param string|null $scopes
+     * @return \WorkOS\Resource\ConnectApplication
+     */
     public function createM2MApplication(
         ?string $name = null,
         ?string $organizationId = null,
@@ -130,6 +182,13 @@ class Connect
         return ConnectApplication::fromArray($response);
     }
 
+    /**
+     * Get a Connect Application
+     *
+     * Retrieve details for a specific Connect Application by ID or client ID.
+     * @param string $id The application ID or client ID of the Connect Application.
+     * @return \WorkOS\Resource\ConnectApplication
+     */
     public function getApplication(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -142,6 +201,17 @@ class Connect
         return ConnectApplication::fromArray($response);
     }
 
+    /**
+     * Update a Connect Application
+     *
+     * Update an existing Connect Application. For OAuth applications, you can update redirect URIs. For all applications, you can update the name, description, and scopes.
+     * @param string $id The application ID or client ID of the Connect Application.
+     * @param string|null $name The name of the application.
+     * @param string|null|null $description A description for the application.
+     * @param array<string>|null|null $scopes The OAuth scopes granted to the application.
+     * @param array<\WorkOS\Resource\RedirectUriDto>|null|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
+     * @return \WorkOS\Resource\ConnectApplication
+     */
     public function updateApplication(
         string $id,
         ?string $name = null,
@@ -165,6 +235,13 @@ class Connect
         return ConnectApplication::fromArray($response);
     }
 
+    /**
+     * Delete a Connect Application
+     *
+     * Delete an existing Connect Application.
+     * @param string $id The application ID or client ID of the Connect Application.
+     * @return void
+     */
     public function deleteApplication(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -176,6 +253,13 @@ class Connect
         );
     }
 
+    /**
+     * List Client Secrets for a Connect Application
+     *
+     * List all client secrets associated with a Connect Application.
+     * @param string $id The application ID or client ID of the Connect Application.
+     * @return array
+     */
     public function listApplicationClientSecrets(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -188,6 +272,13 @@ class Connect
         return array_map(fn ($item) => ApplicationCredentialsListItem::fromArray($item), $response);
     }
 
+    /**
+     * Create a new client secret for a Connect Application
+     *
+     * Create new secrets for a Connect Application.
+     * @param string $id The application ID or client ID of the Connect Application.
+     * @return \WorkOS\Resource\NewConnectApplicationSecret
+     */
     public function createApplicationClientSecrets(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -203,6 +294,13 @@ class Connect
         return NewConnectApplicationSecret::fromArray($response);
     }
 
+    /**
+     * Delete a Client Secret
+     *
+     * Delete (revoke) an existing client secret.
+     * @param string $id The unique ID of the client secret.
+     * @return void
+     */
     public function deleteClientSecret(
         string $id,
         ?\WorkOS\RequestOptions $options = null,

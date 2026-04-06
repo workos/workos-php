@@ -11,9 +11,13 @@ readonly class CreateRole implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A unique slug for the role. */
         public string $slug,
+        /** A descriptive name for the role. */
         public string $name,
+        /** An optional description of the role. */
         public ?string $description = null,
+        /** The slug of the resource type the role is scoped to. */
         public ?string $resourceTypeSlug = null,
     ) {
     }

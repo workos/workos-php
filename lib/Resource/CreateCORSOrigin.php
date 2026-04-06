@@ -11,6 +11,7 @@ readonly class CreateCORSOrigin implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The origin URL to allow for CORS requests. */
         public string $origin,
     ) {
     }

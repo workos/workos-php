@@ -11,8 +11,11 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The HTTPS URL where webhooks will be sent. */
         public ?string $endpointUrl = null,
+        /** Whether the Webhook Endpoint is enabled or disabled. */
         public ?UpdateWebhookEndpointStatus $status = null,
+        /** The events that the Webhook Endpoint is subscribed to. */
         public ?array $events = null,
     ) {
     }

@@ -11,13 +11,21 @@ readonly class AuthenticateResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The corresponding [user](https://workos.com/docs/reference/authkit/user) object. */
         public User $user,
+        /** A JWT containing information about the current session. */
         public string $accessToken,
+        /** [Exchange this token](https://workos.com/docs/reference/authkit/authentication/refresh-token) for a new access token. */
         public string $refreshToken,
+        /** The ID of the organization the user selected to sign in to. */
         public ?string $organizationId = null,
+        /** An authorization code that can be exchanged for tokens by a different application. */
         public ?string $authkitAuthorizationCode = null,
+        /** The authentication method used to initiate the session. */
         public ?AuthenticateResponseAuthenticationMethod $authenticationMethod = null,
+        /** Information about the impersonator if this session was created via impersonation. */
         public ?AuthenticateResponseImpersonator $impersonator = null,
+        /** The OAuth tokens from the identity provider, if applicable. */
         public ?AuthenticateResponseOAuthToken $oauthTokens = null,
     ) {
     }

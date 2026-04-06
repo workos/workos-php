@@ -6,13 +6,17 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The resource to which the role is assigned. */
 readonly class RoleAssignmentResource implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The unique ID of the Resource. */
         public string $id,
+        /** An identifier you provide to reference the resource in your system. */
         public string $externalId,
+        /** The slug of the resource type this resource belongs to. */
         public string $resourceTypeSlug,
     ) {
     }

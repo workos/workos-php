@@ -11,7 +11,9 @@ readonly class AuditLogEventContext implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** IP Address or some other geolocation identifier. */
         public string $location,
+        /** User agent string. */
         public ?string $userAgent = null,
     ) {
     }

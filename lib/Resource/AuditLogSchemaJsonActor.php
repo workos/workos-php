@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The metadata schema for the actor. */
 readonly class AuditLogSchemaJsonActor implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The JSON Schema definition for actor metadata. */
         public array $metadata,
     ) {
     }

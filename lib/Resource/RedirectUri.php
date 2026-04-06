@@ -11,11 +11,17 @@ readonly class RedirectUri implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The object type. */
         public string $object,
+        /** The ID of the redirect URI. */
         public string $id,
+        /** The redirect URI. */
         public string $uri,
+        /** Whether this is the default redirect URI. */
         public bool $default,
+        /** The timestamp when the redirect URI was created. */
         public string $createdAt,
+        /** The timestamp when the redirect URI was last updated. */
         public string $updatedAt,
     ) {
     }

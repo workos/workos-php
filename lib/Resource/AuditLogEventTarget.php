@@ -11,9 +11,13 @@ readonly class AuditLogEventTarget implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Target identifier. */
         public string $id,
+        /** Target type. */
         public string $type,
+        /** Optional target name. */
         public ?string $name = null,
+        /** Additional data associated with the event or entity. */
         public ?array $metadata = null,
     ) {
     }

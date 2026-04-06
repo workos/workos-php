@@ -11,7 +11,9 @@ readonly class UpdateAuthorizationPermission implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A descriptive name for the Permission. */
         public ?string $name = null,
+        /** An optional description of the Permission. */
         public ?string $description = null,
     ) {
     }

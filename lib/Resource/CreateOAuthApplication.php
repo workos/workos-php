@@ -11,13 +11,21 @@ readonly class CreateOAuthApplication implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The name of the application. */
         public string $name,
+        /** The type of application to create. */
         public string $applicationType,
+        /** Whether this is a first-party application. Third-party applications require an organization_id. */
         public bool $isFirstParty,
+        /** A description for the application. */
         public ?string $description = null,
+        /** The OAuth scopes granted to the application. */
         public ?array $scopes = null,
+        /** Redirect URIs for the application. */
         public ?array $redirectUris = null,
+        /** Whether the application uses PKCE (Proof Key for Code Exchange). */
         public ?bool $usesPkce = null,
+        /** The organization ID this application belongs to. Required when is_first_party is false. */
         public ?string $organizationId = null,
     ) {
     }

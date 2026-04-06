@@ -11,6 +11,7 @@ readonly class IntentOptions implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** SSO-specific options for the Admin Portal. */
         public SSOIntentOptions $sso,
     ) {
     }

@@ -11,14 +11,23 @@ readonly class DirectoryGroup implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Directory Group object. */
         public string $object,
+        /** Unique identifier for the Directory Group. */
         public string $id,
+        /** Unique identifier for the group, assigned by the Directory Provider. Different Directory Providers use different ID formats. */
         public string $idpId,
+        /** The identifier of the Directory the Directory Group belongs to. */
         public string $directoryId,
+        /** The identifier for the Organization in which the Directory resides. */
         public string $organizationId,
+        /** The name of the Directory Group. */
         public string $name,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The raw attributes received from the directory provider. */
         public ?array $rawAttributes = null,
     ) {
     }

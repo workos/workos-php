@@ -11,6 +11,7 @@ readonly class CreateRedirectUri implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The redirect URI to create. */
         public string $uri,
     ) {
     }

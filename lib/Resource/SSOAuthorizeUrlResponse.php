@@ -11,6 +11,7 @@ readonly class SSOAuthorizeUrlResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** An OAuth 2.0 authorization URL. */
         public string $url,
     ) {
     }

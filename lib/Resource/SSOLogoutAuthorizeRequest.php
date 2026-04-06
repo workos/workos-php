@@ -11,6 +11,7 @@ readonly class SSOLogoutAuthorizeRequest implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The unique ID of the profile to log out. */
         public string $profileId,
     ) {
     }

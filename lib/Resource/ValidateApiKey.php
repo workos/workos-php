@@ -11,6 +11,7 @@ readonly class ValidateApiKey implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The value for an API key. */
         public string $value,
     ) {
     }

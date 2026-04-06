@@ -11,10 +11,15 @@ readonly class UserObject implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Your application's user identifier, which will be stored as an [`external_id`](https://workos.com/docs/authkit/metadata/external-identifiers). Used for upserting and deduplication. */
         public string $id,
+        /** The user's email address. */
         public string $email,
+        /** The user's first name. */
         public ?string $firstName = null,
+        /** The user's last name. */
         public ?string $lastName = null,
+        /** A set of key-value pairs to attach to the user. */
         public ?array $metadata = null,
     ) {
     }

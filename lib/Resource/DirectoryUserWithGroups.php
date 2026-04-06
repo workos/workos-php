@@ -11,24 +11,42 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Directory User object. */
         public string $object,
+        /** Unique identifier for the Directory User. */
         public string $id,
+        /** The identifier of the Directory the Directory User belongs to. */
         public string $directoryId,
+        /** The identifier for the Organization in which the Directory resides. */
         public string $organizationId,
+        /** Unique identifier for the user, assigned by the Directory Provider. Different Directory Providers use different ID formats. */
         public string $idpId,
+        /** The email address of the user. */
         public ?string $email,
+        /** The state of the user. */
         public DirectoryUserWithGroupsState $state,
+        /** The raw attributes received from the directory provider. */
         public array $rawAttributes,
+        /** An object containing the custom attribute mapping for the Directory Provider. */
         public array $customAttributes,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The directory groups the user belongs to. */
         public array $groups,
+        /** The first name of the user. */
         public ?string $firstName = null,
+        /** The last name of the user. */
         public ?string $lastName = null,
+        /** A list of email addresses for the user. */
         public ?array $emails = null,
+        /** The job title of the user. */
         public ?string $jobTitle = null,
+        /** The username of the user. */
         public ?string $username = null,
         public ?SlimRole $role = null,
+        /** All roles assigned to the user. */
         public ?array $roles = null,
     ) {
     }

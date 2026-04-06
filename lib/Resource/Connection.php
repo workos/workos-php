@@ -11,16 +11,30 @@ readonly class Connection implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Connection object. */
         public string $object,
+        /** Unique identifier for the Connection. */
         public string $id,
+        /** The type of the SSO Connection used to authenticate the user. The Connection type may be used to dynamically generate authorization URLs. */
         public ConnectionType $connectionType,
+        /** A human-readable name for the Connection. This will most commonly be the organization's name. */
         public string $name,
+        /** Indicates whether a Connection is able to authenticate users. */
         public ConnectionState $state,
+        /**
+         * Deprecated. Use `state` instead.
+         * @deprecated
+         */
         public ConnectionStatus $status,
+        /** List of Organization Domains. */
         public array $domains,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** Unique identifier for the Organization in which the Connection resides. */
         public ?string $organizationId = null,
+        /** Configuration options for SAML connections. Only present for SAML connection types. */
         public ?ConnectionOption $options = null,
     ) {
     }

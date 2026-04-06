@@ -11,7 +11,9 @@ readonly class RedirectUriDto implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The redirect URI. */
         public string $uri,
+        /** Whether this is the default redirect URI. */
         public ?bool $default = null,
     ) {
     }

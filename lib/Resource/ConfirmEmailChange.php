@@ -11,6 +11,7 @@ readonly class ConfirmEmailChange implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The one-time code used to confirm the email change. */
         public string $code,
     ) {
     }

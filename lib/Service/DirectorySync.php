@@ -17,6 +17,19 @@ class DirectorySync
     ) {
     }
 
+    /**
+     * List Directories
+     *
+     * Get a list of all of your existing directories matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\DirectoriesOrder|null $order Order the results by the creation time.
+     * @param string|null $organizationId Filter Directories by their associated organization.
+     * @param string|null $search Searchable text to match against Directory names.
+     * @param string|null $domain Filter Directories by their associated domain.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listDirectories(
         ?string $before = null,
         ?string $after = null,
@@ -45,6 +58,13 @@ class DirectorySync
         );
     }
 
+    /**
+     * Get a Directory
+     *
+     * Get the details of an existing directory.
+     * @param string $id Unique identifier for the Directory.
+     * @return \WorkOS\Resource\Directory
+     */
     public function getDirectory(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -57,6 +77,13 @@ class DirectorySync
         return Directory::fromArray($response);
     }
 
+    /**
+     * Delete a Directory
+     *
+     * Permanently deletes an existing directory. It cannot be undone.
+     * @param string $id Unique identifier for the Directory.
+     * @return void
+     */
     public function deleteDirectory(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -68,6 +95,18 @@ class DirectorySync
         );
     }
 
+    /**
+     * List Directory Groups
+     *
+     * Get a list of all of existing directory groups matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\DirectoryGroupsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
+     * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listDirectoryGroups(
         ?string $before = null,
         ?string $after = null,
@@ -94,6 +133,13 @@ class DirectorySync
         );
     }
 
+    /**
+     * Get a Directory Group
+     *
+     * Get the details of an existing Directory Group.
+     * @param string $id Unique identifier for the Directory Group.
+     * @return \WorkOS\Resource\DirectoryGroup
+     */
     public function getDirectoryGroup(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -106,6 +152,18 @@ class DirectorySync
         return DirectoryGroup::fromArray($response);
     }
 
+    /**
+     * List Directory Users
+     *
+     * Get a list of all of existing Directory Users matching the criteria specified.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\DirectoryUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
+     * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listDirectoryUsers(
         ?string $before = null,
         ?string $after = null,
@@ -132,6 +190,13 @@ class DirectorySync
         );
     }
 
+    /**
+     * Get a Directory User
+     *
+     * Get the details of an existing Directory User.
+     * @param string $id Unique identifier for the Directory User.
+     * @return \WorkOS\Resource\DirectoryUserWithGroups
+     */
     public function getDirectoryUser(
         string $id,
         ?\WorkOS\RequestOptions $options = null,

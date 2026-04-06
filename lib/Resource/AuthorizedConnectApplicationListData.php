@@ -11,8 +11,11 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the authorized connect application object. */
         public string $object,
+        /** The unique ID of the authorized connect application. */
         public string $id,
+        /** The scopes granted by the user to the application. */
         public array $grantedScopes,
         public ConnectApplication $application,
     ) {

@@ -11,12 +11,19 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the connect application secret object. */
         public string $object,
+        /** The unique ID of the client secret. */
         public string $id,
+        /** A hint showing the last few characters of the secret value. */
         public string $secretHint,
+        /** The timestamp when the client secret was last used, or null if never used. */
         public ?string $lastUsedAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The plaintext secret value. Only returned at creation time and cannot be retrieved later. */
         public string $secret,
     ) {
     }

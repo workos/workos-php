@@ -11,13 +11,21 @@ readonly class PasswordReset implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the password reset object. */
         public string $object,
+        /** The unique ID of the password reset object. */
         public string $id,
+        /** The unique ID of the user. */
         public string $userId,
+        /** The email address of the user. */
         public string $email,
+        /** The timestamp when the password reset token expires. */
         public \DateTimeImmutable $expiresAt,
+        /** The timestamp when the password reset token was created. */
         public \DateTimeImmutable $createdAt,
+        /** The token used to reset the password. */
         public string $passwordResetToken,
+        /** The URL where the user can reset their password. */
         public string $passwordResetUrl,
     ) {
     }

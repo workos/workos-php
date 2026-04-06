@@ -11,15 +11,25 @@ readonly class Role implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A unique slug for the role. */
         public string $slug,
+        /** Distinguishes the role object. */
         public string $object,
+        /** Unique identifier of the role. */
         public string $id,
+        /** A descriptive name for the role. */
         public string $name,
+        /** An optional description of the role. */
         public ?string $description,
+        /** Whether the role is scoped to the environment or an organization. */
         public RoleType $type,
+        /** The slug of the resource type the role is scoped to. */
         public string $resourceTypeSlug,
+        /** The permission slugs assigned to the role. */
         public array $permissions,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
     ) {
     }

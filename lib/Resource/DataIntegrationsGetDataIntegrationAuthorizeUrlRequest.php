@@ -11,8 +11,11 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The ID of the user to authorize. */
         public string $userId,
+        /** An organization ID to scope the authorization to a specific organization. */
         public ?string $organizationId = null,
+        /** The URL to redirect the user to after authorization. */
         public ?string $returnTo = null,
     ) {
     }

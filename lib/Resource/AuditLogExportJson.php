@@ -11,11 +11,17 @@ readonly class AuditLogExportJson implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Audit Log Export object. */
         public string $object,
+        /** The unique ID of the Audit Log Export. */
         public string $id,
+        /** The state of the export. Possible values: pending, ready, error. */
         public AuditLogExportJsonState $state,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** A URL to the CSV file. Only defined when the Audit Log Export is ready. */
         public ?string $url = null,
     ) {
     }

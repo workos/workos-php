@@ -6,15 +6,21 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The Audit Log Stream currently configured for the organization, if any. */
 readonly class AuditLogConfigurationLogStream implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Unique identifier of the Audit Log Stream. */
         public string $id,
+        /** The type of the Audit Log Stream destination. */
         public AuditLogConfigurationLogStreamType $type,
+        /** The current state of the Audit Log Stream. */
         public AuditLogConfigurationLogStreamState $state,
+        /** ISO-8601 timestamp of when the last event was successfully synced, or null if no events have been synced. */
         public ?string $lastSyncedAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
     ) {
     }

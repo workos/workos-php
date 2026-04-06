@@ -6,15 +6,21 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The OAuth tokens from the identity provider, if applicable. */
 readonly class AuthenticateResponseOAuthToken implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The OAuth provider used for authentication. */
         public string $provider,
+        /** The refresh token from the OAuth provider. */
         public string $refreshToken,
+        /** The access token from the OAuth provider. */
         public string $accessToken,
+        /** The timestamp at which the access token expires. */
         public int $expiresAt,
+        /** A list of OAuth scopes for which the access token is authorized. */
         public array $scopes,
     ) {
     }

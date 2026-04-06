@@ -11,13 +11,21 @@ readonly class JwksResponseKeys implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Algorithm. */
         public string $alg,
+        /** Key type. */
         public string $kty,
+        /** Key use (signature). */
         public string $use,
+        /** X.509 certificate chain. */
         public array $x5C,
+        /** RSA modulus. */
         public string $n,
+        /** RSA exponent. */
         public string $e,
+        /** Key ID. */
         public string $kid,
+        /** X.509 certificate SHA-256 thumbprint. */
         public string $x5TS256,
     ) {
     }

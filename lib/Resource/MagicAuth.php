@@ -11,13 +11,21 @@ readonly class MagicAuth implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Magic Auth object. */
         public string $object,
+        /** The unique ID of the Magic Auth code. */
         public string $id,
+        /** The unique ID of the user. */
         public string $userId,
+        /** The email address of the user. */
         public string $email,
+        /** The timestamp when the Magic Auth code expires. */
         public \DateTimeImmutable $expiresAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The code used to verify the Magic Auth code. */
         public string $code,
     ) {
     }

@@ -11,12 +11,19 @@ readonly class AuthenticationChallenge implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the authentication challenge object. */
         public string $object,
+        /** The unique ID of the authentication challenge. */
         public string $id,
+        /** The unique ID of the authentication factor the challenge belongs to. */
         public string $authenticationFactorId,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The timestamp when the challenge will expire. Does not apply to TOTP factors. */
         public ?\DateTimeImmutable $expiresAt = null,
+        /** The one-time code for the challenge. */
         public ?string $code = null,
     ) {
     }

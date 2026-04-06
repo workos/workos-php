@@ -11,10 +11,15 @@ readonly class UpdateAuthorizationResource implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A display name for the resource. */
         public ?string $name = null,
+        /** An optional description of the resource. */
         public ?string $description = null,
+        /** The ID of the parent resource. */
         public ?string $parentResourceId = null,
+        /** The external ID of the parent resource. */
         public ?string $parentResourceExternalId = null,
+        /** The resource type slug of the parent resource. */
         public ?string $parentResourceTypeSlug = null,
     ) {
     }

@@ -11,6 +11,7 @@ readonly class UpdateAuditLogsRetention implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The number of days Audit Log events will be retained. Valid values are `30` and `365`. */
         public int $retentionPeriodInDays,
     ) {
     }

@@ -11,6 +11,7 @@ readonly class RadarStandaloneUpdateRadarListRequest implements \JsonSerializabl
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The value to add to the list. Must match the format of the list type (e.g. a valid IP address for `ip_address`, a valid email for `email`). */
         public string $entry,
     ) {
     }

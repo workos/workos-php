@@ -11,9 +11,13 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The name of the application. */
         public ?string $name = null,
+        /** A description for the application. */
         public ?string $description = null,
+        /** The OAuth scopes granted to the application. */
         public ?array $scopes = null,
+        /** Updated redirect URIs for the application. OAuth applications only. */
         public ?array $redirectUris = null,
     ) {
     }

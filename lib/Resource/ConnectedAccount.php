@@ -11,13 +11,26 @@ readonly class ConnectedAccount implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the connected account object. */
         public string $object,
+        /** The unique identifier of the connected account. */
         public string $id,
+        /** The [User](https://workos.com/docs/reference/authkit/user) identifier associated with this connection. */
         public ?string $userId,
+        /** The [Organization](https://workos.com/docs/reference/organization) identifier associated with this connection, or `null` if not scoped to an organization. */
         public ?string $organizationId,
+        /** The OAuth scopes granted for this connection. */
         public array $scopes,
+        /**
+         * The state of the connected account:
+         * - `connected`: The connection is active and tokens are valid.
+         * - `needs_reauthorization`: The user needs to reauthorize the connection, typically because required scopes have changed.
+         * - `disconnected`: The connection has been disconnected.
+         */
         public ConnectedAccountState $state,
+        /** The timestamp when the connection was created. */
         public string $createdAt,
+        /** The timestamp when the connection was last updated. */
         public string $updatedAt,
     ) {
     }

@@ -11,7 +11,9 @@ readonly class UserAuthenticationFactorEnrollResponse implements \JsonSerializab
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The [authentication factor](https://workos.com/docs/reference/authkit/mfa/authentication-factor) object that represents the additional authentication method used on top of the existing authentication strategy. */
         public AuthenticationFactorEnrolled $authenticationFactor,
+        /** The [authentication challenge](https://workos.com/docs/reference/authkit/mfa/authentication-challenge) object that is used to complete the authentication process. */
         public AuthenticationChallenge $authenticationChallenge,
     ) {
     }

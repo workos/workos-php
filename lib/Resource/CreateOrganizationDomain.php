@@ -11,7 +11,9 @@ readonly class CreateOrganizationDomain implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The domain to add to the organization. */
         public string $domain,
+        /** The ID of the organization to add the domain to. */
         public string $organizationId,
     ) {
     }

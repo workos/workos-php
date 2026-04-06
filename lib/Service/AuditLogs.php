@@ -19,6 +19,13 @@ class AuditLogs
     ) {
     }
 
+    /**
+     * Get Retention
+     *
+     * Get the configured event retention period for the given Organization.
+     * @param string $id Unique identifier of the Organization.
+     * @return \WorkOS\Resource\AuditLogsRetentionJson
+     */
     public function listOrganizationAuditLogsRetention(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
@@ -31,6 +38,14 @@ class AuditLogs
         return AuditLogsRetentionJson::fromArray($response);
     }
 
+    /**
+     * Set Retention
+     *
+     * Set the event retention period for the given Organization.
+     * @param string $id Unique identifier of the Organization.
+     * @param int $retentionPeriodInDays The number of days Audit Log events will be retained. Valid values are `30` and `365`.
+     * @return \WorkOS\Resource\AuditLogsRetentionJson
+     */
     public function updateOrganizationAuditLogsRetention(
         string $id,
         int $retentionPeriodInDays,
@@ -48,6 +63,16 @@ class AuditLogs
         return AuditLogsRetentionJson::fromArray($response);
     }
 
+    /**
+     * List Actions
+     *
+     * Get a list of all Audit Log actions in the current environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuditLogsOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listActions(
         ?string $before = null,
         ?string $after = null,
@@ -70,6 +95,17 @@ class AuditLogs
         );
     }
 
+    /**
+     * List Schemas
+     *
+     * Get a list of all schemas for the Audit Logs action identified by `:name`.
+     * @param string $actionName The name of the Audit Log action.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
+     * @param \WorkOS\Resource\AuditLogsOrder|null $order Order the results by the creation time.
+     * @return \WorkOS\PaginatedResponse
+     */
     public function listActionSchemas(
         string $actionName,
         ?string $before = null,
@@ -93,6 +129,16 @@ class AuditLogs
         );
     }
 
+    /**
+     * Create Schema
+     *
+     * Creates a new Audit Log schema used to validate the payload of incoming Audit Log Events. If the `action` does not exist, it will also be created.
+     * @param string $actionName The name of the Audit Log action.
+     * @param \WorkOS\Resource\AuditLogSchemaActor|null $actor The metadata schema for the actor.
+     * @param array<\WorkOS\Resource\AuditLogSchemaTarget> $targets The list of targets for the schema.
+     * @param array<string, mixed>|null $metadata Optional JSON schema for event metadata.
+     * @return \WorkOS\Resource\AuditLogSchemaJson
+     */
     public function createActionSchemas(
         string $actionName,
         array $targets,
@@ -114,6 +160,20 @@ class AuditLogs
         return AuditLogSchemaJson::fromArray($response);
     }
 
+    /**
+     * Create Event
+     *
+     * Create an Audit Log Event.
+     *
+     * This API supports idempotency which guarantees that performing the same operation multiple times will have the same result as if the operation were performed only once. This is handy in situations where you may need to retry a request due to a failure or prevent accidental duplicate requests from creating more than one resource.
+     *
+     * To achieve idempotency, you can add `Idempotency-Key` request header to a Create Event request with a unique string as the value. Each subsequent request matching this unique string will return the same response. We suggest using [v4 UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier) for idempotency keys to avoid collisions.
+     *
+     * Idempotency keys expire after 24 hours. The API will generate a new response if you submit a request with an expired key.
+     * @param string $organizationId The unique ID of the Organization.
+     * @param \WorkOS\Resource\AuditLogEvent $event The audit log event to create.
+     * @return \WorkOS\Resource\AuditLogEventCreateResponse
+     */
     public function createEvents(
         string $organizationId,
         \WorkOS\Resource\AuditLogEvent $event,
@@ -132,6 +192,20 @@ class AuditLogs
         return AuditLogEventCreateResponse::fromArray($response);
     }
 
+    /**
+     * Create Export
+     *
+     * Create an Audit Log Export. Exports are scoped to a single organization within a specified date range.
+     * @param string $organizationId The unique ID of the Organization.
+     * @param string $rangeStart ISO-8601 value for start of the export range.
+     * @param string $rangeEnd ISO-8601 value for end of the export range.
+     * @param array<string>|null $actions List of actions to filter against.
+     * @param array<string>|null $actors (deprecated) Deprecated. Use `actor_names` instead.
+     * @param array<string>|null $actorNames List of actor names to filter against.
+     * @param array<string>|null $actorIds List of actor IDs to filter against.
+     * @param array<string>|null $targets List of target types to filter against.
+     * @return \WorkOS\Resource\AuditLogExportJson
+     */
     public function createExports(
         string $organizationId,
         string $rangeStart,
@@ -162,6 +236,13 @@ class AuditLogs
         return AuditLogExportJson::fromArray($response);
     }
 
+    /**
+     * Get Export
+     *
+     * Get an Audit Log Export. The URL will expire after 10 minutes. If the export is needed again at a later time, refetching the export will regenerate the URL.
+     * @param string $auditLogExportId The unique ID of the Audit Log Export.
+     * @return \WorkOS\Resource\AuditLogExportJson
+     */
     public function getExport(
         string $auditLogExportId,
         ?\WorkOS\RequestOptions $options = null,

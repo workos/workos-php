@@ -11,11 +11,17 @@ readonly class CreateUserInviteOptions implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** The email address of the recipient. */
         public string $email,
+        /** The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join. */
         public ?string $organizationId = null,
+        /** The [role](https://workos.com/docs/authkit/roles) that the recipient will receive when they join the organization in the invitation. */
         public ?string $roleSlug = null,
+        /** How many days the invitations will be valid for. Must be between 1 and 30 days. Defaults to 7 days if not specified. */
         public ?int $expiresInDays = null,
+        /** The ID of the [user](https://workos.com/docs/reference/authkit/user) who invites the recipient. The invitation email will mention the name of this user. */
         public ?string $inviterUserId = null,
+        /** The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization). */
         public ?CreateUserInviteOptionsLocale $locale = null,
     ) {
     }
