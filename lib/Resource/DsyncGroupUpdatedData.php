@@ -28,8 +28,12 @@ readonly class DsyncGroupUpdatedData implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** The raw attributes received from the directory provider. */
+        /**
+         * The raw attributes received from the directory provider.
+         * @var array<string, mixed>|null
+         */
         public ?array $rawAttributes = null,
+        /** @var array<string, mixed>|null */
         public ?array $previousAttributes = null,
     ) {
     }

@@ -18,11 +18,17 @@ readonly class EventSchema implements \JsonSerializable
         public string $id,
         /** The type of event that occurred. */
         public string $event,
-        /** The event payload. */
+        /**
+         * The event payload.
+         * @var array<string, mixed>
+         */
         public array $data,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
-        /** Additional context about the event. */
+        /**
+         * Additional context about the event.
+         * @var array<string, mixed>|null
+         */
         public ?array $context = null,
     ) {
     }

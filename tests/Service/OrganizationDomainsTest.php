@@ -19,6 +19,8 @@ class OrganizationDomainsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizationDomains()->createOrganizationDomains(domain: 'test_value', organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organization_domains', $request->getUri()->getPath());
@@ -33,6 +35,8 @@ class OrganizationDomainsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizationDomains()->getOrganizationDomain('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organization_domains/test_id', $request->getUri()->getPath());
@@ -53,6 +57,8 @@ class OrganizationDomainsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizationDomains()->verifyOrganizationDomain('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organization_domains/test_id/verify', $request->getUri()->getPath());

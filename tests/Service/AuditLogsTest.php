@@ -41,22 +41,32 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_audit_log_action_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listActions();
+        $result = $client->auditLogs()->listActions(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/actions', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testListActionSchemas(): void
     {
         $fixture = $this->loadFixture('list_audit_log_schema_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listActionSchemas('test_actionName');
+        $result = $client->auditLogs()->listActionSchemas('test_actionName', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/actions/test_actionName/schemas', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testCreateActionSchemas(): void
@@ -89,6 +99,7 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->createExports(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/exports', $request->getUri()->getPath());
@@ -104,8 +115,25 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->getExport('test_auditLogExportId');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/exports/test_auditLogExportId', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_audit_log_action_json');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->auditLogs()->listActions();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

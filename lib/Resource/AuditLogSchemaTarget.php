@@ -13,7 +13,10 @@ readonly class AuditLogSchemaTarget implements \JsonSerializable
     public function __construct(
         /** The type of the target resource. */
         public string $type,
-        /** Optional JSON schema for target metadata. */
+        /**
+         * Optional JSON schema for target metadata.
+         * @var array<string, mixed>|null
+         */
         public ?array $metadata = null,
     ) {
     }

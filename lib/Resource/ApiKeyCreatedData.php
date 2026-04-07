@@ -24,7 +24,10 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         public string $obfuscatedValue,
         /** The timestamp when the API key was last used. */
         public ?string $lastUsedAt,
-        /** The permissions granted to the API key. */
+        /**
+         * The permissions granted to the API key.
+         * @var array<string>
+         */
         public array $permissions,
         /** The timestamp when the API key was created. */
         public string $createdAt,

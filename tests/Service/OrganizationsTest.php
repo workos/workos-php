@@ -17,11 +17,17 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->listOrganizations();
+        $result = $client->organizations()->listOrganizations(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, domains: [], search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['search']);
     }
 
     public function testCreateOrganizations(): void
@@ -30,6 +36,8 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->createOrganizations(name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations', $request->getUri()->getPath());
@@ -43,6 +51,8 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->getOrganizationByExternalId('test_external_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/external_id/test_external_id', $request->getUri()->getPath());
@@ -54,6 +64,8 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->getOrganization('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
@@ -65,6 +77,8 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->updateOrganization('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
@@ -85,8 +99,25 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->listOrganizationAuditLogConfiguration('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogConfiguration::class, $result);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id/audit_log_configuration', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_organization');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->organizations()->listOrganizations();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

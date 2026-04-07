@@ -13,7 +13,10 @@ readonly class CreateWebhookEndpoint implements \JsonSerializable
     public function __construct(
         /** The HTTPS URL where webhooks will be sent. */
         public string $endpointUrl,
-        /** The events that the Webhook Endpoint is subscribed to. */
+        /**
+         * The events that the Webhook Endpoint is subscribed to.
+         * @var array<\WorkOS\Resource\CreateWebhookEndpointEvents>
+         */
         public array $events,
     ) {
     }

@@ -24,7 +24,10 @@ readonly class OrganizationRoleUpdatedData implements \JsonSerializable
         public ?string $description,
         /** The slug of the resource type the role applies to. */
         public string $resourceTypeSlug,
-        /** The permissions granted by the role. */
+        /**
+         * The permissions granted by the role.
+         * @var array<string>
+         */
         public array $permissions,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

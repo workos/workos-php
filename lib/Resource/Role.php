@@ -25,7 +25,10 @@ readonly class Role implements \JsonSerializable
         public RoleType $type,
         /** The slug of the resource type the role is scoped to. */
         public string $resourceTypeSlug,
-        /** The permission slugs assigned to the role. */
+        /**
+         * The permission slugs assigned to the role.
+         * @var array<string>
+         */
         public array $permissions,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

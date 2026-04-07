@@ -19,6 +19,7 @@ class AdminPortalTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->adminPortal()->generateLink(organization: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\PortalLinkResponse::class, $result);
+        $this->assertSame($fixture['link'], $result->link);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('portal/generate_link', $request->getUri()->getPath());

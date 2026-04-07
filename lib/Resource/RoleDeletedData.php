@@ -22,7 +22,10 @@ readonly class RoleDeletedData implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** The permissions granted by the role. */
+        /**
+         * The permissions granted by the role.
+         * @var array<string>|null
+         */
         public ?array $permissions = null,
     ) {
     }

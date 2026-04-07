@@ -39,11 +39,16 @@ class ApiKeysTest extends TestCase
     {
         $fixture = $this->loadFixture('list_api_key');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId');
+        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testCreateOrganizationApiKeys(): void
@@ -52,10 +57,28 @@ class ApiKeysTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->apiKeys()->createOrganizationApiKeys('test_organizationId', name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ApiKeyWithValue::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['name']);
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_api_key');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

@@ -21,6 +21,7 @@ readonly class VaultDataUpdatedData implements \JsonSerializable
         public string $kvName,
         /** The unique identifier of the encryption key. */
         public string $keyId,
+        /** @var array<string, string> */
         public array $keyContext,
     ) {
     }

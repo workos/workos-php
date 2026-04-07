@@ -17,8 +17,12 @@ readonly class VaultDekReadData implements \JsonSerializable
         public VaultDekReadDataActorSource $actorSource,
         /** The name of the actor. */
         public string $actorName,
-        /** The unique identifiers of the data encryption keys. */
+        /**
+         * The unique identifiers of the data encryption keys.
+         * @var array<string>
+         */
         public array $keyIds,
+        /** @var array<string, string> */
         public array $keyContext,
     ) {
     }

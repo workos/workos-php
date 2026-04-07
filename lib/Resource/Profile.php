@@ -29,15 +29,27 @@ readonly class Profile implements \JsonSerializable
         public ?string $firstName,
         /** The user's last name. */
         public ?string $lastName,
-        /** The complete set of raw attributes returned by the identity provider. */
+        /**
+         * The complete set of raw attributes returned by the identity provider.
+         * @var array<string, mixed>
+         */
         public array $rawAttributes,
         /** The role assigned to the user within the organization, if applicable. */
         public ?SlimRole $role = null,
-        /** The roles assigned to the user within the organization, if applicable. */
+        /**
+         * The roles assigned to the user within the organization, if applicable.
+         * @var array<\WorkOS\Resource\SlimRole>|null|null
+         */
         public ?array $roles = null,
-        /** The groups the user belongs to, as returned by the identity provider. */
+        /**
+         * The groups the user belongs to, as returned by the identity provider.
+         * @var array<string>|null
+         */
         public ?array $groups = null,
-        /** Custom attribute mappings defined for the connection, returned as key-value pairs. */
+        /**
+         * Custom attribute mappings defined for the connection, returned as key-value pairs.
+         * @var array<string, mixed>|null
+         */
         public ?array $customAttributes = null,
     ) {
     }

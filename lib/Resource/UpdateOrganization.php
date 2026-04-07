@@ -17,14 +17,21 @@ readonly class UpdateOrganization implements \JsonSerializable
         public ?bool $allowProfilesOutsideOrganization = null,
         /**
          * The domains associated with the organization. Deprecated in favor of `domain_data`.
+         * @var array<string>|null
          * @deprecated
          */
         public ?array $domains = null,
-        /** The domains associated with the organization, including verification state. */
+        /**
+         * The domains associated with the organization, including verification state.
+         * @var array<\WorkOS\Resource\OrganizationDomainData>|null
+         */
         public ?array $domainData = null,
         /** The Stripe customer ID associated with the organization. */
         public ?string $stripeCustomerId = null,
-        /** Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization. */
+        /**
+         * Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+         * @var array<string, string>|null|null
+         */
         public ?array $metadata = null,
         /** An external identifier for the Organization. */
         public ?string $externalId = null,

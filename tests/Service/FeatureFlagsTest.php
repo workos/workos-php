@@ -17,11 +17,16 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listFeatureFlags();
+        $result = $client->featureFlags()->listFeatureFlags(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('feature-flags', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testGetFeatureFlag(): void
@@ -30,6 +35,8 @@ class FeatureFlagsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->featureFlags()->getFeatureFlag('test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\Flag::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug', $request->getUri()->getPath());
@@ -41,6 +48,8 @@ class FeatureFlagsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->featureFlags()->disableFeatureFlag('test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/disable', $request->getUri()->getPath());
@@ -52,6 +61,8 @@ class FeatureFlagsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->featureFlags()->enableFeatureFlag('test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/enable', $request->getUri()->getPath());
@@ -79,21 +90,47 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listOrganizationFeatureFlags('test_organizationId');
+        $result = $client->featureFlags()->listOrganizationFeatureFlags('test_organizationId', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/feature-flags', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testListUserFeatureFlags(): void
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listUserFeatureFlags('test_userId');
+        $result = $client->featureFlags()->listUserFeatureFlags('test_userId', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_userId/feature-flags', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_flag');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->featureFlags()->listFeatureFlags();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

@@ -19,6 +19,7 @@ class PipesTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->pipes()->authorizeDataIntegration('test_slug', userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationAuthorizeUrlResponse::class, $result);
+        $this->assertSame($fixture['url'], $result->url);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('data-integrations/test_slug/authorize', $request->getUri()->getPath());
@@ -45,6 +46,8 @@ class PipesTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->pipes()->getUserConnectedAccount('test_user_id', 'test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_user_id/connected_accounts/test_slug', $request->getUri()->getPath());

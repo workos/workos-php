@@ -15,7 +15,10 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
         public string $object,
         /** The unique ID of the authorized connect application. */
         public string $id,
-        /** The scopes granted by the user to the application. */
+        /**
+         * The scopes granted by the user to the application.
+         * @var array<string>
+         */
         public array $grantedScopes,
         public ConnectApplication $application,
     ) {

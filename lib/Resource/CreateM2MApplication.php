@@ -19,7 +19,10 @@ readonly class CreateM2MApplication implements \JsonSerializable
         public string $organizationId,
         /** A description for the application. */
         public ?string $description = null,
-        /** The OAuth scopes granted to the application. */
+        /**
+         * The OAuth scopes granted to the application.
+         * @var array<string>|null|null
+         */
         public ?array $scopes = null,
     ) {
     }

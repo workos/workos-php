@@ -26,7 +26,10 @@ readonly class Connection implements \JsonSerializable
          * @deprecated
          */
         public ConnectionStatus $status,
-        /** List of Organization Domains. */
+        /**
+         * List of Organization Domains.
+         * @var array<\WorkOS\Resource\ConnectionDomain>
+         */
         public array $domains,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

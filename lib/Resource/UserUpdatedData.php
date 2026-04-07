@@ -34,7 +34,10 @@ readonly class UserUpdatedData implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** Object containing metadata key/value pairs associated with the user. */
+        /**
+         * Object containing metadata key/value pairs associated with the user.
+         * @var array<string, string>|null
+         */
         public ?array $metadata = null,
         /** The user's preferred locale. */
         public ?string $locale = null,

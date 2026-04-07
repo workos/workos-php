@@ -25,7 +25,10 @@ readonly class UpdateUser implements \JsonSerializable
         public ?string $passwordHash = null,
         /** The algorithm originally used to hash the password, used when providing a `password_hash`. */
         public ?CreateUserPasswordHashType $passwordHashType = null,
-        /** Object containing metadata key/value pairs associated with the user. */
+        /**
+         * Object containing metadata key/value pairs associated with the user.
+         * @var array<string, string>|null|null
+         */
         public ?array $metadata = null,
         /** The external ID of the user. */
         public ?string $externalId = null,

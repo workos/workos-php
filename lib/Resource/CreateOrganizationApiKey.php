@@ -13,7 +13,10 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
     public function __construct(
         /** The name for the API key. */
         public string $name,
-        /** The permission slugs to assign to the API key. */
+        /**
+         * The permission slugs to assign to the API key.
+         * @var array<string>|null
+         */
         public ?array $permissions = null,
     ) {
     }

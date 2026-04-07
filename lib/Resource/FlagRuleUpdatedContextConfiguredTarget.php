@@ -12,9 +12,15 @@ readonly class FlagRuleUpdatedContextConfiguredTarget implements \JsonSerializab
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The organizations targeted by the flag rule. */
+        /**
+         * The organizations targeted by the flag rule.
+         * @var array<\WorkOS\Resource\FlagRuleUpdatedContextConfiguredTargetOrganization>
+         */
         public array $organizations,
-        /** The users targeted by the flag rule. */
+        /**
+         * The users targeted by the flag rule.
+         * @var array<\WorkOS\Resource\FlagRuleUpdatedContextConfiguredTargetUser>
+         */
         public array $users,
     ) {
     }

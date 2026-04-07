@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Exception;
 
 /** @phpstan-consistent-constructor */
-class ApiException extends \Exception
+class ApiException extends \Exception implements WorkOSException
 {
     public function __construct(
         string $message = '',

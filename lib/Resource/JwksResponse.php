@@ -11,7 +11,10 @@ readonly class JwksResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The public keys used for verifying access tokens. */
+        /**
+         * The public keys used for verifying access tokens.
+         * @var array<\WorkOS\Resource\JwksResponseKeys>
+         */
         public array $keys,
     ) {
     }

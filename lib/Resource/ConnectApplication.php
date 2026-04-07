@@ -21,7 +21,10 @@ readonly class ConnectApplication implements \JsonSerializable
         public ?string $description,
         /** The name of the connect application. */
         public string $name,
-        /** The scopes available for this application. */
+        /**
+         * The scopes available for this application.
+         * @var array<string>
+         */
         public array $scopes,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

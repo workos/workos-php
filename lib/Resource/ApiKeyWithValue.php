@@ -23,7 +23,10 @@ readonly class ApiKeyWithValue implements \JsonSerializable
         public string $obfuscatedValue,
         /** Timestamp of when the API Key was last used. */
         public ?string $lastUsedAt,
-        /** The permission slugs assigned to the API Key. */
+        /**
+         * The permission slugs assigned to the API Key.
+         * @var array<string>
+         */
         public array $permissions,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

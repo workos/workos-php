@@ -28,10 +28,14 @@ readonly class DsyncUserDeletedData implements \JsonSerializable
         public DsyncUserCreatedDataState $state,
         /**
          * The raw attributes received from the directory provider.
+         * @var array<string, mixed>
          * @deprecated
          */
         public array $rawAttributes,
-        /** An object containing the custom attribute mapping for the Directory Provider. */
+        /**
+         * An object containing the custom attribute mapping for the Directory Provider.
+         * @var array<string, mixed>
+         */
         public array $customAttributes,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
@@ -43,6 +47,7 @@ readonly class DsyncUserDeletedData implements \JsonSerializable
         public ?string $lastName = null,
         /**
          * A list of email addresses for the user.
+         * @var array<\WorkOS\Resource\DsyncUserDeletedDataEmail>|null
          * @deprecated
          */
         public ?array $emails = null,
@@ -58,7 +63,10 @@ readonly class DsyncUserDeletedData implements \JsonSerializable
         public ?string $username = null,
         /** The primary role assigned to the user. */
         public ?DsyncUserDeletedDataRole $role = null,
-        /** All roles assigned to the user. */
+        /**
+         * All roles assigned to the user.
+         * @var array<\WorkOS\Resource\DsyncUserDeletedDataRole>|null
+         */
         public ?array $roles = null,
     ) {
     }

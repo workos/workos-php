@@ -17,10 +17,34 @@ class EventsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_event_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->events()->listEvents();
+        $result = $client->events()->listEvents(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, events: [], rangeStart: 'test_value', rangeEnd: 'test_value', organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('events', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['range_start']);
+        $this->assertSame('test_value', $query['range_end']);
+        $this->assertSame('test_value', $query['organization_id']);
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_event_schema');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->events()->listEvents();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

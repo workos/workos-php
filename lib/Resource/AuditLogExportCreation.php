@@ -17,18 +17,31 @@ readonly class AuditLogExportCreation implements \JsonSerializable
         public string $rangeStart,
         /** ISO-8601 value for end of the export range. */
         public string $rangeEnd,
-        /** List of actions to filter against. */
+        /**
+         * List of actions to filter against.
+         * @var array<string>|null
+         */
         public ?array $actions = null,
         /**
          * Deprecated. Use `actor_names` instead.
+         * @var array<string>|null
          * @deprecated
          */
         public ?array $actors = null,
-        /** List of actor names to filter against. */
+        /**
+         * List of actor names to filter against.
+         * @var array<string>|null
+         */
         public ?array $actorNames = null,
-        /** List of actor IDs to filter against. */
+        /**
+         * List of actor IDs to filter against.
+         * @var array<string>|null
+         */
         public ?array $actorIds = null,
-        /** List of target types to filter against. */
+        /**
+         * List of target types to filter against.
+         * @var array<string>|null
+         */
         public ?array $targets = null,
     ) {
     }

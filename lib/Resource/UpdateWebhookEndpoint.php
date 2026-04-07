@@ -15,7 +15,10 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
         public ?string $endpointUrl = null,
         /** Whether the Webhook Endpoint is enabled or disabled. */
         public ?WebhookEndpointJsonStatus $status = null,
-        /** The events that the Webhook Endpoint is subscribed to. */
+        /**
+         * The events that the Webhook Endpoint is subscribed to.
+         * @var array<\WorkOS\Resource\CreateWebhookEndpointEvents>|null
+         */
         public ?array $events = null,
     ) {
     }

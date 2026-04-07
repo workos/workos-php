@@ -15,13 +15,19 @@ readonly class AuditLogSchemaJson implements \JsonSerializable
         public string $object,
         /** The version of the schema. */
         public int $version,
-        /** The list of targets for the schema. */
+        /**
+         * The list of targets for the schema.
+         * @var array<\WorkOS\Resource\AuditLogSchemaJsonTarget>
+         */
         public array $targets,
         /** The timestamp when the Audit Log Schema was created. */
         public \DateTimeImmutable $createdAt,
         /** The metadata schema for the actor. */
         public ?AuditLogSchemaJsonActor $actor = null,
-        /** Additional data associated with the event or entity. */
+        /**
+         * Additional data associated with the event or entity.
+         * @var array<string, mixed>|null
+         */
         public ?array $metadata = null,
     ) {
     }

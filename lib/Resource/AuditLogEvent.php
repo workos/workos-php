@@ -17,11 +17,17 @@ readonly class AuditLogEvent implements \JsonSerializable
         public string $occurredAt,
         /** The entity that performed the action. */
         public AuditLogEventActor $actor,
-        /** The resources affected by the action. */
+        /**
+         * The resources affected by the action.
+         * @var array<\WorkOS\Resource\AuditLogEventTarget>
+         */
         public array $targets,
         /** Additional context about where and how the action occurred. */
         public AuditLogEventContext $context,
-        /** Additional data associated with the event or entity. */
+        /**
+         * Additional data associated with the event or entity.
+         * @var array<string, string|float|bool>|null
+         */
         public ?array $metadata = null,
         /** What schema version the event is associated with. */
         public ?float $version = null,

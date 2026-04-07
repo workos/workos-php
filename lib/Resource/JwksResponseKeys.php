@@ -17,7 +17,10 @@ readonly class JwksResponseKeys implements \JsonSerializable
         public string $kty,
         /** Key use (signature). */
         public string $use,
-        /** X.509 certificate chain. */
+        /**
+         * X.509 certificate chain.
+         * @var array<string>
+         */
         public array $x5C,
         /** RSA modulus. */
         public string $n,

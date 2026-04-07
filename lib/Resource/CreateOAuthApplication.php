@@ -19,9 +19,15 @@ readonly class CreateOAuthApplication implements \JsonSerializable
         public bool $isFirstParty,
         /** A description for the application. */
         public ?string $description = null,
-        /** The OAuth scopes granted to the application. */
+        /**
+         * The OAuth scopes granted to the application.
+         * @var array<string>|null|null
+         */
         public ?array $scopes = null,
-        /** Redirect URIs for the application. */
+        /**
+         * Redirect URIs for the application.
+         * @var array<\WorkOS\Resource\RedirectUriInput>|null|null
+         */
         public ?array $redirectUris = null,
         /** Whether the application uses PKCE (Proof Key for Code Exchange). */
         public ?bool $usesPkce = null,

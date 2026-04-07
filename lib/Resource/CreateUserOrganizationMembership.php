@@ -17,7 +17,10 @@ readonly class CreateUserOrganizationMembership implements \JsonSerializable
         public string $organizationId,
         /** A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`. */
         public ?string $roleSlug = null,
-        /** An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`. */
+        /**
+         * An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
+         * @var array<string>|null
+         */
         public ?array $roleSlugs = null,
     ) {
     }

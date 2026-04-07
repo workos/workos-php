@@ -6,6 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Exception;
 
-class ConfigurationException extends \Exception
+class ConfigurationException extends \Exception implements WorkOSException
 {
 }

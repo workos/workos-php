@@ -19,7 +19,10 @@ readonly class UserObject implements \JsonSerializable
         public ?string $firstName = null,
         /** The user's last name. */
         public ?string $lastName = null,
-        /** A set of key-value pairs to attach to the user. */
+        /**
+         * A set of key-value pairs to attach to the user.
+         * @var array<string, string>|null
+         */
         public ?array $metadata = null,
     ) {
     }

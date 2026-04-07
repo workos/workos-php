@@ -15,9 +15,15 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
         public ?string $name = null,
         /** A description for the application. */
         public ?string $description = null,
-        /** The OAuth scopes granted to the application. */
+        /**
+         * The OAuth scopes granted to the application.
+         * @var array<string>|null|null
+         */
         public ?array $scopes = null,
-        /** Updated redirect URIs for the application. OAuth applications only. */
+        /**
+         * Updated redirect URIs for the application. OAuth applications only.
+         * @var array<\WorkOS\Resource\RedirectUriInput>|null|null
+         */
         public ?array $redirectUris = null,
     ) {
     }

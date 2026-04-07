@@ -32,6 +32,7 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->enrollFactor(type: \WorkOS\Resource\AuthenticationFactorsCreateRequestType::GenericOtp);
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactorEnrolled::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/enroll', $request->getUri()->getPath());
@@ -43,6 +44,7 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->getFactor('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactor::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/test_id', $request->getUri()->getPath());
@@ -63,6 +65,8 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->challengeFactor('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationChallenge::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['authentication_factor_id'], $result->authenticationFactorId);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/test_id/challenge', $request->getUri()->getPath());
@@ -72,11 +76,16 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authentication_factor');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId');
+        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_userlandUserId/auth_factors', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testCreateUserAuthFactors(): void
@@ -90,5 +99,21 @@ class MultiFactorAuthTest extends TestCase
         $this->assertStringEndsWith('user_management/users/test_userlandUserId/auth_factors', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertArrayHasKey('type', $body);
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_authentication_factor');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

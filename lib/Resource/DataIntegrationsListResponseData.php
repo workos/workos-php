@@ -25,7 +25,10 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
         public string $integrationType,
         /** The type of credentials used by the provider (e.g., `oauth2`). */
         public string $credentialsType,
-        /** The OAuth scopes configured for this provider, or `null` if none are configured. */
+        /**
+         * The OAuth scopes configured for this provider, or `null` if none are configured.
+         * @var array<string>|null
+         */
         public ?array $scopes,
         /** Whether the provider is owned by a user or organization. */
         public DataIntegrationsListResponseDataOwnership $ownership,

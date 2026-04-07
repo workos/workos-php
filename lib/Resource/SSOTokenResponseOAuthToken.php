@@ -20,7 +20,10 @@ readonly class SSOTokenResponseOAuthToken implements \JsonSerializable
         public string $accessToken,
         /** The timestamp at which the access token expires. */
         public int $expiresAt,
-        /** A list of OAuth scopes for which the access token is authorized. */
+        /**
+         * A list of OAuth scopes for which the access token is authorized.
+         * @var array<string>
+         */
         public array $scopes,
     ) {
     }

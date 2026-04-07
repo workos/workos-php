@@ -16,7 +16,10 @@ readonly class FlagUpdatedContextPreviousAttributeData implements \JsonSerializa
         public ?string $name = null,
         /** The previous description of the flag. */
         public ?string $description = null,
-        /** The previous tags of the flag. */
+        /**
+         * The previous tags of the flag.
+         * @var array<string>|null
+         */
         public ?array $tags = null,
         /** Whether the flag was previously enabled. */
         public ?bool $enabled = null,

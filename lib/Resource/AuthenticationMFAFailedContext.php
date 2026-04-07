@@ -14,7 +14,10 @@ readonly class AuthenticationMFAFailedContext implements \JsonSerializable
     public function __construct(
         /** The Google Analytics client ID. */
         public ?string $googleAnalyticsClientId = null,
-        /** The Google Analytics sessions associated with the event. */
+        /**
+         * The Google Analytics sessions associated with the event.
+         * @var array<\WorkOS\Resource\AuthenticationMFAFailedContextGoogleAnalyticsSession>|null
+         */
         public ?array $googleAnalyticsSessions = null,
         /** The anonymous ID from analytics. */
         public ?string $ajsAnonymousId = null,
@@ -22,7 +25,10 @@ readonly class AuthenticationMFAFailedContext implements \JsonSerializable
         public ?string $clientId = null,
         /** The actor who performed the action. */
         public ?AuthenticationMFAFailedContextActor $actor = null,
-        /** Attributes that changed from their previous values. */
+        /**
+         * Attributes that changed from their previous values.
+         * @var array<string, mixed>|null
+         */
         public ?array $previousAttributes = null,
     ) {
     }

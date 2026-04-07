@@ -28,7 +28,10 @@ readonly class DsyncActivatedData implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /** The external key of the directory. */
         public string $externalKey,
-        /** The domains associated with the directory. */
+        /**
+         * The domains associated with the directory.
+         * @var array<\WorkOS\Resource\DsyncActivatedDataDomain>
+         */
         public array $domains,
         /** The ID of the organization the directory belongs to. */
         public ?string $organizationId = null,

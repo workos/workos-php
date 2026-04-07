@@ -12,7 +12,10 @@ readonly class AuditLogSchemaJsonActor implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The JSON Schema definition for actor metadata. */
+        /**
+         * The JSON Schema definition for actor metadata.
+         * @var array<string, mixed>
+         */
         public array $metadata,
     ) {
     }

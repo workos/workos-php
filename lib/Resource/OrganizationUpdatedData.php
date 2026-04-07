@@ -18,9 +18,15 @@ readonly class OrganizationUpdatedData implements \JsonSerializable
         public string $id,
         /** A descriptive name for the Organization. This field does not need to be unique. */
         public string $name,
-        /** List of Organization Domains. */
+        /**
+         * List of Organization Domains.
+         * @var array<\WorkOS\Resource\OrganizationUpdatedDataDomain>
+         */
         public array $domains,
-        /** Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization. */
+        /**
+         * Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+         * @var array<string, string>
+         */
         public array $metadata,
         /** The external ID of the Organization. */
         public ?string $externalId,

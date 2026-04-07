@@ -27,16 +27,23 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         public DsyncUserCreatedDataState $state,
         /**
          * The raw attributes received from the directory provider.
+         * @var array<string, mixed>
          * @deprecated
          */
         public array $rawAttributes,
-        /** An object containing the custom attribute mapping for the Directory Provider. */
+        /**
+         * An object containing the custom attribute mapping for the Directory Provider.
+         * @var array<string, mixed>
+         */
         public array $customAttributes,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** The directory groups the user belongs to. */
+        /**
+         * The directory groups the user belongs to.
+         * @var array<\WorkOS\Resource\DirectoryGroup>
+         */
         public array $groups,
         /** The first name of the user. */
         public ?string $firstName = null,
@@ -44,6 +51,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         public ?string $lastName = null,
         /**
          * A list of email addresses for the user.
+         * @var array<\WorkOS\Resource\DirectoryUserWithGroupsEmail>|null
          * @deprecated
          */
         public ?array $emails = null,
@@ -58,7 +66,10 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
          */
         public ?string $username = null,
         public ?SlimRole $role = null,
-        /** All roles assigned to the user. */
+        /**
+         * All roles assigned to the user.
+         * @var array<\WorkOS\Resource\SlimRole>|null
+         */
         public ?array $roles = null,
     ) {
     }

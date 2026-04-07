@@ -13,7 +13,10 @@ readonly class DataIntegrationsListResponse implements \JsonSerializable
     public function __construct(
         /** Indicates this is a list response. */
         public string $object,
-        /** A list of [providers](https://workos.com/docs/reference/pipes/provider), each including a [`connected_account`](https://workos.com/docs/reference/pipes/connected-account) field with the user's connection status. */
+        /**
+         * A list of [providers](https://workos.com/docs/reference/pipes/provider), each including a [`connected_account`](https://workos.com/docs/reference/pipes/connected-account) field with the user's connection status.
+         * @var array<\WorkOS\Resource\DataIntegrationsListResponseData>
+         */
         public array $data,
     ) {
     }

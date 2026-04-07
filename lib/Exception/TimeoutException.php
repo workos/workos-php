@@ -6,6 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Exception;
 
-class TimeoutException extends \Exception
+class TimeoutException extends \Exception implements WorkOSException
 {
 }

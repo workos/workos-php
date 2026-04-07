@@ -17,7 +17,10 @@ readonly class UserConsentOption implements \JsonSerializable
         public string $type,
         /** A human-readable label for this consent option. */
         public string $label,
-        /** The available choices for this consent option. */
+        /**
+         * The available choices for this consent option.
+         * @var array<\WorkOS\Resource\UserConsentOptionChoice>
+         */
         public array $choices,
     ) {
     }

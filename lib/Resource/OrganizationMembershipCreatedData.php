@@ -22,9 +22,15 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
         public string $organizationId,
         /** The status of the organization membership. */
         public OrganizationMembershipStatus $status,
-        /** The role associated with the membership. */
+        /**
+         * The role associated with the membership.
+         * @var array<string, mixed>
+         */
         public array $role,
-        /** Custom attributes associated with the membership. */
+        /**
+         * Custom attributes associated with the membership.
+         * @var array<string, mixed>
+         */
         public array $customAttributes,
         /** Whether the membership is managed by a directory sync provider. */
         public bool $directoryManaged,
@@ -32,7 +38,10 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** The roles associated with the membership. */
+        /**
+         * The roles associated with the membership.
+         * @var array<array<string, mixed>>|null
+         */
         public ?array $roles = null,
     ) {
     }

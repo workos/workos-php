@@ -21,7 +21,10 @@ readonly class WebhookEndpointJson implements \JsonSerializable
         public string $secret,
         /** Whether the Webhook Endpoint is enabled or disabled. */
         public WebhookEndpointJsonStatus $status,
-        /** The events that the Webhook Endpoint is subscribed to. */
+        /**
+         * The events that the Webhook Endpoint is subscribed to.
+         * @var array<string>
+         */
         public array $events,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

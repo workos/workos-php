@@ -14,7 +14,10 @@ readonly class InvitationCreatedContext implements \JsonSerializable
     public function __construct(
         /** The Google Analytics client ID. */
         public ?string $googleAnalyticsClientId = null,
-        /** The Google Analytics sessions associated with the event. */
+        /**
+         * The Google Analytics sessions associated with the event.
+         * @var array<\WorkOS\Resource\InvitationCreatedContextGoogleAnalyticsSession>|null
+         */
         public ?array $googleAnalyticsSessions = null,
         /** The anonymous ID from analytics. */
         public ?string $ajsAnonymousId = null,
@@ -22,7 +25,10 @@ readonly class InvitationCreatedContext implements \JsonSerializable
         public ?string $clientId = null,
         /** The actor who performed the action. */
         public ?InvitationCreatedContextActor $actor = null,
-        /** Attributes that changed from their previous values. */
+        /**
+         * Attributes that changed from their previous values.
+         * @var array<string, mixed>|null
+         */
         public ?array $previousAttributes = null,
     ) {
     }

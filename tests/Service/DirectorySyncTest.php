@@ -17,11 +17,19 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectories();
+        $result = $client->directorySync()->listDirectories(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', search: 'test_value', domain: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directories', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['organization_id']);
+        $this->assertSame('test_value', $query['search']);
+        $this->assertSame('test_value', $query['domain']);
     }
 
     public function testGetDirectory(): void
@@ -30,6 +38,8 @@ class DirectorySyncTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->directorySync()->getDirectory('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Directory::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directories/test_id', $request->getUri()->getPath());
@@ -48,11 +58,18 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectoryGroups();
+        $result = $client->directorySync()->listDirectoryGroups(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', user: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_groups', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['directory']);
+        $this->assertSame('test_value', $query['user']);
     }
 
     public function testGetDirectoryGroup(): void
@@ -61,6 +78,8 @@ class DirectorySyncTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->directorySync()->getDirectoryGroup('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryGroup::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['idp_id'], $result->idpId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_groups/test_id', $request->getUri()->getPath());
@@ -70,11 +89,18 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectoryUsers();
+        $result = $client->directorySync()->listDirectoryUsers(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', group: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_users', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['directory']);
+        $this->assertSame('test_value', $query['group']);
     }
 
     public function testGetDirectoryUser(): void
@@ -83,8 +109,26 @@ class DirectorySyncTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->directorySync()->getDirectoryUser('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryUserWithGroups::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['directory_id'], $result->directoryId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_users/test_id', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_directory');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->directorySync()->listDirectories();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

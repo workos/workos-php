@@ -31,7 +31,10 @@ readonly class OrganizationMembership implements \JsonSerializable
         public SlimRole $role,
         /** The name of the organization which the user belongs to. */
         public ?string $organizationName = null,
-        /** An object containing IdP-sourced attributes from the linked [Directory User](https://workos.com/docs/reference/directory-sync/directory-user) or [SSO Profile](https://workos.com/docs/reference/sso/profile). Directory User attributes take precedence when both are linked. */
+        /**
+         * An object containing IdP-sourced attributes from the linked [Directory User](https://workos.com/docs/reference/directory-sync/directory-user) or [SSO Profile](https://workos.com/docs/reference/sso/profile). Directory User attributes take precedence when both are linked.
+         * @var array<string, mixed>|null
+         */
         public ?array $customAttributes = null,
     ) {
     }

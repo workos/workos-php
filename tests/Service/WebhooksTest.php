@@ -17,11 +17,16 @@ class WebhooksTest extends TestCase
     {
         $fixture = $this->loadFixture('list_webhook_endpoint_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->webhooks()->listWebhookEndpoints();
+        $result = $client->webhooks()->listWebhookEndpoints(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testCreateWebhookEndpoints(): void
@@ -30,6 +35,8 @@ class WebhooksTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->createWebhookEndpoints(endpointUrl: 'test_value', events: []);
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints', $request->getUri()->getPath());
@@ -43,6 +50,8 @@ class WebhooksTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->updateWebhookEndpoint('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints/test_id', $request->getUri()->getPath());
@@ -55,5 +64,21 @@ class WebhooksTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints/test_id', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_webhook_endpoint_json');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->webhooks()->listWebhookEndpoints();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

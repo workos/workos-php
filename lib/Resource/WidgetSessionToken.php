@@ -15,7 +15,10 @@ readonly class WidgetSessionToken implements \JsonSerializable
         public string $organizationId,
         /** The ID of the user to issue the widget session token for. */
         public ?string $userId = null,
-        /** The scopes to grant the widget session. */
+        /**
+         * The scopes to grant the widget session.
+         * @var array<\WorkOS\Resource\WidgetSessionTokenScopes>|null
+         */
         public ?array $scopes = null,
     ) {
     }

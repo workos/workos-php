@@ -30,7 +30,10 @@ readonly class ConnectionDeactivatedData implements \JsonSerializable
         public string $externalKey,
         /** Deprecated. Use state instead. */
         public ConnectionStatus $status,
-        /** The domains associated with the connection. */
+        /**
+         * The domains associated with the connection.
+         * @var array<\WorkOS\Resource\ConnectionDeactivatedDataDomain>
+         */
         public array $domains,
         /** The ID of the organization the connection belongs to. */
         public ?string $organizationId = null,

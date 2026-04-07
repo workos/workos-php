@@ -15,7 +15,10 @@ readonly class UserManagementLoginRequest implements \JsonSerializable
         public string $externalAuthId,
         /** The user to create or update in AuthKit. */
         public UserObject $user,
-        /** Array of [User Consent Options](https://workos.com/docs/reference/workos-connect/standalone/user-consent-options) to store with the session. */
+        /**
+         * Array of [User Consent Options](https://workos.com/docs/reference/workos-connect/standalone/user-consent-options) to store with the session.
+         * @var array<\WorkOS\Resource\UserConsentOption>|null
+         */
         public ?array $userConsentOptions = null,
     ) {
     }

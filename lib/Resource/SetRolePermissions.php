@@ -11,7 +11,10 @@ readonly class SetRolePermissions implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The permission slugs to assign to the role. */
+        /**
+         * The permission slugs to assign to the role.
+         * @var array<string>
+         */
         public array $permissions,
     ) {
     }

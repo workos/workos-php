@@ -12,9 +12,15 @@ readonly class FlagRuleUpdatedContextPreviousAttributeContextConfiguredTarget im
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The organizations targeted by the flag rule. */
+        /**
+         * The organizations targeted by the flag rule.
+         * @var array<\WorkOS\Resource\FlagRuleUpdatedContextPreviousAttributeContextConfiguredTargetOrganization>
+         */
         public array $organizations,
-        /** The users targeted by the flag rule. */
+        /**
+         * The users targeted by the flag rule.
+         * @var array<\WorkOS\Resource\FlagRuleUpdatedContextPreviousAttributeContextConfiguredTargetUser>
+         */
         public array $users,
     ) {
     }

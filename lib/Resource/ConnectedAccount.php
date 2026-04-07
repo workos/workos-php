@@ -19,7 +19,10 @@ readonly class ConnectedAccount implements \JsonSerializable
         public ?string $userId,
         /** The [Organization](https://workos.com/docs/reference/organization) identifier associated with this connection, or `null` if not scoped to an organization. */
         public ?string $organizationId,
-        /** The OAuth scopes granted for this connection. */
+        /**
+         * The OAuth scopes granted for this connection.
+         * @var array<string>
+         */
         public array $scopes,
         /**
          * The state of the connected account:

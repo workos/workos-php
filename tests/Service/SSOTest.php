@@ -17,11 +17,20 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('list_connection');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->listConnections();
+        $result = $client->sso()->listConnections(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, connectionType: \WorkOS\Resource\ConnectionsConnectionType::Adfssaml, domain: 'test_value', organizationId: 'test_value', search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connections', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('ADFSSAML', $query['connection_type']);
+        $this->assertSame('test_value', $query['domain']);
+        $this->assertSame('test_value', $query['organization_id']);
+        $this->assertSame('test_value', $query['search']);
     }
 
     public function testGetConnection(): void
@@ -30,6 +39,8 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->getConnection('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connections/test_id', $request->getUri()->getPath());
@@ -70,6 +81,7 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->authorizeLogout(profileId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOLogoutAuthorizeResponse::class, $result);
+        $this->assertSame($fixture['logout_url'], $result->logoutUrl);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/logout/authorize', $request->getUri()->getPath());
@@ -83,6 +95,8 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->getProfile();
         $this->assertInstanceOf(\WorkOS\Resource\Profile::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['connection_id'], $result->connectionId);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('sso/profile', $request->getUri()->getPath());
@@ -94,6 +108,7 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->getProfileAndToken(clientId: 'test_value', clientSecret: 'test_value', code: 'test_value', grantType: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOTokenResponse::class, $result);
+        $this->assertSame($fixture['access_token'], $result->accessToken);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/token', $request->getUri()->getPath());
@@ -102,5 +117,21 @@ class SSOTest extends TestCase
         $this->assertSame('test_value', $body['client_secret']);
         $this->assertSame('test_value', $body['code']);
         $this->assertArrayHasKey('grant_type', $body);
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_connection');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->listConnections();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

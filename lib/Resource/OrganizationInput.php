@@ -15,11 +15,20 @@ readonly class OrganizationInput implements \JsonSerializable
         public string $name,
         /** Whether the organization allows profiles from outside the organization to sign in. */
         public ?bool $allowProfilesOutsideOrganization = null,
-        /** The domains associated with the organization. Deprecated in favor of `domain_data`. */
+        /**
+         * The domains associated with the organization. Deprecated in favor of `domain_data`.
+         * @var array<string>|null
+         */
         public ?array $domains = null,
-        /** The domains associated with the organization, including verification state. */
+        /**
+         * The domains associated with the organization, including verification state.
+         * @var array<\WorkOS\Resource\OrganizationDomainData>|null
+         */
         public ?array $domainData = null,
-        /** Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization. */
+        /**
+         * Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+         * @var array<string, string>|null|null
+         */
         public ?array $metadata = null,
         /** An external identifier for the Organization. */
         public ?string $externalId = null,

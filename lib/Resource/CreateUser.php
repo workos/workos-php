@@ -25,7 +25,10 @@ readonly class CreateUser implements \JsonSerializable
         public ?string $lastName = null,
         /** Whether the user's email has been verified. */
         public ?bool $emailVerified = null,
-        /** Object containing metadata key/value pairs associated with the user. */
+        /**
+         * Object containing metadata key/value pairs associated with the user.
+         * @var array<string, string>|null|null
+         */
         public ?array $metadata = null,
         /** The external ID of the user. */
         public ?string $externalId = null,

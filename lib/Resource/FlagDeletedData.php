@@ -25,7 +25,10 @@ readonly class FlagDeletedData implements \JsonSerializable
         public ?string $description,
         /** The owner of the Feature Flag. */
         public ?FlagDeletedDataOwner $owner,
-        /** Labels assigned to the Feature Flag for categorizing and filtering. */
+        /**
+         * Labels assigned to the Feature Flag for categorizing and filtering.
+         * @var array<string>
+         */
         public array $tags,
         /** Specifies whether the Feature Flag is active for the current environment. */
         public bool $enabled,

@@ -12,7 +12,10 @@ readonly class RoleList implements \JsonSerializable
 
     public function __construct(
         public string $object,
-        /** The list of records for the current page. */
+        /**
+         * The list of records for the current page.
+         * @var array<\WorkOS\Resource\Role>
+         */
         public array $data,
     ) {
     }
