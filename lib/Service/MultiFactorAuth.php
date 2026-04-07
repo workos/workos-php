@@ -149,7 +149,7 @@ class MultiFactorAuth
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementMultiFactorAuthenticationOrder|null $order Order the results by the creation time.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse
      */
     public function listUserAuthFactors(
@@ -157,7 +157,7 @@ class MultiFactorAuth
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementMultiFactorAuthenticationOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([

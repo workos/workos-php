@@ -24,8 +24,11 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         /** The email address of the user. */
         public ?string $email,
         /** The state of the user. */
-        public DirectoryUserWithGroupsState $state,
-        /** The raw attributes received from the directory provider. */
+        public DsyncUserCreatedDataState $state,
+        /**
+         * The raw attributes received from the directory provider.
+         * @deprecated
+         */
         public array $rawAttributes,
         /** An object containing the custom attribute mapping for the Directory Provider. */
         public array $customAttributes,
@@ -39,11 +42,20 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         public ?string $firstName = null,
         /** The last name of the user. */
         public ?string $lastName = null,
-        /** A list of email addresses for the user. */
+        /**
+         * A list of email addresses for the user.
+         * @deprecated
+         */
         public ?array $emails = null,
-        /** The job title of the user. */
+        /**
+         * The job title of the user.
+         * @deprecated
+         */
         public ?string $jobTitle = null,
-        /** The username of the user. */
+        /**
+         * The username of the user.
+         * @deprecated
+         */
         public ?string $username = null,
         public ?SlimRole $role = null,
         /** All roles assigned to the user. */
@@ -60,7 +72,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             organizationId: $data['organization_id'],
             idpId: $data['idp_id'],
             email: $data['email'] ?? null,
-            state: DirectoryUserWithGroupsState::from($data['state']),
+            state: DsyncUserCreatedDataState::from($data['state']),
             rawAttributes: $data['raw_attributes'],
             customAttributes: $data['custom_attributes'],
             createdAt: new \DateTimeImmutable($data['created_at']),

@@ -24,13 +24,13 @@ readonly class OrganizationDomainStandAlone implements \JsonSerializable
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
         /** Verification state of the domain. */
-        public ?OrganizationDomainStandAloneState $state = null,
+        public ?OrganizationDomainState $state = null,
         /** The prefix used in DNS verification. */
         public ?string $verificationPrefix = null,
         /** Validation token to be used in DNS TXT record. */
         public ?string $verificationToken = null,
         /** Strategy used to verify the domain. */
-        public ?OrganizationDomainStandAloneVerificationStrategy $verificationStrategy = null,
+        public ?OrganizationDomainVerificationStrategy $verificationStrategy = null,
     ) {
     }
 
@@ -43,10 +43,10 @@ readonly class OrganizationDomainStandAlone implements \JsonSerializable
             domain: $data['domain'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
-            state: isset($data['state']) ? OrganizationDomainStandAloneState::from($data['state']) : null,
+            state: isset($data['state']) ? OrganizationDomainState::from($data['state']) : null,
             verificationPrefix: $data['verification_prefix'] ?? null,
             verificationToken: $data['verification_token'] ?? null,
-            verificationStrategy: isset($data['verification_strategy']) ? OrganizationDomainStandAloneVerificationStrategy::from($data['verification_strategy']) : null,
+            verificationStrategy: isset($data['verification_strategy']) ? OrganizationDomainVerificationStrategy::from($data['verification_strategy']) : null,
         );
     }
 

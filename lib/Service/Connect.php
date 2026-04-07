@@ -63,7 +63,7 @@ class Connect
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\ApplicationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId Filter Connect Applications by organization ID.
      * @return \WorkOS\PaginatedResponse
      */
@@ -71,7 +71,7 @@ class Connect
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\ApplicationsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -209,7 +209,7 @@ class Connect
      * @param string|null $name The name of the application.
      * @param string|null|null $description A description for the application.
      * @param array<string>|null|null $scopes The OAuth scopes granted to the application.
-     * @param array<\WorkOS\Resource\RedirectUriDto>|null|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
+     * @param array<\WorkOS\Resource\RedirectUriInput>|null|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function updateApplication(

@@ -20,7 +20,7 @@ readonly class UserOrganizationMembership implements \JsonSerializable
         /** The ID of the organization which the user belongs to. */
         public string $organizationId,
         /** The status of the organization membership. One of `active`, `inactive`, or `pending`. */
-        public UserOrganizationMembershipStatus $status,
+        public OrganizationMembershipStatus $status,
         /** Whether this organization membership is managed by a directory sync connection. */
         public bool $directoryManaged,
         /** An ISO 8601 timestamp. */
@@ -43,7 +43,7 @@ readonly class UserOrganizationMembership implements \JsonSerializable
             id: $data['id'],
             userId: $data['user_id'],
             organizationId: $data['organization_id'],
-            status: UserOrganizationMembershipStatus::from($data['status']),
+            status: OrganizationMembershipStatus::from($data['status']),
             directoryManaged: $data['directory_managed'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),

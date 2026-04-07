@@ -24,17 +24,17 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\DirectoriesOrder|null $order Order the results by the creation time.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
      * @param string|null $organizationId Filter Directories by their associated organization.
      * @param string|null $search Searchable text to match against Directory names.
-     * @param string|null $domain Filter Directories by their associated domain.
+     * @param string|null $domain (deprecated) Filter Directories by their associated domain.
      * @return \WorkOS\PaginatedResponse
      */
     public function listDirectories(
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\DirectoriesOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organizationId = null,
         ?string $search = null,
         ?string $domain = null,
@@ -102,7 +102,7 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\DirectoryGroupsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse
@@ -111,7 +111,7 @@ class DirectorySync
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\DirectoryGroupsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $directory = null,
         ?string $user = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -159,7 +159,7 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\DirectoryUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse
@@ -168,7 +168,7 @@ class DirectorySync
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\DirectoryUsersOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $directory = null,
         ?string $group = null,
         ?\WorkOS\RequestOptions $options = null,

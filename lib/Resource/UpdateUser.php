@@ -24,7 +24,7 @@ readonly class UpdateUser implements \JsonSerializable
         /** The hashed password to set for the user. Mutually exclusive with `password`. */
         public ?string $passwordHash = null,
         /** The algorithm originally used to hash the password, used when providing a `password_hash`. */
-        public ?UpdateUserPasswordHashType $passwordHashType = null,
+        public ?CreateUserPasswordHashType $passwordHashType = null,
         /** Object containing metadata key/value pairs associated with the user. */
         public ?array $metadata = null,
         /** The external ID of the user. */
@@ -43,7 +43,7 @@ readonly class UpdateUser implements \JsonSerializable
             emailVerified: $data['email_verified'] ?? null,
             password: $data['password'] ?? null,
             passwordHash: $data['password_hash'] ?? null,
-            passwordHashType: isset($data['password_hash_type']) ? UpdateUserPasswordHashType::from($data['password_hash_type']) : null,
+            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
             locale: $data['locale'] ?? null,

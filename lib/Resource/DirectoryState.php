@@ -8,7 +8,6 @@ namespace WorkOS\Resource;
 
 enum DirectoryState: string
 {
-    case RequiresType = 'requires_type';
     case Linked = 'linked';
     case Validating = 'validating';
     case InvalidCredentials = 'invalid_credentials';

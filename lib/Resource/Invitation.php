@@ -18,7 +18,7 @@ readonly class Invitation implements \JsonSerializable
         /** The email address of the recipient. */
         public string $email,
         /** The state of the invitation. */
-        public InvitationState $state,
+        public UserInviteState $state,
         /** The timestamp when the invitation was accepted, or null if not yet accepted. */
         public ?\DateTimeImmutable $acceptedAt,
         /** The timestamp when the invitation was revoked, or null if not revoked. */
@@ -48,7 +48,7 @@ readonly class Invitation implements \JsonSerializable
             object: $data['object'],
             id: $data['id'],
             email: $data['email'],
-            state: InvitationState::from($data['state']),
+            state: UserInviteState::from($data['state']),
             acceptedAt: isset($data['accepted_at']) ? new \DateTimeImmutable($data['accepted_at']) : null,
             revokedAt: isset($data['revoked_at']) ? new \DateTimeImmutable($data['revoked_at']) : null,
             expiresAt: new \DateTimeImmutable($data['expires_at']),

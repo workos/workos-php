@@ -29,7 +29,10 @@ readonly class Organization implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /** The Stripe customer ID of the Organization. */
         public ?string $stripeCustomerId = null,
-        /** Whether the Organization allows profiles outside of its managed domains. */
+        /**
+         * Whether the Organization allows profiles outside of its managed domains.
+         * @deprecated
+         */
         public ?bool $allowProfilesOutsideOrganization = null,
     ) {
     }

@@ -23,7 +23,7 @@ class Organizations
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\OrganizationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param array<string>|null $domains The domains of an Organization. Any Organization with a matching domain will be returned.
      * @param string|null $search Searchable text for an Organization. Matches against the organization name.
      * @return \WorkOS\PaginatedResponse
@@ -32,7 +32,7 @@ class Organizations
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\OrganizationsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?array $domains = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,

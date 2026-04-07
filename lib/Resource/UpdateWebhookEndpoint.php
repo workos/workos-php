@@ -14,7 +14,7 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
         /** The HTTPS URL where webhooks will be sent. */
         public ?string $endpointUrl = null,
         /** Whether the Webhook Endpoint is enabled or disabled. */
-        public ?UpdateWebhookEndpointStatus $status = null,
+        public ?WebhookEndpointJsonStatus $status = null,
         /** The events that the Webhook Endpoint is subscribed to. */
         public ?array $events = null,
     ) {
@@ -24,7 +24,7 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
     {
         return new self(
             endpointUrl: $data['endpoint_url'] ?? null,
-            status: isset($data['status']) ? UpdateWebhookEndpointStatus::from($data['status']) : null,
+            status: isset($data['status']) ? WebhookEndpointJsonStatus::from($data['status']) : null,
             events: $data['events'] ?? null,
         );
     }

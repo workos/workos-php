@@ -8,7 +8,6 @@ namespace WorkOS\Resource;
 
 enum DirectoryType: string
 {
-    case Pending = 'pending';
     case AzureSCIMV20 = 'azure scim v2.0';
     case Bamboohr = 'bamboohr';
     case BreatheHr = 'breathe hr';
@@ -30,6 +29,4 @@ enum DirectoryType: string
     case Sftp = 'sftp';
     case SftpWorkday = 'sftp workday';
     case Workday = 'workday';
-    case Gusto = 'gusto';
-    case Rippling = 'rippling';
 }

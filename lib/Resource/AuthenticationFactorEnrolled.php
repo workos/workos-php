@@ -16,7 +16,7 @@ readonly class AuthenticationFactorEnrolled implements \JsonSerializable
         /** The unique ID of the factor. */
         public string $id,
         /** The type of the factor to enroll. */
-        public AuthenticationFactorEnrolledType $type,
+        public AuthenticationFactorType $type,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -35,7 +35,7 @@ readonly class AuthenticationFactorEnrolled implements \JsonSerializable
         return new self(
             object: $data['object'],
             id: $data['id'],
-            type: AuthenticationFactorEnrolledType::from($data['type']),
+            type: AuthenticationFactorType::from($data['type']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             userId: $data['user_id'] ?? null,

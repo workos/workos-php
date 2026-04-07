@@ -20,7 +20,7 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
         /** The Radar control that triggered the verdict. Only present if the verdict is `block` or `challenge`. */
         public ?RadarStandaloneResponseControl $control = null,
         /** The type of blocklist entry that triggered the verdict. Only present if the control is `restriction`. */
-        public ?RadarStandaloneResponseBlocklistType $blocklistType = null,
+        public ?RadarType $blocklistType = null,
     ) {
     }
 
@@ -31,7 +31,7 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
             reason: $data['reason'],
             attemptId: $data['attempt_id'],
             control: isset($data['control']) ? RadarStandaloneResponseControl::from($data['control']) : null,
-            blocklistType: isset($data['blocklist_type']) ? RadarStandaloneResponseBlocklistType::from($data['blocklist_type']) : null,
+            blocklistType: isset($data['blocklist_type']) ? RadarType::from($data['blocklist_type']) : null,
         );
     }
 

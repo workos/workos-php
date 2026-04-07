@@ -27,7 +27,7 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
          * - `needs_reauthorization`: The user needs to reauthorize the connection, typically because required scopes have changed.
          * - `disconnected`: The connection has been disconnected.
          */
-        public DataIntegrationsListResponseDataConnectedAccountState $state,
+        public ConnectedAccountState $state,
         /** The timestamp when the connection was created. */
         public string $createdAt,
         /** The timestamp when the connection was last updated. */
@@ -48,7 +48,7 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
             userId: $data['user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             scopes: $data['scopes'],
-            state: DataIntegrationsListResponseDataConnectedAccountState::from($data['state']),
+            state: ConnectedAccountState::from($data['state']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             userlandUserId: $data['userlandUserId'] ?? null,

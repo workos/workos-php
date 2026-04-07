@@ -20,7 +20,7 @@ readonly class Profile implements \JsonSerializable
         /** The ID of the SSO connection used for authentication. */
         public string $connectionId,
         /** The type of SSO connection. */
-        public ProfileConnectionType $connectionType,
+        public ConnectionType $connectionType,
         /** The user's unique identifier from the identity provider. */
         public string $idpId,
         /** The user's email address. */
@@ -49,7 +49,7 @@ readonly class Profile implements \JsonSerializable
             id: $data['id'],
             organizationId: $data['organization_id'] ?? null,
             connectionId: $data['connection_id'],
-            connectionType: ProfileConnectionType::from($data['connection_type']),
+            connectionType: ConnectionType::from($data['connection_type']),
             idpId: $data['idp_id'],
             email: $data['email'],
             firstName: $data['first_name'] ?? null,

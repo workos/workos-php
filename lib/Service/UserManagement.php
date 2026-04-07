@@ -553,7 +553,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organization (deprecated) Filter users by the organization they are a member of. Deprecated in favor of `organization_id`.
      * @param string|null $organizationId Filter users by the organization they are a member of.
      * @param string|null $email Filter users by their email address.
@@ -563,7 +563,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementUsersOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organization = null,
         ?string $organizationId = null,
         ?string $email = null,
@@ -683,7 +683,7 @@ class UserManagement
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param string|null $password The password to set for the user.
      * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
-     * @param \WorkOS\Resource\UpdateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
+     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
      * @param array<string, string>|null|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null|null $externalId The external ID of the user.
      * @param string|null|null $locale The user's preferred locale.
@@ -697,7 +697,7 @@ class UserManagement
         ?bool $emailVerified = null,
         ?string $password = null,
         ?string $passwordHash = null,
-        ?\WorkOS\Resource\UpdateUserPasswordHashType $passwordHashType = null,
+        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
         ?array $metadata = null,
         ?string $externalId = null,
         ?string $locale = null,
@@ -863,7 +863,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementUsersOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse
      */
     public function listUserSessions(
@@ -871,7 +871,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementUsersOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -896,7 +896,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementInvitationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
      * @param string|null $email The email address of the recipient.
      * @return \WorkOS\PaginatedResponse
@@ -905,7 +905,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementInvitationsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organizationId = null,
         ?string $email = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -1027,12 +1027,12 @@ class UserManagement
      *
      * Resends an invitation email to the recipient. The invitation must be in a pending state.
      * @param string $id The unique ID of the invitation.
-     * @param \WorkOS\Resource\ResendUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
+     * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
      * @return \WorkOS\Resource\UserInvite
      */
     public function resendInvitation(
         string $id,
-        ?\WorkOS\Resource\ResendUserInviteOptionsLocale $locale = null,
+        ?\WorkOS\Resource\CreateUserInviteOptionsLocale $locale = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserInvite {
         $body = array_filter([
@@ -1141,9 +1141,9 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementOrganizationMembershipOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
-     * @param array<\WorkOS\Resource\UserManagementOrganizationMembershipStatuses>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
+     * @param array<\WorkOS\Resource\OrganizationMembershipStatus>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
      * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
      * @return \WorkOS\PaginatedResponse
      */
@@ -1151,7 +1151,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementOrganizationMembershipOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organizationId = null,
         ?array $statuses = null,
         ?string $userId = null,
@@ -1353,7 +1353,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\UserManagementUsersAuthorizedApplicationsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse
      */
     public function listUserAuthorizedApplications(
@@ -1361,7 +1361,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\UserManagementUsersAuthorizedApplicationsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([

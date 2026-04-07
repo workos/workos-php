@@ -22,7 +22,7 @@ readonly class ListData implements \JsonSerializable
         /** An optional description of the role. */
         public ?string $description,
         /** Whether the role is scoped to the environment or an organization. */
-        public ListDataType $type,
+        public RoleType $type,
         /** The slug of the resource type the role is scoped to. */
         public string $resourceTypeSlug,
         /** The permission slugs assigned to the role. */
@@ -42,7 +42,7 @@ readonly class ListData implements \JsonSerializable
             id: $data['id'],
             name: $data['name'],
             description: $data['description'] ?? null,
-            type: ListDataType::from($data['type']),
+            type: RoleType::from($data['type']),
             resourceTypeSlug: $data['resource_type_slug'],
             permissions: $data['permissions'],
             createdAt: new \DateTimeImmutable($data['created_at']),

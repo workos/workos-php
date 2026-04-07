@@ -26,7 +26,7 @@ class SSO
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\ConnectionsOrder|null $order Order the results by the creation time.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
      * @param \WorkOS\Resource\ConnectionsConnectionType|null $connectionType Filter Connections by their type.
      * @param string|null $domain Filter Connections by their associated domain.
      * @param string|null $organizationId Filter Connections by their associated organization.
@@ -37,7 +37,7 @@ class SSO
         ?string $before = null,
         ?string $after = null,
         ?float $limit = null,
-        ?\WorkOS\Resource\ConnectionsOrder $order = null,
+        ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\Resource\ConnectionsConnectionType $connectionType = null,
         ?string $domain = null,
         ?string $organizationId = null,

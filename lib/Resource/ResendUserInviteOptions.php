@@ -12,14 +12,14 @@ readonly class ResendUserInviteOptions implements \JsonSerializable
 
     public function __construct(
         /** The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization). */
-        public ?ResendUserInviteOptionsLocale $locale = null,
+        public ?CreateUserInviteOptionsLocale $locale = null,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            locale: isset($data['locale']) ? ResendUserInviteOptionsLocale::from($data['locale']) : null,
+            locale: isset($data['locale']) ? CreateUserInviteOptionsLocale::from($data['locale']) : null,
         );
     }
 
