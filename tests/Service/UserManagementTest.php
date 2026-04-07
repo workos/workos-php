@@ -39,7 +39,7 @@ class UserManagementTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->userManagement()->getAuthorizationUrl(responseType: 'test_value', redirectUri: 'test_value', clientId: 'test_value');
+        $client->userManagement()->getAuthorizationUrl(redirectUri: 'test_value');
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/authorize', $request->getUri()->getPath());

@@ -22,8 +22,8 @@ class FeatureFlags
      * Get a list of all of your existing feature flags matching the criteria specified.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listFeatureFlags(
@@ -153,8 +153,8 @@ class FeatureFlags
      * @param string $organizationId Unique identifier of the Organization.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listOrganizationFeatureFlags(
@@ -187,8 +187,8 @@ class FeatureFlags
      * @param string $userId The ID of the user.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listUserFeatureFlags(

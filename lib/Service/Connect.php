@@ -62,8 +62,8 @@ class Connect
      * List all Connect Applications in the current environment with optional filtering.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
-     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string|null $organizationId Filter Connect Applications by organization ID.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ConnectApplication>
      */
@@ -112,23 +112,23 @@ class Connect
     }
 
     /**
-     * @param mixed|null $name
-     * @param mixed|null $isFirstParty
-     * @param mixed|null $description
-     * @param mixed|null $scopes
-     * @param mixed|null $redirectUris
-     * @param mixed|null $usesPkce
-     * @param mixed|null $organizationId
+     * @param string $name
+     * @param bool $isFirstParty
+     * @param string|null|null $description
+     * @param array<string>|null|null $scopes
+     * @param array<\WorkOS\Resource\RedirectUriInput>|null|null $redirectUris
+     * @param bool|null|null $usesPkce
+     * @param string|null|null $organizationId
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createOAuthApplication(
-        mixed $name = null,
-        mixed $isFirstParty = null,
-        mixed $description = null,
-        mixed $scopes = null,
-        mixed $redirectUris = null,
-        mixed $usesPkce = null,
-        mixed $organizationId = null,
+        string $name,
+        bool $isFirstParty,
+        ?string $description = null,
+        ?array $scopes = null,
+        ?array $redirectUris = null,
+        ?bool $usesPkce = null,
+        ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
         $body = array_filter([
@@ -152,17 +152,17 @@ class Connect
     }
 
     /**
-     * @param mixed|null $name
-     * @param mixed|null $organizationId
-     * @param mixed|null $description
-     * @param mixed|null $scopes
+     * @param string $name
+     * @param string $organizationId
+     * @param string|null|null $description
+     * @param array<string>|null|null $scopes
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createM2MApplication(
-        mixed $name = null,
-        mixed $organizationId = null,
-        mixed $description = null,
-        mixed $scopes = null,
+        string $name,
+        string $organizationId,
+        ?string $description = null,
+        ?array $scopes = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
         $body = array_filter([

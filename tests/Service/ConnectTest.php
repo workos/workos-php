@@ -132,7 +132,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('connect_application');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->createOAuthApplication();
+        $result = $client->connect()->createOAuthApplication(name: 'test_value', isFirstParty: true);
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
     }
 
@@ -140,7 +140,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('connect_application');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->createM2MApplication();
+        $result = $client->connect()->createM2MApplication(name: 'test_value', organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
     }
 
