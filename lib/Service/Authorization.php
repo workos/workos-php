@@ -90,7 +90,7 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'permission_slug' => $permissionSlug,
             'parent_resource_id' => $parentResourceId,
             'parent_resource_type_slug' => $parentResourceTypeSlug,
@@ -128,7 +128,7 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -546,9 +546,9 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'permission_slug' => $permissionSlug,
-            'assignment' => $assignment,
+            'assignment' => $assignment?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -592,7 +592,7 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization_id' => $organizationId,
             'resource_type_slug' => $resourceTypeSlug,
             'parent_resource_id' => $parentResourceId,
@@ -760,9 +760,9 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'permission_slug' => $permissionSlug,
-            'assignment' => $assignment,
+            'assignment' => $assignment?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -940,7 +940,7 @@ class Authorization
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',

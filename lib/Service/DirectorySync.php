@@ -44,7 +44,7 @@ class DirectorySync
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization_id' => $organizationId,
             'search' => $search,
             'domain' => $domain,
@@ -120,7 +120,7 @@ class DirectorySync
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'directory' => $directory,
             'user' => $user,
         ], fn ($v) => $v !== null);
@@ -177,7 +177,7 @@ class DirectorySync
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'directory' => $directory,
             'group' => $group,
         ], fn ($v) => $v !== null);

@@ -38,7 +38,7 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
             'name' => $this->name,
             'description' => $this->description,
             'scopes' => $this->scopes,
-            'redirect_uris' => array_map(fn ($item) => $item->toArray(), $this->redirectUris ?? []),
+            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
         ];
     }
 }

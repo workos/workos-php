@@ -44,7 +44,7 @@ class Events
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'events' => $events,
             'range_start' => $rangeStart,
             'range_end' => $rangeEnd,

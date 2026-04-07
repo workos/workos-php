@@ -105,11 +105,11 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             'groups' => array_map(fn ($item) => $item->toArray(), $this->groups),
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'emails' => array_map(fn ($item) => $item->toArray(), $this->emails ?? []),
+            'emails' => $this->emails !== null ? array_map(fn ($item) => $item->toArray(), $this->emails) : null,
             'job_title' => $this->jobTitle,
             'username' => $this->username,
             'role' => $this->role?->toArray(),
-            'roles' => array_map(fn ($item) => $item->toArray(), $this->roles ?? []),
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
         ];
     }
 }

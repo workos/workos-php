@@ -41,7 +41,7 @@ class Organizations
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'domains' => $domains,
             'search' => $search,
         ], fn ($v) => $v !== null);

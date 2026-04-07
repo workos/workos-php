@@ -76,7 +76,7 @@ readonly class Profile implements \JsonSerializable
             'last_name' => $this->lastName,
             'raw_attributes' => $this->rawAttributes,
             'role' => $this->role?->toArray(),
-            'roles' => array_map(fn ($item) => $item->toArray(), $this->roles ?? []),
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
             'groups' => $this->groups,
             'custom_attributes' => $this->customAttributes,
         ];

@@ -84,7 +84,7 @@ class AuditLogs
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -118,7 +118,7 @@ class AuditLogs
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',

@@ -52,7 +52,7 @@ readonly class CreateOAuthApplication implements \JsonSerializable
             'is_first_party' => $this->isFirstParty,
             'description' => $this->description,
             'scopes' => $this->scopes,
-            'redirect_uris' => array_map(fn ($item) => $item->toArray(), $this->redirectUris ?? []),
+            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
             'uses_pkce' => $this->usesPkce,
             'organization_id' => $this->organizationId,
         ];

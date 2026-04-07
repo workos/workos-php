@@ -79,7 +79,7 @@ class Connect
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization_id' => $organizationId,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(

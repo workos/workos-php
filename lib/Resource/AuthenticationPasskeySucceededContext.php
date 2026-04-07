@@ -43,7 +43,7 @@ readonly class AuthenticationPasskeySucceededContext implements \JsonSerializabl
     {
         return [
             'google_analytics_client_id' => $this->googleAnalyticsClientId,
-            'google_analytics_sessions' => array_map(fn ($item) => $item->toArray(), $this->googleAnalyticsSessions ?? []),
+            'google_analytics_sessions' => $this->googleAnalyticsSessions !== null ? array_map(fn ($item) => $item->toArray(), $this->googleAnalyticsSessions) : null,
             'ajs_anonymous_id' => $this->ajsAnonymousId,
             'client_id' => $this->clientId,
             'actor' => $this->actor?->toArray(),

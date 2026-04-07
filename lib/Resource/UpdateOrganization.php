@@ -50,7 +50,7 @@ readonly class UpdateOrganization implements \JsonSerializable
             'name' => $this->name,
             'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
             'domains' => $this->domains,
-            'domain_data' => array_map(fn ($item) => $item->toArray(), $this->domainData ?? []),
+            'domain_data' => $this->domainData !== null ? array_map(fn ($item) => $item->toArray(), $this->domainData) : null,
             'stripe_customer_id' => $this->stripeCustomerId,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,

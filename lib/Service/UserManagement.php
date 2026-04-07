@@ -342,9 +342,9 @@ class UserManagement
             'provider_query_params' => $providerQueryParams,
             'provider_scopes' => $providerScopes,
             'invitation_token' => $invitationToken,
-            'screen_hint' => $screenHint,
+            'screen_hint' => $screenHint?->value,
             'login_hint' => $loginHint,
-            'provider' => $provider,
+            'provider' => $provider?->value,
             'prompt' => $prompt,
             'state' => $state,
             'organization_id' => $organizationId,
@@ -573,7 +573,7 @@ class UserManagement
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization' => $organization,
             'organization_id' => $organizationId,
             'email' => $email,
@@ -878,7 +878,7 @@ class UserManagement
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -914,7 +914,7 @@ class UserManagement
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization_id' => $organizationId,
             'email' => $email,
         ], fn ($v) => $v !== null);
@@ -1161,7 +1161,7 @@ class UserManagement
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
             'organization_id' => $organizationId,
             'statuses' => $statuses,
             'user_id' => $userId,
@@ -1368,7 +1368,7 @@ class UserManagement
             'before' => $before,
             'after' => $after,
             'limit' => $limit,
-            'order' => $order,
+            'order' => $order?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
