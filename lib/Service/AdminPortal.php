@@ -46,7 +46,7 @@ class AdminPortal
             'return_url' => $returnUrl,
             'success_url' => $successUrl,
             'organization' => $organization,
-            'intent' => $intent,
+            'intent' => $intent?->value,
             'intent_options' => $intentOptions,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(

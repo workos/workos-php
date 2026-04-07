@@ -31,7 +31,7 @@ class SSO
      * @param string|null $domain Filter Connections by their associated domain.
      * @param string|null $organizationId Filter Connections by their associated organization.
      * @param string|null $search Searchable text to match against Connection names.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Connection>
      */
     public function listConnections(
         ?string $before = null,

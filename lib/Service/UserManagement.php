@@ -76,14 +76,14 @@ class UserManagement
     }
 
     /**
-     * @param string|null $email
-     * @param string|null $password
+     * @param string $email
+     * @param string $password
      * @param string|null $invitationToken
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithPassword(
-        ?string $email = null,
-        ?string $password = null,
+        string $email,
+        string $password,
         ?string $invitationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
@@ -106,11 +106,11 @@ class UserManagement
     }
 
     /**
-     * @param string|null $code
+     * @param mixed|null $code
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithCode(
-        ?string $code = null,
+        mixed $code = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -130,12 +130,12 @@ class UserManagement
     }
 
     /**
-     * @param string|null $refreshToken
+     * @param string $refreshToken
      * @param string|null $organizationId
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithRefreshToken(
-        ?string $refreshToken = null,
+        string $refreshToken,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
@@ -157,15 +157,15 @@ class UserManagement
     }
 
     /**
-     * @param string|null $code
-     * @param string|null $email
-     * @param string|null $invitationToken
+     * @param mixed|null $code
+     * @param mixed|null $email
+     * @param mixed|null $invitationToken
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithMagicAuth(
-        ?string $code = null,
-        ?string $email = null,
-        ?string $invitationToken = null,
+        mixed $code = null,
+        mixed $email = null,
+        mixed $invitationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -187,13 +187,13 @@ class UserManagement
     }
 
     /**
-     * @param string|null $code
-     * @param string|null $pendingAuthenticationToken
+     * @param mixed|null $code
+     * @param mixed|null $pendingAuthenticationToken
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithEmailVerification(
-        ?string $code = null,
-        ?string $pendingAuthenticationToken = null,
+        mixed $code = null,
+        mixed $pendingAuthenticationToken = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -214,15 +214,15 @@ class UserManagement
     }
 
     /**
-     * @param string|null $code
-     * @param string|null $pendingAuthenticationToken
-     * @param string|null $authenticationChallengeId
+     * @param mixed|null $code
+     * @param mixed|null $pendingAuthenticationToken
+     * @param mixed|null $authenticationChallengeId
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithTotp(
-        ?string $code = null,
-        ?string $pendingAuthenticationToken = null,
-        ?string $authenticationChallengeId = null,
+        mixed $code = null,
+        mixed $pendingAuthenticationToken = null,
+        mixed $authenticationChallengeId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -244,13 +244,13 @@ class UserManagement
     }
 
     /**
-     * @param string|null $pendingAuthenticationToken
-     * @param string|null $organizationId
+     * @param mixed|null $pendingAuthenticationToken
+     * @param mixed|null $organizationId
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithOrganizationSelection(
-        ?string $pendingAuthenticationToken = null,
-        ?string $organizationId = null,
+        mixed $pendingAuthenticationToken = null,
+        mixed $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -271,11 +271,11 @@ class UserManagement
     }
 
     /**
-     * @param string|null $deviceCode
+     * @param mixed|null $deviceCode
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithDeviceCode(
-        ?string $deviceCode = null,
+        mixed $deviceCode = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -557,7 +557,7 @@ class UserManagement
      * @param string|null $organization (deprecated) Filter users by the organization they are a member of. Deprecated in favor of `organization_id`.
      * @param string|null $organizationId Filter users by the organization they are a member of.
      * @param string|null $email Filter users by their email address.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\User>
      */
     public function listUsers(
         ?string $before = null,
@@ -618,7 +618,7 @@ class UserManagement
             'email' => $email,
             'password' => $password,
             'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType,
+            'password_hash_type' => $passwordHashType?->value,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email_verified' => $emailVerified,
@@ -710,7 +710,7 @@ class UserManagement
             'email_verified' => $emailVerified,
             'password' => $password,
             'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType,
+            'password_hash_type' => $passwordHashType?->value,
             'metadata' => $metadata,
             'external_id' => $externalId,
             'locale' => $locale,
@@ -864,7 +864,7 @@ class UserManagement
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserSessionsListItem>
      */
     public function listUserSessions(
         string $id,
@@ -899,7 +899,7 @@ class UserManagement
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
      * @param string|null $email The email address of the recipient.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserInvite>
      */
     public function listInvitations(
         ?string $before = null,
@@ -954,7 +954,7 @@ class UserManagement
             'role_slug' => $roleSlug,
             'expires_in_days' => $expiresInDays,
             'inviter_user_id' => $inviterUserId,
-            'locale' => $locale,
+            'locale' => $locale?->value,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -1036,7 +1036,7 @@ class UserManagement
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserInvite {
         $body = array_filter([
-            'locale' => $locale,
+            'locale' => $locale?->value,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -1145,7 +1145,7 @@ class UserManagement
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
      * @param array<\WorkOS\Resource\OrganizationMembershipStatus>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
      * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembership>
      */
     public function listOrganizationMemberships(
         ?string $before = null,
@@ -1354,7 +1354,7 @@ class UserManagement
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizedConnectApplicationListData>
      */
     public function listUserAuthorizedApplications(
         string $userId,

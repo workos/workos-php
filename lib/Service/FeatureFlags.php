@@ -24,7 +24,7 @@ class FeatureFlags
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listFeatureFlags(
         ?string $before = null,
@@ -155,7 +155,7 @@ class FeatureFlags
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listOrganizationFeatureFlags(
         string $organizationId,
@@ -189,7 +189,7 @@ class FeatureFlags
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      */
     public function listUserFeatureFlags(
         string $userId,

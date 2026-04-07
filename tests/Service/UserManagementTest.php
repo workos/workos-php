@@ -507,7 +507,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->authenticateWithPassword();
+        $result = $client->userManagement()->authenticateWithPassword(email: 'test_value', password: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 
@@ -523,7 +523,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->authenticateWithRefreshToken();
+        $result = $client->userManagement()->authenticateWithRefreshToken(refreshToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 

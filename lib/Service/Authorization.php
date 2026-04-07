@@ -72,7 +72,7 @@ class Authorization
      * @param string|null $parentResourceId The WorkOS ID of the parent resource. Provide this or both `parent_resource_external_id` and `parent_resource_type_slug`, but not both.
      * @param string|null $parentResourceTypeSlug The slug of the parent resource type. Must be provided together with `parent_resource_external_id`.
      * @param string|null $parentResourceExternalId The application-specific external identifier of the parent resource. Must be provided together with `parent_resource_type_slug`.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      */
     public function listOrganizationMembershipResources(
         string $organizationMembershipId,
@@ -114,7 +114,7 @@ class Authorization
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RoleAssignment>
      */
     public function listOrganizationMembershipRoleAssignments(
         string $organizationMembershipId,
@@ -528,7 +528,7 @@ class Authorization
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
      */
     public function listResourceOrganizationMemberships(
         string $organizationId,
@@ -573,7 +573,7 @@ class Authorization
      * @param string|null $parentResourceTypeSlug Filter resources by parent resource type slug.
      * @param string|null $parentExternalId Filter resources by parent external ID.
      * @param string|null $search Search resources by name.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      */
     public function listResources(
         ?string $before = null,
@@ -744,7 +744,7 @@ class Authorization
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
      */
     public function listMembershipsForResource(
         string $resourceId,
@@ -927,7 +927,7 @@ class Authorization
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      */
     public function listPermissions(
         ?string $before = null,

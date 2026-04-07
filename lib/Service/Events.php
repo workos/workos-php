@@ -27,7 +27,7 @@ class Events
      * @param string|null $rangeStart ISO-8601 date string to filter events created after this date.
      * @param string|null $rangeEnd ISO-8601 date string to filter events created before this date.
      * @param string|null $organizationId Filter events by the [Organization](https://workos.com/docs/reference/organization) that the event is associated with.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\EventSchema>
      */
     public function listEvents(
         ?string $before = null,

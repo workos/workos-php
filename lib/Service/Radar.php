@@ -43,8 +43,8 @@ class Radar
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
             'email' => $email,
-            'auth_method' => $authMethod,
-            'action' => $action,
+            'auth_method' => $authMethod->value,
+            'action' => $action->value,
             'device_fingerprint' => $deviceFingerprint,
             'bot_score' => $botScore,
         ], fn ($v) => $v !== null);

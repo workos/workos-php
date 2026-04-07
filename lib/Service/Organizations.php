@@ -26,7 +26,7 @@ class Organizations
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param array<string>|null $domains The domains of an Organization. Any Organization with a matching domain will be returned.
      * @param string|null $search Searchable text for an Organization. Matches against the organization name.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Organization>
      */
     public function listOrganizations(
         ?string $before = null,

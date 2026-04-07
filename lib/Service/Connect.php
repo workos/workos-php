@@ -65,7 +65,7 @@ class Connect
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId Filter Connect Applications by organization ID.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ConnectApplication>
      */
     public function listApplications(
         ?string $before = null,
@@ -112,23 +112,23 @@ class Connect
     }
 
     /**
-     * @param string|null $name
-     * @param string|null $isFirstParty
-     * @param string|null $description
-     * @param string|null $scopes
-     * @param string|null $redirectUris
-     * @param string|null $usesPkce
-     * @param string|null $organizationId
+     * @param mixed|null $name
+     * @param mixed|null $isFirstParty
+     * @param mixed|null $description
+     * @param mixed|null $scopes
+     * @param mixed|null $redirectUris
+     * @param mixed|null $usesPkce
+     * @param mixed|null $organizationId
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createOAuthApplication(
-        ?string $name = null,
-        ?string $isFirstParty = null,
-        ?string $description = null,
-        ?string $scopes = null,
-        ?string $redirectUris = null,
-        ?string $usesPkce = null,
-        ?string $organizationId = null,
+        mixed $name = null,
+        mixed $isFirstParty = null,
+        mixed $description = null,
+        mixed $scopes = null,
+        mixed $redirectUris = null,
+        mixed $usesPkce = null,
+        mixed $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
         $body = array_filter([
@@ -152,17 +152,17 @@ class Connect
     }
 
     /**
-     * @param string|null $name
-     * @param string|null $organizationId
-     * @param string|null $description
-     * @param string|null $scopes
+     * @param mixed|null $name
+     * @param mixed|null $organizationId
+     * @param mixed|null $description
+     * @param mixed|null $scopes
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createM2MApplication(
-        ?string $name = null,
-        ?string $organizationId = null,
-        ?string $description = null,
-        ?string $scopes = null,
+        mixed $name = null,
+        mixed $organizationId = null,
+        mixed $description = null,
+        mixed $scopes = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectApplication {
         $body = array_filter([

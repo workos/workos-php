@@ -28,7 +28,7 @@ class DirectorySync
      * @param string|null $organizationId Filter Directories by their associated organization.
      * @param string|null $search Searchable text to match against Directory names.
      * @param string|null $domain (deprecated) Filter Directories by their associated domain.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Directory>
      */
     public function listDirectories(
         ?string $before = null,
@@ -105,7 +105,7 @@ class DirectorySync
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
      */
     public function listDirectoryGroups(
         ?string $before = null,
@@ -162,7 +162,7 @@ class DirectorySync
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
      */
     public function listDirectoryUsers(
         ?string $before = null,

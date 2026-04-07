@@ -23,7 +23,7 @@ class Webhooks
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
-     * @return \WorkOS\PaginatedResponse
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\WebhookEndpointJson>
      */
     public function listWebhookEndpoints(
         ?string $before = null,
@@ -92,7 +92,7 @@ class Webhooks
     ): \WorkOS\Resource\WebhookEndpointJson {
         $body = array_filter([
             'endpoint_url' => $endpointUrl,
-            'status' => $status,
+            'status' => $status?->value,
             'events' => $events,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
