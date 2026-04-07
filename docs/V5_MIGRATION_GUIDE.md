@@ -90,6 +90,8 @@ $user = $workos->userManagement()->createUsers(
 
 `WorkOS::setApiKey()` and `WorkOS::setClientId()` still exist as defaults, but the intended integration style is now an instantiated client.
 
+Static getters are no longer the primary configuration path. In v4, `WorkOS::getApiKey()` and `WorkOS::getClientId()` loaded environment variables and threw when unset; in v5, they are nullable compatibility shims, and credential validation happens when an operation requires them.
+
 ### 2. Most product areas are now accessed through the `WorkOS` client
 
 Instead of instantiating `new SSO()`, `new UserManagement()`, `new MFA()`, and so on, you now call lazy client methods:
@@ -145,6 +147,10 @@ new \WorkOS\RBAC();
 
 Use the `WorkOS` client methods instead.
 
+#### Imports and type hints also need to move to the new surface
+
+It is not enough to replace `new \WorkOS\SSO()` with `$workos->sso()`. If your code imported or type-hinted old top-level service classes such as `WorkOS\UserManagement`, `WorkOS\Portal`, or `WorkOS\RBAC`, update those references to the client-accessed services instead.
+
 #### `Client`, `RequestClientInterface`, and `CurlRequestClient` were removed
 
 If you were customizing transport internals with:
@@ -172,6 +178,33 @@ These v4 methods are gone:
 
 Configure `baseUrl`, `timeout`, `maxRetries`, and `handler` via the `WorkOS` constructor instead.
 
+#### `WorkOS::getApiKey()` and `WorkOS::getClientId()` no longer validate configuration
+
+Before:
+
+```php
+use WorkOS\WorkOS;
+
+WorkOS::setApiKey(getenv('WORKOS_API_KEY'));
+WorkOS::setClientId(getenv('WORKOS_CLIENT_ID'));
+
+$clientId = WorkOS::getClientId();
+$apiKey = WorkOS::getApiKey();
+```
+
+After:
+
+```php
+use WorkOS\WorkOS;
+
+$workos = new WorkOS(
+    apiKey: getenv('WORKOS_API_KEY'),
+    clientId: getenv('WORKOS_CLIENT_ID'),
+);
+```
+
+In v4, the getters loaded env vars and threw `ConfigurationException` when missing. In v5, they only return the current static shim value. If you used them as bootstrap-time validation, move that validation to `new WorkOS(...)` or to the first API call that requires credentials.
+
 ### Pagination and list responses
 
 #### `Resource\PaginatedResource` was replaced with `WorkOS\PaginatedResponse`
@@ -198,6 +231,8 @@ foreach ($page->autoPagingIterator() as $user) {
     // ...
 }
 ```
+
+Auto-pagination only follows `after` cursors. If your integration previously relied on reverse pagination with `before`, keep fetching those pages manually.
 
 #### Array destructuring and magic list keys should be considered removed
 
@@ -233,6 +268,24 @@ Examples of behavior changes you may notice:
 - timestamps are often `DateTimeImmutable` instead of strings
 - enums are used for many option and state fields
 - list responses sometimes return typed wrappers like `RoleList` or `ListModel`
+
+Common constant-to-enum migrations include:
+
+```php
+use WorkOS\Resource\EventsOrder;
+
+$workos->organizations()->listOrganizations(
+    order: EventsOrder::Asc,
+);
+```
+
+```php
+use WorkOS\Resource\ConnectionsConnectionType;
+
+$workos->sso()->listConnections(
+    connectionType: ConnectionsConnectionType::OktaSAML,
+);
+```
 
 #### Exception types are more granular
 
@@ -275,7 +328,8 @@ In v5 it:
 
 - makes an HTTP request
 - returns `WorkOS\Resource\SSOAuthorizeUrlResponse`
-- requires `clientId`, `redirectUri`, and `responseType`
+- requires an instantiated client with `clientId`
+- requires `redirectUri`
 
 Before:
 
@@ -291,9 +345,7 @@ After:
 
 ```php
 $response = $workos->sso()->getAuthorizationUrl(
-    clientId: 'client_...',
     redirectUri: 'https://example.com/callback',
-    responseType: 'code',
     domain: 'example.com',
     state: json_encode(['return_to' => '/dashboard']),
 );
@@ -302,6 +354,8 @@ $url = $response->url;
 ```
 
 `state` is now a string parameter. If you used array state in v4, encode it yourself.
+
+`client_id` now comes from the instantiated `WorkOS` client, and the SDK always sends `response_type=code` for you.
 
 #### `getProfileAndToken()` now requires explicit credentials
 
@@ -379,6 +433,52 @@ $result = $workos->sessionManager()->authenticate(
 
 The old `new UserManagement($encryptor)` customization point was also removed.
 
+#### Session authentication now returns arrays instead of response models
+
+Before:
+
+```php
+$result = $userManagement->authenticateWithSessionCookie(
+    $sealedSession,
+    $cookiePassword,
+);
+```
+
+After:
+
+```php
+$result = $workos->sessionManager()->authenticate(
+    sessionData: $sealedSession,
+    cookiePassword: $cookiePassword,
+    clientId: 'client_...',
+);
+```
+
+The new method returns an associative array such as `['authenticated' => true, ...]` or `['authenticated' => false, 'reason' => 'invalid_jwt']`. If your code checked for `SessionAuthenticationSuccessResponse` or `SessionAuthenticationFailureResponse`, update that logic.
+
+#### Auth methods now read credentials from the client instance
+
+Before:
+
+```php
+$result = $userManagement->authenticateWithPassword(
+    'client_...',
+    'user@example.com',
+    'secret',
+);
+```
+
+After:
+
+```php
+$result = $workos->userManagement()->authenticateWithPassword(
+    email: 'user@example.com',
+    password: 'secret',
+);
+```
+
+The same change applies to methods like `authenticateWithCode()` and `authenticateWithRefreshToken()`: remove leading credential arguments and ensure the `WorkOS` client was instantiated with `apiKey` and `clientId`.
+
 #### Several User Management methods were renamed
 
 | v4                                       | v5                                                          |
@@ -406,9 +506,29 @@ These methods existed in v4 but should be treated as removed in v5:
 Notable differences:
 
 - they make API calls
-- `getAuthorizationUrl()` now requires explicit `responseType`, `redirectUri`, and `clientId`
+- `getAuthorizationUrl()` now requires `redirectUri` and an instantiated client with `clientId`
 - `state` is now a string, not an array that the SDK JSON-encodes for you
 - `getLogoutUrl()` now returns response data instead of a locally composed URL string
+
+Before:
+
+```php
+$url = $userManagement->getAuthorizationUrl(
+    'https://example.com/callback',
+    ['return_to' => '/dashboard'],
+    WorkOS\UserManagement::AUTHORIZATION_PROVIDER_AUTHKIT,
+);
+```
+
+After:
+
+```php
+$response = $workos->userManagement()->getAuthorizationUrl(
+    redirectUri: 'https://example.com/callback',
+    state: json_encode(['return_to' => '/dashboard']),
+    provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit,
+);
+```
 
 ### Directory Sync
 
@@ -542,6 +662,8 @@ $organization = $workos->organizations()->createOrganizations(
 ```
 
 The same pattern applies anywhere the new runtime uses `RequestOptions`.
+
+If you rely on retries for write requests, set an explicit idempotency key yourself. The new runtime retries retryable responses, but it does not auto-generate idempotency keys for POST requests.
 
 ### Audit Logs
 
@@ -682,8 +804,9 @@ After migrating, verify at least the following:
 2. All direct `new WorkOS\...` class construction has been replaced with a `WorkOS` client.
 3. Any list-response destructuring has been updated to `PaginatedResponse`.
 4. Any code that accessed resource `raw` data or mutated resource objects has been updated.
-5. SSO and User Management URL-generation code has been updated for the new request/response shape.
-6. Session-cookie code now uses `SessionManager`.
-7. Deprecated User Management and MFA method names have been replaced.
-8. Webhook verification paths were updated to exception-based handling.
-9. Integration tests for SSO, AuthKit, invitations, password reset, and webhooks still pass.
+5. Any code that relied on `WorkOS::getApiKey()` / `getClientId()` throwing during bootstrap has been updated.
+6. SSO and User Management URL-generation code has been updated for the new request/response shape.
+7. Session-cookie code now uses `SessionManager`, and any success/failure type checks were updated for the new array return shape.
+8. Deprecated User Management and MFA method names have been replaced, including auth methods that no longer accept leading credential arguments.
+9. Webhook verification paths were updated to exception-based handling.
+10. Integration tests for SSO, AuthKit, invitations, password reset, and webhooks still pass.
