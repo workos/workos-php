@@ -19,6 +19,7 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->listOrganizationAuditLogsRetention('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetentionJson::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id/audit_logs_retention', $request->getUri()->getPath());
@@ -30,6 +31,7 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->updateOrganizationAuditLogsRetention('test_id', retentionPeriodInDays: 1);
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetentionJson::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id/audit_logs_retention', $request->getUri()->getPath());
@@ -75,6 +77,7 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->createSchema('test_actionName', targets: []);
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchemaJson::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/actions/test_actionName/schemas', $request->getUri()->getPath());
@@ -86,6 +89,7 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->createEvent(organizationId: 'test_value', event: \WorkOS\Resource\AuditLogEvent::fromArray($this->loadFixture('audit_log_event')));
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogEventCreateResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/events', $request->getUri()->getPath());
@@ -100,6 +104,7 @@ class AuditLogsTest extends TestCase
         $result = $client->auditLogs()->createExport(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/exports', $request->getUri()->getPath());
@@ -116,6 +121,7 @@ class AuditLogsTest extends TestCase
         $result = $client->auditLogs()->getExport('test_auditLogExportId');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/exports/test_auditLogExportId', $request->getUri()->getPath());
@@ -130,6 +136,9 @@ class AuditLogsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->listActions();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

@@ -19,6 +19,7 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->verifyChallenge('test_id', code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationChallengeVerifyResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('auth/challenges/test_id/verify', $request->getUri()->getPath());
@@ -33,6 +34,7 @@ class MultiFactorAuthTest extends TestCase
         $result = $client->multiFactorAuth()->enrollFactor(type: \WorkOS\Resource\AuthenticationFactorsCreateRequestType::GenericOtp);
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactorEnrolled::class, $result);
         $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/enroll', $request->getUri()->getPath());
@@ -45,6 +47,7 @@ class MultiFactorAuthTest extends TestCase
         $result = $client->multiFactorAuth()->getFactor('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactor::class, $result);
         $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/test_id', $request->getUri()->getPath());
@@ -67,6 +70,7 @@ class MultiFactorAuthTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationChallenge::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['authentication_factor_id'], $result->authenticationFactorId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/test_id/challenge', $request->getUri()->getPath());
@@ -94,6 +98,7 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->createUserAuthFactors('test_userlandUserId', type: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\UserAuthenticationFactorEnrollResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_userlandUserId/auth_factors', $request->getUri()->getPath());
@@ -110,6 +115,9 @@ class MultiFactorAuthTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

@@ -19,6 +19,7 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->getJwks('test_clientId');
         $this->assertInstanceOf(\WorkOS\Resource\JwksResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('sso/jwks/test_clientId', $request->getUri()->getPath());
@@ -40,6 +41,7 @@ class UserManagementTest extends TestCase
         $result = $client->userManagement()->createDevice(clientId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\DeviceAuthorizationResponse::class, $result);
         $this->assertSame($fixture['device_code'], $result->deviceCode);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/authorize/device', $request->getUri()->getPath());
@@ -73,6 +75,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\CORSOriginResponse::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['origin'], $result->origin);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/cors_origins', $request->getUri()->getPath());
@@ -88,6 +91,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\EmailVerification::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/email_verification/test_id', $request->getUri()->getPath());
@@ -101,6 +105,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\PasswordReset::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/password_reset', $request->getUri()->getPath());
@@ -114,6 +119,7 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->confirmPasswordReset(token: 'test_value', newPassword: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ResetPasswordResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/password_reset/confirm', $request->getUri()->getPath());
@@ -130,6 +136,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\PasswordReset::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/password_reset/test_id', $request->getUri()->getPath());
@@ -162,6 +169,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\User::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users', $request->getUri()->getPath());
@@ -177,6 +185,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\User::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/external_id/test_external_id', $request->getUri()->getPath());
@@ -190,6 +199,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\User::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id', $request->getUri()->getPath());
@@ -203,6 +213,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\User::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id', $request->getUri()->getPath());
@@ -223,6 +234,7 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->confirmEmailChange('test_id', code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\EmailChangeConfirmation::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/email_change/confirm', $request->getUri()->getPath());
@@ -237,6 +249,7 @@ class UserManagementTest extends TestCase
         $result = $client->userManagement()->sendEmailChange('test_id', newEmail: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\EmailChange::class, $result);
         $this->assertSame($fixture['new_email'], $result->newEmail);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/email_change/send', $request->getUri()->getPath());
@@ -250,6 +263,7 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->verifyEmail('test_id', code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\VerifyEmailResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/email_verification/confirm', $request->getUri()->getPath());
@@ -263,6 +277,7 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->sendVerificationEmail('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\SendVerificationEmailResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/email_verification/send', $request->getUri()->getPath());
@@ -276,6 +291,7 @@ class UserManagementTest extends TestCase
         $this->assertIsArray($result);
         $this->assertInstanceOf(\WorkOS\Resource\UserIdentitiesGetItem::class, $result[0]);
         $this->assertSame($fixture['idp_id'], $result[0]->idpId);
+        $this->assertIsArray($result[0]->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_id/identities', $request->getUri()->getPath());
@@ -323,6 +339,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserInvite::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations', $request->getUri()->getPath());
@@ -338,6 +355,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserInvite::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations/by_token/test_token', $request->getUri()->getPath());
@@ -351,6 +369,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserInvite::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations/test_id', $request->getUri()->getPath());
@@ -364,6 +383,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Invitation::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations/test_id/accept', $request->getUri()->getPath());
@@ -377,6 +397,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserInvite::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations/test_id/resend', $request->getUri()->getPath());
@@ -390,6 +411,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Invitation::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/invitations/test_id/revoke', $request->getUri()->getPath());
@@ -402,6 +424,7 @@ class UserManagementTest extends TestCase
         $result = $client->userManagement()->updateJWTTemplate(content: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\JWTTemplateResponse::class, $result);
         $this->assertSame($fixture['content'], $result->content);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('user_management/jwt_template', $request->getUri()->getPath());
@@ -417,6 +440,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\MagicAuth::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/magic_auth', $request->getUri()->getPath());
@@ -432,6 +456,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\MagicAuth::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/magic_auth/test_id', $request->getUri()->getPath());
@@ -463,6 +488,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships', $request->getUri()->getPath());
@@ -479,6 +505,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
@@ -492,6 +519,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
@@ -514,6 +542,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships/test_id/deactivate', $request->getUri()->getPath());
@@ -527,6 +556,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships/test_id/reactivate', $request->getUri()->getPath());
@@ -540,6 +570,7 @@ class UserManagementTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\RedirectUri::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['uri'], $result->uri);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/redirect_uris', $request->getUri()->getPath());
@@ -645,6 +676,9 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->listUsers();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

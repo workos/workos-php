@@ -21,6 +21,7 @@ class OrganizationDomainsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organization_domains', $request->getUri()->getPath());
@@ -37,6 +38,7 @@ class OrganizationDomainsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organization_domains/test_id', $request->getUri()->getPath());
@@ -59,6 +61,7 @@ class OrganizationDomainsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organization_domains/test_id/verify', $request->getUri()->getPath());

@@ -19,6 +19,7 @@ class AuthorizationTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->check('test_organization_membership_id', permissionSlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationCheck::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/check', $request->getUri()->getPath());
@@ -69,6 +70,7 @@ class AuthorizationTest extends TestCase
         $result = $client->authorization()->assignRole('test_organization_membership_id', roleSlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\RoleAssignment::class, $result);
         $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/role_assignments', $request->getUri()->getPath());
@@ -102,6 +104,7 @@ class AuthorizationTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->listOrganizationRoles('test_organizationId');
         $this->assertInstanceOf(\WorkOS\Resource\RoleList::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles', $request->getUri()->getPath());
@@ -115,6 +118,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles', $request->getUri()->getPath());
@@ -130,6 +134,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug', $request->getUri()->getPath());
@@ -143,6 +148,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug', $request->getUri()->getPath());
@@ -165,6 +171,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug/permissions', $request->getUri()->getPath());
@@ -178,6 +185,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug/permissions', $request->getUri()->getPath());
@@ -200,6 +208,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id', $request->getUri()->getPath());
@@ -213,6 +222,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id', $request->getUri()->getPath());
@@ -275,6 +285,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/resources', $request->getUri()->getPath());
@@ -293,6 +304,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/resources/test_resource_id', $request->getUri()->getPath());
@@ -306,6 +318,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/resources/test_resource_id', $request->getUri()->getPath());
@@ -344,6 +357,7 @@ class AuthorizationTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->listEnvironmentRoles();
         $this->assertInstanceOf(\WorkOS\Resource\RoleList::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles', $request->getUri()->getPath());
@@ -357,6 +371,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles', $request->getUri()->getPath());
@@ -373,6 +388,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles/test_slug', $request->getUri()->getPath());
@@ -386,6 +402,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles/test_slug', $request->getUri()->getPath());
@@ -399,6 +416,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles/test_slug/permissions', $request->getUri()->getPath());
@@ -412,6 +430,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('authorization/roles/test_slug/permissions', $request->getUri()->getPath());
@@ -441,6 +460,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Permission::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authorization/permissions', $request->getUri()->getPath());
@@ -457,6 +477,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationPermission::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('authorization/permissions/test_slug', $request->getUri()->getPath());
@@ -470,6 +491,7 @@ class AuthorizationTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationPermission::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/permissions/test_slug', $request->getUri()->getPath());
@@ -493,6 +515,9 @@ class AuthorizationTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->listOrganizationMembershipResources('test_organization_membership_id', permissionSlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

@@ -19,6 +19,7 @@ class ApiKeysTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->apiKeys()->createValidations(value: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ApiKeyValidationResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('api_keys/validations', $request->getUri()->getPath());
@@ -59,6 +60,7 @@ class ApiKeysTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\ApiKeyWithValue::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
@@ -75,6 +77,9 @@ class ApiKeysTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

@@ -20,6 +20,7 @@ class AdminPortalTest extends TestCase
         $result = $client->adminPortal()->generateLink(organization: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\PortalLinkResponse::class, $result);
         $this->assertSame($fixture['link'], $result->link);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('portal/generate_link', $request->getUri()->getPath());

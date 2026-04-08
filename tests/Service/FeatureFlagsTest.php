@@ -37,6 +37,7 @@ class FeatureFlagsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Flag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug', $request->getUri()->getPath());
@@ -50,6 +51,7 @@ class FeatureFlagsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/disable', $request->getUri()->getPath());
@@ -63,6 +65,7 @@ class FeatureFlagsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/enable', $request->getUri()->getPath());
@@ -127,6 +130,9 @@ class FeatureFlagsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->featureFlags()->listFeatureFlags();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

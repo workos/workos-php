@@ -20,6 +20,7 @@ class WidgetsTest extends TestCase
         $result = $client->widgets()->createToken(organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\WidgetSessionTokenResponse::class, $result);
         $this->assertSame($fixture['token'], $result->token);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('widgets/token', $request->getUri()->getPath());

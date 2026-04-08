@@ -20,6 +20,7 @@ class RadarTest extends TestCase
         $result = $client->radar()->createAttempts(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::Login);
         $this->assertInstanceOf(\WorkOS\Resource\RadarStandaloneResponse::class, $result);
         $this->assertSame($fixture['reason'], $result->reason);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('radar/attempts', $request->getUri()->getPath());
@@ -45,6 +46,7 @@ class RadarTest extends TestCase
         $result = $client->radar()->addListEntry(\WorkOS\Resource\RadarType::IpAddress, \WorkOS\Resource\RadarAction::Block, entry: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\RadarListEntryAlreadyPresentResponse::class, $result);
         $this->assertSame($fixture['message'], $result->message);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('radar/lists/ip_address/block', $request->getUri()->getPath());

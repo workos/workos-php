@@ -37,6 +37,7 @@ class WebhooksTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints', $request->getUri()->getPath());
@@ -52,6 +53,7 @@ class WebhooksTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints/test_id', $request->getUri()->getPath());
@@ -75,6 +77,9 @@ class WebhooksTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->listWebhookEndpoints();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

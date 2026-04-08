@@ -40,6 +40,7 @@ class DirectorySyncTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Directory::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directories/test_id', $request->getUri()->getPath());
@@ -80,6 +81,7 @@ class DirectorySyncTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryGroup::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['idp_id'], $result->idpId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_groups/test_id', $request->getUri()->getPath());
@@ -111,6 +113,7 @@ class DirectorySyncTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryUserWithGroups::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['directory_id'], $result->directoryId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('directory_users/test_id', $request->getUri()->getPath());
@@ -125,6 +128,9 @@ class DirectorySyncTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->directorySync()->listDirectories();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

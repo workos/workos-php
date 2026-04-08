@@ -38,6 +38,7 @@ class OrganizationsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations', $request->getUri()->getPath());
@@ -53,6 +54,7 @@ class OrganizationsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/external_id/test_external_id', $request->getUri()->getPath());
@@ -66,6 +68,7 @@ class OrganizationsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
@@ -79,6 +82,7 @@ class OrganizationsTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
@@ -100,6 +104,7 @@ class OrganizationsTest extends TestCase
         $result = $client->organizations()->listOrganizationAuditLogConfiguration('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogConfiguration::class, $result);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id/audit_log_configuration', $request->getUri()->getPath());
@@ -114,6 +119,9 @@ class OrganizationsTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizations()->listOrganizations();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

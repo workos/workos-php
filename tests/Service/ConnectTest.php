@@ -20,6 +20,7 @@ class ConnectTest extends TestCase
         $result = $client->connect()->completeOAuth2(externalAuthId: 'test_value', user: \WorkOS\Resource\UserObject::fromArray($this->loadFixture('user_object')));
         $this->assertInstanceOf(\WorkOS\Resource\ExternalAuthCompleteResponse::class, $result);
         $this->assertSame($fixture['redirect_uri'], $result->redirectUri);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('authkit/oauth2/complete', $request->getUri()->getPath());
@@ -52,6 +53,7 @@ class ConnectTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['client_id'], $result->clientId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id', $request->getUri()->getPath());
@@ -65,6 +67,7 @@ class ConnectTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['client_id'], $result->clientId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id', $request->getUri()->getPath());
@@ -88,6 +91,7 @@ class ConnectTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\ApplicationCredentialsListItem::class, $result[0]);
         $this->assertSame($fixture['id'], $result[0]->id);
         $this->assertSame($fixture['secret_hint'], $result[0]->secretHint);
+        $this->assertIsArray($result[0]->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id/client_secrets', $request->getUri()->getPath());
@@ -101,6 +105,7 @@ class ConnectTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\NewConnectApplicationSecret::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['secret_hint'], $result->secretHint);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id/client_secrets', $request->getUri()->getPath());
@@ -140,6 +145,9 @@ class ConnectTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->connect()->listApplications();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);

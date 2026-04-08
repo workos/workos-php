@@ -41,6 +41,7 @@ class SSOTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('connections/test_id', $request->getUri()->getPath());
@@ -61,6 +62,7 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->getAuthorizationUrl(redirectUri: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOAuthorizeUrlResponse::class, $result);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('sso/authorize', $request->getUri()->getPath());
@@ -82,6 +84,7 @@ class SSOTest extends TestCase
         $result = $client->sso()->authorizeLogout(profileId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOLogoutAuthorizeResponse::class, $result);
         $this->assertSame($fixture['logout_url'], $result->logoutUrl);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/logout/authorize', $request->getUri()->getPath());
@@ -97,6 +100,7 @@ class SSOTest extends TestCase
         $this->assertInstanceOf(\WorkOS\Resource\Profile::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['connection_id'], $result->connectionId);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('sso/profile', $request->getUri()->getPath());
@@ -109,6 +113,7 @@ class SSOTest extends TestCase
         $result = $client->sso()->getProfileAndToken(code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOTokenResponse::class, $result);
         $this->assertSame($fixture['access_token'], $result->accessToken);
+        $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/token', $request->getUri()->getPath());
@@ -125,6 +130,9 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->listConnections();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
         // Iterating should not throw on null cursors
         foreach ($result as $item) {
             $this->assertNotNull($item);
