@@ -31,7 +31,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('list_connect_application');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->listApplications(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value');
+        $result = $client->connect()->listApplications(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

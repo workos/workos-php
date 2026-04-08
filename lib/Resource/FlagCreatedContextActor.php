@@ -15,7 +15,7 @@ readonly class FlagCreatedContextActor implements \JsonSerializable
         /** Unique identifier of the actor. */
         public string $id,
         /** The source of the actor that performed the action. */
-        public FlagCreatedContextActorSource $source,
+        public EventContextActorSource $source,
         /** The name of the actor. */
         public ?string $name,
     ) {
@@ -25,7 +25,7 @@ readonly class FlagCreatedContextActor implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            source: FlagCreatedContextActorSource::from($data['source']),
+            source: EventContextActorSource::from($data['source']),
             name: $data['name'] ?? null,
         );
     }

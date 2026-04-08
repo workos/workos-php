@@ -20,8 +20,7 @@ readonly class OrganizationMembershipUpdated implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?OrganizationMembershipUpdatedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class OrganizationMembershipUpdated implements \JsonSerializable
             data: OrganizationMembershipUpdatedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? OrganizationMembershipUpdatedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

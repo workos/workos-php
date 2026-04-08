@@ -15,9 +15,9 @@ readonly class DsyncGroupUserRemovedData implements \JsonSerializable
         /** The ID of the directory. */
         public string $directoryId,
         /** The directory user removed from the group. */
-        public DsyncGroupUserRemovedDataUser $user,
+        public DirectoryUser $user,
         /** The directory group the user was removed from. */
-        public DsyncGroupUserRemovedDataGroup $group,
+        public DirectoryGroup $group,
     ) {
     }
 
@@ -25,8 +25,8 @@ readonly class DsyncGroupUserRemovedData implements \JsonSerializable
     {
         return new self(
             directoryId: $data['directory_id'],
-            user: DsyncGroupUserRemovedDataUser::fromArray($data['user']),
-            group: DsyncGroupUserRemovedDataGroup::fromArray($data['group']),
+            user: DirectoryUser::fromArray($data['user']),
+            group: DirectoryGroup::fromArray($data['group']),
         );
     }
 

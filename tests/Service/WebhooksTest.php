@@ -17,7 +17,7 @@ class WebhooksTest extends TestCase
     {
         $fixture = $this->loadFixture('list_webhook_endpoint_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->webhooks()->listWebhookEndpoints(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->webhooks()->listWebhookEndpoints(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

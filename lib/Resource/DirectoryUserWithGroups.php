@@ -24,7 +24,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         /** The email address of the user. */
         public ?string $email,
         /** The state of the user. */
-        public DsyncUserCreatedDataState $state,
+        public DirectoryUserState $state,
         /**
          * The raw attributes received from the directory provider.
          * @var array<string, mixed>
@@ -83,7 +83,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             organizationId: $data['organization_id'],
             idpId: $data['idp_id'],
             email: $data['email'] ?? null,
-            state: DsyncUserCreatedDataState::from($data['state']),
+            state: DirectoryUserState::from($data['state']),
             rawAttributes: $data['raw_attributes'],
             customAttributes: $data['custom_attributes'],
             createdAt: new \DateTimeImmutable($data['created_at']),

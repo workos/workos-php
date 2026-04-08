@@ -20,8 +20,7 @@ readonly class PermissionDeleted implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?PermissionDeletedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class PermissionDeleted implements \JsonSerializable
             data: PermissionDeletedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? PermissionDeletedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

@@ -30,7 +30,7 @@ readonly class AuditLogEvent implements \JsonSerializable
          */
         public ?array $metadata = null,
         /** What schema version the event is associated with. */
-        public ?float $version = null,
+        public ?int $version = null,
     ) {
     }
 

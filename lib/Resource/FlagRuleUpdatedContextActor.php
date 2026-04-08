@@ -14,7 +14,7 @@ readonly class FlagRuleUpdatedContextActor implements \JsonSerializable
     public function __construct(
         /** Unique identifier of the actor. */
         public string $id,
-        public FlagCreatedContextActorSource $source,
+        public EventContextActorSource $source,
         /** The name of the actor. */
         public ?string $name,
     ) {
@@ -24,7 +24,7 @@ readonly class FlagRuleUpdatedContextActor implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            source: FlagCreatedContextActorSource::from($data['source']),
+            source: EventContextActorSource::from($data['source']),
             name: $data['name'] ?? null,
         );
     }

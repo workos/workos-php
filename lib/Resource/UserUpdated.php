@@ -15,13 +15,12 @@ readonly class UserUpdated implements \JsonSerializable
         public string $id,
         public string $event,
         /** The event payload. */
-        public UserUpdatedData $data,
+        public User $data,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?UserUpdatedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -30,10 +29,10 @@ readonly class UserUpdated implements \JsonSerializable
         return new self(
             id: $data['id'],
             event: $data['event'],
-            data: UserUpdatedData::fromArray($data['data']),
+            data: User::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? UserUpdatedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

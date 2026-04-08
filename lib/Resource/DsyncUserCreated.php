@@ -15,13 +15,12 @@ readonly class DsyncUserCreated implements \JsonSerializable
         public string $id,
         public string $event,
         /** The event payload. */
-        public DsyncUserCreatedData $data,
+        public DirectoryUser $data,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?DsyncUserCreatedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -30,10 +29,10 @@ readonly class DsyncUserCreated implements \JsonSerializable
         return new self(
             id: $data['id'],
             event: $data['event'],
-            data: DsyncUserCreatedData::fromArray($data['data']),
+            data: DirectoryUser::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? DsyncUserCreatedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

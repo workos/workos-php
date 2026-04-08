@@ -15,9 +15,9 @@ readonly class DsyncGroupUserAddedData implements \JsonSerializable
         /** The ID of the directory. */
         public string $directoryId,
         /** The directory user added to the group. */
-        public DsyncGroupUserAddedDataUser $user,
+        public DirectoryUser $user,
         /** The directory group the user was added to. */
-        public DsyncGroupUserAddedDataGroup $group,
+        public DirectoryGroup $group,
     ) {
     }
 
@@ -25,8 +25,8 @@ readonly class DsyncGroupUserAddedData implements \JsonSerializable
     {
         return new self(
             directoryId: $data['directory_id'],
-            user: DsyncGroupUserAddedDataUser::fromArray($data['user']),
-            group: DsyncGroupUserAddedDataGroup::fromArray($data['group']),
+            user: DirectoryUser::fromArray($data['user']),
+            group: DirectoryGroup::fromArray($data['group']),
         );
     }
 

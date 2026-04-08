@@ -20,8 +20,7 @@ readonly class ConnectionSAMLCertificateRenewalRequired implements \JsonSerializ
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?ConnectionSAMLCertificateRenewalRequiredContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class ConnectionSAMLCertificateRenewalRequired implements \JsonSerializ
             data: ConnectionSAMLCertificateRenewalRequiredData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? ConnectionSAMLCertificateRenewalRequiredContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

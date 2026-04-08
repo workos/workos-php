@@ -22,11 +22,8 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
         public string $organizationId,
         /** The status of the organization membership. */
         public OrganizationMembershipStatus $status,
-        /**
-         * The role associated with the membership.
-         * @var array<string, mixed>
-         */
-        public array $role,
+        /** The role associated with the membership. */
+        public SlimRole $role,
         /**
          * Custom attributes associated with the membership.
          * @var array<string, mixed>
@@ -40,7 +37,7 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /**
          * The roles associated with the membership.
-         * @var array<array<string, mixed>>|null
+         * @var array<\WorkOS\Resource\SlimRole>|null
          */
         public ?array $roles = null,
     ) {
@@ -54,7 +51,7 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
             userId: $data['user_id'],
             organizationId: $data['organization_id'],
             status: OrganizationMembershipStatus::from($data['status']),
-            role: $data['role'],
+            role: SlimRole::fromArray($data['role']),
             customAttributes: $data['custom_attributes'],
             directoryManaged: $data['directory_managed'],
             createdAt: new \DateTimeImmutable($data['created_at']),
@@ -71,12 +68,12 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
             'status' => $this->status->value,
-            'role' => $this->role,
+            'role' => $this->role->toArray(),
             'custom_attributes' => $this->customAttributes,
             'directory_managed' => $this->directoryManaged,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'roles' => $this->roles,
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
         ];
     }
 }

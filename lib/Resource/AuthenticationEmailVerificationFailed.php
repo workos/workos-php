@@ -20,8 +20,7 @@ readonly class AuthenticationEmailVerificationFailed implements \JsonSerializabl
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?AuthenticationEmailVerificationFailedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class AuthenticationEmailVerificationFailed implements \JsonSerializabl
             data: AuthenticationEmailVerificationFailedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? AuthenticationEmailVerificationFailedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

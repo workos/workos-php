@@ -17,6 +17,8 @@ readonly class CreateOrganizationRole implements \JsonSerializable
         public ?string $slug = null,
         /** An optional description of the role's purpose. */
         public ?string $description = null,
+        /** The slug of the resource type the role is scoped to. */
+        public ?string $resourceTypeSlug = null,
     ) {
     }
 
@@ -26,6 +28,7 @@ readonly class CreateOrganizationRole implements \JsonSerializable
             name: $data['name'],
             slug: $data['slug'] ?? null,
             description: $data['description'] ?? null,
+            resourceTypeSlug: $data['resource_type_slug'] ?? null,
         );
     }
 
@@ -35,6 +38,7 @@ readonly class CreateOrganizationRole implements \JsonSerializable
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'resource_type_slug' => $this->resourceTypeSlug,
         ];
     }
 }

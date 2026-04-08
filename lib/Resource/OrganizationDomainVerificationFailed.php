@@ -20,8 +20,7 @@ readonly class OrganizationDomainVerificationFailed implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?OrganizationDomainVerificationFailedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -33,7 +32,7 @@ readonly class OrganizationDomainVerificationFailed implements \JsonSerializable
             data: OrganizationDomainVerificationFailedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? OrganizationDomainVerificationFailedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

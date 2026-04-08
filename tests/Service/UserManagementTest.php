@@ -151,7 +151,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUsers(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, organization: 'test_value', organizationId: 'test_value', email: 'test_value');
+        $result = $client->userManagement()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organization: 'test_value', organizationId: 'test_value', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -297,7 +297,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_sessions_list_item');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUserSessions('test_id', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->userManagement()->listUserSessions('test_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -313,7 +313,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_invite');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listInvitations(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', email: 'test_value');
+        $result = $client->userManagement()->listInvitations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -453,7 +453,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listOrganizationMemberships(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', statuses: [], userId: 'test_value');
+        $result = $client->userManagement()->listOrganizationMemberships(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', statuses: [], userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -563,7 +563,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authorized_connect_application_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUserAuthorizedApplications('test_user_id', before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->userManagement()->listUserAuthorizedApplications('test_user_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

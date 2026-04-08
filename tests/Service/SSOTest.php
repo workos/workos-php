@@ -17,7 +17,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('list_connection');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->listConnections(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, connectionType: \WorkOS\Resource\ConnectionsConnectionType::Adfssaml, domain: 'test_value', organizationId: 'test_value', search: 'test_value');
+        $result = $client->sso()->listConnections(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, connectionType: \WorkOS\Resource\ConnectionsConnectionType::Adfssaml, domain: 'test_value', organizationId: 'test_value', search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

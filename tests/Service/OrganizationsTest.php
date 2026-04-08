@@ -17,7 +17,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->listOrganizations(before: 'test_value', after: 'test_value', limit: 1.0, order: \WorkOS\Resource\EventsOrder::Normal, domains: [], search: 'test_value');
+        $result = $client->organizations()->listOrganizations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, domains: [], search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

@@ -39,7 +39,7 @@
     "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-fixer.dist.php",
     "test": "php vendor/bin/phpunit tests",
     "typecheck": "php vendor/bin/phpstan analyse --no-progress",
-    "ci": "./scripts/test.sh --ci"
+    "ci": "./script/ci"
   },
   "config": {
     "allow-plugins": {

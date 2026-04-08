@@ -25,7 +25,7 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
         /** The email address of the user. */
         public ?string $email,
         /** The state of the user. */
-        public DsyncUserCreatedDataState $state,
+        public DirectoryUserState $state,
         /**
          * The raw attributes received from the directory provider.
          * @var array<string, mixed>
@@ -61,11 +61,10 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
          * @deprecated
          */
         public ?string $username = null,
-        /** The primary role assigned to the user. */
-        public ?DsyncUserUpdatedDataRole $role = null,
+        public ?SlimRole $role = null,
         /**
          * All roles assigned to the user.
-         * @var array<\WorkOS\Resource\DsyncUserUpdatedDataRole>|null
+         * @var array<\WorkOS\Resource\SlimRole>|null
          */
         public ?array $roles = null,
         /** @var array<string, mixed>|null */
@@ -82,7 +81,7 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
             organizationId: $data['organization_id'],
             idpId: $data['idp_id'],
             email: $data['email'] ?? null,
-            state: DsyncUserCreatedDataState::from($data['state']),
+            state: DirectoryUserState::from($data['state']),
             rawAttributes: $data['raw_attributes'],
             customAttributes: $data['custom_attributes'],
             createdAt: new \DateTimeImmutable($data['created_at']),
@@ -92,7 +91,7 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
             emails: $data['emails'] ?? null,
             jobTitle: $data['job_title'] ?? null,
             username: $data['username'] ?? null,
-            role: isset($data['role']) ? DsyncUserUpdatedDataRole::fromArray($data['role']) : null,
+            role: isset($data['role']) ? SlimRole::fromArray($data['role']) : null,
             roles: $data['roles'] ?? null,
             previousAttributes: $data['previous_attributes'] ?? null,
         );

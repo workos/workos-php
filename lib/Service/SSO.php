@@ -25,7 +25,7 @@ class SSO
      * Get a list of all of your existing connections matching the criteria specified.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @param \WorkOS\Resource\ConnectionsConnectionType|null $connectionType Filter Connections by their type.
      * @param string|null $domain Filter Connections by their associated domain.
@@ -36,7 +36,7 @@ class SSO
     public function listConnections(
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\Resource\ConnectionsConnectionType $connectionType = null,
         ?string $domain = null,

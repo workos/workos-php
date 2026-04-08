@@ -15,13 +15,12 @@ readonly class DsyncGroupDeleted implements \JsonSerializable
         public string $id,
         public string $event,
         /** The event payload. */
-        public DsyncGroupDeletedData $data,
+        public DirectoryGroup $data,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** Distinguishes the Event object. */
         public string $object,
-        /** Additional context about the event. */
-        public ?DsyncGroupDeletedContext $context = null,
+        public ?EventContext $context = null,
     ) {
     }
 
@@ -30,10 +29,10 @@ readonly class DsyncGroupDeleted implements \JsonSerializable
         return new self(
             id: $data['id'],
             event: $data['event'],
-            data: DsyncGroupDeletedData::fromArray($data['data']),
+            data: DirectoryGroup::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             object: $data['object'],
-            context: isset($data['context']) ? DsyncGroupDeletedContext::fromArray($data['context']) : null,
+            context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }
 

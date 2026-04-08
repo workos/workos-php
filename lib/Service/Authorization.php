@@ -9,7 +9,6 @@ namespace WorkOS\Service;
 use WorkOS\Resource\AuthorizationCheck;
 use WorkOS\Resource\AuthorizationPermission;
 use WorkOS\Resource\AuthorizationResource;
-use WorkOS\Resource\ListModel;
 use WorkOS\Resource\Permission;
 use WorkOS\Resource\Role;
 use WorkOS\Resource\RoleAssignment;
@@ -66,7 +65,7 @@ class Authorization
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only child resources where the organization membership has this permission are returned.
      * @param string|null $parentResourceId The WorkOS ID of the parent resource. Provide this or both `parent_resource_external_id` and `parent_resource_type_slug`, but not both.
@@ -79,7 +78,7 @@ class Authorization
         string $permissionSlug,
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $parentResourceId = null,
         ?string $parentResourceTypeSlug = null,
@@ -112,7 +111,7 @@ class Authorization
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RoleAssignment>
      */
@@ -120,7 +119,7 @@ class Authorization
         string $organizationMembershipId,
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -231,18 +230,18 @@ class Authorization
      *
      * Get a list of all roles that apply to an organization. This includes both environment roles and organization-specific roles, returned in priority order.
      * @param string $organizationId The ID of the organization.
-     * @return \WorkOS\Resource\ListModel
+     * @return \WorkOS\Resource\RoleList
      */
     public function listOrganizationRoles(
         string $organizationId,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ListModel {
+    ): \WorkOS\Resource\RoleList {
         $response = $this->client->request(
             method: 'GET',
             path: "authorization/organizations/{$organizationId}/roles",
             options: $options,
         );
-        return ListModel::fromArray($response);
+        return RoleList::fromArray($response);
     }
 
     /**
@@ -253,6 +252,7 @@ class Authorization
      * @param string|null $slug A unique identifier for the role within the organization. When provided, must begin with 'org-' and contain only lowercase letters, numbers, hyphens, and underscores. When omitted, a slug is auto-generated from the role name and a random suffix.
      * @param string $name A descriptive name for the role.
      * @param string|null|null $description An optional description of the role's purpose.
+     * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
      * @return \WorkOS\Resource\Role
      */
     public function createOrganizationRoles(
@@ -260,12 +260,14 @@ class Authorization
         string $name,
         ?string $slug = null,
         ?string $description = null,
+        ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\Role {
         $body = array_filter([
             'slug' => $slug,
             'name' => $name,
             'description' => $description,
+            'resource_type_slug' => $resourceTypeSlug,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -524,7 +526,7 @@ class Authorization
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
@@ -537,7 +539,7 @@ class Authorization
         string $permissionSlug,
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -565,7 +567,7 @@ class Authorization
      * Get a paginated list of authorization resources.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string|null $organizationId Filter resources by organization ID.
      * @param string|null $resourceTypeSlug Filter resources by resource type slug.
@@ -578,7 +580,7 @@ class Authorization
     public function listResources(
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?string $organizationId = null,
         ?string $resourceTypeSlug = null,
@@ -740,7 +742,7 @@ class Authorization
      * @param string $resourceId The ID of the authorization resource.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
@@ -751,7 +753,7 @@ class Authorization
         string $permissionSlug,
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -925,14 +927,14 @@ class Authorization
      * Get a list of all permissions in your WorkOS environment.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param float|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      */
     public function listPermissions(
         ?string $before = null,
         ?string $after = null,
-        ?float $limit = null,
+        ?int $limit = null,
         ?\WorkOS\Resource\EventsOrder $order = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
