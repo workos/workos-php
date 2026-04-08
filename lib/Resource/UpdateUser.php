@@ -27,7 +27,7 @@ readonly class UpdateUser implements \JsonSerializable
         public ?CreateUserPasswordHashType $passwordHashType = null,
         /**
          * Object containing metadata key/value pairs associated with the user.
-         * @var array<string, string>|null|null
+         * @var array<string, string>|null
          */
         public ?array $metadata = null,
         /** The external ID of the user. */
@@ -62,7 +62,7 @@ readonly class UpdateUser implements \JsonSerializable
             'email_verified' => $this->emailVerified,
             'password' => $this->password,
             'password_hash' => $this->passwordHash,
-            'password_hash_type' => $this->passwordHashType instanceof \BackedEnum ? $this->passwordHashType->value : $this->passwordHashType,
+            'password_hash_type' => $this->passwordHashType?->value,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
             'locale' => $this->locale,

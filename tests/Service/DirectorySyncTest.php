@@ -54,11 +54,11 @@ class DirectorySyncTest extends TestCase
         $this->assertStringEndsWith('directories/test_id', $request->getUri()->getPath());
     }
 
-    public function testListDirectoryGroups(): void
+    public function testListGroups(): void
     {
         $fixture = $this->loadFixture('list_directory_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectoryGroups(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', user: 'test_value');
+        $result = $client->directorySync()->listGroups(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', user: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -72,11 +72,11 @@ class DirectorySyncTest extends TestCase
         $this->assertSame('test_value', $query['user']);
     }
 
-    public function testGetDirectoryGroup(): void
+    public function testGetGroup(): void
     {
         $fixture = $this->loadFixture('directory_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->getDirectoryGroup('test_id');
+        $result = $client->directorySync()->getGroup('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryGroup::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['idp_id'], $result->idpId);
@@ -85,11 +85,11 @@ class DirectorySyncTest extends TestCase
         $this->assertStringEndsWith('directory_groups/test_id', $request->getUri()->getPath());
     }
 
-    public function testListDirectoryUsers(): void
+    public function testListUsers(): void
     {
         $fixture = $this->loadFixture('list_directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectoryUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', group: 'test_value');
+        $result = $client->directorySync()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', group: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -103,11 +103,11 @@ class DirectorySyncTest extends TestCase
         $this->assertSame('test_value', $query['group']);
     }
 
-    public function testGetDirectoryUser(): void
+    public function testGetUser(): void
     {
         $fixture = $this->loadFixture('directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->getDirectoryUser('test_id');
+        $result = $client->directorySync()->getUser('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryUserWithGroups::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['directory_id'], $result->directoryId);

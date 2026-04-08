@@ -85,11 +85,11 @@ readonly class DirectoryUser implements \JsonSerializable
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
-            emails: $data['emails'] ?? null,
+            emails: isset($data['emails']) ? array_map(fn ($item) => DirectoryUserEmail::fromArray($item), $data['emails']) : null,
             jobTitle: $data['job_title'] ?? null,
             username: $data['username'] ?? null,
             role: isset($data['role']) ? SlimRole::fromArray($data['role']) : null,
-            roles: $data['roles'] ?? null,
+            roles: isset($data['roles']) ? array_map(fn ($item) => SlimRole::fromArray($item), $data['roles']) : null,
         );
     }
 

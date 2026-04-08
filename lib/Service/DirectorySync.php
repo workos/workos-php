@@ -107,7 +107,7 @@ class DirectorySync
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
      */
-    public function listDirectoryGroups(
+    public function listGroups(
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
@@ -140,7 +140,7 @@ class DirectorySync
      * @param string $id Unique identifier for the Directory Group.
      * @return \WorkOS\Resource\DirectoryGroup
      */
-    public function getDirectoryGroup(
+    public function getGroup(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DirectoryGroup {
@@ -164,7 +164,7 @@ class DirectorySync
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
      */
-    public function listDirectoryUsers(
+    public function listUsers(
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
@@ -197,7 +197,7 @@ class DirectorySync
      * @param string $id Unique identifier for the Directory User.
      * @return \WorkOS\Resource\DirectoryUserWithGroups
      */
-    public function getDirectoryUser(
+    public function getUser(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DirectoryUserWithGroups {

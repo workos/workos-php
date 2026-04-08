@@ -27,7 +27,7 @@ readonly class CreateUser implements \JsonSerializable
         public ?bool $emailVerified = null,
         /**
          * Object containing metadata key/value pairs associated with the user.
-         * @var array<string, string>|null|null
+         * @var array<string, string>|null
          */
         public ?array $metadata = null,
         /** The external ID of the user. */
@@ -56,7 +56,7 @@ readonly class CreateUser implements \JsonSerializable
             'email' => $this->email,
             'password' => $this->password,
             'password_hash' => $this->passwordHash,
-            'password_hash_type' => $this->passwordHashType instanceof \BackedEnum ? $this->passwordHashType->value : $this->passwordHashType,
+            'password_hash_type' => $this->passwordHashType?->value,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'email_verified' => $this->emailVerified,

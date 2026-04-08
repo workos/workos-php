@@ -51,7 +51,7 @@ readonly class GenerateLink implements \JsonSerializable
             'organization' => $this->organization,
             'return_url' => $this->returnUrl,
             'success_url' => $this->successUrl,
-            'intent' => $this->intent instanceof \BackedEnum ? $this->intent->value : $this->intent,
+            'intent' => $this->intent?->value,
             'intent_options' => $this->intentOptions?->toArray(),
         ];
     }

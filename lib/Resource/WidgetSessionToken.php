@@ -28,7 +28,7 @@ readonly class WidgetSessionToken implements \JsonSerializable
         return new self(
             organizationId: $data['organization_id'],
             userId: $data['user_id'] ?? null,
-            scopes: $data['scopes'] ?? null,
+            scopes: isset($data['scopes']) ? array_map(fn ($item) => WidgetSessionTokenScopes::from($item), $data['scopes']) : null,
         );
     }
 
@@ -37,7 +37,7 @@ readonly class WidgetSessionToken implements \JsonSerializable
         return [
             'organization_id' => $this->organizationId,
             'user_id' => $this->userId,
-            'scopes' => $this->scopes,
+            'scopes' => $this->scopes !== null ? array_map(fn ($item) => $item->value, $this->scopes) : null,
         ];
     }
 }

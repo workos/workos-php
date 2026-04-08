@@ -92,33 +92,13 @@ class Connect
     }
 
     /**
-     * Create a Connect Application
-     *
-     * Create a new Connect Application. Supports both OAuth and Machine-to-Machine (M2M) application types.
-     * @return \WorkOS\Resource\ConnectApplication
-     */
-    public function createApplications(
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ConnectApplication {
-        $body = [
-        ];
-        $response = $this->client->request(
-            method: 'POST',
-            path: 'connect/applications',
-            body: $body,
-            options: $options,
-        );
-        return ConnectApplication::fromArray($response);
-    }
-
-    /**
      * @param string $name
      * @param bool $isFirstParty
-     * @param string|null|null $description
-     * @param array<string>|null|null $scopes
-     * @param array<\WorkOS\Resource\RedirectUriInput>|null|null $redirectUris
-     * @param bool|null|null $usesPkce
-     * @param string|null|null $organizationId
+     * @param string|null $description
+     * @param array<string>|null $scopes
+     * @param array<\WorkOS\Resource\RedirectUriInput>|null $redirectUris
+     * @param bool|null $usesPkce
+     * @param string|null $organizationId
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createOAuthApplication(
@@ -154,8 +134,8 @@ class Connect
     /**
      * @param string $name
      * @param string $organizationId
-     * @param string|null|null $description
-     * @param array<string>|null|null $scopes
+     * @param string|null $description
+     * @param array<string>|null $scopes
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function createM2MApplication(
@@ -207,9 +187,9 @@ class Connect
      * Update an existing Connect Application. For OAuth applications, you can update redirect URIs. For all applications, you can update the name, description, and scopes.
      * @param string $id The application ID or client ID of the Connect Application.
      * @param string|null $name The name of the application.
-     * @param string|null|null $description A description for the application.
-     * @param array<string>|null|null $scopes The OAuth scopes granted to the application.
-     * @param array<\WorkOS\Resource\RedirectUriInput>|null|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
+     * @param string|null $description A description for the application.
+     * @param array<string>|null $scopes The OAuth scopes granted to the application.
+     * @param array<\WorkOS\Resource\RedirectUriInput>|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
      * @return \WorkOS\Resource\ConnectApplication
      */
     public function updateApplication(

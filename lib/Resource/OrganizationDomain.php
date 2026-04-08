@@ -59,10 +59,10 @@ readonly class OrganizationDomain implements \JsonSerializable
             'domain' => $this->domain,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'state' => $this->state instanceof \BackedEnum ? $this->state->value : $this->state,
+            'state' => $this->state?->value,
             'verification_prefix' => $this->verificationPrefix,
             'verification_token' => $this->verificationToken,
-            'verification_strategy' => $this->verificationStrategy instanceof \BackedEnum ? $this->verificationStrategy->value : $this->verificationStrategy,
+            'verification_strategy' => $this->verificationStrategy?->value,
         ];
     }
 }

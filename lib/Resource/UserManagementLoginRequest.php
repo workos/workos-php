@@ -28,7 +28,7 @@ readonly class UserManagementLoginRequest implements \JsonSerializable
         return new self(
             externalAuthId: $data['external_auth_id'],
             user: UserObject::fromArray($data['user']),
-            userConsentOptions: $data['user_consent_options'] ?? null,
+            userConsentOptions: isset($data['user_consent_options']) ? array_map(fn ($item) => UserConsentOption::fromArray($item), $data['user_consent_options']) : null,
         );
     }
 

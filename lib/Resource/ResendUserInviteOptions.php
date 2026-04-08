@@ -26,7 +26,7 @@ readonly class ResendUserInviteOptions implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'locale' => $this->locale instanceof \BackedEnum ? $this->locale->value : $this->locale,
+            'locale' => $this->locale?->value,
         ];
     }
 }

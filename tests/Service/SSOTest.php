@@ -106,17 +106,14 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('sso_token_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->getProfileAndToken(clientId: 'test_value', clientSecret: 'test_value', code: 'test_value', grantType: 'test_value');
+        $result = $client->sso()->getProfileAndToken(code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOTokenResponse::class, $result);
         $this->assertSame($fixture['access_token'], $result->accessToken);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/token', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['client_id']);
-        $this->assertSame('test_value', $body['client_secret']);
         $this->assertSame('test_value', $body['code']);
-        $this->assertArrayHasKey('grant_type', $body);
     }
 
     public function testPaginationBoundary(): void

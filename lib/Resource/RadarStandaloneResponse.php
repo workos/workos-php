@@ -41,8 +41,8 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
             'verdict' => $this->verdict->value,
             'reason' => $this->reason,
             'attempt_id' => $this->attemptId,
-            'control' => $this->control instanceof \BackedEnum ? $this->control->value : $this->control,
-            'blocklist_type' => $this->blocklistType instanceof \BackedEnum ? $this->blocklistType->value : $this->blocklistType,
+            'control' => $this->control?->value,
+            'blocklist_type' => $this->blocklistType?->value,
         ];
     }
 }

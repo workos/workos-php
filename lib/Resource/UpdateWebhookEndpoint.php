@@ -28,7 +28,7 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
         return new self(
             endpointUrl: $data['endpoint_url'] ?? null,
             status: isset($data['status']) ? WebhookEndpointJsonStatus::from($data['status']) : null,
-            events: $data['events'] ?? null,
+            events: isset($data['events']) ? array_map(fn ($item) => CreateWebhookEndpointEvents::from($item), $data['events']) : null,
         );
     }
 
@@ -36,8 +36,8 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
     {
         return [
             'endpoint_url' => $this->endpointUrl,
-            'status' => $this->status instanceof \BackedEnum ? $this->status->value : $this->status,
-            'events' => $this->events,
+            'status' => $this->status?->value,
+            'events' => $this->events !== null ? array_map(fn ($item) => $item->value, $this->events) : null,
         ];
     }
 }

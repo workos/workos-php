@@ -56,7 +56,7 @@ readonly class OrganizationMembershipCreatedData implements \JsonSerializable
             directoryManaged: $data['directory_managed'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
-            roles: $data['roles'] ?? null,
+            roles: isset($data['roles']) ? array_map(fn ($item) => SlimRole::fromArray($item), $data['roles']) : null,
         );
     }
 

@@ -30,11 +30,11 @@ class OrganizationsTest extends TestCase
         $this->assertSame('test_value', $query['search']);
     }
 
-    public function testCreateOrganizations(): void
+    public function testCreateOrganization(): void
     {
         $fixture = $this->loadFixture('organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->createOrganizations(name: 'test_value');
+        $result = $client->organizations()->createOrganization(name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);

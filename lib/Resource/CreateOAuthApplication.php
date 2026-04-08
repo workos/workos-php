@@ -21,12 +21,12 @@ readonly class CreateOAuthApplication implements \JsonSerializable
         public ?string $description = null,
         /**
          * The OAuth scopes granted to the application.
-         * @var array<string>|null|null
+         * @var array<string>|null
          */
         public ?array $scopes = null,
         /**
          * Redirect URIs for the application.
-         * @var array<\WorkOS\Resource\RedirectUriInput>|null|null
+         * @var array<\WorkOS\Resource\RedirectUriInput>|null
          */
         public ?array $redirectUris = null,
         /** Whether the application uses PKCE (Proof Key for Code Exchange). */
@@ -44,7 +44,7 @@ readonly class CreateOAuthApplication implements \JsonSerializable
             isFirstParty: $data['is_first_party'],
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,
-            redirectUris: $data['redirect_uris'] ?? null,
+            redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => RedirectUriInput::fromArray($item), $data['redirect_uris']) : null,
             usesPkce: $data['uses_pkce'] ?? null,
             organizationId: $data['organization_id'] ?? null,
         );

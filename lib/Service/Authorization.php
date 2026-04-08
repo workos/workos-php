@@ -33,7 +33,7 @@ class Authorization
      * @param string|null $resourceTypeSlug The slug of the resource type.
      * @return \WorkOS\Resource\AuthorizationCheck
      */
-    public function checkOrganizationMembership(
+    public function check(
         string $organizationMembershipId,
         string $permissionSlug,
         ?string $resourceId = null,
@@ -149,7 +149,7 @@ class Authorization
      * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
      * @return \WorkOS\Resource\RoleAssignment
      */
-    public function createOrganizationMembershipRoleAssignments(
+    public function assignRole(
         string $organizationMembershipId,
         string $roleSlug,
         ?string $resourceId = null,
@@ -183,7 +183,7 @@ class Authorization
      * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
      * @return void
      */
-    public function deleteOrganizationMembershipRoleAssignments(
+    public function removeRole(
         string $organizationMembershipId,
         string $roleSlug,
         ?string $resourceId = null,
@@ -251,11 +251,11 @@ class Authorization
      * @param string $organizationId The ID of the organization.
      * @param string|null $slug A unique identifier for the role within the organization. When provided, must begin with 'org-' and contain only lowercase letters, numbers, hyphens, and underscores. When omitted, a slug is auto-generated from the role name and a random suffix.
      * @param string $name A descriptive name for the role.
-     * @param string|null|null $description An optional description of the role's purpose.
+     * @param string|null $description An optional description of the role's purpose.
      * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
      * @return \WorkOS\Resource\Role
      */
-    public function createOrganizationRoles(
+    public function createOrganizationRole(
         string $organizationId,
         string $name,
         ?string $slug = null,
@@ -306,7 +306,7 @@ class Authorization
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @param string|null $name A descriptive name for the role.
-     * @param string|null|null $description An optional description of the role's purpose.
+     * @param string|null $description An optional description of the role's purpose.
      * @return \WorkOS\Resource\Role
      */
     public function updateOrganizationRole(
@@ -456,7 +456,7 @@ class Authorization
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @param string|null $name A display name for the resource.
-     * @param string|null|null $description An optional description of the resource.
+     * @param string|null $description An optional description of the resource.
      * @param string|null $parentResourceId The ID of the parent resource.
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
@@ -617,15 +617,15 @@ class Authorization
      * Create a new authorization resource.
      * @param string $externalId An external identifier for the resource.
      * @param string $name A display name for the resource.
-     * @param string|null|null $description An optional description of the resource.
+     * @param string|null $description An optional description of the resource.
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $organizationId The ID of the organization this resource belongs to.
-     * @param string|null|null $parentResourceId The ID of the parent resource.
+     * @param string|null $parentResourceId The ID of the parent resource.
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
      * @return \WorkOS\Resource\AuthorizationResource
      */
-    public function createResources(
+    public function createResource(
         string $externalId,
         string $name,
         string $resourceTypeSlug,
@@ -680,7 +680,7 @@ class Authorization
      * Update an existing authorization resource.
      * @param string $resourceId The ID of the authorization resource.
      * @param string|null $name A display name for the resource.
-     * @param string|null|null $description An optional description of the resource.
+     * @param string|null $description An optional description of the resource.
      * @param string|null $parentResourceId The ID of the parent resource.
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
@@ -781,7 +781,7 @@ class Authorization
      * List all environment roles in priority order.
      * @return \WorkOS\Resource\RoleList
      */
-    public function listRoles(
+    public function listEnvironmentRoles(
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RoleList {
         $response = $this->client->request(
@@ -798,11 +798,11 @@ class Authorization
      * Create a new environment role.
      * @param string $slug A unique slug for the role.
      * @param string $name A descriptive name for the role.
-     * @param string|null|null $description An optional description of the role.
+     * @param string|null $description An optional description of the role.
      * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
      * @return \WorkOS\Resource\Role
      */
-    public function createRoles(
+    public function createEnvironmentRole(
         string $slug,
         string $name,
         ?string $description = null,
@@ -831,7 +831,7 @@ class Authorization
      * @param string $slug The slug of the environment role.
      * @return \WorkOS\Resource\Role
      */
-    public function getRole(
+    public function getEnvironmentRole(
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\Role {
@@ -849,10 +849,10 @@ class Authorization
      * Update an existing environment role.
      * @param string $slug The slug of the environment role.
      * @param string|null $name A descriptive name for the role.
-     * @param string|null|null $description An optional description of the role.
+     * @param string|null $description An optional description of the role.
      * @return \WorkOS\Resource\Role
      */
-    public function updateRole(
+    public function updateEnvironmentRole(
         string $slug,
         ?string $name = null,
         ?string $description = null,
@@ -879,7 +879,7 @@ class Authorization
      * @param string $bodySlug The slug of the permission to add to the role.
      * @return \WorkOS\Resource\Role
      */
-    public function addRolePermission(
+    public function addEnvironmentRolePermission(
         string $slug,
         string $bodySlug,
         ?\WorkOS\RequestOptions $options = null,
@@ -904,7 +904,7 @@ class Authorization
      * @param array<string> $permissions The permission slugs to assign to the role.
      * @return \WorkOS\Resource\Role
      */
-    public function setRolePermissions(
+    public function setEnvironmentRolePermissions(
         string $slug,
         array $permissions,
         ?\WorkOS\RequestOptions $options = null,
@@ -959,11 +959,11 @@ class Authorization
      * Create a new permission in your WorkOS environment. The permission can then be assigned to environment roles and organization roles.
      * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
      * @param string $name A descriptive name for the Permission.
-     * @param string|null|null $description An optional description of the Permission.
+     * @param string|null $description An optional description of the Permission.
      * @param string|null $resourceTypeSlug The slug of the resource type this permission is scoped to.
      * @return \WorkOS\Resource\Permission
      */
-    public function createPermissions(
+    public function createPermission(
         string $slug,
         string $name,
         ?string $description = null,
@@ -1010,7 +1010,7 @@ class Authorization
      * Update an existing permission. Only the fields provided in the request body will be updated.
      * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
      * @param string|null $name A descriptive name for the Permission.
-     * @param string|null|null $description An optional description of the Permission.
+     * @param string|null $description An optional description of the Permission.
      * @return \WorkOS\Resource\AuthorizationPermission
      */
     public function updatePermission(

@@ -52,7 +52,7 @@ readonly class AuthenticateResponse implements \JsonSerializable
             'refresh_token' => $this->refreshToken,
             'organization_id' => $this->organizationId,
             'authkit_authorization_code' => $this->authkitAuthorizationCode,
-            'authentication_method' => $this->authenticationMethod instanceof \BackedEnum ? $this->authenticationMethod->value : $this->authenticationMethod,
+            'authentication_method' => $this->authenticationMethod?->value,
             'impersonator' => $this->impersonator?->toArray(),
             'oauth_tokens' => $this->oauthTokens?->toArray(),
         ];

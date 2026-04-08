@@ -228,29 +228,19 @@ class SSO
      * Get a Profile and Token
      *
      * Get an access token along with the user [Profile](https://workos.com/docs/reference/sso/profile) using the code passed to your [Redirect URI](https://workos.com/docs/reference/sso/get-authorization-url/redirect-uri).
-     * @param string $clientId The client ID of the WorkOS environment.
-     * @param string $clientSecret The client secret of the WorkOS environment.
      * @param string $code The authorization code received from the authorization callback.
-     * @param string $grantType The grant type for the token request.
-     * @param string $clientId The client ID of the WorkOS environment.
-     * @param string $clientSecret The client secret of the WorkOS environment.
-     * @param string $code The authorization code received from the authorization callback.
-     * @param string $grantType The grant type for the token request.
      * @return \WorkOS\Resource\SSOTokenResponse
      */
     public function getProfileAndToken(
-        string $clientId,
-        string $clientSecret,
         string $code,
-        string $grantType,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\SSOTokenResponse {
         $body = [
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
             'code' => $code,
-            'grant_type' => $grantType,
+            'grant_type' => 'authorization_code',
         ];
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
         $response = $this->client->request(
             method: 'POST',
             path: 'sso/token',

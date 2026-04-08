@@ -113,7 +113,7 @@ class FeatureFlags
      * @param string $slug The unique slug identifier of the feature flag.
      * @return mixed
      */
-    public function createFeatureFlagTarget(
+    public function addFlagTarget(
         string $resourceId,
         string $slug,
         ?\WorkOS\RequestOptions $options = null,
@@ -134,7 +134,7 @@ class FeatureFlags
      * @param string $slug The unique slug identifier of the feature flag.
      * @return void
      */
-    public function deleteFeatureFlagTarget(
+    public function removeFlagTarget(
         string $resourceId,
         string $slug,
         ?\WorkOS\RequestOptions $options = null,

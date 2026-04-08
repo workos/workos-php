@@ -17,12 +17,12 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
         public ?string $description = null,
         /**
          * The OAuth scopes granted to the application.
-         * @var array<string>|null|null
+         * @var array<string>|null
          */
         public ?array $scopes = null,
         /**
          * Updated redirect URIs for the application. OAuth applications only.
-         * @var array<\WorkOS\Resource\RedirectUriInput>|null|null
+         * @var array<\WorkOS\Resource\RedirectUriInput>|null
          */
         public ?array $redirectUris = null,
     ) {
@@ -34,7 +34,7 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
             name: $data['name'] ?? null,
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,
-            redirectUris: $data['redirect_uris'] ?? null,
+            redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => RedirectUriInput::fromArray($item), $data['redirect_uris']) : null,
         );
     }
 

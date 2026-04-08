@@ -56,26 +56,6 @@ class UserManagement
     }
 
     /**
-     * Authenticate
-     *
-     * Authenticate a user with a specified [authentication method](https://workos.com/docs/reference/authkit/authentication).
-     * @return \WorkOS\Resource\AuthenticateResponse
-     */
-    public function createAuthenticate(
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuthenticateResponse {
-        $body = [
-        ];
-        $response = $this->client->request(
-            method: 'POST',
-            path: 'user_management/authenticate',
-            body: $body,
-            options: $options,
-        );
-        return AuthenticateResponse::fromArray($response);
-    }
-
-    /**
      * @param string $email
      * @param string $password
      * @param string|null $invitationToken
@@ -439,7 +419,7 @@ class UserManagement
      * @param string $origin The origin URL to allow for CORS requests.
      * @return \WorkOS\Resource\CORSOriginResponse
      */
-    public function createCorsOrigins(
+    public function createCorsOrigin(
         string $origin,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\CORSOriginResponse {
@@ -481,7 +461,7 @@ class UserManagement
      * @param string $email The email address of the user requesting a password reset.
      * @return \WorkOS\Resource\PasswordReset
      */
-    public function createPasswordReset(
+    public function resetPassword(
         string $email,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\PasswordReset {
@@ -588,17 +568,17 @@ class UserManagement
      *
      * Create a new user in the current environment.
      * @param string $email The email address of the user.
-     * @param string|null|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
+     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
      * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
      * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
-     * @param string|null|null $firstName The first name of the user.
-     * @param string|null|null $lastName The last name of the user.
-     * @param bool|null|null $emailVerified Whether the user's email has been verified.
-     * @param array<string, string>|null|null $metadata Object containing metadata key/value pairs associated with the user.
-     * @param string|null|null $externalId The external ID of the user.
+     * @param string|null $firstName The first name of the user.
+     * @param string|null $lastName The last name of the user.
+     * @param bool|null $emailVerified Whether the user's email has been verified.
+     * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
+     * @param string|null $externalId The external ID of the user.
      * @return \WorkOS\Resource\User
      */
-    public function createUsers(
+    public function createUser(
         string $email,
         ?string $password = null,
         ?string $passwordHash = null,
@@ -680,9 +660,9 @@ class UserManagement
      * @param string|null $password The password to set for the user.
      * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
      * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
-     * @param array<string, string>|null|null $metadata Object containing metadata key/value pairs associated with the user.
-     * @param string|null|null $externalId The external ID of the user.
-     * @param string|null|null $locale The user's preferred locale.
+     * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
+     * @param string|null $externalId The external ID of the user.
+     * @param string|null $locale The user's preferred locale.
      * @return \WorkOS\Resource\User
      */
     public function updateUser(
@@ -796,7 +776,7 @@ class UserManagement
      * @param string $code The one-time email verification code.
      * @return \WorkOS\Resource\VerifyEmailResponse
      */
-    public function confirmEmailVerification(
+    public function verifyEmail(
         string $id,
         string $code,
         ?\WorkOS\RequestOptions $options = null,
@@ -820,7 +800,7 @@ class UserManagement
      * @param string $id The ID of the user.
      * @return \WorkOS\Resource\SendVerificationEmailResponse
      */
-    public function sendEmailVerification(
+    public function sendVerificationEmail(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\SendVerificationEmailResponse {
@@ -839,7 +819,7 @@ class UserManagement
      * @param string $id The unique ID of the user.
      * @return array
      */
-    public function listUserIdentities(
+    public function getUserIdentities(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): array {
@@ -862,7 +842,7 @@ class UserManagement
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserSessionsListItem>
      */
-    public function listUserSessions(
+    public function listSessions(
         string $id,
         ?string $before = null,
         ?string $after = null,
@@ -935,7 +915,7 @@ class UserManagement
      * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
      * @return \WorkOS\Resource\UserInvite
      */
-    public function createInvitations(
+    public function sendInvitation(
         string $email,
         ?string $organizationId = null,
         ?string $roleSlug = null,
@@ -968,7 +948,7 @@ class UserManagement
      * @param string $token The token used to accept the invitation.
      * @return \WorkOS\Resource\UserInvite
      */
-    public function getByToken(
+    public function findInvitationByToken(
         string $token,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserInvite {
@@ -1183,7 +1163,7 @@ class UserManagement
      * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
      * @return \WorkOS\Resource\OrganizationMembership
      */
-    public function createOrganizationMemberships(
+    public function createOrganizationMembership(
         string $userId,
         string $organizationId,
         ?string $roleSlug = null,
@@ -1325,7 +1305,7 @@ class UserManagement
      * @param string $uri The redirect URI to create.
      * @return \WorkOS\Resource\RedirectUri
      */
-    public function createRedirectUris(
+    public function createRedirectUri(
         string $uri,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RedirectUri {

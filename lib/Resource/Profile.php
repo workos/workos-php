@@ -38,7 +38,7 @@ readonly class Profile implements \JsonSerializable
         public ?SlimRole $role = null,
         /**
          * The roles assigned to the user within the organization, if applicable.
-         * @var array<\WorkOS\Resource\SlimRole>|null|null
+         * @var array<\WorkOS\Resource\SlimRole>|null
          */
         public ?array $roles = null,
         /**
@@ -68,7 +68,7 @@ readonly class Profile implements \JsonSerializable
             lastName: $data['last_name'] ?? null,
             rawAttributes: $data['raw_attributes'],
             role: isset($data['role']) ? SlimRole::fromArray($data['role']) : null,
-            roles: $data['roles'] ?? null,
+            roles: isset($data['roles']) ? array_map(fn ($item) => SlimRole::fromArray($item), $data['roles']) : null,
             groups: $data['groups'] ?? null,
             customAttributes: $data['custom_attributes'] ?? null,
         );

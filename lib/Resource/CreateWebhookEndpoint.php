@@ -25,7 +25,7 @@ readonly class CreateWebhookEndpoint implements \JsonSerializable
     {
         return new self(
             endpointUrl: $data['endpoint_url'],
-            events: $data['events'],
+            events: array_map(fn ($item) => CreateWebhookEndpointEvents::from($item), $data['events']),
         );
     }
 
@@ -33,7 +33,7 @@ readonly class CreateWebhookEndpoint implements \JsonSerializable
     {
         return [
             'endpoint_url' => $this->endpointUrl,
-            'events' => $this->events,
+            'events' => array_map(fn ($item) => $item->value, $this->events),
         ];
     }
 }

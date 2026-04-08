@@ -46,7 +46,7 @@ readonly class CreateUserInviteOptions implements \JsonSerializable
             'role_slug' => $this->roleSlug,
             'expires_in_days' => $this->expiresInDays,
             'inviter_user_id' => $this->inviterUserId,
-            'locale' => $this->locale instanceof \BackedEnum ? $this->locale->value : $this->locale,
+            'locale' => $this->locale?->value,
         ];
     }
 }

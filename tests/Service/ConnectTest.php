@@ -44,19 +44,6 @@ class ConnectTest extends TestCase
         $this->assertSame('test_value', $query['organization_id']);
     }
 
-    public function testCreateApplications(): void
-    {
-        $fixture = $this->loadFixture('connect_application');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->createApplications();
-        $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['client_id'], $result->clientId);
-        $request = $this->getLastRequest();
-        $this->assertSame('POST', $request->getMethod());
-        $this->assertStringEndsWith('connect/applications', $request->getUri()->getPath());
-    }
-
     public function testGetApplication(): void
     {
         $fixture = $this->loadFixture('connect_application');

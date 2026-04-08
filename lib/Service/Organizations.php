@@ -62,11 +62,11 @@ class Organizations
      * @param bool|null $allowProfilesOutsideOrganization Whether the organization allows profiles from outside the organization to sign in.
      * @param array<string>|null $domains The domains associated with the organization. Deprecated in favor of `domain_data`.
      * @param array<\WorkOS\Resource\OrganizationDomainData>|null $domainData The domains associated with the organization, including verification state.
-     * @param array<string, string>|null|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
-     * @param string|null|null $externalId An external identifier for the Organization.
+     * @param array<string, string>|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+     * @param string|null $externalId An external identifier for the Organization.
      * @return \WorkOS\Resource\Organization
      */
-    public function createOrganizations(
+    public function createOrganization(
         string $name,
         ?bool $allowProfilesOutsideOrganization = null,
         ?array $domains = null,
@@ -140,8 +140,8 @@ class Organizations
      * @param array<string>|null $domains (deprecated) The domains associated with the organization. Deprecated in favor of `domain_data`.
      * @param array<\WorkOS\Resource\OrganizationDomainData>|null $domainData The domains associated with the organization, including verification state.
      * @param string|null $stripeCustomerId The Stripe customer ID associated with the organization.
-     * @param array<string, string>|null|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
-     * @param string|null|null $externalId An external identifier for the Organization.
+     * @param array<string, string>|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
+     * @param string|null $externalId An external identifier for the Organization.
      * @return \WorkOS\Resource\Organization
      */
     public function updateOrganization(

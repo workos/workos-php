@@ -36,7 +36,7 @@ readonly class EventContext implements \JsonSerializable
     {
         return new self(
             googleAnalyticsClientId: $data['google_analytics_client_id'] ?? null,
-            googleAnalyticsSessions: $data['google_analytics_sessions'] ?? null,
+            googleAnalyticsSessions: isset($data['google_analytics_sessions']) ? array_map(fn ($item) => EventContextGoogleAnalyticsSession::fromArray($item), $data['google_analytics_sessions']) : null,
             ajsAnonymousId: $data['ajs_anonymous_id'] ?? null,
             clientId: $data['client_id'] ?? null,
             actor: isset($data['actor']) ? EventContextActor::fromArray($data['actor']) : null,

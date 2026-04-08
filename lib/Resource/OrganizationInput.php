@@ -27,7 +27,7 @@ readonly class OrganizationInput implements \JsonSerializable
         public ?array $domainData = null,
         /**
          * Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
-         * @var array<string, string>|null|null
+         * @var array<string, string>|null
          */
         public ?array $metadata = null,
         /** An external identifier for the Organization. */
@@ -41,7 +41,7 @@ readonly class OrganizationInput implements \JsonSerializable
             name: $data['name'],
             allowProfilesOutsideOrganization: $data['allow_profiles_outside_organization'] ?? null,
             domains: $data['domains'] ?? null,
-            domainData: $data['domain_data'] ?? null,
+            domainData: isset($data['domain_data']) ? array_map(fn ($item) => OrganizationDomainData::fromArray($item), $data['domain_data']) : null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
         );

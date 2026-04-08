@@ -139,7 +139,7 @@ class AuditLogs
      * @param array<string, mixed>|null $metadata Optional JSON schema for event metadata.
      * @return \WorkOS\Resource\AuditLogSchemaJson
      */
-    public function createActionSchemas(
+    public function createSchema(
         string $actionName,
         array $targets,
         ?\WorkOS\Resource\AuditLogSchemaActor $actor = null,
@@ -174,7 +174,7 @@ class AuditLogs
      * @param \WorkOS\Resource\AuditLogEvent $event The audit log event to create.
      * @return \WorkOS\Resource\AuditLogEventCreateResponse
      */
-    public function createEvents(
+    public function createEvent(
         string $organizationId,
         \WorkOS\Resource\AuditLogEvent $event,
         ?\WorkOS\RequestOptions $options = null,
@@ -206,7 +206,7 @@ class AuditLogs
      * @param array<string>|null $targets List of target types to filter against.
      * @return \WorkOS\Resource\AuditLogExportJson
      */
-    public function createExports(
+    public function createExport(
         string $organizationId,
         string $rangeStart,
         string $rangeEnd,

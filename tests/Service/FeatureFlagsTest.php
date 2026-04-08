@@ -68,19 +68,19 @@ class FeatureFlagsTest extends TestCase
         $this->assertStringEndsWith('feature-flags/test_slug/enable', $request->getUri()->getPath());
     }
 
-    public function testCreateFeatureFlagTarget(): void
+    public function testAddFlagTarget(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->featureFlags()->createFeatureFlagTarget('test_resourceId', 'test_slug');
+        $client->featureFlags()->addFlagTarget('test_resourceId', 'test_slug');
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/targets/test_resourceId', $request->getUri()->getPath());
     }
 
-    public function testDeleteFeatureFlagTarget(): void
+    public function testRemoveFlagTarget(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->featureFlags()->deleteFeatureFlagTarget('test_resourceId', 'test_slug');
+        $client->featureFlags()->removeFlagTarget('test_resourceId', 'test_slug');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/targets/test_resourceId', $request->getUri()->getPath());

@@ -69,22 +69,22 @@ class AuditLogsTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
-    public function testCreateActionSchemas(): void
+    public function testCreateSchema(): void
     {
         $fixture = $this->loadFixture('audit_log_schema_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->createActionSchemas('test_actionName', targets: []);
+        $result = $client->auditLogs()->createSchema('test_actionName', targets: []);
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchemaJson::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('audit_logs/actions/test_actionName/schemas', $request->getUri()->getPath());
     }
 
-    public function testCreateEvents(): void
+    public function testCreateEvent(): void
     {
         $fixture = $this->loadFixture('audit_log_event_create_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->createEvents(organizationId: 'test_value', event: \WorkOS\Resource\AuditLogEvent::fromArray($this->loadFixture('audit_log_event')));
+        $result = $client->auditLogs()->createEvent(organizationId: 'test_value', event: \WorkOS\Resource\AuditLogEvent::fromArray($this->loadFixture('audit_log_event')));
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogEventCreateResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
@@ -93,11 +93,11 @@ class AuditLogsTest extends TestCase
         $this->assertSame('test_value', $body['organization_id']);
     }
 
-    public function testCreateExports(): void
+    public function testCreateExport(): void
     {
         $fixture = $this->loadFixture('audit_log_export_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->createExports(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
+        $result = $client->auditLogs()->createExport(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $request = $this->getLastRequest();

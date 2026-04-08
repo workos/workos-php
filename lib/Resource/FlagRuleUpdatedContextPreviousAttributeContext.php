@@ -30,7 +30,7 @@ readonly class FlagRuleUpdatedContextPreviousAttributeContext implements \JsonSe
     public function toArray(): array
     {
         return [
-            'access_type' => $this->accessType instanceof \BackedEnum ? $this->accessType->value : $this->accessType,
+            'access_type' => $this->accessType?->value,
             'configured_targets' => $this->configuredTargets?->toArray(),
         ];
     }
