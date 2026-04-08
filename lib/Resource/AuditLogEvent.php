@@ -14,7 +14,7 @@ readonly class AuditLogEvent implements \JsonSerializable
         /** Identifier of what happened. */
         public string $action,
         /** ISO-8601 value of when the action occurred. */
-        public string $occurredAt,
+        public \DateTimeImmutable $occurredAt,
         /** The entity that performed the action. */
         public AuditLogEventActor $actor,
         /**
@@ -38,7 +38,7 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return new self(
             action: $data['action'],
-            occurredAt: $data['occurred_at'],
+            occurredAt: new \DateTimeImmutable($data['occurred_at']),
             actor: AuditLogEventActor::fromArray($data['actor']),
             targets: array_map(fn ($item) => AuditLogEventTarget::fromArray($item), $data['targets']),
             context: AuditLogEventContext::fromArray($data['context']),
@@ -51,7 +51,7 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return [
             'action' => $this->action,
-            'occurred_at' => $this->occurredAt,
+            'occurred_at' => $this->occurredAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'actor' => $this->actor->toArray(),
             'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
             'context' => $this->context->toArray(),

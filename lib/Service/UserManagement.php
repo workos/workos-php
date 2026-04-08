@@ -290,15 +290,11 @@ class UserManagement
      * @param string|null $prompt Controls the authentication flow behavior for the user.
      * @param string|null $state An opaque value used to maintain state between the request and the callback.
      * @param string|null $organizationId The ID of the organization to authenticate the user against.
-     * @param string $responseType The response type of the application.
      * @param string $redirectUri The callback URI where the authorization code will be sent after authentication.
-     * @param string $clientId The unique identifier of the WorkOS environment client.
      * @return mixed
      */
     public function getAuthorizationUrl(
-        string $responseType,
         string $redirectUri,
-        string $clientId,
         ?string $codeChallengeMethod = null,
         ?string $codeChallenge = null,
         ?string $domainHint = null,
@@ -328,10 +324,10 @@ class UserManagement
             'prompt' => $prompt,
             'state' => $state,
             'organization_id' => $organizationId,
-            'response_type' => $responseType,
             'redirect_uri' => $redirectUri,
-            'client_id' => $clientId,
+            'response_type' => 'code',
         ], fn ($v) => $v !== null);
+        $query['client_id'] = $this->client->requireClientId();
         $response = $this->client->request(
             method: 'GET',
             path: 'user_management/authorize',

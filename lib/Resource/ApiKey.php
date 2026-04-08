@@ -23,7 +23,7 @@ readonly class ApiKey implements \JsonSerializable
         /** An obfuscated representation of the API Key value. */
         public string $obfuscatedValue,
         /** Timestamp of when the API Key was last used. */
-        public ?string $lastUsedAt,
+        public ?\DateTimeImmutable $lastUsedAt,
         /**
          * The permission slugs assigned to the API Key.
          * @var array<string>
@@ -44,7 +44,7 @@ readonly class ApiKey implements \JsonSerializable
             owner: ApiKeyOwner::fromArray($data['owner']),
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
-            lastUsedAt: $data['last_used_at'] ?? null,
+            lastUsedAt: isset($data['last_used_at']) ? new \DateTimeImmutable($data['last_used_at']) : null,
             permissions: $data['permissions'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
@@ -59,7 +59,7 @@ readonly class ApiKey implements \JsonSerializable
             'owner' => $this->owner->toArray(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
-            'last_used_at' => $this->lastUsedAt,
+            'last_used_at' => $this->lastUsedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
