@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+// @oagen-ignore-file
+
 namespace WorkOS\Exception;
 
-/**
- * Class NotFoundException.
- */
-class NotFoundException extends BaseRequestException implements WorkOSException
+class NotFoundException extends BaseRequestException
 {
 }

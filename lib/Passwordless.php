@@ -1,72 +1,62 @@
 <?php
 
+declare(strict_types=1);
+// @oagen-ignore-file
+// This file is hand-maintained. The passwordless API endpoints are not yet in
+// the OpenAPI spec, so this module provides the functionality until they are.
+
 namespace WorkOS;
 
-/**
- * Class Passwordless.
- *
- * This class facilitates the use of WorkOS Magic Link.
- */
 class Passwordless
 {
-    /**
-     * Generates a passwordless session.
-     *
-     * @param string $email Email address of the user that the session is to be created for
-     * @param null|string $redirectUri URI to direct the user to user to upon authenticating through the passwordless link
-     * @param null|string $state Encoded string used to manage application state
-     * @param string $type The only supported ConnectionType at the time of this writing is MagicLink
-     * @param string $connection Unique WorkOS connection_ID
-     * @param int $expiresIn Number of seconds the Passwordless Session should live before expiring.
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return  Resource\PasswordlessSession
-     */
-    public function createSession($email, $redirectUri, $state, $type, $connection, $expiresIn)
-    {
-        $createSessionPath = "passwordless/sessions";
-
-        $params = [
-            "email" => $email,
-            "type" => $type
-        ];
-
-        if ($redirectUri) {
-            $params["redirect_uri"] = $redirectUri;
-        }
-
-        if ($state) {
-            $params["state"] = $state;
-        }
-
-        if ($connection) {
-            $params["connection"] = $connection;
-        }
-
-        if ($expiresIn) {
-            $params["expires_in"] = $expiresIn;
-        }
-
-        $response = Client::request(Client::METHOD_POST, $createSessionPath, null, $params, true);
-
-        return Resource\PasswordlessSession::constructFromResponse($response);
+    public function __construct(
+        private readonly HttpClient $client,
+    ) {
     }
 
     /**
-     * Send a passwordless link via email from WorkOS.
+     * Create a Passwordless Session.
      *
-     * @param Resource\PasswordlessSession $session Passwordless session generated through Passwordless->createSession
-     *
-     * @throws Exception\WorkOSException
-     *
-     * @return true
+     * @param string $email The email of the user to authenticate.
+     * @param string $type The type of Passwordless Session ('MagicLink').
+     * @param string|null $redirectUri The redirect endpoint for the callback. (Optional)
+     * @param string|null $state Arbitrary state to pass through the redirect. (Optional)
+     * @param int|null $expiresIn Seconds until expiry (900-86400). (Optional)
+     * @return array The passwordless session data.
      */
-    public function sendSession($session)
-    {
-        $sendSessionPath = "passwordless/sessions/$session->id/send";
-        Client::request(Client::METHOD_POST, $sendSessionPath, null, null, true);
+    public function createSession(
+        string $email,
+        string $type = 'MagicLink',
+        ?string $redirectUri = null,
+        ?string $state = null,
+        ?int $expiresIn = null,
+    ): array {
+        $body = array_filter([
+            'email' => $email,
+            'type' => $type,
+            'redirect_uri' => $redirectUri,
+            'state' => $state,
+            'expires_in' => $expiresIn,
+        ], fn ($v) => $v !== null);
 
-        return true;
+        return $this->client->request(
+            method: 'POST',
+            path: 'passwordless/sessions',
+            body: $body,
+        );
+    }
+
+    /**
+     * Send a Passwordless Session via email.
+     *
+     * @param string $sessionId The unique identifier of the Passwordless Session.
+     */
+    public function sendSession(string $sessionId): void
+    {
+        $this->client->request(
+            method: 'POST',
+            path: "passwordless/sessions/{$sessionId}/send",
+            body: [],
+        );
     }
 }

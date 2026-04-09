@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+// @oagen-ignore-file
+
 namespace WorkOS\Exception;
 
-/**
- * Class AuthorizationException.
- */
-class AuthorizationException extends BaseRequestException implements WorkOSException
+class AuthorizationException extends BaseRequestException
 {
 }
