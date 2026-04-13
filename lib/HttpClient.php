@@ -37,6 +37,7 @@ class HttpClient
         private readonly int $timeout,
         private readonly int $maxRetries,
         ?\GuzzleHttp\HandlerStack $handler = null,
+        private readonly ?string $userAgent = null,
     ) {
         $this->client = new Client([
             'handler' => $handler,
@@ -176,6 +177,7 @@ class HttpClient
     ): array {
         $headers = [
             'Content-Type' => 'application/json',
+            'User-Agent' => $this->userAgent ?? sprintf('%s/%s', Version::SDK_IDENTIFIER, Version::SDK_VERSION),
         ];
 
         if ($this->getApiKey() !== null) {

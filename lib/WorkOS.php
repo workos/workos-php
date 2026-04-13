@@ -80,10 +80,11 @@ class WorkOS
         int $timeout = 60,
         int $maxRetries = 3,
         ?\GuzzleHttp\HandlerStack $handler = null,
+        ?string $userAgent = null,
     ) {
         $apiKey ??= getenv('WORKOS_API_KEY') ?: self::$apiKey ?? '';
         $clientId ??= getenv('WORKOS_CLIENT_ID') ?: self::$clientId;
-        $this->httpClient = new HttpClient($apiKey, $clientId, $baseUrl, $timeout, $maxRetries, $handler);
+        $this->httpClient = new HttpClient($apiKey, $clientId, $baseUrl, $timeout, $maxRetries, $handler, $userAgent);
     }
 
     public function apiKeys(): ApiKeys

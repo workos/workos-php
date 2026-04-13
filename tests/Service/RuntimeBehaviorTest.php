@@ -9,6 +9,7 @@ use WorkOS\Exception\AuthenticationException;
 use WorkOS\Exception\RateLimitExceededException;
 use WorkOS\RequestOptions;
 use WorkOS\TestHelper;
+use WorkOS\Version;
 
 class RuntimeBehaviorTest extends TestCase
 {
@@ -123,6 +124,53 @@ class RuntimeBehaviorTest extends TestCase
             $this->assertSame('req_auth', $exception->requestId);
             $this->assertSame('Nope', $exception->getMessage());
         }
+    }
+
+    public function testDefaultUserAgentIdentifiesTheSdk(): void
+    {
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $this->loadFixture('organization')],
+        ]);
+
+        $client->organizations()->getOrganization('org_123');
+
+        $this->assertSame(
+            sprintf('%s/%s', Version::SDK_IDENTIFIER, Version::SDK_VERSION),
+            $this->getLastRequest()->getHeaderLine('User-Agent'),
+        );
+    }
+
+    public function testConstructorUserAgentOverridesDefault(): void
+    {
+        $client = $this->createMockClient(
+            [['status' => 200, 'body' => $this->loadFixture('organization')]],
+            userAgent: 'WorkOS PHP Laravel/5.1.0',
+        );
+
+        $client->organizations()->getOrganization('org_123');
+
+        $this->assertSame(
+            'WorkOS PHP Laravel/5.1.0',
+            $this->getLastRequest()->getHeaderLine('User-Agent'),
+        );
+    }
+
+    public function testPerRequestUserAgentBeatsConstructorUserAgent(): void
+    {
+        $client = $this->createMockClient(
+            [['status' => 200, 'body' => $this->loadFixture('organization')]],
+            userAgent: 'WorkOS PHP Laravel/5.1.0',
+        );
+
+        $client->organizations()->getOrganization(
+            'org_123',
+            new RequestOptions(extraHeaders: ['User-Agent' => 'Custom/9.9.9']),
+        );
+
+        $this->assertSame(
+            'Custom/9.9.9',
+            $this->getLastRequest()->getHeaderLine('User-Agent'),
+        );
     }
 
     public function testRateLimitErrorsExposeRetryAfter(): void
