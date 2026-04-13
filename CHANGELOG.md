@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.0.1](https://github.com/workos/workos-php/compare/5.0.0...5.0.1) (2026-04-13)
+
+
+### Bug Fixes
+
+* add default User-Agent header and optional override ([#352](https://github.com/workos/workos-php/issues/352)) ([8e202db](https://github.com/workos/workos-php/commit/8e202db6920a4cd918ebbea44fd8006916968c1f))
+* one more regen ([44906fd](https://github.com/workos/workos-php/commit/44906fdbf2263b9b7b8c075636d12bf2540064f8))
+
 ## [5.0.0](https://github.com/workos/workos-php/compare/4.32.0...5.0.0) (2026-04-13)
 
 ### Top-Level Notices
