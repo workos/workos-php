@@ -30,6 +30,7 @@ trait TestHelper
         ?string $clientId = 'test_client_id',
         string $baseUrl = 'https://api.workos.com',
         int $maxRetries = 3,
+        ?string $userAgent = null,
     ): WorkOS {
         $mockResponses = array_map(
             fn (array $response) => new Response(
@@ -51,6 +52,7 @@ trait TestHelper
             baseUrl: $baseUrl,
             maxRetries: $maxRetries,
             handler: $handler,
+            userAgent: $userAgent,
         );
     }
 
