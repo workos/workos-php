@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.0.0](https://github.com/workos/workos-php/compare/4.32.0...5.0.0) (2026-04-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* release new version of PHP SDK library ([#349](https://github.com/workos/workos-php/issues/349))
+
+### Features
+
+* release new version of PHP SDK library ([#349](https://github.com/workos/workos-php/issues/349)) ([6233b98](https://github.com/workos/workos-php/commit/6233b98381d441480b92321592c41128e9ad10b3))
+
+
+### Miscellaneous Chores
+
+* **deps:** update actions/create-github-app-token action to v3 ([#345](https://github.com/workos/workos-php/issues/345)) ([0259ffb](https://github.com/workos/workos-php/commit/0259ffba069819acace1a30d878d21aba813f012))
+* **deps:** update amannn/action-semantic-pull-request action to v6 ([#346](https://github.com/workos/workos-php/issues/346)) ([4cf01c0](https://github.com/workos/workos-php/commit/4cf01c0669fa83ae958448457c90537808ab3c27))
+
 ## [4.32.0](https://github.com/workos/workos-php/compare/4.31.0...4.32.0) (2026-03-09)
 
 
