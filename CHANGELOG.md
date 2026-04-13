@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.0.0](https://github.com/workos/workos-php/compare/4.32.0...5.0.0) (2026-04-13)
+
+### Top-Level Notices
+
+* v5 is a major SDK redesign centered on an instantiated `WorkOS` client with service accessors like `$workos->sso()`, `$workos->userManagement()`, and `$workos->authorization()`. Direct use of many legacy top-level service classes and transport internals has been removed or renamed.
+* The minimum runtime is now PHP 8.2. The SDK now depends on `guzzlehttp/guzzle:^7`, `paragonie/halite:^5.1`, and `ext-curl:^8.2`.
+* Responses and resources are now typed, generated models, pagination now uses `PaginatedResponse`, and named arguments are strongly recommended because many method signatures changed in v5.
+* The v5 release also expands and reorganizes the SDK surface across areas like Authorization, Audit Logs, Feature Flags, Organization Domains, Connect, Events, Pipes, Radar, API Keys, Session Manager, PKCE, Webhooks, and Vault helpers.
+
+### Migration Guide
+
+* For upgrade steps, renamed APIs, and side-by-side examples for moving from v4 to v5, see [V5_MIGRATION_GUIDE](docs/V5_MIGRATION_GUIDE.md).
+
 ## [4.32.0](https://github.com/workos/workos-php/compare/4.31.0...4.32.0) (2026-03-09)
 
 
