@@ -198,7 +198,7 @@ class Organizations
      * @param string $id Unique identifier of the Organization.
      * @return \WorkOS\Resource\AuditLogConfiguration
      */
-    public function listOrganizationAuditLogConfiguration(
+    public function getAuditLogConfiguration(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuditLogConfiguration {

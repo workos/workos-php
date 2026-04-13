@@ -97,11 +97,11 @@ class OrganizationsTest extends TestCase
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
     }
 
-    public function testListOrganizationAuditLogConfiguration(): void
+    public function testGetAuditLogConfiguration(): void
     {
         $fixture = $this->loadFixture('audit_log_configuration');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->listOrganizationAuditLogConfiguration('test_id');
+        $result = $client->organizations()->getAuditLogConfiguration('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogConfiguration::class, $result);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
         $this->assertIsArray($result->toArray());

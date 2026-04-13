@@ -13,11 +13,11 @@ class AuditLogsTest extends TestCase
 {
     use TestHelper;
 
-    public function testListOrganizationAuditLogsRetention(): void
+    public function testGetOrganizationAuditLogsRetention(): void
     {
         $fixture = $this->loadFixture('audit_logs_retention_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listOrganizationAuditLogsRetention('test_id');
+        $result = $client->auditLogs()->getOrganizationAuditLogsRetention('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetentionJson::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();

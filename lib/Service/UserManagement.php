@@ -59,12 +59,18 @@ class UserManagement
      * @param string $email
      * @param string $password
      * @param string|null $invitationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithPassword(
         string $email,
         string $password,
         ?string $invitationToken = null,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -72,6 +78,9 @@ class UserManagement
             'email' => $email,
             'password' => $password,
             'invitation_token' => $invitationToken,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -86,16 +95,25 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $code
+     * @param mixed $code
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithCode(
         mixed $code = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'authorization_code',
             'code' => $code,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -112,17 +130,26 @@ class UserManagement
     /**
      * @param string $refreshToken
      * @param string|null $organizationId
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithRefreshToken(
         string $refreshToken,
         ?string $organizationId = null,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'refresh_token',
             'refresh_token' => $refreshToken,
             'organization_id' => $organizationId,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -137,15 +164,21 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $code
-     * @param mixed|null $email
+     * @param mixed $code
+     * @param mixed $email
      * @param mixed|null $invitationToken
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithMagicAuth(
         mixed $code = null,
         mixed $email = null,
         mixed $invitationToken = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -153,6 +186,9 @@ class UserManagement
             'code' => $code,
             'email' => $email,
             'invitation_token' => $invitationToken,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -167,19 +203,28 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $code
+     * @param mixed $code
      * @param mixed|null $pendingAuthenticationToken
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithEmailVerification(
         mixed $code = null,
         mixed $pendingAuthenticationToken = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'urn:workos:oauth:grant-type:email-verification:code',
             'code' => $code,
             'pending_authentication_token' => $pendingAuthenticationToken,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -194,15 +239,21 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $code
-     * @param mixed|null $pendingAuthenticationToken
-     * @param mixed|null $authenticationChallengeId
+     * @param mixed $code
+     * @param mixed $pendingAuthenticationToken
+     * @param mixed $authenticationChallengeId
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithTotp(
         mixed $code = null,
         mixed $pendingAuthenticationToken = null,
         mixed $authenticationChallengeId = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -210,6 +261,9 @@ class UserManagement
             'code' => $code,
             'pending_authentication_token' => $pendingAuthenticationToken,
             'authentication_challenge_id' => $authenticationChallengeId,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -224,19 +278,28 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $pendingAuthenticationToken
-     * @param mixed|null $organizationId
+     * @param mixed $pendingAuthenticationToken
+     * @param mixed $organizationId
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithOrganizationSelection(
         mixed $pendingAuthenticationToken = null,
         mixed $organizationId = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'urn:workos:oauth:grant-type:organization-selection',
             'pending_authentication_token' => $pendingAuthenticationToken,
             'organization_id' => $organizationId,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -251,16 +314,25 @@ class UserManagement
     }
 
     /**
-     * @param mixed|null $deviceCode
+     * @param mixed $deviceCode
+     * @param mixed|null $ipAddress
+     * @param mixed|null $deviceId
+     * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      */
     public function authenticateWithDeviceCode(
         mixed $deviceCode = null,
+        mixed $ipAddress = null,
+        mixed $deviceId = null,
+        mixed $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'urn:ietf:params:oauth:grant-type:device_code',
             'device_code' => $deviceCode,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
 

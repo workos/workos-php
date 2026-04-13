@@ -26,7 +26,7 @@ class AuditLogs
      * @param string $id Unique identifier of the Organization.
      * @return \WorkOS\Resource\AuditLogsRetentionJson
      */
-    public function listOrganizationAuditLogsRetention(
+    public function getOrganizationAuditLogsRetention(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuditLogsRetentionJson {
