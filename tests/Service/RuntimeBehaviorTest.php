@@ -155,7 +155,7 @@ class RuntimeBehaviorTest extends TestCase
         );
     }
 
-    public function testPerRequestUserAgentBeatsConstructorUserAgent(): void
+    public function testPerRequestExtraHeadersCannotOverrideUserAgent(): void
     {
         $client = $this->createMockClient(
             [['status' => 200, 'body' => $this->loadFixture('organization')]],
@@ -168,7 +168,7 @@ class RuntimeBehaviorTest extends TestCase
         );
 
         $this->assertSame(
-            'Custom/9.9.9',
+            'WorkOS PHP Laravel/5.1.0',
             $this->getLastRequest()->getHeaderLine('User-Agent'),
         );
     }

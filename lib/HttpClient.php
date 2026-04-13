@@ -177,7 +177,6 @@ class HttpClient
     ): array {
         $headers = [
             'Content-Type' => 'application/json',
-            'User-Agent' => $this->userAgent ?? sprintf('%s/%s', Version::SDK_IDENTIFIER, Version::SDK_VERSION),
         ];
 
         if ($this->getApiKey() !== null) {
@@ -191,6 +190,9 @@ class HttpClient
         if ($options?->idempotencyKey !== null) {
             $headers['Idempotency-Key'] = $options->idempotencyKey;
         }
+
+        // Always set User-Agent last so callers cannot override it via extraHeaders.
+        $headers['User-Agent'] = $this->userAgent ?? sprintf('%s/%s', Version::SDK_IDENTIFIER, Version::SDK_VERSION);
 
         $requestOptions = [
             'headers' => $headers,
