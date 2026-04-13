@@ -6,17 +6,19 @@
   "authors": [
     {
       "name": "WorkOS",
-      "email": "eng@workos.com"
+      "email": "sdk@workos.com"
     }
   ],
   "require": {
-    "php": ">=7.3.0",
-    "ext-curl": "*",
-    "paragonie/halite": "^4.0"
+    "php": "^8.2",
+    "ext-curl": "^8.2",
+    "guzzlehttp/guzzle": "^7.0",
+    "paragonie/halite": "^5.1"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.15|^3.6",
-    "phpunit/phpunit": "^9"
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^11.5"
   },
   "autoload": {
     "psr-4": {
@@ -33,9 +35,11 @@
   },
   "scripts": {
     "clean": "rm -rf composer.lock vendor/",
-    "format": "php vendor/bin/php-cs-fixer fix -v --using-cache=no .",
-    "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no .",
-    "test": "php vendor/bin/phpunit tests"
+    "format": "php vendor/bin/php-cs-fixer fix -v --using-cache=no --config=.php-cs-fixer.dist.php",
+    "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-fixer.dist.php",
+    "test": "php vendor/bin/phpunit tests",
+    "typecheck": "php vendor/bin/phpstan analyse --no-progress",
+    "ci": "./script/ci"
   },
   "config": {
     "allow-plugins": {

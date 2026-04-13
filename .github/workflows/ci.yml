@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ["7.3", "7.4", "8.1", "8.2", "8.3"]
+        php: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: shivammathur/setup-php@9e72090525849c5e82e596468b86eb55e9cc5401 # v2.32.0
@@ -36,15 +36,6 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Lint and formatting
-        if: >-
-          matrix.php == '7.4' || 
-          matrix.php == '8.1' || 
-          matrix.php == '8.2' || 
-          matrix.php == '8.3'
-        run: |
-          composer run-script format-check
 
       - name: Test
         run: |

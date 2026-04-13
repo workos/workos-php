@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+cd "$PROJECT_DIR"
+
+if [ ! -d vendor ]; then
+  echo "Installing dependencies..."
+  composer install --prefer-dist --no-progress --no-interaction
+fi
+
+echo "==> Checking formatting (php-cs-fixer)..."
+php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-fixer.dist.php
+
+echo ""
+echo "==> Running typecheck (PHPStan)..."
+php vendor/bin/phpstan analyse --no-progress
+
+echo ""
+echo "==> Running tests (PHPUnit)..."
+php vendor/bin/phpunit
+
+echo ""
+echo "All checks passed."

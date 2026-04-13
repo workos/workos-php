@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+// @oagen-ignore-file
+
 namespace WorkOS\Exception;
 
-/**
- * Class BadRequestException.
- */
-class BadRequestException extends BaseRequestException implements WorkOSException
+class BadRequestException extends BaseRequestException
 {
 }
