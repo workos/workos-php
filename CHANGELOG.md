@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.0.2](https://github.com/workos/workos-php/compare/5.0.1...5.0.2) (2026-04-14)
+
+
+### Bug Fixes
+
+* slight rename ([496f75b](https://github.com/workos/workos-php/commit/496f75b3d1034d1dd68fb55eeb88333ec020b809))
+
+
+### Miscellaneous Chores
+
+* mark non-spec service accessors with `@oagen-ignore-start/end` ([#354](https://github.com/workos/workos-php/issues/354)) ([084d0d1](https://github.com/workos/workos-php/commit/084d0d125f7f7cfcf0cbc9530063009831c303a1))
+
 ## [5.0.1](https://github.com/workos/workos-php/compare/5.0.0...5.0.1) (2026-04-13)
 
 
