@@ -35,6 +35,7 @@ class Connect
      * @param \WorkOS\Resource\UserObject $user The user to create or update in AuthKit.
      * @param array<\WorkOS\Resource\UserConsentOption>|null $userConsentOptions Array of [User Consent Options](https://workos.com/docs/reference/workos-connect/standalone/user-consent-options) to store with the session.
      * @return \WorkOS\Resource\ExternalAuthCompleteResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function completeOAuth2(
         string $externalAuthId,
@@ -66,6 +67,7 @@ class Connect
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string|null $organizationId Filter Connect Applications by organization ID.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ConnectApplication>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listApplications(
         ?string $before = null,
@@ -100,6 +102,7 @@ class Connect
      * @param bool|null $usesPkce
      * @param string|null $organizationId
      * @return \WorkOS\Resource\ConnectApplication
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOAuthApplication(
         string $name,
@@ -137,6 +140,7 @@ class Connect
      * @param string|null $description
      * @param array<string>|null $scopes
      * @return \WorkOS\Resource\ConnectApplication
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createM2MApplication(
         string $name,
@@ -168,6 +172,7 @@ class Connect
      * Retrieve details for a specific Connect Application by ID or client ID.
      * @param string $id The application ID or client ID of the Connect Application.
      * @return \WorkOS\Resource\ConnectApplication
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getApplication(
         string $id,
@@ -191,6 +196,7 @@ class Connect
      * @param array<string>|null $scopes The OAuth scopes granted to the application.
      * @param array<\WorkOS\Resource\RedirectUriInput>|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
      * @return \WorkOS\Resource\ConnectApplication
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateApplication(
         string $id,
@@ -221,6 +227,7 @@ class Connect
      * Delete an existing Connect Application.
      * @param string $id The application ID or client ID of the Connect Application.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteApplication(
         string $id,
@@ -239,6 +246,7 @@ class Connect
      * List all client secrets associated with a Connect Application.
      * @param string $id The application ID or client ID of the Connect Application.
      * @return array
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listApplicationClientSecrets(
         string $id,
@@ -258,6 +266,7 @@ class Connect
      * Create new secrets for a Connect Application.
      * @param string $id The application ID or client ID of the Connect Application.
      * @return \WorkOS\Resource\NewConnectApplicationSecret
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createApplicationClientSecret(
         string $id,
@@ -280,6 +289,7 @@ class Connect
      * Delete (revoke) an existing client secret.
      * @param string $id The unique ID of the client secret.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteClientSecret(
         string $id,

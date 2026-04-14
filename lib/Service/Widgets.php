@@ -23,6 +23,7 @@ class Widgets
      * @param string|null $userId The ID of the user to issue the widget session token for.
      * @param array<\WorkOS\Resource\WidgetSessionTokenScopes>|null $scopes The scopes to grant the widget session.
      * @return \WorkOS\Resource\WidgetSessionTokenResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createToken(
         string $organizationId,

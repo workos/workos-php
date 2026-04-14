@@ -25,6 +25,7 @@ class AuditLogs
      * Get the configured event retention period for the given Organization.
      * @param string $id Unique identifier of the Organization.
      * @return \WorkOS\Resource\AuditLogsRetentionJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationAuditLogsRetention(
         string $id,
@@ -45,6 +46,7 @@ class AuditLogs
      * @param string $id Unique identifier of the Organization.
      * @param int $retentionPeriodInDays The number of days Audit Log events will be retained. Valid values are `30` and `365`.
      * @return \WorkOS\Resource\AuditLogsRetentionJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationAuditLogsRetention(
         string $id,
@@ -72,6 +74,7 @@ class AuditLogs
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogActionJson>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listActions(
         ?string $before = null,
@@ -105,6 +108,7 @@ class AuditLogs
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogSchemaJson>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listActionSchemas(
         string $actionName,
@@ -138,6 +142,7 @@ class AuditLogs
      * @param array<\WorkOS\Resource\AuditLogSchemaTarget> $targets The list of targets for the schema.
      * @param array<string, mixed>|null $metadata Optional JSON schema for event metadata.
      * @return \WorkOS\Resource\AuditLogSchemaJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createSchema(
         string $actionName,
@@ -173,6 +178,7 @@ class AuditLogs
      * @param string $organizationId The unique ID of the Organization.
      * @param \WorkOS\Resource\AuditLogEvent $event The audit log event to create.
      * @return \WorkOS\Resource\AuditLogEventCreateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createEvent(
         string $organizationId,
@@ -205,6 +211,7 @@ class AuditLogs
      * @param array<string>|null $actorIds List of actor IDs to filter against.
      * @param array<string>|null $targets List of target types to filter against.
      * @return \WorkOS\Resource\AuditLogExportJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createExport(
         string $organizationId,
@@ -242,6 +249,7 @@ class AuditLogs
      * Get an Audit Log Export. The URL will expire after 10 minutes. If the export is needed again at a later time, refetching the export will regenerate the URL.
      * @param string $auditLogExportId The unique ID of the Audit Log Export.
      * @return \WorkOS\Resource\AuditLogExportJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getExport(
         string $auditLogExportId,

@@ -25,6 +25,7 @@ class FeatureFlags
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listFeatureFlags(
         ?string $before = null,
@@ -54,6 +55,7 @@ class FeatureFlags
      * Get the details of an existing feature flag by its slug.
      * @param string $slug A unique key to reference the Feature Flag.
      * @return \WorkOS\Resource\Flag
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getFeatureFlag(
         string $slug,
@@ -73,6 +75,7 @@ class FeatureFlags
      * Disables a feature flag in the current environment.
      * @param string $slug A unique key to reference the Feature Flag.
      * @return \WorkOS\Resource\FeatureFlag
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function disableFeatureFlag(
         string $slug,
@@ -92,6 +95,7 @@ class FeatureFlags
      * Enables a feature flag in the current environment.
      * @param string $slug A unique key to reference the Feature Flag.
      * @return \WorkOS\Resource\FeatureFlag
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function enableFeatureFlag(
         string $slug,
@@ -112,6 +116,7 @@ class FeatureFlags
      * @param string $resourceId The resource ID in format "user_<id>" or "org_<id>".
      * @param string $slug The unique slug identifier of the feature flag.
      * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function addFlagTarget(
         string $resourceId,
@@ -133,6 +138,7 @@ class FeatureFlags
      * @param string $resourceId The resource ID in format "user_<id>" or "org_<id>".
      * @param string $slug The unique slug identifier of the feature flag.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeFlagTarget(
         string $resourceId,
@@ -156,6 +162,7 @@ class FeatureFlags
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationFeatureFlags(
         string $organizationId,
@@ -190,6 +197,7 @@ class FeatureFlags
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUserFeatureFlags(
         string $userId,

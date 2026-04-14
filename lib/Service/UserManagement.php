@@ -42,6 +42,7 @@ class UserManagement
      * Returns the JSON Web Key Set (JWKS) containing the public keys used for verifying access tokens.
      * @param string $clientId Identifies the application making the request to the WorkOS server. You can obtain your client ID from the [API Keys](https://dashboard.workos.com/api-keys) page in the dashboard.
      * @return \WorkOS\Resource\JwksResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getJwks(
         string $clientId,
@@ -63,6 +64,7 @@ class UserManagement
      * @param string|null $deviceId
      * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithPassword(
         string $email,
@@ -100,6 +102,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithCode(
         mixed $code = null,
@@ -134,6 +137,7 @@ class UserManagement
      * @param string|null $deviceId
      * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithRefreshToken(
         string $refreshToken,
@@ -171,6 +175,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithMagicAuth(
         mixed $code = null,
@@ -209,6 +214,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithEmailVerification(
         mixed $code = null,
@@ -246,6 +252,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithTotp(
         mixed $code = null,
@@ -284,6 +291,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithOrganizationSelection(
         mixed $pendingAuthenticationToken = null,
@@ -319,6 +327,7 @@ class UserManagement
      * @param mixed|null $deviceId
      * @param mixed|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithDeviceCode(
         mixed $deviceCode = null,
@@ -364,6 +373,7 @@ class UserManagement
      * @param string|null $organizationId The ID of the organization to authenticate the user against.
      * @param string $redirectUri The callback URI where the authorization code will be sent after authentication.
      * @return string
+     * @throws \WorkOS\Exception\ConfigurationException
      */
     public function getAuthorizationUrl(
         string $redirectUri,
@@ -409,6 +419,7 @@ class UserManagement
      * Initiates the CLI Auth flow by requesting a device code and verification URLs. This endpoint implements the OAuth 2.0 Device Authorization Flow ([RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628)) and is designed for command-line applications or other devices with limited input capabilities.
      * @param string $clientId The WorkOS client ID for your application.
      * @return \WorkOS\Resource\DeviceAuthorizationResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createDevice(
         string $clientId,
@@ -453,6 +464,7 @@ class UserManagement
      * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
      * @param string|null $returnTo The URL to redirect the user to after session revocation.
      * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function revokeSession(
         string $sessionId,
@@ -478,6 +490,7 @@ class UserManagement
      * Creates a new CORS origin for the current environment. CORS origins allow browser-based applications to make requests to the WorkOS API.
      * @param string $origin The origin URL to allow for CORS requests.
      * @return \WorkOS\Resource\CORSOriginResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createCorsOrigin(
         string $origin,
@@ -501,6 +514,7 @@ class UserManagement
      * Get the details of an existing email verification code that can be used to send an email to a user for verification.
      * @param string $id The ID of the email verification code.
      * @return \WorkOS\Resource\EmailVerification
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getEmailVerification(
         string $id,
@@ -520,6 +534,7 @@ class UserManagement
      * Creates a one-time token that can be used to reset a user's password.
      * @param string $email The email address of the user requesting a password reset.
      * @return \WorkOS\Resource\PasswordReset
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function resetPassword(
         string $email,
@@ -544,6 +559,7 @@ class UserManagement
      * @param string $token The password reset token.
      * @param string $newPassword The new password to set for the user.
      * @return \WorkOS\Resource\ResetPasswordResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function confirmPasswordReset(
         string $token,
@@ -569,6 +585,7 @@ class UserManagement
      * Get the details of an existing password reset token that can be used to reset a user's password.
      * @param string $id The ID of the password reset token.
      * @return \WorkOS\Resource\PasswordReset
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getPasswordReset(
         string $id,
@@ -594,6 +611,7 @@ class UserManagement
      * @param string|null $organizationId Filter users by the organization they are a member of.
      * @param string|null $email Filter users by their email address.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\User>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUsers(
         ?string $before = null,
@@ -637,6 +655,7 @@ class UserManagement
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
      * @return \WorkOS\Resource\User
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createUser(
         string $email,
@@ -676,6 +695,7 @@ class UserManagement
      * Get the details of an existing user by an [external identifier](https://workos.com/docs/authkit/metadata/external-identifiers).
      * @param string $externalId The external ID of the user.
      * @return \WorkOS\Resource\User
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getUserByExternalId(
         string $externalId,
@@ -695,6 +715,7 @@ class UserManagement
      * Get the details of an existing user.
      * @param string $id The unique ID of the user.
      * @return \WorkOS\Resource\User
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getUser(
         string $id,
@@ -724,6 +745,7 @@ class UserManagement
      * @param string|null $externalId The external ID of the user.
      * @param string|null $locale The user's preferred locale.
      * @return \WorkOS\Resource\User
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateUser(
         string $id,
@@ -766,6 +788,7 @@ class UserManagement
      * Permanently deletes a user in the current environment. It cannot be undone.
      * @param string $id The unique ID of the user.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteUser(
         string $id,
@@ -785,6 +808,7 @@ class UserManagement
      * @param string $id The unique ID of the user.
      * @param string $code The one-time code used to confirm the email change.
      * @return \WorkOS\Resource\EmailChangeConfirmation
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function confirmEmailChange(
         string $id,
@@ -810,6 +834,7 @@ class UserManagement
      * @param string $id The unique ID of the user.
      * @param string $newEmail The new email address to change to.
      * @return \WorkOS\Resource\EmailChange
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function sendEmailChange(
         string $id,
@@ -835,6 +860,7 @@ class UserManagement
      * @param string $id The ID of the user.
      * @param string $code The one-time email verification code.
      * @return \WorkOS\Resource\VerifyEmailResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function verifyEmail(
         string $id,
@@ -859,6 +885,7 @@ class UserManagement
      * Sends an email that contains a one-time code used to verify a user’s email address.
      * @param string $id The ID of the user.
      * @return \WorkOS\Resource\SendVerificationEmailResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function sendVerificationEmail(
         string $id,
@@ -878,6 +905,7 @@ class UserManagement
      * Get a list of identities associated with the user. A user can have multiple associated identities after going through [identity linking](https://workos.com/docs/authkit/identity-linking). Currently only OAuth identities are supported. More provider types may be added in the future.
      * @param string $id The unique ID of the user.
      * @return array
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getUserIdentities(
         string $id,
@@ -901,6 +929,7 @@ class UserManagement
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserSessionsListItem>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listSessions(
         string $id,
@@ -936,6 +965,7 @@ class UserManagement
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
      * @param string|null $email The email address of the recipient.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserInvite>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listInvitations(
         ?string $before = null,
@@ -974,6 +1004,7 @@ class UserManagement
      * @param string|null $inviterUserId The ID of the [user](https://workos.com/docs/reference/authkit/user) who invites the recipient. The invitation email will mention the name of this user.
      * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
      * @return \WorkOS\Resource\UserInvite
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function sendInvitation(
         string $email,
@@ -1007,6 +1038,7 @@ class UserManagement
      * Retrieve an existing invitation using the token.
      * @param string $token The token used to accept the invitation.
      * @return \WorkOS\Resource\UserInvite
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function findInvitationByToken(
         string $token,
@@ -1026,6 +1058,7 @@ class UserManagement
      * Get the details of an existing invitation.
      * @param string $id The unique ID of the invitation.
      * @return \WorkOS\Resource\UserInvite
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getInvitation(
         string $id,
@@ -1045,6 +1078,7 @@ class UserManagement
      * Accepts an invitation and, if linked to an organization, activates the user's membership in that organization.
      * @param string $id The unique ID of the invitation.
      * @return \WorkOS\Resource\Invitation
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function acceptInvitation(
         string $id,
@@ -1065,6 +1099,7 @@ class UserManagement
      * @param string $id The unique ID of the invitation.
      * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
      * @return \WorkOS\Resource\UserInvite
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function resendInvitation(
         string $id,
@@ -1089,6 +1124,7 @@ class UserManagement
      * Revokes an existing invitation.
      * @param string $id The unique ID of the invitation.
      * @return \WorkOS\Resource\Invitation
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function revokeInvitation(
         string $id,
@@ -1108,6 +1144,7 @@ class UserManagement
      * Update the JWT template for the current environment.
      * @param string $content The JWT template content as a Liquid template string.
      * @return \WorkOS\Resource\JWTTemplateResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateJWTTemplate(
         string $content,
@@ -1132,6 +1169,7 @@ class UserManagement
      * @param string $email The email address to send the magic code to.
      * @param string|null $invitationToken The invitation token to associate with this magic code.
      * @return \WorkOS\Resource\MagicAuth
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createMagicAuth(
         string $email,
@@ -1157,6 +1195,7 @@ class UserManagement
      * Get the details of an existing [Magic Auth](https://workos.com/docs/reference/authkit/magic-auth) code that can be used to send an email to a user for authentication.
      * @param string $id The unique ID of the Magic Auth code.
      * @return \WorkOS\Resource\MagicAuth
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getMagicAuth(
         string $id,
@@ -1182,6 +1221,7 @@ class UserManagement
      * @param array<\WorkOS\Resource\OrganizationMembershipStatus>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
      * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembership>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationMemberships(
         ?string $before = null,
@@ -1222,6 +1262,7 @@ class UserManagement
      * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
      * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
      * @return \WorkOS\Resource\OrganizationMembership
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganizationMembership(
         string $userId,
@@ -1251,6 +1292,7 @@ class UserManagement
      * Get the details of an existing organization membership.
      * @param string $id The unique ID of the organization membership.
      * @return \WorkOS\Resource\UserOrganizationMembership
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationMembership(
         string $id,
@@ -1272,6 +1314,7 @@ class UserManagement
      * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
      * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
      * @return \WorkOS\Resource\UserOrganizationMembership
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationMembership(
         string $id,
@@ -1298,6 +1341,7 @@ class UserManagement
      * Permanently deletes an existing organization membership. It cannot be undone.
      * @param string $id The unique ID of the organization membership.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganizationMembership(
         string $id,
@@ -1321,6 +1365,7 @@ class UserManagement
      * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
      * @param string $id The unique ID of the organization membership.
      * @return \WorkOS\Resource\OrganizationMembership
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deactivateOrganizationMembership(
         string $id,
@@ -1345,6 +1390,7 @@ class UserManagement
      * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
      * @param string $id The unique ID of the organization membership.
      * @return \WorkOS\Resource\UserOrganizationMembership
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function reactivateOrganizationMembership(
         string $id,
@@ -1364,6 +1410,7 @@ class UserManagement
      * Creates a new redirect URI for an environment.
      * @param string $uri The redirect URI to create.
      * @return \WorkOS\Resource\RedirectUri
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createRedirectUri(
         string $uri,
@@ -1391,6 +1438,7 @@ class UserManagement
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizedConnectApplicationListData>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUserAuthorizedApplications(
         string $userId,
@@ -1422,6 +1470,7 @@ class UserManagement
      * @param string $applicationId The ID or client ID of the application.
      * @param string $userId The ID of the user.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteUserAuthorizedApplication(
         string $applicationId,

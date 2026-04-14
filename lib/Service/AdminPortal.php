@@ -34,6 +34,7 @@ class AdminPortal
      * @param \WorkOS\Resource\IntentOptions|null $intentOptions Options to configure the Admin Portal based on the intent.
      * @param array<string>|null $adminEmails The email addresses of the IT admins to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
      * @return \WorkOS\Resource\PortalLinkResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function generateLink(
         string $organization,

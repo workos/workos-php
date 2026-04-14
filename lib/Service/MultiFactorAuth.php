@@ -26,6 +26,7 @@ class MultiFactorAuth
      * @param string $id The unique ID of the Authentication Challenge.
      * @param string $code The one-time code to verify.
      * @return \WorkOS\Resource\AuthenticationChallengeVerifyResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function verifyChallenge(
         string $id,
@@ -54,6 +55,7 @@ class MultiFactorAuth
      * @param string|null $totpUser Required when type is 'totp'.
      * @param string|null $userId The ID of the user to associate the factor with.
      * @return \WorkOS\Resource\AuthenticationFactorEnrolled
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function enrollFactor(
         \WorkOS\Resource\AuthenticationFactorsCreateRequestType $type,
@@ -85,6 +87,7 @@ class MultiFactorAuth
      * Gets an Authentication Factor.
      * @param string $id The unique ID of the Factor.
      * @return \WorkOS\Resource\AuthenticationFactor
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getFactor(
         string $id,
@@ -104,6 +107,7 @@ class MultiFactorAuth
      * Permanently deletes an Authentication Factor. It cannot be undone.
      * @param string $id The unique ID of the Factor.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteFactor(
         string $id,
@@ -123,6 +127,7 @@ class MultiFactorAuth
      * @param string $id The unique ID of the Authentication Factor to be challenged.
      * @param string|null $smsTemplate A custom template for the SMS message. Use the {{code}} placeholder to include the verification code.
      * @return \WorkOS\Resource\AuthenticationChallenge
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function challengeFactor(
         string $id,
@@ -151,6 +156,7 @@ class MultiFactorAuth
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthenticationFactor>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUserAuthFactors(
         string $userlandUserId,
@@ -185,6 +191,7 @@ class MultiFactorAuth
      * @param string|null $totpUser The user's account name displayed in their authenticator app.
      * @param string|null $totpSecret The Base32-encoded shared secret for TOTP factors. This can be provided when creating the auth factor, otherwise it will be generated. The algorithm used to derive TOTP codes is SHA-1, the code length is 6 digits, and the timestep is 30 seconds – the secret must be compatible with these parameters.
      * @return \WorkOS\Resource\UserAuthenticationFactorEnrollResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createUserAuthFactor(
         string $userlandUserId,

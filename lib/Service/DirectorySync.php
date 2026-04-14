@@ -29,6 +29,7 @@ class DirectorySync
      * @param string|null $search Searchable text to match against Directory names.
      * @param string|null $domain (deprecated) Filter Directories by their associated domain.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Directory>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listDirectories(
         ?string $before = null,
@@ -64,6 +65,7 @@ class DirectorySync
      * Get the details of an existing directory.
      * @param string $id Unique identifier for the Directory.
      * @return \WorkOS\Resource\Directory
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getDirectory(
         string $id,
@@ -83,6 +85,7 @@ class DirectorySync
      * Permanently deletes an existing directory. It cannot be undone.
      * @param string $id Unique identifier for the Directory.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteDirectory(
         string $id,
@@ -106,6 +109,7 @@ class DirectorySync
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listGroups(
         ?string $before = null,
@@ -139,6 +143,7 @@ class DirectorySync
      * Get the details of an existing Directory Group.
      * @param string $id Unique identifier for the Directory Group.
      * @return \WorkOS\Resource\DirectoryGroup
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getGroup(
         string $id,
@@ -163,6 +168,7 @@ class DirectorySync
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUsers(
         ?string $before = null,
@@ -196,6 +202,7 @@ class DirectorySync
      * Get the details of an existing Directory User.
      * @param string $id Unique identifier for the Directory User.
      * @return \WorkOS\Resource\DirectoryUserWithGroups
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getUser(
         string $id,

@@ -23,6 +23,7 @@ class ApiKeys
      * Validate an API key value and return the API key object if valid.
      * @param string $value The value for an API key.
      * @return \WorkOS\Resource\ApiKeyValidationResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createValidation(
         string $value,
@@ -46,6 +47,7 @@ class ApiKeys
      * Permanently deletes an API key. This action cannot be undone. Once deleted, any requests using this API key will fail authentication.
      * @param string $id The unique ID of the API key.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteApiKey(
         string $id,
@@ -68,6 +70,7 @@ class ApiKeys
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ApiKey>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationApiKeys(
         string $organizationId,
@@ -100,6 +103,7 @@ class ApiKeys
      * @param string $name The name for the API key.
      * @param array<string>|null $permissions The permission slugs to assign to the API key.
      * @return \WorkOS\Resource\ApiKeyWithValue
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganizationApiKey(
         string $organizationId,

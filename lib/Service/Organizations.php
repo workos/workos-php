@@ -27,6 +27,7 @@ class Organizations
      * @param array<string>|null $domains The domains of an Organization. Any Organization with a matching domain will be returned.
      * @param string|null $search Searchable text for an Organization. Matches against the organization name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Organization>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizations(
         ?string $before = null,
@@ -65,6 +66,7 @@ class Organizations
      * @param array<string, string>|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
      * @param string|null $externalId An external identifier for the Organization.
      * @return \WorkOS\Resource\Organization
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganization(
         string $name,
@@ -98,6 +100,7 @@ class Organizations
      * Get the details of an existing organization by an [external identifier](https://workos.com/docs/authkit/metadata/external-identifiers).
      * @param string $externalId The external ID of the Organization.
      * @return \WorkOS\Resource\Organization
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationByExternalId(
         string $externalId,
@@ -117,6 +120,7 @@ class Organizations
      * Get the details of an existing organization.
      * @param string $id Unique identifier of the Organization.
      * @return \WorkOS\Resource\Organization
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganization(
         string $id,
@@ -143,6 +147,7 @@ class Organizations
      * @param array<string, string>|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
      * @param string|null $externalId An external identifier for the Organization.
      * @return \WorkOS\Resource\Organization
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganization(
         string $id,
@@ -179,6 +184,7 @@ class Organizations
      * Permanently deletes an organization in the current environment. It cannot be undone.
      * @param string $id Unique identifier of the Organization.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganization(
         string $id,
@@ -197,6 +203,7 @@ class Organizations
      * Get the unified view of audit log trail and stream configuration for an organization.
      * @param string $id Unique identifier of the Organization.
      * @return \WorkOS\Resource\AuditLogConfiguration
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getAuditLogConfiguration(
         string $id,

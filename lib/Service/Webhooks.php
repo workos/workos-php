@@ -24,6 +24,7 @@ class Webhooks
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\WebhookEndpointJson>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listWebhookEndpoints(
         ?string $before = null,
@@ -54,6 +55,7 @@ class Webhooks
      * @param string $endpointUrl The HTTPS URL where webhooks will be sent.
      * @param array<\WorkOS\Resource\CreateWebhookEndpointEvents> $events The events that the Webhook Endpoint is subscribed to.
      * @return \WorkOS\Resource\WebhookEndpointJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createWebhookEndpoint(
         string $endpointUrl,
@@ -82,6 +84,7 @@ class Webhooks
      * @param \WorkOS\Resource\WebhookEndpointJsonStatus|null $status Whether the Webhook Endpoint is enabled or disabled.
      * @param array<\WorkOS\Resource\CreateWebhookEndpointEvents>|null $events The events that the Webhook Endpoint is subscribed to.
      * @return \WorkOS\Resource\WebhookEndpointJson
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateWebhookEndpoint(
         string $id,
@@ -110,6 +113,7 @@ class Webhooks
      * Delete an existing webhook endpoint.
      * @param string $id Unique identifier of the Webhook Endpoint.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteWebhookEndpoint(
         string $id,
