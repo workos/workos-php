@@ -28,9 +28,23 @@ class UserManagementTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->userManagement()->getAuthorizationUrl(redirectUri: 'test_value');
+        $result = $client->userManagement()->getAuthorizationUrl(codeChallengeMethod: 'test_value', codeChallenge: 'test_value', domainHint: 'test_value', connectionId: 'test_value', providerQueryParams: [], providerScopes: [], invitationToken: 'test_value', screenHint: \WorkOS\Resource\UserManagementAuthenticationScreenHint::SignUp, loginHint: 'test_value', provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit, prompt: 'test_value', state: 'test_value', organizationId: 'test_value', redirectUri: 'test_value');
         $this->assertIsString($result);
         $this->assertStringContainsString('user_management/authorize', $result);
+        parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
+        $this->assertSame('test_value', $query['code_challenge']);
+        $this->assertSame('test_value', $query['domain_hint']);
+        $this->assertSame('test_value', $query['connection_id']);
+        $this->assertSame('test_value', $query['invitation_token']);
+        $this->assertSame('sign-up', $query['screen_hint']);
+        $this->assertSame('test_value', $query['login_hint']);
+        $this->assertSame('authkit', $query['provider']);
+        $this->assertSame('test_value', $query['prompt']);
+        $this->assertSame('test_value', $query['state']);
+        $this->assertSame('test_value', $query['organization_id']);
+        $this->assertSame('test_value', $query['redirect_uri']);
+        $this->assertSame('code', $query['response_type']);
+        $this->assertArrayHasKey('client_id', $query);
     }
 
     public function testCreateDevice(): void
@@ -51,9 +65,12 @@ class UserManagementTest extends TestCase
     public function testGetLogoutUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->userManagement()->getLogoutUrl(sessionId: 'test_value');
+        $result = $client->userManagement()->getLogoutUrl(sessionId: 'test_value', returnTo: 'test_value');
         $this->assertIsString($result);
         $this->assertStringContainsString('user_management/sessions/logout', $result);
+        parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
+        $this->assertSame('test_value', $query['session_id']);
+        $this->assertSame('test_value', $query['return_to']);
     }
 
     public function testRevokeSession(): void

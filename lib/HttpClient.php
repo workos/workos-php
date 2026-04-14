@@ -88,8 +88,9 @@ class HttpClient
     public function buildUrl(string $path, array $query = [], ?RequestOptions $options = null): string
     {
         $url = $this->resolveUrl($path, $options);
-        if (count($query) > 0) {
-            $url .= '?' . http_build_query($query);
+        $queryString = http_build_query($query);
+        if ($queryString !== '') {
+            $url .= '?' . $queryString;
         }
 
         return $url;
