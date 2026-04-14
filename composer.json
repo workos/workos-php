@@ -38,7 +38,7 @@
     "format": "php vendor/bin/php-cs-fixer fix -v --using-cache=no --config=.php-cs-fixer.dist.php",
     "format-check": "php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-fixer.dist.php",
     "test": "php vendor/bin/phpunit tests",
-    "typecheck": "php vendor/bin/phpstan analyse --no-progress",
+    "typecheck": "php vendor/bin/phpstan analyse --no-progress --memory-limit=512M",
     "ci": "./script/ci"
   },
   "config": {
