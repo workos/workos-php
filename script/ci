@@ -16,7 +16,7 @@ php vendor/bin/php-cs-fixer fix -v --dry-run --using-cache=no --config=.php-cs-f
 
 echo ""
 echo "==> Running typecheck (PHPStan)..."
-php vendor/bin/phpstan analyse --no-progress
+php vendor/bin/phpstan analyse --no-progress --memory-limit=512M
 
 echo ""
 echo "==> Running tests (PHPUnit)..."
