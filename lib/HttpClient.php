@@ -77,6 +77,25 @@ class HttpClient
         return $this->clientId;
     }
 
+    /**
+     * Build a fully-qualified URL without making an HTTP request.
+     *
+     * Used for redirect endpoints (e.g., SSO authorize, logout) where the
+     * caller needs a URL to redirect the user's browser to.
+     *
+     * @param array<string, mixed> $query
+     */
+    public function buildUrl(string $path, array $query = [], ?RequestOptions $options = null): string
+    {
+        $url = $this->resolveUrl($path, $options);
+        $queryString = http_build_query($query);
+        if ($queryString !== '') {
+            $url .= '?' . $queryString;
+        }
+
+        return $url;
+    }
+
     public function request(
         string $method,
         string $path,
@@ -244,13 +263,25 @@ class HttpClient
         }
 
         $decoded = json_decode($contents, true);
-        return is_array($decoded) ? $decoded : null;
+        if (!is_array($decoded)) {
+            $statusCode = $response->getStatusCode();
+            $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
+            $preview = mb_substr($contents, 0, 200);
+
+            throw new Exception\ApiException(
+                sprintf('Expected JSON response but received non-JSON body (HTTP %d): %s', $statusCode, $preview),
+                $statusCode,
+                $requestId,
+            );
+        }
+
+        return $decoded;
     }
 
     private function mapApiException(ResponseInterface $response, ?\Throwable $previous = null): ApiException
     {
         $statusCode = $response->getStatusCode();
-        $requestId = $response->getHeaderLine('X-Request-ID') ?: $response->getHeaderLine('x-request-id') ?: null;
+        $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
         $body = $this->decodeErrorBody($response);
 
         return match ($statusCode) {

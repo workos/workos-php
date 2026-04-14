@@ -58,23 +58,32 @@ class SSOTest extends TestCase
 
     public function testGetAuthorizationUrl(): void
     {
-        $fixture = $this->loadFixture('sso_authorize_url_response');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->getAuthorizationUrl(redirectUri: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\SSOAuthorizeUrlResponse::class, $result);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('sso/authorize', $request->getUri()->getPath());
+        $client = $this->createMockClient([]);
+        $result = $client->sso()->getAuthorizationUrl(providerScopes: [], providerQueryParams: [], domain: 'test_value', provider: \WorkOS\Resource\SSOProvider::AppleOAuth, redirectUri: 'test_value', state: 'test_value', connection: 'test_value', organization: 'test_value', domainHint: 'test_value', loginHint: 'test_value', nonce: 'test_value');
+        $this->assertIsString($result);
+        $this->assertStringContainsString('sso/authorize', $result);
+        parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
+        $this->assertSame('test_value', $query['domain']);
+        $this->assertSame('AppleOAuth', $query['provider']);
+        $this->assertSame('test_value', $query['redirect_uri']);
+        $this->assertSame('test_value', $query['state']);
+        $this->assertSame('test_value', $query['connection']);
+        $this->assertSame('test_value', $query['organization']);
+        $this->assertSame('test_value', $query['domain_hint']);
+        $this->assertSame('test_value', $query['login_hint']);
+        $this->assertSame('test_value', $query['nonce']);
+        $this->assertSame('code', $query['response_type']);
+        $this->assertArrayHasKey('client_id', $query);
     }
 
     public function testGetLogoutUrl(): void
     {
-        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->sso()->getLogoutUrl(token: 'test_value');
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('sso/logout', $request->getUri()->getPath());
+        $client = $this->createMockClient([]);
+        $result = $client->sso()->getLogoutUrl(token: 'test_value');
+        $this->assertIsString($result);
+        $this->assertStringContainsString('sso/logout', $result);
+        parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
+        $this->assertSame('test_value', $query['token']);
     }
 
     public function testAuthorizeLogout(): void
