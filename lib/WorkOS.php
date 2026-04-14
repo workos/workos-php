@@ -66,12 +66,14 @@ class WorkOS
     private ?Service\Webhooks $webhooks = null;
     private ?Service\Widgets $widgets = null;
     private ?Service\AuditLogs $auditLogs = null;
+    // @oagen-ignore-start — non-spec service properties (hand-maintained)
     private ?Passwordless $passwordless = null;
     private ?Vault $vault = null;
     private ?WebhookVerification $webhookVerification = null;
     private ?Actions $actions = null;
     private ?SessionManager $sessionManager = null;
     private ?PKCEHelper $pkce = null;
+    // @oagen-ignore-end
 
     public function __construct(
         ?string $apiKey = null,
@@ -172,6 +174,8 @@ class WorkOS
         return $this->auditLogs ??= new Service\AuditLogs($this->httpClient);
     }
 
+    // @oagen-ignore-start — non-spec service accessors (hand-maintained)
+
     public function passwordless(): Passwordless
     {
         return $this->passwordless ??= new Passwordless($this->httpClient);
@@ -201,4 +205,5 @@ class WorkOS
     {
         return $this->pkce ??= new PKCEHelper($this->httpClient);
     }
+    // @oagen-ignore-end
 }
