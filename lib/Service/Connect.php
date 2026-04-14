@@ -259,7 +259,7 @@ class Connect
      * @param string $id The application ID or client ID of the Connect Application.
      * @return \WorkOS\Resource\NewConnectApplicationSecret
      */
-    public function createApplicationClientSecrets(
+    public function createApplicationClientSecret(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\NewConnectApplicationSecret {

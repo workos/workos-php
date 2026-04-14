@@ -186,7 +186,7 @@ class MultiFactorAuth
      * @param string|null $totpSecret The Base32-encoded shared secret for TOTP factors. This can be provided when creating the auth factor, otherwise it will be generated. The algorithm used to derive TOTP codes is SHA-1, the code length is 6 digits, and the timestep is 30 seconds – the secret must be compatible with these parameters.
      * @return \WorkOS\Resource\UserAuthenticationFactorEnrollResponse
      */
-    public function createUserAuthFactors(
+    public function createUserAuthFactor(
         string $userlandUserId,
         string $type,
         ?string $totpIssuer = null,

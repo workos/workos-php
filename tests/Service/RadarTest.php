@@ -13,11 +13,11 @@ class RadarTest extends TestCase
 {
     use TestHelper;
 
-    public function testCreateAttempts(): void
+    public function testCreateAttempt(): void
     {
         $fixture = $this->loadFixture('radar_standalone_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->radar()->createAttempts(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::Login);
+        $result = $client->radar()->createAttempt(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::Login);
         $this->assertInstanceOf(\WorkOS\Resource\RadarStandaloneResponse::class, $result);
         $this->assertSame($fixture['reason'], $result->reason);
         $this->assertIsArray($result->toArray());

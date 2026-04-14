@@ -13,11 +13,11 @@ class ApiKeysTest extends TestCase
 {
     use TestHelper;
 
-    public function testCreateValidations(): void
+    public function testCreateValidation(): void
     {
         $fixture = $this->loadFixture('api_key_validation_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->createValidations(value: 'test_value');
+        $result = $client->apiKeys()->createValidation(value: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ApiKeyValidationResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -52,11 +52,11 @@ class ApiKeysTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
-    public function testCreateOrganizationApiKeys(): void
+    public function testCreateOrganizationApiKey(): void
     {
         $fixture = $this->loadFixture('api_key_with_value');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->createOrganizationApiKeys('test_organizationId', name: 'test_value');
+        $result = $client->apiKeys()->createOrganizationApiKey('test_organizationId', name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ApiKeyWithValue::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);

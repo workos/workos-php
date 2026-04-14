@@ -163,11 +163,11 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug', $request->getUri()->getPath());
     }
 
-    public function testCreateRolePermissions(): void
+    public function testCreateRolePermission(): void
     {
         $fixture = $this->loadFixture('role');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->createRolePermissions('test_organizationId', 'test_slug', bodySlug: 'test_value');
+        $result = $client->authorization()->createRolePermission('test_organizationId', 'test_slug', bodySlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);

@@ -24,7 +24,7 @@ class OrganizationDomains
      * @param string $organizationId The ID of the organization to add the domain to.
      * @return \WorkOS\Resource\OrganizationDomain
      */
-    public function createOrganizationDomains(
+    public function createOrganizationDomain(
         string $domain,
         string $organizationId,
         ?\WorkOS\RequestOptions $options = null,

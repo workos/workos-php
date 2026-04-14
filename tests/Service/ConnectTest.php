@@ -97,11 +97,11 @@ class ConnectTest extends TestCase
         $this->assertStringEndsWith('connect/applications/test_id/client_secrets', $request->getUri()->getPath());
     }
 
-    public function testCreateApplicationClientSecrets(): void
+    public function testCreateApplicationClientSecret(): void
     {
         $fixture = $this->loadFixture('new_connect_application_secret');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->createApplicationClientSecrets('test_id');
+        $result = $client->connect()->createApplicationClientSecret('test_id');
         $this->assertInstanceOf(\WorkOS\Resource\NewConnectApplicationSecret::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['secret_hint'], $result->secretHint);

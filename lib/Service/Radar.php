@@ -29,7 +29,7 @@ class Radar
      * @param string|null $botScore An optional bot detection score for the request.
      * @return \WorkOS\Resource\RadarStandaloneResponse
      */
-    public function createAttempts(
+    public function createAttempt(
         string $ipAddress,
         string $userAgent,
         string $email,

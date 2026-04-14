@@ -92,11 +92,11 @@ class MultiFactorAuthTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
-    public function testCreateUserAuthFactors(): void
+    public function testCreateUserAuthFactor(): void
     {
         $fixture = $this->loadFixture('user_authentication_factor_enroll_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->createUserAuthFactors('test_userlandUserId', type: 'test_value');
+        $result = $client->multiFactorAuth()->createUserAuthFactor('test_userlandUserId', type: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\UserAuthenticationFactorEnrollResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();

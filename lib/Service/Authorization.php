@@ -358,7 +358,7 @@ class Authorization
      * @param string $bodySlug The slug of the permission to add to the role.
      * @return \WorkOS\Resource\Role
      */
-    public function createRolePermissions(
+    public function createRolePermission(
         string $organizationId,
         string $slug,
         string $bodySlug,

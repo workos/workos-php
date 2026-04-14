@@ -13,11 +13,11 @@ class OrganizationDomainsTest extends TestCase
 {
     use TestHelper;
 
-    public function testCreateOrganizationDomains(): void
+    public function testCreateOrganizationDomain(): void
     {
         $fixture = $this->loadFixture('organization_domain');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationDomains()->createOrganizationDomains(domain: 'test_value', organizationId: 'test_value');
+        $result = $client->organizationDomains()->createOrganizationDomain(domain: 'test_value', organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);

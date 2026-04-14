@@ -29,11 +29,11 @@ class WebhooksTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
-    public function testCreateWebhookEndpoints(): void
+    public function testCreateWebhookEndpoint(): void
     {
         $fixture = $this->loadFixture('webhook_endpoint_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->webhooks()->createWebhookEndpoints(endpointUrl: 'test_value', events: []);
+        $result = $client->webhooks()->createWebhookEndpoint(endpointUrl: 'test_value', events: []);
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);

@@ -55,7 +55,7 @@ class Webhooks
      * @param array<\WorkOS\Resource\CreateWebhookEndpointEvents> $events The events that the Webhook Endpoint is subscribed to.
      * @return \WorkOS\Resource\WebhookEndpointJson
      */
-    public function createWebhookEndpoints(
+    public function createWebhookEndpoint(
         string $endpointUrl,
         array $events,
         ?\WorkOS\RequestOptions $options = null,

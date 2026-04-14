@@ -24,7 +24,7 @@ class ApiKeys
      * @param string $value The value for an API key.
      * @return \WorkOS\Resource\ApiKeyValidationResponse
      */
-    public function createValidations(
+    public function createValidation(
         string $value,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ApiKeyValidationResponse {
@@ -101,7 +101,7 @@ class ApiKeys
      * @param array<string>|null $permissions The permission slugs to assign to the API key.
      * @return \WorkOS\Resource\ApiKeyWithValue
      */
-    public function createOrganizationApiKeys(
+    public function createOrganizationApiKey(
         string $organizationId,
         string $name,
         ?array $permissions = null,
