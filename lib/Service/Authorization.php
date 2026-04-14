@@ -32,6 +32,7 @@ class Authorization
      * @param string|null $resourceExternalId The external ID of the resource.
      * @param string|null $resourceTypeSlug The slug of the resource type.
      * @return \WorkOS\Resource\AuthorizationCheck
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function check(
         string $organizationMembershipId,
@@ -72,6 +73,7 @@ class Authorization
      * @param string|null $parentResourceTypeSlug The slug of the parent resource type. Must be provided together with `parent_resource_external_id`.
      * @param string|null $parentResourceExternalId The application-specific external identifier of the parent resource. Must be provided together with `parent_resource_type_slug`.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationMembershipResources(
         string $organizationMembershipId,
@@ -114,6 +116,7 @@ class Authorization
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RoleAssignment>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationMembershipRoleAssignments(
         string $organizationMembershipId,
@@ -148,6 +151,7 @@ class Authorization
      * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
      * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
      * @return \WorkOS\Resource\RoleAssignment
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function assignRole(
         string $organizationMembershipId,
@@ -182,6 +186,7 @@ class Authorization
      * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
      * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeRole(
         string $organizationMembershipId,
@@ -212,6 +217,7 @@ class Authorization
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleAssignmentId The ID of the role assignment to remove.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganizationMembershipRoleAssignment(
         string $organizationMembershipId,
@@ -231,6 +237,7 @@ class Authorization
      * Get a list of all roles that apply to an organization. This includes both environment roles and organization-specific roles, returned in priority order.
      * @param string $organizationId The ID of the organization.
      * @return \WorkOS\Resource\RoleList
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationRoles(
         string $organizationId,
@@ -254,6 +261,7 @@ class Authorization
      * @param string|null $description An optional description of the role's purpose.
      * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganizationRole(
         string $organizationId,
@@ -285,6 +293,7 @@ class Authorization
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationRole(
         string $organizationId,
@@ -308,6 +317,7 @@ class Authorization
      * @param string|null $name A descriptive name for the role.
      * @param string|null $description An optional description of the role's purpose.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationRole(
         string $organizationId,
@@ -336,6 +346,7 @@ class Authorization
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganizationRole(
         string $organizationId,
@@ -357,6 +368,7 @@ class Authorization
      * @param string $slug The slug of the role.
      * @param string $bodySlug The slug of the permission to add to the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createRolePermission(
         string $organizationId,
@@ -384,6 +396,7 @@ class Authorization
      * @param string $slug The slug of the role.
      * @param array<string> $permissions The permission slugs to assign to the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateRolePermissions(
         string $organizationId,
@@ -411,6 +424,7 @@ class Authorization
      * @param string $slug The slug of the role.
      * @param string $permissionSlug The slug of the permission to remove.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteRolePermission(
         string $organizationId,
@@ -433,6 +447,7 @@ class Authorization
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @return \WorkOS\Resource\AuthorizationResource
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationResource(
         string $organizationId,
@@ -461,6 +476,7 @@ class Authorization
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
      * @return \WorkOS\Resource\AuthorizationResource
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationResource(
         string $organizationId,
@@ -498,6 +514,7 @@ class Authorization
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @param bool|null $cascadeDelete If true, deletes all descendant resources and role assignments. If not set and the resource has children or assignments, the request will fail. Defaults to false.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganizationResource(
         string $organizationId,
@@ -531,6 +548,7 @@ class Authorization
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listResourceOrganizationMemberships(
         string $organizationId,
@@ -576,6 +594,7 @@ class Authorization
      * @param string|null $parentExternalId Filter resources by parent external ID.
      * @param string|null $search Search resources by name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listResources(
         ?string $before = null,
@@ -624,6 +643,7 @@ class Authorization
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
      * @return \WorkOS\Resource\AuthorizationResource
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createResource(
         string $externalId,
@@ -661,6 +681,7 @@ class Authorization
      * Retrieve the details of an authorization resource by its ID.
      * @param string $resourceId The ID of the authorization resource.
      * @return \WorkOS\Resource\AuthorizationResource
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getResource(
         string $resourceId,
@@ -685,6 +706,7 @@ class Authorization
      * @param string|null $parentResourceExternalId The external ID of the parent resource.
      * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
      * @return \WorkOS\Resource\AuthorizationResource
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateResource(
         string $resourceId,
@@ -718,6 +740,7 @@ class Authorization
      * @param string $resourceId The ID of the authorization resource.
      * @param bool|null $cascadeDelete If true, deletes all descendant resources and role assignments. If not set and the resource has children or assignments, the request will fail. Defaults to false.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteResource(
         string $resourceId,
@@ -747,6 +770,7 @@ class Authorization
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listMembershipsForResource(
         string $resourceId,
@@ -780,6 +804,7 @@ class Authorization
      *
      * List all environment roles in priority order.
      * @return \WorkOS\Resource\RoleList
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listEnvironmentRoles(
         ?\WorkOS\RequestOptions $options = null,
@@ -801,6 +826,7 @@ class Authorization
      * @param string|null $description An optional description of the role.
      * @param string|null $resourceTypeSlug The slug of the resource type the role is scoped to.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createEnvironmentRole(
         string $slug,
@@ -830,6 +856,7 @@ class Authorization
      * Get an environment role by its slug.
      * @param string $slug The slug of the environment role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getEnvironmentRole(
         string $slug,
@@ -851,6 +878,7 @@ class Authorization
      * @param string|null $name A descriptive name for the role.
      * @param string|null $description An optional description of the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateEnvironmentRole(
         string $slug,
@@ -878,6 +906,7 @@ class Authorization
      * @param string $slug The slug of the environment role.
      * @param string $bodySlug The slug of the permission to add to the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function addEnvironmentRolePermission(
         string $slug,
@@ -903,6 +932,7 @@ class Authorization
      * @param string $slug The slug of the environment role.
      * @param array<string> $permissions The permission slugs to assign to the role.
      * @return \WorkOS\Resource\Role
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function setEnvironmentRolePermissions(
         string $slug,
@@ -930,6 +960,7 @@ class Authorization
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listPermissions(
         ?string $before = null,
@@ -962,6 +993,7 @@ class Authorization
      * @param string|null $description An optional description of the Permission.
      * @param string|null $resourceTypeSlug The slug of the resource type this permission is scoped to.
      * @return \WorkOS\Resource\Permission
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createPermission(
         string $slug,
@@ -991,6 +1023,7 @@ class Authorization
      * Retrieve a permission by its unique slug.
      * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
      * @return \WorkOS\Resource\AuthorizationPermission
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getPermission(
         string $slug,
@@ -1012,6 +1045,7 @@ class Authorization
      * @param string|null $name A descriptive name for the Permission.
      * @param string|null $description An optional description of the Permission.
      * @return \WorkOS\Resource\AuthorizationPermission
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updatePermission(
         string $slug,
@@ -1038,6 +1072,7 @@ class Authorization
      * Delete an existing permission. System permissions cannot be deleted.
      * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deletePermission(
         string $slug,

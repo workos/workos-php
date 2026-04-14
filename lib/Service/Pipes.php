@@ -27,6 +27,7 @@ class Pipes
      * @param string|null $organizationId An organization ID to scope the authorization to a specific organization.
      * @param string|null $returnTo The URL to redirect the user to after authorization.
      * @return \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function authorizeDataIntegration(
         string $slug,
@@ -57,6 +58,7 @@ class Pipes
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
      * @return \WorkOS\Resource\DataIntegrationAccessTokenResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createDataIntegrationToken(
         string $slug,
@@ -85,6 +87,7 @@ class Pipes
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getUserConnectedAccount(
         string $userId,
@@ -112,6 +115,7 @@ class Pipes
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteUserConnectedAccount(
         string $userId,
@@ -137,6 +141,7 @@ class Pipes
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier to list providers and connected accounts for.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to filter connections for a specific organization.
      * @return \WorkOS\Resource\DataIntegrationsListResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUserDataProviders(
         string $userId,

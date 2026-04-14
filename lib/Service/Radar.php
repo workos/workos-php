@@ -28,6 +28,7 @@ class Radar
      * @param string|null $deviceFingerprint An optional device fingerprint for the request.
      * @param string|null $botScore An optional bot detection score for the request.
      * @return \WorkOS\Resource\RadarStandaloneResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createAttempt(
         string $ipAddress,
@@ -65,6 +66,7 @@ class Radar
      * @param string|null $challengeStatus Set to `"success"` to mark the challenge as completed.
      * @param string|null $attemptStatus Set to `"success"` to mark the authentication attempt as successful.
      * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateAttempt(
         string $id,
@@ -93,6 +95,7 @@ class Radar
      * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to add the entry to the allow or block list.
      * @param string $entry The value to add to the list. Must match the format of the list type (e.g. a valid IP address for `ip_address`, a valid email for `email`).
      * @return \WorkOS\Resource\RadarListEntryAlreadyPresentResponse
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function addListEntry(
         \WorkOS\Resource\RadarType $type,
@@ -120,6 +123,7 @@ class Radar
      * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to remove the entry from the allow or block list.
      * @param string $entry The value to remove from the list. Must match an existing entry.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeListEntry(
         \WorkOS\Resource\RadarType $type,

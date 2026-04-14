@@ -23,6 +23,7 @@ class OrganizationDomains
      * @param string $domain The domain to add to the organization.
      * @param string $organizationId The ID of the organization to add the domain to.
      * @return \WorkOS\Resource\OrganizationDomain
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganizationDomain(
         string $domain,
@@ -48,6 +49,7 @@ class OrganizationDomains
      * Get the details of an existing organization domain.
      * @param string $id Unique identifier of the organization domain.
      * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationDomain(
         string $id,
@@ -67,6 +69,7 @@ class OrganizationDomains
      * Permanently deletes an organization domain. It cannot be undone.
      * @param string $id Unique identifier of the organization domain.
      * @return void
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function deleteOrganizationDomain(
         string $id,
@@ -85,6 +88,7 @@ class OrganizationDomains
      * Initiates verification process for an Organization Domain.
      * @param string $id Unique identifier of the organization domain.
      * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     * @throws \WorkOS\Exception\WorkOSException
      */
     public function verifyOrganizationDomain(
         string $id,
