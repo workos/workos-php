@@ -320,14 +320,12 @@ After:
 $sso = $workos->sso();
 ```
 
-#### `getAuthorizationUrl()` no longer builds a URL locally
+#### `getAuthorizationUrl()` still builds a URL locally but the API changed
 
 In v4, `SSO::getAuthorizationUrl(...)` returned a string and implicitly used `WorkOS::getClientId()`.
 
-In v5 it:
+In v5 it still returns a string, but:
 
-- makes an HTTP request
-- returns `WorkOS\Resource\SSOAuthorizeUrlResponse`
 - requires an instantiated client with `clientId`
 - requires `redirectUri`
 
@@ -344,13 +342,11 @@ $url = $sso->getAuthorizationUrl(
 After:
 
 ```php
-$response = $workos->sso()->getAuthorizationUrl(
+$url = $workos->sso()->getAuthorizationUrl(
     redirectUri: 'https://example.com/callback',
     domain: 'example.com',
     state: json_encode(['return_to' => '/dashboard']),
 );
-
-$url = $response->url;
 ```
 
 `state` is now a string parameter. If you used array state in v4, encode it yourself.
@@ -501,14 +497,12 @@ These methods existed in v4 but should be treated as removed in v5:
 
 #### Auth and logout URL helpers changed behavior
 
-`userManagement()->getAuthorizationUrl()` and `userManagement()->getLogoutUrl()` no longer just build a local string.
+`userManagement()->getAuthorizationUrl()` and `userManagement()->getLogoutUrl()` still build URLs locally and return strings.
 
 Notable differences:
 
-- they make API calls
 - `getAuthorizationUrl()` now requires `redirectUri` and an instantiated client with `clientId`
 - `state` is now a string, not an array that the SDK JSON-encodes for you
-- `getLogoutUrl()` now returns response data instead of a locally composed URL string
 
 Before:
 
@@ -523,7 +517,7 @@ $url = $userManagement->getAuthorizationUrl(
 After:
 
 ```php
-$response = $workos->userManagement()->getAuthorizationUrl(
+$url = $workos->userManagement()->getAuthorizationUrl(
     redirectUri: 'https://example.com/callback',
     state: json_encode(['return_to' => '/dashboard']),
     provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit,

@@ -27,11 +27,10 @@ class UserManagementTest extends TestCase
 
     public function testGetAuthorizationUrl(): void
     {
-        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->userManagement()->getAuthorizationUrl(redirectUri: 'test_value');
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('user_management/authorize', $request->getUri()->getPath());
+        $client = $this->createMockClient([]);
+        $result = $client->userManagement()->getAuthorizationUrl(redirectUri: 'test_value');
+        $this->assertIsString($result);
+        $this->assertStringContainsString('user_management/authorize', $result);
     }
 
     public function testCreateDevice(): void
@@ -51,11 +50,10 @@ class UserManagementTest extends TestCase
 
     public function testGetLogoutUrl(): void
     {
-        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->userManagement()->getLogoutUrl(sessionId: 'test_value');
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('user_management/sessions/logout', $request->getUri()->getPath());
+        $client = $this->createMockClient([]);
+        $result = $client->userManagement()->getLogoutUrl(sessionId: 'test_value');
+        $this->assertIsString($result);
+        $this->assertStringContainsString('user_management/sessions/logout', $result);
     }
 
     public function testRevokeSession(): void

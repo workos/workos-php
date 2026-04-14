@@ -58,23 +58,18 @@ class SSOTest extends TestCase
 
     public function testGetAuthorizationUrl(): void
     {
-        $fixture = $this->loadFixture('sso_authorize_url_response');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $client = $this->createMockClient([]);
         $result = $client->sso()->getAuthorizationUrl(redirectUri: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\SSOAuthorizeUrlResponse::class, $result);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('sso/authorize', $request->getUri()->getPath());
+        $this->assertIsString($result);
+        $this->assertStringContainsString('sso/authorize', $result);
     }
 
     public function testGetLogoutUrl(): void
     {
-        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->sso()->getLogoutUrl(token: 'test_value');
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('sso/logout', $request->getUri()->getPath());
+        $client = $this->createMockClient([]);
+        $result = $client->sso()->getLogoutUrl(token: 'test_value');
+        $this->assertIsString($result);
+        $this->assertStringContainsString('sso/logout', $result);
     }
 
     public function testAuthorizeLogout(): void

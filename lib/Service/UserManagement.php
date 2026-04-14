@@ -363,7 +363,7 @@ class UserManagement
      * @param string|null $state An opaque value used to maintain state between the request and the callback.
      * @param string|null $organizationId The ID of the organization to authenticate the user against.
      * @param string $redirectUri The callback URI where the authorization code will be sent after authentication.
-     * @return mixed
+     * @return string
      */
     public function getAuthorizationUrl(
         string $redirectUri,
@@ -381,7 +381,7 @@ class UserManagement
         ?string $state = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): mixed {
+    ): string {
         $query = array_filter([
             'code_challenge_method' => $codeChallengeMethod,
             'code_challenge' => $codeChallenge,
@@ -400,13 +400,7 @@ class UserManagement
             'response_type' => 'code',
         ], fn ($v) => $v !== null);
         $query['client_id'] = $this->client->requireClientId();
-        $response = $this->client->request(
-            method: 'GET',
-            path: 'user_management/authorize',
-            query: $query,
-            options: $options,
-        );
-        return $response;
+        return $this->client->buildUrl('user_management/authorize', $query, $options);
     }
 
     /**
@@ -438,24 +432,18 @@ class UserManagement
      * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
      * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
      * @param string|null $returnTo The URL to redirect the user to after session revocation.
-     * @return mixed
+     * @return string
      */
     public function getLogoutUrl(
         string $sessionId,
         ?string $returnTo = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): mixed {
+    ): string {
         $query = array_filter([
             'session_id' => $sessionId,
             'return_to' => $returnTo,
         ], fn ($v) => $v !== null);
-        $response = $this->client->request(
-            method: 'GET',
-            path: 'user_management/sessions/logout',
-            query: $query,
-            options: $options,
-        );
-        return $response;
+        return $this->client->buildUrl('user_management/sessions/logout', $query, $options);
     }
 
     /**
