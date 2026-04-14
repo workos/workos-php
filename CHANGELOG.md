@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.0.3](https://github.com/workos/workos-php/compare/5.0.2...5.0.3) (2026-04-14)
+
+
+### Bug Fixes
+
+* build redirect endpoint URLs locally instead of making HTTP requests ([#358](https://github.com/workos/workos-php/issues/358)) ([eae3949](https://github.com/workos/workos-php/commit/eae39490c79b2ab921d479a5b2686946b61a7b24))
+* **docs:** add `[@throws](https://github.com/throws)` to PHPDoc when appropriate ([#360](https://github.com/workos/workos-php/issues/360)) ([ed68872](https://github.com/workos/workos-php/commit/ed68872bce0c62486f05890e464b1f8adfbdb6de))
+
 ## [5.0.2](https://github.com/workos/workos-php/compare/5.0.1...5.0.2) (2026-04-14)
 
 
