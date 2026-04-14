@@ -265,7 +265,7 @@ class HttpClient
         $decoded = json_decode($contents, true);
         if (!is_array($decoded)) {
             $statusCode = $response->getStatusCode();
-            $requestId = $response->getHeaderLine('X-Request-ID') ?: $response->getHeaderLine('x-request-id') ?: null;
+            $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
             $preview = mb_substr($contents, 0, 200);
 
             throw new Exception\ApiException(
@@ -281,7 +281,7 @@ class HttpClient
     private function mapApiException(ResponseInterface $response, ?\Throwable $previous = null): ApiException
     {
         $statusCode = $response->getStatusCode();
-        $requestId = $response->getHeaderLine('X-Request-ID') ?: $response->getHeaderLine('x-request-id') ?: null;
+        $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
         $body = $this->decodeErrorBody($response);
 
         return match ($statusCode) {
