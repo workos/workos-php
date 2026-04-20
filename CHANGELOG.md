@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.1.0](https://github.com/workos/workos-php/compare/5.0.3...5.1.0) (2026-04-20)
+
+
+### Features
+
+* add group, pipes, and authorization additive API support ([#367](https://github.com/workos/workos-php/issues/367)) ([c90a5d6](https://github.com/workos/workos-php/commit/c90a5d6ecaa887da7d0f5437269850f272cc5ba6))
+
+
+### Bug Fixes
+
+* redesign authorization resource targeting and default order handling ([b435ced](https://github.com/workos/workos-php/commit/b435cedbbaf7a2cf0bd2ef964e065de78e272750))
+* Remove extractVersion from matchUpdateTypes rules ([#365](https://github.com/workos/workos-php/issues/365)) ([f4ad142](https://github.com/workos/workos-php/commit/f4ad142094c280ea57da9542d422c522dbee99bf))
+* type tweaks ([780ee85](https://github.com/workos/workos-php/commit/780ee85f4bb338695196b4b5ea0073ec572d323c))
+
+
+### Miscellaneous Chores
+
+* **deps:** update minor and patch updates ([#361](https://github.com/workos/workos-php/issues/361)) ([7e439f7](https://github.com/workos/workos-php/commit/7e439f70afca166b64041ef218153f935de77c9d))
+
 ## [5.0.3](https://github.com/workos/workos-php/compare/5.0.2...5.0.3) (2026-04-14)
 
 
