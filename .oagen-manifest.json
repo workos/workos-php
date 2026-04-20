@@ -1,7 +1,7 @@
 {
   "version": 1,
   "language": "php",
-  "generatedAt": "2026-04-20T18:32:34.311Z",
+  "generatedAt": "2026-04-20T18:36:58.288Z",
   "files": [
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",

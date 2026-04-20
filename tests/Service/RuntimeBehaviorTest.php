@@ -49,7 +49,7 @@ class RuntimeBehaviorTest extends TestCase
         );
 
         $this->assertSame(['org_first', 'org_second', 'org_third'], $ids);
-        $this->assertSame('after=cursor_next', $this->getLastRequest()->getUri()->getQuery());
+        $this->assertSame('order=desc&after=cursor_next', $this->getLastRequest()->getUri()->getQuery());
     }
 
     public function testPerRequestOverridesAffectTransport(): void
