@@ -21,6 +21,8 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
          */
         public array $grantedScopes,
         public ConnectApplication $application,
+        /** The OAuth resource associated with the authorized connect application, if one was requested. */
+        public ?string $oauthResource = null,
     ) {
     }
 
@@ -31,6 +33,7 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
             id: $data['id'],
             grantedScopes: $data['granted_scopes'],
             application: ConnectApplication::fromArray($data['application']),
+            oauthResource: $data['oauth_resource'] ?? null,
         );
     }
 
@@ -41,6 +44,7 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
             'id' => $this->id,
             'granted_scopes' => $this->grantedScopes,
             'application' => $this->application->toArray(),
+            'oauth_resource' => $this->oauthResource,
         ];
     }
 }

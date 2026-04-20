@@ -15,11 +15,11 @@ readonly class UpdateAuthorizationResource implements \JsonSerializable
         public ?string $name = null,
         /** An optional description of the resource. */
         public ?string $description = null,
-        /** The ID of the parent resource. */
+        /** The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`. */
         public ?string $parentResourceId = null,
-        /** The external ID of the parent resource. */
+        /** The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`. */
         public ?string $parentResourceExternalId = null,
-        /** The resource type slug of the parent resource. */
+        /** The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`. */
         public ?string $parentResourceTypeSlug = null,
     ) {
     }

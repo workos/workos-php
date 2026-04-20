@@ -19,12 +19,6 @@ readonly class UpdateUser implements \JsonSerializable
         public ?string $lastName = null,
         /** Whether the user's email has been verified. */
         public ?bool $emailVerified = null,
-        /** The password to set for the user. */
-        public ?string $password = null,
-        /** The hashed password to set for the user. Mutually exclusive with `password`. */
-        public ?string $passwordHash = null,
-        /** The algorithm originally used to hash the password, used when providing a `password_hash`. */
-        public ?CreateUserPasswordHashType $passwordHashType = null,
         /**
          * Object containing metadata key/value pairs associated with the user.
          * @var array<string, string>|null
@@ -34,6 +28,12 @@ readonly class UpdateUser implements \JsonSerializable
         public ?string $externalId = null,
         /** The user's preferred locale. */
         public ?string $locale = null,
+        /** The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`. */
+        public ?string $password = null,
+        /** The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`. */
+        public ?string $passwordHash = null,
+        /** The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`. */
+        public ?CreateUserPasswordHashType $passwordHashType = null,
     ) {
     }
 
@@ -44,12 +44,12 @@ readonly class UpdateUser implements \JsonSerializable
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
             emailVerified: $data['email_verified'] ?? null,
-            password: $data['password'] ?? null,
-            passwordHash: $data['password_hash'] ?? null,
-            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
             locale: $data['locale'] ?? null,
+            password: $data['password'] ?? null,
+            passwordHash: $data['password_hash'] ?? null,
+            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
         );
     }
 
@@ -60,12 +60,12 @@ readonly class UpdateUser implements \JsonSerializable
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'email_verified' => $this->emailVerified,
-            'password' => $this->password,
-            'password_hash' => $this->passwordHash,
-            'password_hash_type' => $this->passwordHashType?->value,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
             'locale' => $this->locale,
+            'password' => $this->password,
+            'password_hash' => $this->passwordHash,
+            'password_hash_type' => $this->passwordHashType?->value,
         ];
     }
 }

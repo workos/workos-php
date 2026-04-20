@@ -37,7 +37,7 @@ class SSO
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\Resource\ConnectionsConnectionType $connectionType = null,
         ?string $domain = null,
         ?string $organizationId = null,
@@ -106,7 +106,7 @@ class SSO
      * Initiate SSO
      *
      * Initiates the single sign-on flow.
-     * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider. Only applicable when using OAuth connections.
+     * @param array<string>|null $providerScopes Additional scopes to request from the identity provider. Applicable when using OAuth or OpenID Connect connections.
      * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider. Only applicable when using OAuth connections.
      * @param string|null $domain (deprecated) Deprecated. Use `connection` or `organization` instead. Used to initiate SSO for a connection by domain. The domain must be associated with a connection in your WorkOS environment.
      * @param \WorkOS\Resource\SSOProvider|null $provider Used to initiate OAuth authentication with Google, Microsoft, GitHub, or Apple.
@@ -153,7 +153,7 @@ class SSO
             'response_type' => 'code',
         ], fn ($v) => $v !== null);
         $query['client_id'] = $this->client->requireClientId();
-        return $this->client->buildUrl('sso/authorize', $query, $options);
+        return $this->client->buildUrl(path: 'sso/authorize', query: $query, options: $options);
     }
 
     /**
@@ -172,7 +172,7 @@ class SSO
         $query = [
             'token' => $token,
         ];
-        return $this->client->buildUrl('sso/logout', $query, $options);
+        return $this->client->buildUrl(path: 'sso/logout', query: $query, options: $options);
     }
 
     /**

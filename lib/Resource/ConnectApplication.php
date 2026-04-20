@@ -30,6 +30,10 @@ readonly class ConnectApplication implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The type of the application. */
+        public ?string $applicationType = null,
+        /** The ID of the organization the application belongs to. */
+        public ?string $organizationId = null,
     ) {
     }
 
@@ -44,6 +48,8 @@ readonly class ConnectApplication implements \JsonSerializable
             scopes: $data['scopes'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            applicationType: $data['application_type'] ?? null,
+            organizationId: $data['organization_id'] ?? null,
         );
     }
 
@@ -58,6 +64,8 @@ readonly class ConnectApplication implements \JsonSerializable
             'scopes' => $this->scopes,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'application_type' => $this->applicationType,
+            'organization_id' => $this->organizationId,
         ];
     }
 }

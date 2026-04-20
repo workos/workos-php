@@ -73,7 +73,7 @@ class Connect
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {

@@ -13,11 +13,11 @@ readonly class AssignRole implements \JsonSerializable
     public function __construct(
         /** The slug of the role to assign. */
         public string $roleSlug,
-        /** The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`. */
+        /** The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`. */
         public ?string $resourceId = null,
-        /** The external ID of the resource. Requires `resource_type_slug`. */
+        /** The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`. */
         public ?string $resourceExternalId = null,
-        /** The resource type slug. Required with `resource_external_id`. */
+        /** The resource type slug. Required with `resource_external_id`. Mutually exclusive with `resource_id`. */
         public ?string $resourceTypeSlug = null,
     ) {
     }

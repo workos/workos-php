@@ -33,7 +33,7 @@ class Organizations
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?array $domains = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,

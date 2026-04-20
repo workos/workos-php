@@ -28,15 +28,17 @@ class Authorization
      * Check if an organization membership has a specific permission on a resource. Supports identification by resource_id OR by resource_external_id + resource_type_slug.
      * @param string $organizationMembershipId The ID of the organization membership to check.
      * @param string $permissionSlug The slug of the permission to check.
-     * @param string|null $resourceId The ID of the resource.
-     * @param string|null $resourceExternalId The external ID of the resource.
-     * @param string|null $resourceTypeSlug The slug of the resource type.
+     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
+     * @param string|null $resourceTypeSlug The slug of the resource type. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
+     * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return \WorkOS\Resource\AuthorizationCheck
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function check(
         string $organizationMembershipId,
         string $permissionSlug,
+        ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
         ?string $resourceId = null,
         ?string $resourceExternalId = null,
         ?string $resourceTypeSlug = null,
@@ -64,27 +66,23 @@ class Authorization
      *
      * You must provide either `parent_resource_id` or both `parent_resource_external_id` and `parent_resource_type_slug` to identify the parent resource.
      * @param string $organizationMembershipId The ID of the organization membership.
+     * @param ParentResourceById|ParentResourceByExternalId $parentResource
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only child resources where the organization membership has this permission are returned.
-     * @param string|null $parentResourceId The WorkOS ID of the parent resource. Provide this or both `parent_resource_external_id` and `parent_resource_type_slug`, but not both.
-     * @param string|null $parentResourceTypeSlug The slug of the parent resource type. Must be provided together with `parent_resource_external_id`.
-     * @param string|null $parentResourceExternalId The application-specific external identifier of the parent resource. Must be provided together with `parent_resource_type_slug`.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationMembershipResources(
         string $organizationMembershipId,
+        ParentResourceById|ParentResourceByExternalId $parentResource,
         string $permissionSlug,
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
-        ?string $parentResourceId = null,
-        ?string $parentResourceTypeSlug = null,
-        ?string $parentResourceExternalId = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -93,15 +91,94 @@ class Authorization
             'limit' => $limit,
             'order' => $order?->value,
             'permission_slug' => $permissionSlug,
-            'parent_resource_id' => $parentResourceId,
-            'parent_resource_type_slug' => $parentResourceTypeSlug,
-            'parent_resource_external_id' => $parentResourceExternalId,
         ], fn ($v) => $v !== null);
+        if ($parentResource instanceof ParentResourceById) {
+            $query['parent_resource_id'] = $parentResource->id;
+        } elseif ($parentResource instanceof ParentResourceByExternalId) {
+            $query['parent_resource_type_slug'] = $parentResource->typeSlug;
+            $query['parent_resource_external_id'] = $parentResource->externalId;
+        }
         return $this->client->requestPage(
             method: 'GET',
             path: "authorization/organization_memberships/{$organizationMembershipId}/resources",
             query: $query,
             modelClass: AuthorizationResource::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * List effective permissions for an organization membership on a resource
+     *
+     * Returns all permissions the organization membership effectively has on a resource, including permissions inherited through roles assigned to ancestor resources.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string $resourceId The ID of the authorization resource.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listResourcePermissions(
+        string $organizationMembershipId,
+        string $resourceId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order?->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceId}/permissions",
+            query: $query,
+            modelClass: AuthorizationPermission::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * List effective permissions for an organization membership on a resource by external ID
+     *
+     * Returns all permissions the organization membership effectively has on a resource identified by its external ID, including permissions inherited through roles assigned to ancestor resources.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listEffectivePermissionsByExternalId(
+        string $organizationMembershipId,
+        string $resourceTypeSlug,
+        string $externalId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order?->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceTypeSlug}/{$externalId}/permissions",
+            query: $query,
+            modelClass: AuthorizationPermission::class,
             options: $options,
         );
     }
@@ -123,7 +200,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -147,15 +224,17 @@ class Authorization
      * Assign a role to an organization membership on a specific resource.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to assign.
-     * @param string|null $resourceId The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`.
-     * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
-     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
+     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
+     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
+     * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return \WorkOS\Resource\RoleAssignment
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function assignRole(
         string $organizationMembershipId,
         string $roleSlug,
+        ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
         ?string $resourceId = null,
         ?string $resourceExternalId = null,
         ?string $resourceTypeSlug = null,
@@ -182,15 +261,17 @@ class Authorization
      * Remove a role assignment by role slug and resource.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to remove.
-     * @param string|null $resourceId The ID of the resource. Use either this or `resource_external_id` and `resource_type_slug`.
-     * @param string|null $resourceExternalId The external ID of the resource. Requires `resource_type_slug`.
-     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`.
+     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
+     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
+     * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeRole(
         string $organizationMembershipId,
         string $roleSlug,
+        ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
         ?string $resourceId = null,
         ?string $resourceExternalId = null,
         ?string $resourceTypeSlug = null,
@@ -232,9 +313,9 @@ class Authorization
     }
 
     /**
-     * List organization roles
+     * List custom roles
      *
-     * Get a list of all roles that apply to an organization. This includes both environment roles and organization-specific roles, returned in priority order.
+     * Get a list of all roles that apply to an organization. This includes both environment roles and custom roles, returned in priority order.
      * @param string $organizationId The ID of the organization.
      * @return \WorkOS\Resource\RoleList
      * @throws \WorkOS\Exception\WorkOSException
@@ -252,9 +333,9 @@ class Authorization
     }
 
     /**
-     * Create a custom organization role
+     * Create a custom role
      *
-     * Create a new custom organization role. When slug is omitted, it is auto-generated from the role name.
+     * Create a new custom role for this organization.
      * @param string $organizationId The ID of the organization.
      * @param string|null $slug A unique identifier for the role within the organization. When provided, must begin with 'org-' and contain only lowercase letters, numbers, hyphens, and underscores. When omitted, a slug is auto-generated from the role name and a random suffix.
      * @param string $name A descriptive name for the role.
@@ -287,9 +368,9 @@ class Authorization
     }
 
     /**
-     * Get an organization role
+     * Get a custom role
      *
-     * Retrieve a role that applies to an organization by its slug. This can return either an environment role or an organization-specific role.
+     * Retrieve a role that applies to an organization by its slug. This can return either an environment role or a custom role.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @return \WorkOS\Resource\Role
@@ -309,9 +390,9 @@ class Authorization
     }
 
     /**
-     * Update an organization role
+     * Update a custom role
      *
-     * Update an existing custom organization role. Only the fields provided in the request body will be updated.
+     * Update an existing custom role. Only the fields provided in the request body will be updated.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @param string|null $name A descriptive name for the role.
@@ -340,9 +421,9 @@ class Authorization
     }
 
     /**
-     * Delete a custom organization role
+     * Delete a custom role
      *
-     * Delete an existing custom organization role.
+     * Delete an existing custom role.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @return void
@@ -361,9 +442,9 @@ class Authorization
     }
 
     /**
-     * Add a permission to an organization role
+     * Add a permission to a custom role
      *
-     * Add a single permission to an organization role. If the permission is already assigned to the role, this operation has no effect.
+     * Add a single permission to a custom role. If the permission is already assigned to the role, this operation has no effect.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @param string $bodySlug The slug of the permission to add to the role.
@@ -389,9 +470,9 @@ class Authorization
     }
 
     /**
-     * Set permissions for a role
+     * Set permissions for a custom role
      *
-     * Replace all permissions on a role with the provided list.
+     * Replace all permissions on a custom role with the provided list.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @param array<string> $permissions The permission slugs to assign to the role.
@@ -417,9 +498,9 @@ class Authorization
     }
 
     /**
-     * Remove a permission from an organization role
+     * Remove a permission from a custom role
      *
-     * Remove a single permission from an organization role by its slug.
+     * Remove a single permission from a custom role by its slug.
      * @param string $organizationId The ID of the organization.
      * @param string $slug The slug of the role.
      * @param string $permissionSlug The slug of the permission to remove.
@@ -472,9 +553,10 @@ class Authorization
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @param string|null $name A display name for the resource.
      * @param string|null $description An optional description of the resource.
-     * @param string|null $parentResourceId The ID of the parent resource.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
+     * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -487,6 +569,7 @@ class Authorization
         ?string $parentResourceId = null,
         ?string $parentResourceExternalId = null,
         ?string $parentResourceTypeSlug = null,
+        null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
         $body = array_filter([
@@ -558,7 +641,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -583,29 +666,25 @@ class Authorization
      * List resources
      *
      * Get a paginated list of authorization resources.
+     * @param null|ParentById|ParentByExternalId $parent
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\EventsOrder|null $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string|null $organizationId Filter resources by organization ID.
      * @param string|null $resourceTypeSlug Filter resources by resource type slug.
-     * @param string|null $parentResourceId Filter resources by parent resource ID.
-     * @param string|null $parentResourceTypeSlug Filter resources by parent resource type slug.
-     * @param string|null $parentExternalId Filter resources by parent external ID.
      * @param string|null $search Search resources by name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listResources(
+        null|ParentById|ParentByExternalId $parent = null,
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organizationId = null,
         ?string $resourceTypeSlug = null,
-        ?string $parentResourceId = null,
-        ?string $parentResourceTypeSlug = null,
-        ?string $parentExternalId = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -616,11 +695,14 @@ class Authorization
             'order' => $order?->value,
             'organization_id' => $organizationId,
             'resource_type_slug' => $resourceTypeSlug,
-            'parent_resource_id' => $parentResourceId,
-            'parent_resource_type_slug' => $parentResourceTypeSlug,
-            'parent_external_id' => $parentExternalId,
             'search' => $search,
         ], fn ($v) => $v !== null);
+        if ($parent instanceof ParentById) {
+            $query['parent_resource_id'] = $parent->resourceId;
+        } elseif ($parent instanceof ParentByExternalId) {
+            $query['parent_resource_type_slug'] = $parent->resourceTypeSlug;
+            $query['parent_external_id'] = $parent->externalId;
+        }
         return $this->client->requestPage(
             method: 'GET',
             path: 'authorization/resources',
@@ -639,9 +721,10 @@ class Authorization
      * @param string|null $description An optional description of the resource.
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $organizationId The ID of the organization this resource belongs to.
-     * @param string|null $parentResourceId The ID of the parent resource.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
+     * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -654,6 +737,7 @@ class Authorization
         ?string $parentResourceId = null,
         ?string $parentResourceExternalId = null,
         ?string $parentResourceTypeSlug = null,
+        null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
         $body = array_filter([
@@ -702,9 +786,10 @@ class Authorization
      * @param string $resourceId The ID of the authorization resource.
      * @param string|null $name A display name for the resource.
      * @param string|null $description An optional description of the resource.
-     * @param string|null $parentResourceId The ID of the parent resource.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource.
+     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
+     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
+     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
+     * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -715,6 +800,7 @@ class Authorization
         ?string $parentResourceId = null,
         ?string $parentResourceExternalId = null,
         ?string $parentResourceTypeSlug = null,
+        null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
         $body = array_filter([
@@ -778,7 +864,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -966,7 +1052,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -987,7 +1073,7 @@ class Authorization
     /**
      * Create a permission
      *
-     * Create a new permission in your WorkOS environment. The permission can then be assigned to environment roles and organization roles.
+     * Create a new permission in your WorkOS environment. The permission can then be assigned to environment roles and custom roles.
      * @param string $slug A unique key to reference the permission. Must be lowercase and contain only letters, numbers, hyphens, underscores, colons, periods, and asterisks.
      * @param string $name A descriptive name for the Permission.
      * @param string|null $description An optional description of the Permission.

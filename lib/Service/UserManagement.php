@@ -97,23 +97,29 @@ class UserManagement
     }
 
     /**
-     * @param mixed $code
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $code
+     * @param string|null $codeVerifier
+     * @param string|null $invitationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithCode(
-        mixed $code = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $code,
+        ?string $codeVerifier = null,
+        ?string $invitationToken = null,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
             'grant_type' => 'authorization_code',
             'code' => $code,
+            'code_verifier' => $codeVerifier,
+            'invitation_token' => $invitationToken,
             'ip_address' => $ipAddress,
             'device_id' => $deviceId,
             'user_agent' => $userAgent,
@@ -168,22 +174,22 @@ class UserManagement
     }
 
     /**
-     * @param mixed $code
-     * @param mixed $email
-     * @param mixed|null $invitationToken
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $code
+     * @param string $email
+     * @param string|null $invitationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithMagicAuth(
-        mixed $code = null,
-        mixed $email = null,
-        mixed $invitationToken = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $code,
+        string $email,
+        ?string $invitationToken = null,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -208,20 +214,20 @@ class UserManagement
     }
 
     /**
-     * @param mixed $code
-     * @param mixed|null $pendingAuthenticationToken
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $code
+     * @param string $pendingAuthenticationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithEmailVerification(
-        mixed $code = null,
-        mixed $pendingAuthenticationToken = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $code,
+        string $pendingAuthenticationToken,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -245,22 +251,22 @@ class UserManagement
     }
 
     /**
-     * @param mixed $code
-     * @param mixed $pendingAuthenticationToken
-     * @param mixed $authenticationChallengeId
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $code
+     * @param string $pendingAuthenticationToken
+     * @param string $authenticationChallengeId
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithTotp(
-        mixed $code = null,
-        mixed $pendingAuthenticationToken = null,
-        mixed $authenticationChallengeId = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $code,
+        string $pendingAuthenticationToken,
+        string $authenticationChallengeId,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -285,20 +291,20 @@ class UserManagement
     }
 
     /**
-     * @param mixed $pendingAuthenticationToken
-     * @param mixed $organizationId
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $pendingAuthenticationToken
+     * @param string $organizationId
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithOrganizationSelection(
-        mixed $pendingAuthenticationToken = null,
-        mixed $organizationId = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $pendingAuthenticationToken,
+        string $organizationId,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -322,18 +328,18 @@ class UserManagement
     }
 
     /**
-     * @param mixed $deviceCode
-     * @param mixed|null $ipAddress
-     * @param mixed|null $deviceId
-     * @param mixed|null $userAgent
+     * @param string $deviceCode
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function authenticateWithDeviceCode(
-        mixed $deviceCode = null,
-        mixed $ipAddress = null,
-        mixed $deviceId = null,
-        mixed $userAgent = null,
+        string $deviceCode,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -410,7 +416,7 @@ class UserManagement
             'response_type' => 'code',
         ], fn ($v) => $v !== null);
         $query['client_id'] = $this->client->requireClientId();
-        return $this->client->buildUrl('user_management/authorize', $query, $options);
+        return $this->client->buildUrl(path: 'user_management/authorize', query: $query, options: $options);
     }
 
     /**
@@ -454,7 +460,7 @@ class UserManagement
             'session_id' => $sessionId,
             'return_to' => $returnTo,
         ], fn ($v) => $v !== null);
-        return $this->client->buildUrl('user_management/sessions/logout', $query, $options);
+        return $this->client->buildUrl(path: 'user_management/sessions/logout', query: $query, options: $options);
     }
 
     /**
@@ -617,7 +623,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organization = null,
         ?string $organizationId = null,
         ?string $email = null,
@@ -646,39 +652,39 @@ class UserManagement
      *
      * Create a new user in the current environment.
      * @param string $email The email address of the user.
-     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
-     * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
-     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
+     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
+     * @param string|null $passwordHash The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`.
+     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`.
      * @return \WorkOS\Resource\User
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createUser(
         string $email,
-        ?string $password = null,
-        ?string $passwordHash = null,
-        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
         ?string $firstName = null,
         ?string $lastName = null,
         ?bool $emailVerified = null,
         ?array $metadata = null,
         ?string $externalId = null,
+        ?string $password = null,
+        ?string $passwordHash = null,
+        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\User {
         $body = array_filter([
             'email' => $email,
-            'password' => $password,
-            'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType?->value,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email_verified' => $emailVerified,
             'metadata' => $metadata,
             'external_id' => $externalId,
+            'password' => $password,
+            'password_hash' => $passwordHash,
+            'password_hash_type' => $passwordHashType?->value,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -738,12 +744,12 @@ class UserManagement
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
      * @param bool|null $emailVerified Whether the user's email has been verified.
-     * @param string|null $password The password to set for the user.
-     * @param string|null $passwordHash The hashed password to set for the user. Mutually exclusive with `password`.
-     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
      * @param string|null $locale The user's preferred locale.
+     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
+     * @param string|null $passwordHash The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`.
+     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`.
      * @return \WorkOS\Resource\User
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -753,12 +759,12 @@ class UserManagement
         ?string $firstName = null,
         ?string $lastName = null,
         ?bool $emailVerified = null,
-        ?string $password = null,
-        ?string $passwordHash = null,
-        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
         ?array $metadata = null,
         ?string $externalId = null,
         ?string $locale = null,
+        ?string $password = null,
+        ?string $passwordHash = null,
+        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\User {
         $body = array_filter([
@@ -766,12 +772,12 @@ class UserManagement
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email_verified' => $emailVerified,
-            'password' => $password,
-            'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType?->value,
             'metadata' => $metadata,
             'external_id' => $externalId,
             'locale' => $locale,
+            'password' => $password,
+            'password_hash' => $passwordHash,
+            'password_hash_type' => $passwordHashType?->value,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
@@ -936,7 +942,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -971,7 +977,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organizationId = null,
         ?string $email = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -1227,7 +1233,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organizationId = null,
         ?array $statuses = null,
         ?string $userId = null,
@@ -1261,6 +1267,7 @@ class UserManagement
      * @param string $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
      * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
      * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
+     * @param null|RoleSingle|RoleMultiple $role
      * @return \WorkOS\Resource\OrganizationMembership
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1269,6 +1276,7 @@ class UserManagement
         string $organizationId,
         ?string $roleSlug = null,
         ?array $roleSlugs = null,
+        null|RoleSingle|RoleMultiple $role = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\OrganizationMembership {
         $body = array_filter([
@@ -1313,6 +1321,7 @@ class UserManagement
      * @param string $id The unique ID of the organization membership.
      * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
      * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
+     * @param null|RoleSingle|RoleMultiple $role
      * @return \WorkOS\Resource\UserOrganizationMembership
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1320,6 +1329,7 @@ class UserManagement
         string $id,
         ?string $roleSlug = null,
         ?array $roleSlugs = null,
+        null|RoleSingle|RoleMultiple $role = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserOrganizationMembership {
         $body = array_filter([
@@ -1445,7 +1455,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([

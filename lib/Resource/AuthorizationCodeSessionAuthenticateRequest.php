@@ -18,6 +18,10 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
         public string $grantType,
         /** The authorization code received from the redirect. */
         public string $code,
+        /** The PKCE code verifier used to derive the code challenge passed to the authorization URL. */
+        public ?string $codeVerifier = null,
+        /** An invitation token to accept during authentication. */
+        public ?string $invitationToken = null,
         /** The IP address of the user's request. */
         public ?string $ipAddress = null,
         /** A unique identifier for the device. */
@@ -34,6 +38,8 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             clientSecret: $data['client_secret'],
             grantType: $data['grant_type'],
             code: $data['code'],
+            codeVerifier: $data['code_verifier'] ?? null,
+            invitationToken: $data['invitation_token'] ?? null,
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
             userAgent: $data['user_agent'] ?? null,
@@ -47,6 +53,8 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType,
             'code' => $this->code,
+            'code_verifier' => $this->codeVerifier,
+            'invitation_token' => $this->invitationToken,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,

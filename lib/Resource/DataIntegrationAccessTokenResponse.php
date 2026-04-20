@@ -11,18 +11,33 @@ readonly class DataIntegrationAccessTokenResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Indicates whether the access token is valid and ready for use, or if reauthorization is required. */
+        public ?bool $active = null,
+        /** The [access token](https://workos.com/docs/reference/pipes/access-token) object, present when `active` is `true`. */
+        public ?DataIntegrationAccessTokenResponseAccessToken $accessToken = null,
+        /**
+         * - `"not_installed"`: The user does not have the integration installed.
+         * - `"needs_reauthorization"`: The user needs to reauthorize the integration.
+         */
+        public ?DataIntegrationAccessTokenResponseError $error = null,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
+            active: $data['active'] ?? null,
+            accessToken: isset($data['access_token']) ? DataIntegrationAccessTokenResponseAccessToken::fromArray($data['access_token']) : null,
+            error: isset($data['error']) ? DataIntegrationAccessTokenResponseError::from($data['error']) : null,
         );
     }
 
     public function toArray(): array
     {
         return [
+            'active' => $this->active,
+            'access_token' => $this->accessToken?->toArray(),
+            'error' => $this->error?->value,
         ];
     }
 }

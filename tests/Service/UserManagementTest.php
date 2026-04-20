@@ -654,7 +654,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->authenticateWithEmailVerification(code: 'test_value');
+        $result = $client->userManagement()->authenticateWithEmailVerification(code: 'test_value', pendingAuthenticationToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 

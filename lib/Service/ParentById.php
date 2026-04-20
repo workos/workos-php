@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-class PasswordHashed
+class ParentById
 {
     public function __construct(
-        public readonly string $hash,
-        public readonly \WorkOS\Resource\CreateUserPasswordHashType $hashType,
+        public readonly string $resourceId,
     ) {
     }
 }

@@ -41,6 +41,11 @@ enum CreateWebhookEndpointEvents: string
     case DsyncUserDeleted = 'dsync.user.deleted';
     case DsyncUserUpdated = 'dsync.user.updated';
     case EmailVerificationCreated = 'email_verification.created';
+    case GroupCreated = 'group.created';
+    case GroupDeleted = 'group.deleted';
+    case GroupMemberAdded = 'group.member_added';
+    case GroupMemberRemoved = 'group.member_removed';
+    case GroupUpdated = 'group.updated';
     case FlagCreated = 'flag.created';
     case FlagDeleted = 'flag.deleted';
     case FlagUpdated = 'flag.updated';

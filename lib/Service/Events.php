@@ -34,7 +34,7 @@ class Events
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        ?\WorkOS\Resource\EventsOrder $order = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?array $events = null,
         ?string $rangeStart = null,
         ?string $rangeEnd = null,

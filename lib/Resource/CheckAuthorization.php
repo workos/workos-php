@@ -13,11 +13,11 @@ readonly class CheckAuthorization implements \JsonSerializable
     public function __construct(
         /** The slug of the permission to check. */
         public string $permissionSlug,
-        /** The ID of the resource. */
+        /** The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`. */
         public ?string $resourceId = null,
-        /** The external ID of the resource. */
+        /** The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`. */
         public ?string $resourceExternalId = null,
-        /** The slug of the resource type. */
+        /** The slug of the resource type. Required with `resource_external_id`. Mutually exclusive with `resource_id`. */
         public ?string $resourceTypeSlug = null,
     ) {
     }

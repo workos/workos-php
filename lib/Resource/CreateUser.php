@@ -13,12 +13,6 @@ readonly class CreateUser implements \JsonSerializable
     public function __construct(
         /** The email address of the user. */
         public string $email,
-        /** The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`. */
-        public ?string $password = null,
-        /** The hashed password to set for the user. Mutually exclusive with `password`. */
-        public ?string $passwordHash = null,
-        /** The algorithm originally used to hash the password, used when providing a `password_hash`. */
-        public ?CreateUserPasswordHashType $passwordHashType = null,
         /** The first name of the user. */
         public ?string $firstName = null,
         /** The last name of the user. */
@@ -32,6 +26,12 @@ readonly class CreateUser implements \JsonSerializable
         public ?array $metadata = null,
         /** The external ID of the user. */
         public ?string $externalId = null,
+        /** The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`. */
+        public ?string $password = null,
+        /** The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`. */
+        public ?string $passwordHash = null,
+        /** The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`. */
+        public ?CreateUserPasswordHashType $passwordHashType = null,
     ) {
     }
 
@@ -39,14 +39,14 @@ readonly class CreateUser implements \JsonSerializable
     {
         return new self(
             email: $data['email'],
-            password: $data['password'] ?? null,
-            passwordHash: $data['password_hash'] ?? null,
-            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
             emailVerified: $data['email_verified'] ?? null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
+            password: $data['password'] ?? null,
+            passwordHash: $data['password_hash'] ?? null,
+            passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
         );
     }
 
@@ -54,14 +54,14 @@ readonly class CreateUser implements \JsonSerializable
     {
         return [
             'email' => $this->email,
-            'password' => $this->password,
-            'password_hash' => $this->passwordHash,
-            'password_hash_type' => $this->passwordHashType?->value,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'email_verified' => $this->emailVerified,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
+            'password' => $this->password,
+            'password_hash' => $this->passwordHash,
+            'password_hash_type' => $this->passwordHashType?->value,
         ];
     }
 }

@@ -21,7 +21,7 @@ readonly class Role implements \JsonSerializable
         public string $name,
         /** An optional description of the role. */
         public ?string $description,
-        /** Whether the role is scoped to the environment or an organization. */
+        /** Whether the role is scoped to the environment or an organization (custom role). */
         public RoleType $type,
         /** The slug of the resource type the role is scoped to. */
         public string $resourceTypeSlug,
