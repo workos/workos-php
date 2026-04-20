@@ -9,7 +9,7 @@ namespace WorkOS\Service;
 class RoleMultiple
 {
     public function __construct(
-        public readonly string $slugs,
+        public readonly array $slugs,
     ) {
     }
 }
