@@ -9,5 +9,5 @@ final class Version
 {
     public const SDK_IDENTIFIER = 'WorkOS PHP';
 
-    public const SDK_VERSION = '5.0.3'; // x-release-please-version
+    public const SDK_VERSION = '5.1.0'; // x-release-please-version
 }
