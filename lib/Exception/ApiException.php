@@ -23,8 +23,8 @@ class ApiException extends \Exception implements WorkOSException
     public static function fromResponse(int $statusCode, array $body, ?string $requestId = null): static
     {
         $message = $body['message'] ?? 'Unknown error';
-        $errorCode = $body['code'] ?? null;
-        $error = $body['error'] ?? null;
+        $errorCode = isset($body['code']) && is_string($body['code']) ? $body['code'] : null;
+        $error = isset($body['error']) && is_string($body['error']) ? $body['error'] : null;
         return new static($message, $statusCode, $requestId, null, $errorCode, $error);
     }
 }
