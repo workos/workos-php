@@ -285,43 +285,47 @@ class HttpClient
         $body = $this->decodeErrorBody($response);
 
         return match ($statusCode) {
-            400 => new BadRequestException($body['message'], $statusCode, $requestId, $previous),
-            401 => new AuthenticationException($body['message'], $statusCode, $requestId, $previous),
-            403 => new AuthorizationException($body['message'], $statusCode, $requestId, $previous),
-            404 => new NotFoundException($body['message'], $statusCode, $requestId, $previous),
-            409 => new ConflictException($body['message'], $statusCode, $requestId, $previous),
-            422 => new UnprocessableEntityException($body['message'], $statusCode, $requestId, $previous),
+            400 => new BadRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            401 => new AuthenticationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            403 => new AuthorizationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            404 => new NotFoundException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            409 => new ConflictException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            422 => new UnprocessableEntityException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
             429 => new RateLimitExceededException(
                 $body['message'],
                 $statusCode,
                 $requestId,
                 $previous,
+                $body['code'],
+                $body['error'],
                 $this->parseRetryAfter($response->getHeaderLine('Retry-After')),
             ),
-            500, 502, 503, 504 => new ServerException($body['message'], $statusCode, $requestId, $previous),
-            default => new BaseRequestException($body['message'], $statusCode, $requestId, $previous),
+            500, 502, 503, 504 => new ServerException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            default => new BaseRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
         };
     }
 
     /**
-     * @return array{message: string}
+     * @return array{message: string, code: ?string, error: ?string}
      */
     private function decodeErrorBody(ResponseInterface $response): array
     {
         $contents = (string) $response->getBody();
         if ($contents === '') {
-            return ['message' => sprintf('WorkOS request failed with status %d.', $response->getStatusCode())];
+            return ['message' => sprintf('WorkOS request failed with status %d.', $response->getStatusCode()), 'code' => null, 'error' => null];
         }
 
         $decoded = json_decode($contents, true);
         if (is_array($decoded)) {
             $message = $decoded['message'] ?? $decoded['error_description'] ?? $decoded['error'] ?? null;
             if (is_string($message) && $message !== '') {
-                return ['message' => $message];
+                $code = isset($decoded['code']) && is_string($decoded['code']) ? $decoded['code'] : null;
+                $error = isset($decoded['error']) && is_string($decoded['error']) ? $decoded['error'] : null;
+                return ['message' => $message, 'code' => $code, 'error' => $error];
             }
         }
 
-        return ['message' => $contents];
+        return ['message' => $contents, 'code' => null, 'error' => null];
     }
 
     private function mapTransportException(\Throwable $exception): \Exception

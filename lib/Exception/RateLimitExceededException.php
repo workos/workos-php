@@ -15,9 +15,11 @@ class RateLimitExceededException extends BaseRequestException
         ?int $statusCode = 429,
         ?string $requestId = null,
         ?\Throwable $previous = null,
+        ?string $errorCode = null,
+        ?string $error = null,
         ?int $retryAfter = null,
     ) {
-        parent::__construct($message, $statusCode, $requestId, $previous);
+        parent::__construct($message, $statusCode, $requestId, $previous, $errorCode, $error);
         $this->retryAfter = $retryAfter;
     }
 }
