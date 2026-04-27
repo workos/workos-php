@@ -41,8 +41,9 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
         /**
-         * The directory groups the user belongs to.
+         * The directory groups the user belongs to. Use the List Directory Groups endpoint with a user filter instead.
          * @var array<\WorkOS\Resource\DirectoryGroup>
+         * @deprecated
          */
         public array $groups,
         /** The first name of the user. */

@@ -28,9 +28,6 @@ class Authorization
      * Check if an organization membership has a specific permission on a resource. Supports identification by resource_id OR by resource_external_id + resource_type_slug.
      * @param string $organizationMembershipId The ID of the organization membership to check.
      * @param string $permissionSlug The slug of the permission to check.
-     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
-     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
-     * @param string|null $resourceTypeSlug The slug of the resource type. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
      * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return \WorkOS\Resource\AuthorizationCheck
      * @throws \WorkOS\Exception\WorkOSException
@@ -39,17 +36,17 @@ class Authorization
         string $organizationMembershipId,
         string $permissionSlug,
         ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
-        ?string $resourceId = null,
-        ?string $resourceExternalId = null,
-        ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationCheck {
-        $body = array_filter([
+        $body = [
             'permission_slug' => $permissionSlug,
-            'resource_id' => $resourceId,
-            'resource_external_id' => $resourceExternalId,
-            'resource_type_slug' => $resourceTypeSlug,
-        ], fn ($v) => $v !== null);
+        ];
+        if ($resourceTarget instanceof ResourceTargetById) {
+            $body['resource_id'] = $resourceTarget->resourceId;
+        } elseif ($resourceTarget instanceof ResourceTargetByExternalId) {
+            $body['resource_external_id'] = $resourceTarget->resourceExternalId;
+            $body['resource_type_slug'] = $resourceTarget->resourceTypeSlug;
+        }
         $response = $this->client->request(
             method: 'POST',
             path: "authorization/organization_memberships/{$organizationMembershipId}/check",
@@ -75,7 +72,7 @@ class Authorization
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listOrganizationMembershipResources(
+    public function listResourcesForMembership(
         string $organizationMembershipId,
         ParentResourceById|ParentResourceByExternalId $parentResource,
         string $permissionSlug,
@@ -120,7 +117,7 @@ class Authorization
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listResourcePermissions(
+    public function listEffectivePermissions(
         string $organizationMembershipId,
         string $resourceId,
         ?string $before = null,
@@ -195,7 +192,7 @@ class Authorization
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RoleAssignment>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listOrganizationMembershipRoleAssignments(
+    public function listRoleAssignments(
         string $organizationMembershipId,
         ?string $before = null,
         ?string $after = null,
@@ -224,9 +221,6 @@ class Authorization
      * Assign a role to an organization membership on a specific resource.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to assign.
-     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
-     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
-     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
      * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return \WorkOS\Resource\RoleAssignment
      * @throws \WorkOS\Exception\WorkOSException
@@ -235,17 +229,17 @@ class Authorization
         string $organizationMembershipId,
         string $roleSlug,
         ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
-        ?string $resourceId = null,
-        ?string $resourceExternalId = null,
-        ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RoleAssignment {
-        $body = array_filter([
+        $body = [
             'role_slug' => $roleSlug,
-            'resource_id' => $resourceId,
-            'resource_external_id' => $resourceExternalId,
-            'resource_type_slug' => $resourceTypeSlug,
-        ], fn ($v) => $v !== null);
+        ];
+        if ($resourceTarget instanceof ResourceTargetById) {
+            $body['resource_id'] = $resourceTarget->resourceId;
+        } elseif ($resourceTarget instanceof ResourceTargetByExternalId) {
+            $body['resource_external_id'] = $resourceTarget->resourceExternalId;
+            $body['resource_type_slug'] = $resourceTarget->resourceTypeSlug;
+        }
         $response = $this->client->request(
             method: 'POST',
             path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
@@ -261,9 +255,6 @@ class Authorization
      * Remove a role assignment by role slug and resource.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to remove.
-     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
-     * @param string|null $resourceExternalId The external ID of the resource. Required with `resource_type_slug`. Mutually exclusive with `resource_id`.
-     * @param string|null $resourceTypeSlug The resource type slug. Required with `resource_external_id`. Mutually exclusive with `resource_id`.
      * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
@@ -272,17 +263,17 @@ class Authorization
         string $organizationMembershipId,
         string $roleSlug,
         ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
-        ?string $resourceId = null,
-        ?string $resourceExternalId = null,
-        ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
-        $body = array_filter([
+        $body = [
             'role_slug' => $roleSlug,
-            'resource_id' => $resourceId,
-            'resource_external_id' => $resourceExternalId,
-            'resource_type_slug' => $resourceTypeSlug,
-        ], fn ($v) => $v !== null);
+        ];
+        if ($resourceTarget instanceof ResourceTargetById) {
+            $body['resource_id'] = $resourceTarget->resourceId;
+        } elseif ($resourceTarget instanceof ResourceTargetByExternalId) {
+            $body['resource_external_id'] = $resourceTarget->resourceExternalId;
+            $body['resource_type_slug'] = $resourceTarget->resourceTypeSlug;
+        }
         $this->client->request(
             method: 'DELETE',
             path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
@@ -300,7 +291,7 @@ class Authorization
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function deleteOrganizationMembershipRoleAssignment(
+    public function removeRoleAssignment(
         string $organizationMembershipId,
         string $roleAssignmentId,
         ?\WorkOS\RequestOptions $options = null,
@@ -451,7 +442,7 @@ class Authorization
      * @return \WorkOS\Resource\Role
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function createRolePermission(
+    public function addOrganizationRolePermission(
         string $organizationId,
         string $slug,
         string $bodySlug,
@@ -479,7 +470,7 @@ class Authorization
      * @return \WorkOS\Resource\Role
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function updateRolePermissions(
+    public function setOrganizationRolePermissions(
         string $organizationId,
         string $slug,
         array $permissions,
@@ -507,7 +498,7 @@ class Authorization
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function deleteRolePermission(
+    public function removeOrganizationRolePermission(
         string $organizationId,
         string $slug,
         string $permissionSlug,
@@ -530,7 +521,7 @@ class Authorization
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function getOrganizationResource(
+    public function getResourceByExternalId(
         string $organizationId,
         string $resourceTypeSlug,
         string $externalId,
@@ -553,32 +544,29 @@ class Authorization
      * @param string $externalId An identifier you provide to reference the resource in your system.
      * @param string|null $name A display name for the resource.
      * @param string|null $description An optional description of the resource.
-     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
      * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function updateOrganizationResource(
+    public function updateResourceByExternalId(
         string $organizationId,
         string $resourceTypeSlug,
         string $externalId,
         ?string $name = null,
         ?string $description = null,
-        ?string $parentResourceId = null,
-        ?string $parentResourceExternalId = null,
-        ?string $parentResourceTypeSlug = null,
         null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
         $body = array_filter([
             'name' => $name,
             'description' => $description,
-            'parent_resource_id' => $parentResourceId,
-            'parent_resource_external_id' => $parentResourceExternalId,
-            'parent_resource_type_slug' => $parentResourceTypeSlug,
         ], fn ($v) => $v !== null);
+        if ($parentResource instanceof ParentResourceById) {
+            $body['parent_resource_id'] = $parentResource->id;
+        } elseif ($parentResource instanceof ParentResourceByExternalId) {
+            $body['parent_resource_external_id'] = $parentResource->externalId;
+            $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+        }
         $response = $this->client->request(
             method: 'PATCH',
             path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
@@ -599,7 +587,7 @@ class Authorization
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function deleteOrganizationResource(
+    public function deleteResourceByExternalId(
         string $organizationId,
         string $resourceTypeSlug,
         string $externalId,
@@ -633,7 +621,7 @@ class Authorization
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listResourceOrganizationMemberships(
+    public function listMembershipsForResourceByExternalId(
         string $organizationId,
         string $resourceTypeSlug,
         string $externalId,
@@ -673,6 +661,7 @@ class Authorization
      * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string|null $organizationId Filter resources by organization ID.
      * @param string|null $resourceTypeSlug Filter resources by resource type slug.
+     * @param string|null $resourceExternalId Filter resources by external ID.
      * @param string|null $search Search resources by name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
@@ -685,6 +674,7 @@ class Authorization
         \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
         ?string $organizationId = null,
         ?string $resourceTypeSlug = null,
+        ?string $resourceExternalId = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -695,6 +685,7 @@ class Authorization
             'order' => $order->value,
             'organization_id' => $organizationId,
             'resource_type_slug' => $resourceTypeSlug,
+            'resource_external_id' => $resourceExternalId,
             'search' => $search,
         ], fn ($v) => $v !== null);
         if ($parent instanceof ParentById) {
@@ -721,9 +712,6 @@ class Authorization
      * @param string|null $description An optional description of the resource.
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $organizationId The ID of the organization this resource belongs to.
-     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
      * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
@@ -734,9 +722,6 @@ class Authorization
         string $resourceTypeSlug,
         string $organizationId,
         ?string $description = null,
-        ?string $parentResourceId = null,
-        ?string $parentResourceExternalId = null,
-        ?string $parentResourceTypeSlug = null,
         null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
@@ -746,10 +731,13 @@ class Authorization
             'description' => $description,
             'resource_type_slug' => $resourceTypeSlug,
             'organization_id' => $organizationId,
-            'parent_resource_id' => $parentResourceId,
-            'parent_resource_external_id' => $parentResourceExternalId,
-            'parent_resource_type_slug' => $parentResourceTypeSlug,
         ], fn ($v) => $v !== null);
+        if ($parentResource instanceof ParentResourceById) {
+            $body['parent_resource_id'] = $parentResource->id;
+        } elseif ($parentResource instanceof ParentResourceByExternalId) {
+            $body['parent_resource_external_id'] = $parentResource->externalId;
+            $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+        }
         $response = $this->client->request(
             method: 'POST',
             path: 'authorization/resources',
@@ -786,9 +774,6 @@ class Authorization
      * @param string $resourceId The ID of the authorization resource.
      * @param string|null $name A display name for the resource.
      * @param string|null $description An optional description of the resource.
-     * @param string|null $parentResourceId The ID of the parent resource. Mutually exclusive with `parent_resource_external_id` and `parent_resource_type_slug`.
-     * @param string|null $parentResourceExternalId The external ID of the parent resource. Required with `parent_resource_type_slug`. Mutually exclusive with `parent_resource_id`.
-     * @param string|null $parentResourceTypeSlug The resource type slug of the parent resource. Required with `parent_resource_external_id`. Mutually exclusive with `parent_resource_id`.
      * @param null|ParentResourceById|ParentResourceByExternalId $parentResource
      * @return \WorkOS\Resource\AuthorizationResource
      * @throws \WorkOS\Exception\WorkOSException
@@ -797,19 +782,19 @@ class Authorization
         string $resourceId,
         ?string $name = null,
         ?string $description = null,
-        ?string $parentResourceId = null,
-        ?string $parentResourceExternalId = null,
-        ?string $parentResourceTypeSlug = null,
         null|ParentResourceById|ParentResourceByExternalId $parentResource = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthorizationResource {
         $body = array_filter([
             'name' => $name,
             'description' => $description,
-            'parent_resource_id' => $parentResourceId,
-            'parent_resource_external_id' => $parentResourceExternalId,
-            'parent_resource_type_slug' => $parentResourceTypeSlug,
         ], fn ($v) => $v !== null);
+        if ($parentResource instanceof ParentResourceById) {
+            $body['parent_resource_id'] = $parentResource->id;
+        } elseif ($parentResource instanceof ParentResourceByExternalId) {
+            $body['parent_resource_external_id'] = $parentResource->externalId;
+            $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+        }
         $response = $this->client->request(
             method: 'PATCH',
             path: "authorization/resources/{$resourceId}",

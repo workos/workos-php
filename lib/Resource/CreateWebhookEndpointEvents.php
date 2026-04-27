@@ -82,4 +82,7 @@ enum CreateWebhookEndpointEvents: string
     case PermissionUpdated = 'permission.updated';
     case SessionCreated = 'session.created';
     case SessionRevoked = 'session.revoked';
+    case WaitlistUserApproved = 'waitlist_user.approved';
+    case WaitlistUserCreated = 'waitlist_user.created';
+    case WaitlistUserDenied = 'waitlist_user.denied';
 }

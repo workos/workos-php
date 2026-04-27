@@ -32,10 +32,10 @@ readonly class GenerateLink implements \JsonSerializable
         /** Options to configure the Admin Portal based on the intent. */
         public ?IntentOptions $intentOptions = null,
         /**
-         * The email addresses of the IT admins to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
+         * The email addresses of the IT contacts to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
          * @var array<string>|null
          */
-        public ?array $adminEmails = null,
+        public ?array $itContactEmails = null,
     ) {
     }
 
@@ -47,7 +47,7 @@ readonly class GenerateLink implements \JsonSerializable
             successUrl: $data['success_url'] ?? null,
             intent: isset($data['intent']) ? GenerateLinkIntent::from($data['intent']) : null,
             intentOptions: isset($data['intent_options']) ? IntentOptions::fromArray($data['intent_options']) : null,
-            adminEmails: $data['admin_emails'] ?? null,
+            itContactEmails: $data['it_contact_emails'] ?? null,
         );
     }
 
@@ -59,7 +59,7 @@ readonly class GenerateLink implements \JsonSerializable
             'success_url' => $this->successUrl,
             'intent' => $this->intent?->value,
             'intent_options' => $this->intentOptions?->toArray(),
-            'admin_emails' => $this->adminEmails,
+            'it_contact_emails' => $this->itContactEmails,
         ];
     }
 }
