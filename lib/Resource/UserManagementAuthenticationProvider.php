@@ -10,7 +10,16 @@ enum UserManagementAuthenticationProvider: string
 {
     case Authkit = 'authkit';
     case AppleOAuth = 'AppleOAuth';
+    case BitbucketOAuth = 'BitbucketOAuth';
     case GitHubOAuth = 'GitHubOAuth';
+    case GitLabOAuth = 'GitLabOAuth';
     case GoogleOAuth = 'GoogleOAuth';
+    case IntuitOAuth = 'IntuitOAuth';
+    case LinkedInOAuth = 'LinkedInOAuth';
     case MicrosoftOAuth = 'MicrosoftOAuth';
+    case SalesforceOAuth = 'SalesforceOAuth';
+    case SlackOAuth = 'SlackOAuth';
+    case VercelMarketplaceOAuth = 'VercelMarketplaceOAuth';
+    case VercelOAuth = 'VercelOAuth';
+    case XeroOAuth = 'XeroOAuth';
 }

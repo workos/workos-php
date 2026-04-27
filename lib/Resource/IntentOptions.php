@@ -12,21 +12,25 @@ readonly class IntentOptions implements \JsonSerializable
 
     public function __construct(
         /** SSO-specific options for the Admin Portal. */
-        public SSOIntentOptions $sso,
+        public ?SSOIntentOptions $sso = null,
+        /** Domain verification-specific options for the Admin Portal. */
+        public ?DomainVerificationIntentOptions $domainVerification = null,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            sso: SSOIntentOptions::fromArray($data['sso']),
+            sso: isset($data['sso']) ? SSOIntentOptions::fromArray($data['sso']) : null,
+            domainVerification: isset($data['domain_verification']) ? DomainVerificationIntentOptions::fromArray($data['domain_verification']) : null,
         );
     }
 
     public function toArray(): array
     {
         return [
-            'sso' => $this->sso->toArray(),
+            'sso' => $this->sso?->toArray(),
+            'domain_verification' => $this->domainVerification?->toArray(),
         ];
     }
 }

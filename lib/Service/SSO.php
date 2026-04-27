@@ -109,7 +109,7 @@ class SSO
      * @param array<string>|null $providerScopes Additional scopes to request from the identity provider. Applicable when using OAuth or OpenID Connect connections.
      * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider. Only applicable when using OAuth connections.
      * @param string|null $domain (deprecated) Deprecated. Use `connection` or `organization` instead. Used to initiate SSO for a connection by domain. The domain must be associated with a connection in your WorkOS environment.
-     * @param \WorkOS\Resource\SSOProvider|null $provider Used to initiate OAuth authentication with Google, Microsoft, GitHub, or Apple.
+     * @param \WorkOS\Resource\SSOProvider|null $provider Used to initiate OAuth authentication with various providers.
      * @param string $redirectUri Where to redirect the user after they complete the authentication process. You must use one of the redirect URIs configured via the [Redirects](https://dashboard.workos.com/redirects) page on the dashboard.
      * @param string|null $state An optional parameter that can be used to encode arbitrary information to help restore application state between redirects. If included, the redirect URI received from WorkOS will contain the exact `state` that was passed.
      * @param string|null $connection Used to initiate SSO for a connection. The value should be a WorkOS connection ID.

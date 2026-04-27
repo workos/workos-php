@@ -14,6 +14,7 @@ use WorkOS\Service\Connect;
 use WorkOS\Service\DirectorySync;
 use WorkOS\Service\Events;
 use WorkOS\Service\FeatureFlags;
+use WorkOS\Service\Groups;
 use WorkOS\Service\MultiFactorAuth;
 use WorkOS\Service\OrganizationDomains;
 use WorkOS\Service\Organizations;
@@ -21,6 +22,7 @@ use WorkOS\Service\Pipes;
 use WorkOS\Service\Radar;
 use WorkOS\Service\SSO;
 use WorkOS\Service\UserManagement;
+use WorkOS\Service\UserManagementOrganizationMembershipGroups;
 use WorkOS\Service\Webhooks;
 use WorkOS\Service\Widgets;
 
@@ -60,20 +62,14 @@ class WorkOS
     private ?Service\FeatureFlags $featureFlags = null;
     private ?Service\OrganizationDomains $organizationDomains = null;
     private ?Service\Organizations $organizations = null;
+    private ?Service\Groups $groups = null;
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
     private ?Service\UserManagement $userManagement = null;
+    private ?Service\UserManagementOrganizationMembershipGroups $userManagementOrganizationMembershipGroups = null;
     private ?Service\Webhooks $webhooks = null;
     private ?Service\Widgets $widgets = null;
     private ?Service\AuditLogs $auditLogs = null;
-    // @oagen-ignore-start — non-spec service properties (hand-maintained)
-    private ?Passwordless $passwordless = null;
-    private ?Vault $vault = null;
-    private ?WebhookVerification $webhookVerification = null;
-    private ?Actions $actions = null;
-    private ?SessionManager $sessionManager = null;
-    private ?PKCEHelper $pkce = null;
-    // @oagen-ignore-end
 
     public function __construct(
         ?string $apiKey = null,
@@ -144,6 +140,11 @@ class WorkOS
         return $this->organizations ??= new Service\Organizations($this->httpClient);
     }
 
+    public function groups(): Groups
+    {
+        return $this->groups ??= new Service\Groups($this->httpClient);
+    }
+
     public function adminPortal(): AdminPortal
     {
         return $this->adminPortal ??= new Service\AdminPortal($this->httpClient);
@@ -157,6 +158,11 @@ class WorkOS
     public function userManagement(): UserManagement
     {
         return $this->userManagement ??= new Service\UserManagement($this->httpClient);
+    }
+
+    public function userManagementOrganizationMembershipGroups(): UserManagementOrganizationMembershipGroups
+    {
+        return $this->userManagementOrganizationMembershipGroups ??= new Service\UserManagementOrganizationMembershipGroups($this->httpClient);
     }
 
     public function webhooks(): Webhooks
@@ -173,6 +179,15 @@ class WorkOS
     {
         return $this->auditLogs ??= new Service\AuditLogs($this->httpClient);
     }
+
+    // @oagen-ignore-start — non-spec service properties (hand-maintained)
+    private ?Passwordless $passwordless = null;
+    private ?Vault $vault = null;
+    private ?WebhookVerification $webhookVerification = null;
+    private ?Actions $actions = null;
+    private ?SessionManager $sessionManager = null;
+    private ?PKCEHelper $pkce = null;
+    // @oagen-ignore-end
 
     // @oagen-ignore-start — non-spec service accessors (hand-maintained)
 
