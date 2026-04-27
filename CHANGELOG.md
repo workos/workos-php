@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.2.0](https://github.com/workos/workos-php/compare/5.1.0...5.2.0) (2026-04-27)
+
+
+### Features
+
+* Add script/setup for pre-generation dependency installation ([edc2543](https://github.com/workos/workos-php/commit/edc25438e11031062f5458d4e183c4baaa77d4fb))
+* surface error metadata from API responses ([#369](https://github.com/workos/workos-php/issues/369)) ([ece118b](https://github.com/workos/workos-php/commit/ece118b00a537f0b0b54161c2dafe106ff76ab13))
+
+
+### Bug Fixes
+
+* **generated:** update generated SDK from spec changes ([#372](https://github.com/workos/workos-php/issues/372)) ([0ee912a](https://github.com/workos/workos-php/commit/0ee912aeb14fb9e150aa1016b3b12a8cef5f48f5))
+
 ## [5.1.0](https://github.com/workos/workos-php/compare/5.0.3...5.1.0) (2026-04-20)
 
 
