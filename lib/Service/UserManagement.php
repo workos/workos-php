@@ -657,9 +657,7 @@ class UserManagement
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
-     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
-     * @param string|null $passwordHash The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`.
-     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`.
+     * @param null|PasswordPlaintext|PasswordHashed $password
      * @return \WorkOS\Resource\User
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -670,9 +668,7 @@ class UserManagement
         ?bool $emailVerified = null,
         ?array $metadata = null,
         ?string $externalId = null,
-        ?string $password = null,
-        ?string $passwordHash = null,
-        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
+        null|PasswordPlaintext|PasswordHashed $password = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\User {
         $body = array_filter([
@@ -682,10 +678,14 @@ class UserManagement
             'email_verified' => $emailVerified,
             'metadata' => $metadata,
             'external_id' => $externalId,
-            'password' => $password,
-            'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType?->value,
         ], fn ($v) => $v !== null);
+        if ($password instanceof PasswordPlaintext) {
+            $body['password'] = $password->password;
+        }
+        elseif ($password instanceof PasswordHashed) {
+            $body['password_hash'] = $password->hash;
+            $body['password_hash_type'] = $password->hashType;
+        }
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/users',
@@ -747,9 +747,7 @@ class UserManagement
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
      * @param string|null $locale The user's preferred locale.
-     * @param string|null $password The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`.
-     * @param string|null $passwordHash The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`.
-     * @param \WorkOS\Resource\CreateUserPasswordHashType|null $passwordHashType The algorithm originally used to hash the password, used when providing a `password_hash`. Required with `password_hash`. Mutually exclusive with `password`.
+     * @param null|PasswordPlaintext|PasswordHashed $password
      * @return \WorkOS\Resource\User
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -762,9 +760,7 @@ class UserManagement
         ?array $metadata = null,
         ?string $externalId = null,
         ?string $locale = null,
-        ?string $password = null,
-        ?string $passwordHash = null,
-        ?\WorkOS\Resource\CreateUserPasswordHashType $passwordHashType = null,
+        null|PasswordPlaintext|PasswordHashed $password = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\User {
         $body = array_filter([
@@ -775,10 +771,14 @@ class UserManagement
             'metadata' => $metadata,
             'external_id' => $externalId,
             'locale' => $locale,
-            'password' => $password,
-            'password_hash' => $passwordHash,
-            'password_hash_type' => $passwordHashType?->value,
         ], fn ($v) => $v !== null);
+        if ($password instanceof PasswordPlaintext) {
+            $body['password'] = $password->password;
+        }
+        elseif ($password instanceof PasswordHashed) {
+            $body['password_hash'] = $password->hash;
+            $body['password_hash_type'] = $password->hashType;
+        }
         $response = $this->client->request(
             method: 'PUT',
             path: "user_management/users/{$id}",
@@ -1265,8 +1265,6 @@ class UserManagement
      * Calling this API with an organization and user that match an `inactive` organization membership will activate the membership with the specified role(s).
      * @param string $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
      * @param string $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
-     * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
-     * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
      * @param null|RoleSingle|RoleMultiple $role
      * @return \WorkOS\Resource\OrganizationMembership
      * @throws \WorkOS\Exception\WorkOSException
@@ -1274,17 +1272,19 @@ class UserManagement
     public function createOrganizationMembership(
         string $userId,
         string $organizationId,
-        ?string $roleSlug = null,
-        ?array $roleSlugs = null,
         null|RoleSingle|RoleMultiple $role = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\OrganizationMembership {
-        $body = array_filter([
+        $body = [
             'user_id' => $userId,
             'organization_id' => $organizationId,
-            'role_slug' => $roleSlug,
-            'role_slugs' => $roleSlugs,
-        ], fn ($v) => $v !== null);
+        ];
+        if ($role instanceof RoleSingle) {
+            $body['role_slug'] = $role->slug;
+        }
+        elseif ($role instanceof RoleMultiple) {
+            $body['role_slugs'] = $role->slugs;
+        }
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/organization_memberships',
@@ -1319,23 +1319,23 @@ class UserManagement
      *
      * Update the details of an existing organization membership.
      * @param string $id The unique ID of the organization membership.
-     * @param string|null $roleSlug A single role identifier. Defaults to `member` or the explicit default role. Mutually exclusive with `role_slugs`.
-     * @param array<string>|null $roleSlugs An array of role identifiers. Limited to one role when Multiple Roles is disabled. Mutually exclusive with `role_slug`.
      * @param null|RoleSingle|RoleMultiple $role
      * @return \WorkOS\Resource\UserOrganizationMembership
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationMembership(
         string $id,
-        ?string $roleSlug = null,
-        ?array $roleSlugs = null,
         null|RoleSingle|RoleMultiple $role = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserOrganizationMembership {
-        $body = array_filter([
-            'role_slug' => $roleSlug,
-            'role_slugs' => $roleSlugs,
-        ], fn ($v) => $v !== null);
+        $body = [
+        ];
+        if ($role instanceof RoleSingle) {
+            $body['role_slug'] = $role->slug;
+        }
+        elseif ($role instanceof RoleMultiple) {
+            $body['role_slugs'] = $role->slugs;
+        }
         $response = $this->client->request(
             method: 'PUT',
             path: "user_management/organization_memberships/{$id}",

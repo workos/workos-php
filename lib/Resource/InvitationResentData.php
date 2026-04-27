@@ -32,6 +32,8 @@ readonly class InvitationResentData implements \JsonSerializable
         public ?string $inviterUserId,
         /** The ID of the user who accepted the invitation, once accepted. */
         public ?string $acceptedUserId,
+        /** Slug of the role the invitee will be assigned on acceptance. Reflects the current role on the invitee's organization membership. null when the invitation has no associated organization. */
+        public ?string $roleSlug,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -52,6 +54,7 @@ readonly class InvitationResentData implements \JsonSerializable
             organizationId: $data['organization_id'] ?? null,
             inviterUserId: $data['inviter_user_id'] ?? null,
             acceptedUserId: $data['accepted_user_id'] ?? null,
+            roleSlug: $data['role_slug'] ?? null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
@@ -70,6 +73,7 @@ readonly class InvitationResentData implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'inviter_user_id' => $this->inviterUserId,
             'accepted_user_id' => $this->acceptedUserId,
+            'role_slug' => $this->roleSlug,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];

@@ -22,7 +22,7 @@ class AdminPortal
      * @param string|null $returnUrl The URL to go to when an admin clicks on your logo in the Admin Portal. If not specified, the return URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used.
      * @param string|null $successUrl The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used.
      * @param string $organization An [Organization](https://workos.com/docs/reference/organization) identifier.
-     * @param \WorkOS\Resource\GenerateLinkIntent|null $intent
+     * @param \WorkOS\Resource\GenerateLinkIntent|null $intent 
      *       The intent of the Admin Portal.
      *         - `sso` - Launch Admin Portal for creating SSO connections
      *         - `dsync` - Launch Admin Portal for creating Directory Sync connections
@@ -32,7 +32,7 @@ class AdminPortal
      *         - `certificate_renewal` - Launch Admin Portal for renewing SAML Certificates
      *         - `bring_your_own_key` - Launch Admin Portal for configuring Bring Your Own Key
      * @param \WorkOS\Resource\IntentOptions|null $intentOptions Options to configure the Admin Portal based on the intent.
-     * @param array<string>|null $adminEmails The email addresses of the IT admins to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
+     * @param array<string>|null $itContactEmails The email addresses of the IT contacts to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
      * @return \WorkOS\Resource\PortalLinkResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -42,7 +42,7 @@ class AdminPortal
         ?string $successUrl = null,
         ?\WorkOS\Resource\GenerateLinkIntent $intent = null,
         ?\WorkOS\Resource\IntentOptions $intentOptions = null,
-        ?array $adminEmails = null,
+        ?array $itContactEmails = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\PortalLinkResponse {
         $body = array_filter([
@@ -51,7 +51,7 @@ class AdminPortal
             'organization' => $organization,
             'intent' => $intent?->value,
             'intent_options' => $intentOptions,
-            'admin_emails' => $adminEmails,
+            'it_contact_emails' => $itContactEmails,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',

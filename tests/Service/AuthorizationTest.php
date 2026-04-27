@@ -27,11 +27,11 @@ class AuthorizationTest extends TestCase
         $this->assertSame('test_value', $body['permission_slug']);
     }
 
-    public function testListOrganizationMembershipResources(): void
+    public function testListResourcesForMembership(): void
     {
         $fixture = $this->loadFixture('list_authorization_resource');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listOrganizationMembershipResources('test_organization_membership_id', parentResource: new \WorkOS\Service\ParentResourceById(id: 'test_value'), before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value');
+        $result = $client->authorization()->listResourcesForMembership('test_organization_membership_id', parentResource: new \WorkOS\Service\ParentResourceById(id: 'test_value'), before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -45,11 +45,11 @@ class AuthorizationTest extends TestCase
         $this->assertSame('test_value', $query['permission_slug']);
     }
 
-    public function testListResourcePermissions(): void
+    public function testListEffectivePermissions(): void
     {
         $fixture = $this->loadFixture('list_authorization_permission');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listResourcePermissions('test_organization_membership_id', 'test_resource_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->authorization()->listEffectivePermissions('test_organization_membership_id', 'test_resource_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -77,11 +77,11 @@ class AuthorizationTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
-    public function testListOrganizationMembershipRoleAssignments(): void
+    public function testListRoleAssignments(): void
     {
         $fixture = $this->loadFixture('list_role_assignment');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listOrganizationMembershipRoleAssignments('test_organization_membership_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->authorization()->listRoleAssignments('test_organization_membership_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -119,10 +119,10 @@ class AuthorizationTest extends TestCase
         $this->assertSame('test_value', $body['role_slug']);
     }
 
-    public function testDeleteOrganizationMembershipRoleAssignment(): void
+    public function testRemoveRoleAssignment(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->authorization()->deleteOrganizationMembershipRoleAssignment('test_organization_membership_id', 'test_role_assignment_id');
+        $client->authorization()->removeRoleAssignment('test_organization_membership_id', 'test_role_assignment_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/role_assignments/test_role_assignment_id', $request->getUri()->getPath());
@@ -193,11 +193,11 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug', $request->getUri()->getPath());
     }
 
-    public function testCreateRolePermission(): void
+    public function testAddOrganizationRolePermission(): void
     {
         $fixture = $this->loadFixture('role');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->createRolePermission('test_organizationId', 'test_slug', bodySlug: 'test_value');
+        $result = $client->authorization()->addOrganizationRolePermission('test_organizationId', 'test_slug', bodySlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
@@ -207,11 +207,11 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug/permissions', $request->getUri()->getPath());
     }
 
-    public function testUpdateRolePermissions(): void
+    public function testSetOrganizationRolePermissions(): void
     {
         $fixture = $this->loadFixture('role');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->updateRolePermissions('test_organizationId', 'test_slug', permissions: []);
+        $result = $client->authorization()->setOrganizationRolePermissions('test_organizationId', 'test_slug', permissions: []);
         $this->assertInstanceOf(\WorkOS\Resource\Role::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
@@ -221,20 +221,20 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug/permissions', $request->getUri()->getPath());
     }
 
-    public function testDeleteRolePermission(): void
+    public function testRemoveOrganizationRolePermission(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->authorization()->deleteRolePermission('test_organizationId', 'test_slug', 'test_permissionSlug');
+        $client->authorization()->removeOrganizationRolePermission('test_organizationId', 'test_slug', 'test_permissionSlug');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organizationId/roles/test_slug/permissions/test_permissionSlug', $request->getUri()->getPath());
     }
 
-    public function testGetOrganizationResource(): void
+    public function testGetResourceByExternalId(): void
     {
         $fixture = $this->loadFixture('authorization_resource');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->getOrganizationResource('test_organization_id', 'test_resource_type_slug', 'test_external_id');
+        $result = $client->authorization()->getResourceByExternalId('test_organization_id', 'test_resource_type_slug', 'test_external_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -244,11 +244,11 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id', $request->getUri()->getPath());
     }
 
-    public function testUpdateOrganizationResource(): void
+    public function testUpdateResourceByExternalId(): void
     {
         $fixture = $this->loadFixture('authorization_resource');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->updateOrganizationResource('test_organization_id', 'test_resource_type_slug', 'test_external_id');
+        $result = $client->authorization()->updateResourceByExternalId('test_organization_id', 'test_resource_type_slug', 'test_external_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthorizationResource::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -258,20 +258,20 @@ class AuthorizationTest extends TestCase
         $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id', $request->getUri()->getPath());
     }
 
-    public function testDeleteOrganizationResource(): void
+    public function testDeleteResourceByExternalId(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->authorization()->deleteOrganizationResource('test_organization_id', 'test_resource_type_slug', 'test_external_id');
+        $client->authorization()->deleteResourceByExternalId('test_organization_id', 'test_resource_type_slug', 'test_external_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('authorization/organizations/test_organization_id/resources/test_resource_type_slug/test_external_id', $request->getUri()->getPath());
     }
 
-    public function testListResourceOrganizationMemberships(): void
+    public function testListMembershipsForResourceByExternalId(): void
     {
         $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listResourceOrganizationMemberships('test_organization_id', 'test_resource_type_slug', 'test_external_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value', assignment: \WorkOS\Resource\AuthorizationAssignment::Direct);
+        $result = $client->authorization()->listMembershipsForResourceByExternalId('test_organization_id', 'test_resource_type_slug', 'test_external_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value', assignment: \WorkOS\Resource\AuthorizationAssignment::Direct);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -289,7 +289,7 @@ class AuthorizationTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authorization_resource');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listResources(parent: new \WorkOS\Service\ParentById(resourceId: 'test_value'), before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', resourceTypeSlug: 'test_value', search: 'test_value');
+        $result = $client->authorization()->listResources(parent: new \WorkOS\Service\ParentById(resourceId: 'test_value'), before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', resourceTypeSlug: 'test_value', resourceExternalId: 'test_value', search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -302,6 +302,7 @@ class AuthorizationTest extends TestCase
         $this->assertSame('normal', $query['order']);
         $this->assertSame('test_value', $query['organization_id']);
         $this->assertSame('test_value', $query['resource_type_slug']);
+        $this->assertSame('test_value', $query['resource_external_id']);
         $this->assertSame('test_value', $query['search']);
     }
 
@@ -541,7 +542,7 @@ class AuthorizationTest extends TestCase
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listOrganizationMembershipResources('test_organization_membership_id', parentResource: new \WorkOS\Service\ParentResourceById(id: 'test_value'), permissionSlug: 'test_value');
+        $result = $client->authorization()->listResourcesForMembership('test_organization_membership_id', parentResource: new \WorkOS\Service\ParentResourceById(id: 'test_value'), permissionSlug: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);
