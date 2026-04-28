@@ -29,7 +29,7 @@ readonly class UserConsentOption implements \JsonSerializable
     {
         return new self(
             claim: $data['claim'],
-            type: $data['type'],
+            type: $data['type'] ?? 'enum',
             label: $data['label'],
             choices: array_map(fn ($item) => UserConsentOptionChoice::fromArray($item), $data['choices']),
         );

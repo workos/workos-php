@@ -45,7 +45,7 @@ readonly class Connection implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'connection',
             id: $data['id'],
             connectionType: ConnectionType::from($data['connection_type']),
             name: $data['name'],

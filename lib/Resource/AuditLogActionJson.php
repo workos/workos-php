@@ -27,7 +27,7 @@ readonly class AuditLogActionJson implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'audit_log_action',
             name: $data['name'],
             schema: AuditLogSchemaJson::fromArray($data['schema']),
             createdAt: new \DateTimeImmutable($data['created_at']),

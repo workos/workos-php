@@ -28,10 +28,10 @@ readonly class AuthenticationEmailVerificationSucceeded implements \JsonSerializ
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'authentication.email_verification_succeeded',
             data: AuthenticationEmailVerificationSucceededData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
             context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }

@@ -31,7 +31,7 @@ readonly class AuthenticationChallenge implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'authentication_challenge',
             id: $data['id'],
             authenticationFactorId: $data['authentication_factor_id'],
             createdAt: new \DateTimeImmutable($data['created_at']),

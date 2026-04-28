@@ -31,7 +31,7 @@ readonly class CreateM2MApplication implements \JsonSerializable
     {
         return new self(
             name: $data['name'],
-            applicationType: $data['application_type'],
+            applicationType: $data['application_type'] ?? 'm2m',
             organizationId: $data['organization_id'],
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,

@@ -34,7 +34,7 @@ readonly class ConnectionDeletedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'connection',
             id: $data['id'],
             state: ConnectionDeletedDataState::from($data['state']),
             name: $data['name'],

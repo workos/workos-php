@@ -36,7 +36,7 @@ readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializa
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:magic-auth:code',
             code: $data['code'],
             email: $data['email'],
             invitationToken: $data['invitation_token'] ?? null,

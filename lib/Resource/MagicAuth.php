@@ -33,7 +33,7 @@ readonly class MagicAuth implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'magic_auth',
             id: $data['id'],
             userId: $data['user_id'],
             email: $data['email'],

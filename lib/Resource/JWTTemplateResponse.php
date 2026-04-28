@@ -25,7 +25,7 @@ readonly class JWTTemplateResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'jwt_template',
             content: $data['content'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],

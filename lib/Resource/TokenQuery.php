@@ -28,7 +28,7 @@ readonly class TokenQuery implements \JsonSerializable
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
             code: $data['code'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'authorization_code',
         );
     }
 

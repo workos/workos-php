@@ -33,7 +33,7 @@ readonly class RoleCreatedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'role',
             slug: $data['slug'],
             resourceTypeSlug: $data['resource_type_slug'],
             createdAt: new \DateTimeImmutable($data['created_at']),

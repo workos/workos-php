@@ -28,10 +28,10 @@ readonly class ConnectionDeleted implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'connection.deleted',
             data: ConnectionDeletedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
             context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }

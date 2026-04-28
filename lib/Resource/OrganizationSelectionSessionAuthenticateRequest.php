@@ -34,7 +34,7 @@ readonly class OrganizationSelectionSessionAuthenticateRequest implements \JsonS
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:organization-selection',
             pendingAuthenticationToken: $data['pending_authentication_token'],
             organizationId: $data['organization_id'],
             ipAddress: $data['ip_address'] ?? null,

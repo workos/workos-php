@@ -36,7 +36,7 @@ readonly class WebhookEndpointJson implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'webhook_endpoint',
             id: $data['id'],
             endpointUrl: $data['endpoint_url'],
             secret: $data['secret'],
