@@ -28,10 +28,10 @@ readonly class OrganizationDomainVerified implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'organization_domain.verified',
             data: OrganizationDomainVerifiedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
             context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }

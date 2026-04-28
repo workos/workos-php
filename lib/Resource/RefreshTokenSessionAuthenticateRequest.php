@@ -34,7 +34,7 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'refresh_token',
             refreshToken: $data['refresh_token'],
             organizationId: $data['organization_id'] ?? null,
             ipAddress: $data['ip_address'] ?? null,

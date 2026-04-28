@@ -44,7 +44,7 @@ readonly class InvitationRevokedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'invitation',
             id: $data['id'],
             email: $data['email'],
             state: UserInviteState::from($data['state']),

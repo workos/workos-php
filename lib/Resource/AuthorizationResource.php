@@ -37,7 +37,7 @@ readonly class AuthorizationResource implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'authorization_resource',
             name: $data['name'],
             description: $data['description'] ?? null,
             organizationId: $data['organization_id'],

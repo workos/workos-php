@@ -38,8 +38,8 @@ readonly class ActionAuthenticationDeniedData implements \JsonSerializable
         return new self(
             actionEndpointId: $data['action_endpoint_id'],
             actionExecutionId: $data['action_execution_id'],
-            type: $data['type'],
-            verdict: $data['verdict'],
+            type: $data['type'] ?? 'authentication',
+            verdict: $data['verdict'] ?? 'Deny',
             userId: $data['user_id'],
             organizationId: $data['organization_id'] ?? null,
             email: $data['email'],

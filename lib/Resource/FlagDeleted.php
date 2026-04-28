@@ -29,11 +29,11 @@ readonly class FlagDeleted implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'flag.deleted',
             data: FlagDeletedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             context: FlagDeletedContext::fromArray($data['context']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
         );
     }
 

@@ -36,7 +36,7 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'password',
             email: $data['email'],
             password: $data['password'],
             invitationToken: $data['invitation_token'] ?? null,

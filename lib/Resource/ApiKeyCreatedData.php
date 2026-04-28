@@ -39,7 +39,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'api_key',
             id: $data['id'],
             owner: ApiKeyCreatedDataOwner::fromArray($data['owner']),
             name: $data['name'],

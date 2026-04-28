@@ -29,7 +29,7 @@ readonly class DeviceCodeSessionAuthenticateRequest implements \JsonSerializable
     {
         return new self(
             clientId: $data['client_id'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'urn:ietf:params:oauth:grant-type:device_code',
             deviceCode: $data['device_code'],
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,

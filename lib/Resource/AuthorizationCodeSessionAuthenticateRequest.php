@@ -36,7 +36,7 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'authorization_code',
             code: $data['code'],
             codeVerifier: $data['code_verifier'] ?? null,
             invitationToken: $data['invitation_token'] ?? null,

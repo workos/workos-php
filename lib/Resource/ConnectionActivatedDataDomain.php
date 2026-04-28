@@ -23,7 +23,7 @@ readonly class ConnectionActivatedDataDomain implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'connection_domain',
             id: $data['id'],
             domain: $data['domain'],
         );

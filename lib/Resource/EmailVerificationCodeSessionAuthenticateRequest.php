@@ -34,7 +34,7 @@ readonly class EmailVerificationCodeSessionAuthenticateRequest implements \JsonS
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'],
+            grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:email-verification:code',
             code: $data['code'],
             pendingAuthenticationToken: $data['pending_authentication_token'],
             ipAddress: $data['ip_address'] ?? null,

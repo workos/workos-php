@@ -44,7 +44,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'data_provider',
             id: $data['id'],
             name: $data['name'],
             description: $data['description'] ?? null,

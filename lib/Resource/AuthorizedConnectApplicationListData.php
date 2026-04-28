@@ -29,7 +29,7 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'authorized_connect_application',
             id: $data['id'],
             grantedScopes: $data['granted_scopes'],
             application: ConnectApplication::fromArray($data['application']),
