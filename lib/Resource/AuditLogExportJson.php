@@ -29,7 +29,7 @@ readonly class AuditLogExportJson implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'audit_log_export',
             id: $data['id'],
             state: AuditLogExportJsonState::from($data['state']),
             createdAt: new \DateTimeImmutable($data['created_at']),

@@ -30,7 +30,7 @@ readonly class PasswordResetSucceededData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'password_reset',
             id: $data['id'],
             userId: $data['user_id'],
             email: $data['email'],

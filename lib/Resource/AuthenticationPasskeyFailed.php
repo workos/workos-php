@@ -28,10 +28,10 @@ readonly class AuthenticationPasskeyFailed implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'authentication.passkey_failed',
             data: AuthenticationPasskeyFailedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
             context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
     }

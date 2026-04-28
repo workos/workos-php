@@ -38,7 +38,7 @@ readonly class OrganizationDomainCreatedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'organization_domain',
             id: $data['id'],
             organizationId: $data['organization_id'],
             domain: $data['domain'],

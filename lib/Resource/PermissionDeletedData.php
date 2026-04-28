@@ -34,7 +34,7 @@ readonly class PermissionDeletedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'permission',
             id: $data['id'],
             slug: $data['slug'],
             name: $data['name'],

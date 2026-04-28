@@ -29,7 +29,7 @@ readonly class RedirectUri implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'redirect_uri',
             id: $data['id'],
             uri: $data['uri'],
             default: $data['default'],

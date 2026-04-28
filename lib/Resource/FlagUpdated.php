@@ -29,11 +29,11 @@ readonly class FlagUpdated implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            event: $data['event'],
+            event: $data['event'] ?? 'flag.updated',
             data: FlagUpdatedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             context: FlagUpdatedContext::fromArray($data['context']),
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
         );
     }
 

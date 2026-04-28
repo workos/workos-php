@@ -27,7 +27,7 @@ readonly class SSOTokenResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            tokenType: $data['token_type'],
+            tokenType: $data['token_type'] ?? 'Bearer',
             accessToken: $data['access_token'],
             expiresIn: $data['expires_in'],
             profile: Profile::fromArray($data['profile']),

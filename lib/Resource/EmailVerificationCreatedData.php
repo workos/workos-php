@@ -32,7 +32,7 @@ readonly class EmailVerificationCreatedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'email_verification',
             id: $data['id'],
             userId: $data['user_id'],
             email: $data['email'],

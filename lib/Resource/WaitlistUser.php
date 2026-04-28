@@ -31,7 +31,7 @@ readonly class WaitlistUser implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'waitlist_user',
             id: $data['id'],
             email: $data['email'],
             state: WaitlistUserState::from($data['state']),

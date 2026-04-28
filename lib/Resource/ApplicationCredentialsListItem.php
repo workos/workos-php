@@ -29,7 +29,7 @@ readonly class ApplicationCredentialsListItem implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'connect_application_secret',
             id: $data['id'],
             secretHint: $data['secret_hint'],
             lastUsedAt: $data['last_used_at'] ?? null,

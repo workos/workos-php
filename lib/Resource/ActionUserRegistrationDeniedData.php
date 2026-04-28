@@ -36,8 +36,8 @@ readonly class ActionUserRegistrationDeniedData implements \JsonSerializable
         return new self(
             actionEndpointId: $data['action_endpoint_id'],
             actionExecutionId: $data['action_execution_id'],
-            type: $data['type'],
-            verdict: $data['verdict'],
+            type: $data['type'] ?? 'user_registration',
+            verdict: $data['verdict'] ?? 'Deny',
             organizationId: $data['organization_id'] ?? null,
             email: $data['email'],
             ipAddress: $data['ip_address'] ?? null,

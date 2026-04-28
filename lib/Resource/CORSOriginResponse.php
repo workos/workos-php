@@ -27,7 +27,7 @@ readonly class CORSOriginResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'cors_origin',
             id: $data['id'],
             origin: $data['origin'],
             createdAt: new \DateTimeImmutable($data['created_at']),

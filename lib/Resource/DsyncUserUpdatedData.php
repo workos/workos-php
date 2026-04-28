@@ -75,7 +75,7 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'directory_user',
             id: $data['id'],
             directoryId: $data['directory_id'],
             organizationId: $data['organization_id'],
