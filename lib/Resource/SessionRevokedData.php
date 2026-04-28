@@ -44,7 +44,7 @@ readonly class SessionRevokedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'session',
             id: $data['id'],
             ipAddress: $data['ip_address'] ?? null,
             userAgent: $data['user_agent'] ?? null,

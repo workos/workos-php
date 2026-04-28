@@ -40,7 +40,7 @@ readonly class CreateOAuthApplication implements \JsonSerializable
     {
         return new self(
             name: $data['name'],
-            applicationType: $data['application_type'],
+            applicationType: $data['application_type'] ?? 'oauth',
             isFirstParty: $data['is_first_party'],
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,

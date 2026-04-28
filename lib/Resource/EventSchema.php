@@ -36,7 +36,7 @@ readonly class EventSchema implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'event',
             id: $data['id'],
             event: $data['event'],
             data: $data['data'],

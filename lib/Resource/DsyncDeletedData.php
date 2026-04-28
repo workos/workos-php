@@ -34,7 +34,7 @@ readonly class DsyncDeletedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'directory',
             id: $data['id'],
             type: DsyncDeletedDataType::from($data['type']),
             state: DsyncDeletedDataState::from($data['state']),

@@ -25,7 +25,7 @@ readonly class EnrollUserAuthenticationFactor implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            type: $data['type'],
+            type: $data['type'] ?? 'totp',
             totpIssuer: $data['totp_issuer'] ?? null,
             totpUser: $data['totp_user'] ?? null,
             totpSecret: $data['totp_secret'] ?? null,

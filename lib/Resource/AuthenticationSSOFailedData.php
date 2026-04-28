@@ -32,8 +32,8 @@ readonly class AuthenticationSSOFailedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            type: $data['type'],
-            status: $data['status'],
+            type: $data['type'] ?? 'sso',
+            status: $data['status'] ?? 'failed',
             ipAddress: $data['ip_address'] ?? null,
             userAgent: $data['user_agent'] ?? null,
             userId: $data['user_id'] ?? null,

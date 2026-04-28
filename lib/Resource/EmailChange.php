@@ -26,7 +26,7 @@ readonly class EmailChange implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'email_change',
             user: User::fromArray($data['user']),
             newEmail: $data['new_email'],
             expiresAt: new \DateTimeImmutable($data['expires_at']),

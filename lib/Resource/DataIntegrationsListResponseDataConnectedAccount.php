@@ -46,7 +46,7 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'connected_account',
             id: $data['id'],
             userId: $data['user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,

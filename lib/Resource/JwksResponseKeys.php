@@ -36,9 +36,9 @@ readonly class JwksResponseKeys implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            alg: $data['alg'],
-            kty: $data['kty'],
-            use: $data['use'],
+            alg: $data['alg'] ?? 'RS256',
+            kty: $data['kty'] ?? 'RSA',
+            use: $data['use'] ?? 'sig',
             x5C: $data['x5c'],
             n: $data['n'],
             e: $data['e'],
