@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.2.1](https://github.com/workos/workos-php/compare/5.2.0...5.2.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* **generated:** Add default values to optional object fields ([#376](https://github.com/workos/workos-php/issues/376)) ([1597af6](https://github.com/workos/workos-php/commit/1597af675fac63b5a309e163145e175f48b056dc))
+
 ## [5.2.0](https://github.com/workos/workos-php/compare/5.1.0...5.2.0) (2026-04-27)
 
 
