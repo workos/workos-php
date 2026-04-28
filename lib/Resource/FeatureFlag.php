@@ -42,7 +42,7 @@ readonly class FeatureFlag implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'feature_flag',
             id: $data['id'],
             slug: $data['slug'],
             name: $data['name'],

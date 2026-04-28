@@ -47,7 +47,7 @@ readonly class EmailChangeConfirmationUser implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'user',
             id: $data['id'],
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,

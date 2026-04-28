@@ -46,7 +46,7 @@ readonly class OrganizationMembershipDeletedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'organization_membership',
             id: $data['id'],
             userId: $data['user_id'],
             organizationId: $data['organization_id'],

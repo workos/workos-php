@@ -34,7 +34,7 @@ readonly class DataIntegrationAccessTokenResponseAccessToken implements \JsonSer
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'access_token',
             accessToken: $data['access_token'],
             expiresAt: $data['expires_at'] ?? null,
             scopes: $data['scopes'],

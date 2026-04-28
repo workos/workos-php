@@ -38,7 +38,7 @@ readonly class DirectoryGroup implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'directory_group',
             id: $data['id'],
             idpId: $data['idp_id'],
             directoryId: $data['directory_id'],

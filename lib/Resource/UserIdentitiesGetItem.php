@@ -24,7 +24,7 @@ readonly class UserIdentitiesGetItem implements \JsonSerializable
     {
         return new self(
             idpId: $data['idp_id'],
-            type: $data['type'],
+            type: $data['type'] ?? 'OAuth',
             provider: UserIdentitiesGetItemProvider::from($data['provider']),
         );
     }

@@ -24,7 +24,7 @@ readonly class ConnectionDomain implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            object: $data['object'],
+            object: $data['object'] ?? 'connection_domain',
             domain: $data['domain'],
         );
     }

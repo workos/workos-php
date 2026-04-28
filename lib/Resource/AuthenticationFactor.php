@@ -33,7 +33,7 @@ readonly class AuthenticationFactor implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'authentication_factor',
             id: $data['id'],
             type: AuthenticationFactorType::from($data['type']),
             createdAt: new \DateTimeImmutable($data['created_at']),

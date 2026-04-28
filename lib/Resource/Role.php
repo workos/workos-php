@@ -41,7 +41,7 @@ readonly class Role implements \JsonSerializable
     {
         return new self(
             slug: $data['slug'],
-            object: $data['object'],
+            object: $data['object'] ?? 'role',
             id: $data['id'],
             name: $data['name'],
             description: $data['description'] ?? null,

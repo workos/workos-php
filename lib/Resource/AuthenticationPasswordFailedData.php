@@ -30,8 +30,8 @@ readonly class AuthenticationPasswordFailedData implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            type: $data['type'],
-            status: $data['status'],
+            type: $data['type'] ?? 'password',
+            status: $data['status'] ?? 'failed',
             ipAddress: $data['ip_address'] ?? null,
             userAgent: $data['user_agent'] ?? null,
             userId: $data['user_id'] ?? null,

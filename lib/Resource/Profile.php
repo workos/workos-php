@@ -57,7 +57,7 @@ readonly class Profile implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'],
+            object: $data['object'] ?? 'profile',
             id: $data['id'],
             organizationId: $data['organization_id'] ?? null,
             connectionId: $data['connection_id'],
