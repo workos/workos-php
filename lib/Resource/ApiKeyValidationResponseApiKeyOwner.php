@@ -6,14 +6,15 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class ApiKeyCreatedDataOwner implements \JsonSerializable
+/** The entity that owns the API Key. */
+readonly class ApiKeyValidationResponseApiKeyOwner implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The type of the API key owner. */
+        /** The type of the API Key owner. */
         public string $type,
-        /** The unique identifier of the API key owner. */
+        /** Unique identifier of the API Key owner. */
         public string $id,
     ) {
     }

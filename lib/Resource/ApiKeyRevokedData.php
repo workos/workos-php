@@ -41,7 +41,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
-            owner: ApiKeyRevokedDataOwner::fromArray($data['owner']),
+            owner: $data['owner'],
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
             lastUsedAt: $data['last_used_at'] ?? null,
@@ -56,7 +56,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner,
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,

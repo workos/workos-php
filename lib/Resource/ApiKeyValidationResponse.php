@@ -11,14 +11,14 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        public ?ApiKey $apiKey,
+        public ?ApiKeyValidationResponseApiKey $apiKey,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            apiKey: isset($data['api_key']) ? ApiKey::fromArray($data['api_key']) : null,
+            apiKey: isset($data['api_key']) ? ApiKeyValidationResponseApiKey::fromArray($data['api_key']) : null,
         );
     }
 
