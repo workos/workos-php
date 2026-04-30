@@ -269,7 +269,7 @@ class AuthorizationTest extends TestCase
 
     public function testListMembershipsForResourceByExternalId(): void
     {
-        $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
+        $fixture = $this->loadFixture('list_user_organization_membership_base_with_user');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->listMembershipsForResourceByExternalId('test_organization_id', 'test_resource_type_slug', 'test_external_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value', assignment: \WorkOS\Resource\AuthorizationAssignment::Direct);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
@@ -364,7 +364,7 @@ class AuthorizationTest extends TestCase
 
     public function testListMembershipsForResource(): void
     {
-        $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
+        $fixture = $this->loadFixture('list_user_organization_membership_base_with_user');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->authorization()->listMembershipsForResource('test_resource_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, permissionSlug: 'test_value', assignment: \WorkOS\Resource\AuthorizationAssignment::Direct);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);

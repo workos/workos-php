@@ -13,7 +13,7 @@ use WorkOS\Resource\Permission;
 use WorkOS\Resource\Role;
 use WorkOS\Resource\RoleAssignment;
 use WorkOS\Resource\RoleList;
-use WorkOS\Resource\UserOrganizationMembershipBaseListData;
+use WorkOS\Resource\UserOrganizationMembershipBaseWithUser;
 
 class Authorization
 {
@@ -618,7 +618,7 @@ class Authorization
      * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseWithUser>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listMembershipsForResourceByExternalId(
@@ -645,7 +645,7 @@ class Authorization
             method: 'GET',
             path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}/organization_memberships",
             query: $query,
-            modelClass: UserOrganizationMembershipBaseListData::class,
+            modelClass: UserOrganizationMembershipBaseWithUser::class,
             options: $options,
         );
     }
@@ -840,7 +840,7 @@ class Authorization
      * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseWithUser>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listMembershipsForResource(
@@ -865,7 +865,7 @@ class Authorization
             method: 'GET',
             path: "authorization/resources/{$resourceId}/organization_memberships",
             query: $query,
-            modelClass: UserOrganizationMembershipBaseListData::class,
+            modelClass: UserOrganizationMembershipBaseWithUser::class,
             options: $options,
         );
     }
