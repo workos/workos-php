@@ -99,6 +99,15 @@ class HttpClientTest extends TestCase
             'embedded carriage return' => ["connections/conn_123\r\nHost: evil"],
             'embedded newline' => ["connections/conn_123\nfoo"],
             'embedded null byte' => ["connections/conn_123\x00"],
+            'percent-encoded parent traversal lowercase' => ['connections/%2e%2e/webhook_endpoints/wh_target'],
+            'percent-encoded parent traversal uppercase' => ['connections/%2E%2E/webhook_endpoints/wh_target'],
+            'percent-encoded current directory segment' => ['connections/%2e/id'],
+            'percent-encoded slash hides traversal' => ['connections%2F..%2Fwebhook_endpoints'],
+            'percent-encoded slash hides encoded traversal' => ['connections%2F%2e%2e%2Fwebhook_endpoints'],
+            'percent-encoded query character' => ['connections/conn_123%3Foverride=1'],
+            'percent-encoded fragment character' => ['connections/conn_123%23frag'],
+            'percent-encoded CRLF injection' => ['connections/conn_123%0D%0AHost:%20evil'],
+            'percent-encoded null byte' => ['connections/conn_123%00'],
         ];
     }
 

@@ -245,21 +245,26 @@ class HttpClient
 
     /**
      * Reject paths whose segments could escape the intended endpoint once
-     * normalized by the HTTP transport. Service methods interpolate caller-
-     * supplied IDs into path templates without per-segment URL-encoding, so
-     * an unencoded "../" or embedded "?"/"#"/CRLF in a single ID would
-     * silently re-target the request at a different WorkOS resource under
-     * the application's authenticated API key.
+     * normalized by the HTTP transport or the receiving server. Service
+     * methods interpolate caller-supplied IDs into path templates without
+     * per-segment URL-encoding, so an unencoded "../" or embedded "?"/"#"/CRLF
+     * in a single ID would silently re-target the request at a different
+     * WorkOS resource under the application's authenticated API key.
+     *
+     * The check runs against the percent-decoded path so that encoded
+     * variants (`%2e%2e`, `%2f`, `%3f`, `%0d%0a`, ...) cannot bypass it.
      */
     private function assertSafePath(string $path): void
     {
-        if (preg_match('/[\x00-\x1f?#]/', $path) === 1) {
+        $decoded = rawurldecode($path);
+
+        if (preg_match('/[\x00-\x1f?#]/', $decoded) === 1) {
             throw new \InvalidArgumentException(
                 'WorkOS request path contains a forbidden character (control character, "?", or "#"). Pass query parameters via the $query argument rather than embedding them in the path.',
             );
         }
 
-        foreach (explode('/', $path) as $segment) {
+        foreach (explode('/', $decoded) as $segment) {
             if ($segment === '.' || $segment === '..') {
                 throw new \InvalidArgumentException(
                     'WorkOS request path contains a relative segment ("." or ".."). Refusing to send the request to avoid cross-resource redirection.',
