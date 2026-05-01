@@ -85,6 +85,75 @@ class HttpClientTest extends TestCase
         $this->assertSame('code', $query['response_type']);
     }
 
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function unsafePathProvider(): array
+    {
+        return [
+            'parent traversal segment' => ['connections/../webhook_endpoints/wh_target'],
+            'leading parent traversal' => ['../webhook_endpoints/wh_target'],
+            'current directory segment' => ['connections/./id'],
+            'embedded query character' => ['connections/conn_123?override=1'],
+            'embedded fragment character' => ['connections/conn_123#frag'],
+            'embedded carriage return' => ["connections/conn_123\r\nHost: evil"],
+            'embedded newline' => ["connections/conn_123\nfoo"],
+            'embedded null byte' => ["connections/conn_123\x00"],
+        ];
+    }
+
+    /**
+     * @dataProvider unsafePathProvider
+     */
+    public function testRequestRejectsUnsafePaths(string $path): void
+    {
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $client->request('DELETE', $path);
+    }
+
+    /**
+     * @dataProvider unsafePathProvider
+     */
+    public function testBuildUrlRejectsUnsafePaths(string $path): void
+    {
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $client->buildUrl($path);
+    }
+
+    public function testRequestAllowsSafePathsWithDotsInsideSegments(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: HandlerStack::create($mock),
+        );
+
+        $this->assertSame([], $client->request('GET', 'users/user.with.dots'));
+    }
+
     public function testErrorResponseIncludesCodeAndError(): void
     {
         $body = json_encode([

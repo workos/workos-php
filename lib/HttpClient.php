@@ -236,9 +236,36 @@ class HttpClient
             return $path;
         }
 
+        $this->assertSafePath($path);
+
         $baseUrl = $options !== null && $options->baseUrl !== null ? $options->baseUrl : $this->baseUrl;
         $baseUrl = rtrim($baseUrl, '/');
         return $baseUrl . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * Reject paths whose segments could escape the intended endpoint once
+     * normalized by the HTTP transport. Service methods interpolate caller-
+     * supplied IDs into path templates without per-segment URL-encoding, so
+     * an unencoded "../" or embedded "?"/"#"/CRLF in a single ID would
+     * silently re-target the request at a different WorkOS resource under
+     * the application's authenticated API key.
+     */
+    private function assertSafePath(string $path): void
+    {
+        if (preg_match('/[\x00-\x1f?#]/', $path) === 1) {
+            throw new \InvalidArgumentException(
+                'WorkOS request path contains a forbidden character (control character, "?", or "#"). Pass query parameters via the $query argument rather than embedding them in the path.',
+            );
+        }
+
+        foreach (explode('/', $path) as $segment) {
+            if ($segment === '.' || $segment === '..') {
+                throw new \InvalidArgumentException(
+                    'WorkOS request path contains a relative segment ("." or ".."). Refusing to send the request to avoid cross-resource redirection.',
+                );
+            }
+        }
     }
 
     private function resolveTimeout(?RequestOptions $options): int
