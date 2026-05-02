@@ -108,6 +108,10 @@ class HttpClientTest extends TestCase
             'percent-encoded fragment character' => ['connections/conn_123%23frag'],
             'percent-encoded CRLF injection' => ['connections/conn_123%0D%0AHost:%20evil'],
             'percent-encoded null byte' => ['connections/conn_123%00'],
+            'double-encoded parent traversal' => ['connections/%252e%252e/webhook_endpoints'],
+            'double-encoded slash hides traversal' => ['connections%252F..%252Fwebhook_endpoints'],
+            'double-encoded query character' => ['connections/conn_123%253Foverride=1'],
+            'double-encoded null byte' => ['connections/conn_123%2500'],
         ];
     }
 

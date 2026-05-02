@@ -251,12 +251,13 @@ class HttpClient
      * in a single ID would silently re-target the request at a different
      * WorkOS resource under the application's authenticated API key.
      *
-     * The check runs against the percent-decoded path so that encoded
-     * variants (`%2e%2e`, `%2f`, `%3f`, `%0d%0a`, ...) cannot bypass it.
+     * The check runs against the fully percent-decoded path so that encoded
+     * variants (`%2e%2e`, `%2f`, `%3f`, `%0d%0a`, ...) and double-encoded
+     * variants (`%252e%252e`, `%252f`, ...) cannot bypass it.
      */
     private function assertSafePath(string $path): void
     {
-        $decoded = rawurldecode($path);
+        $decoded = self::decodeUntilStable($path);
 
         if (preg_match('/[\x00-\x1f?#]/', $decoded) === 1) {
             throw new \InvalidArgumentException(
@@ -271,6 +272,20 @@ class HttpClient
                 );
             }
         }
+    }
+
+    /**
+     * Decode percent-encoded characters in a loop until the value stabilizes,
+     * closing double-encoding bypass vectors like `%252e%252e`.
+     */
+    private static function decodeUntilStable(string $value): string
+    {
+        do {
+            $prev = $value;
+            $value = rawurldecode($value);
+        } while ($value !== $prev);
+
+        return $value;
     }
 
     private function resolveTimeout(?RequestOptions $options): int
