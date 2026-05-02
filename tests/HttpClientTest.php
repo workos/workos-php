@@ -85,6 +85,88 @@ class HttpClientTest extends TestCase
         $this->assertSame('code', $query['response_type']);
     }
 
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function unsafePathProvider(): array
+    {
+        return [
+            'parent traversal segment' => ['connections/../webhook_endpoints/wh_target'],
+            'leading parent traversal' => ['../webhook_endpoints/wh_target'],
+            'current directory segment' => ['connections/./id'],
+            'embedded query character' => ['connections/conn_123?override=1'],
+            'embedded fragment character' => ['connections/conn_123#frag'],
+            'embedded carriage return' => ["connections/conn_123\r\nHost: evil"],
+            'embedded newline' => ["connections/conn_123\nfoo"],
+            'embedded null byte' => ["connections/conn_123\x00"],
+            'percent-encoded parent traversal lowercase' => ['connections/%2e%2e/webhook_endpoints/wh_target'],
+            'percent-encoded parent traversal uppercase' => ['connections/%2E%2E/webhook_endpoints/wh_target'],
+            'percent-encoded current directory segment' => ['connections/%2e/id'],
+            'percent-encoded slash hides traversal' => ['connections%2F..%2Fwebhook_endpoints'],
+            'percent-encoded slash hides encoded traversal' => ['connections%2F%2e%2e%2Fwebhook_endpoints'],
+            'percent-encoded query character' => ['connections/conn_123%3Foverride=1'],
+            'percent-encoded fragment character' => ['connections/conn_123%23frag'],
+            'percent-encoded CRLF injection' => ['connections/conn_123%0D%0AHost:%20evil'],
+            'percent-encoded null byte' => ['connections/conn_123%00'],
+            'double-encoded parent traversal' => ['connections/%252e%252e/webhook_endpoints'],
+            'double-encoded slash hides traversal' => ['connections%252F..%252Fwebhook_endpoints'],
+            'double-encoded query character' => ['connections/conn_123%253Foverride=1'],
+            'double-encoded null byte' => ['connections/conn_123%2500'],
+        ];
+    }
+
+    /**
+     * @dataProvider unsafePathProvider
+     */
+    public function testRequestRejectsUnsafePaths(string $path): void
+    {
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $client->request('DELETE', $path);
+    }
+
+    /**
+     * @dataProvider unsafePathProvider
+     */
+    public function testBuildUrlRejectsUnsafePaths(string $path): void
+    {
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+        );
+
+        $this->expectException(\InvalidArgumentException::class);
+        $client->buildUrl($path);
+    }
+
+    public function testRequestAllowsSafePathsWithDotsInsideSegments(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: HandlerStack::create($mock),
+        );
+
+        $this->assertSame([], $client->request('GET', 'users/user.with.dots'));
+    }
+
     public function testErrorResponseIncludesCodeAndError(): void
     {
         $body = json_encode([
