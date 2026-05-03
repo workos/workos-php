@@ -44,7 +44,7 @@ class Groups
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "organizations/{$organizationId}/groups",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups',
             query: $query,
             modelClass: Group::class,
             options: $options,
@@ -73,7 +73,7 @@ class Groups
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "organizations/{$organizationId}/groups",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups',
             body: $body,
             options: $options,
         );
@@ -96,7 +96,7 @@ class Groups
     ): \WorkOS\Resource\Group {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$organizationId}/groups/{$groupId}",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId),
             options: $options,
         );
         return Group::fromArray($response);
@@ -126,7 +126,7 @@ class Groups
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "organizations/{$organizationId}/groups/{$groupId}",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId),
             body: $body,
             options: $options,
         );
@@ -149,7 +149,7 @@ class Groups
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "organizations/{$organizationId}/groups/{$groupId}",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId),
             options: $options,
         );
     }
@@ -184,7 +184,7 @@ class Groups
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "organizations/{$organizationId}/groups/{$groupId}/organization-memberships",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId) . '/organization-memberships',
             query: $query,
             modelClass: UserOrganizationMembershipBaseListData::class,
             options: $options,
@@ -212,7 +212,7 @@ class Groups
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "organizations/{$organizationId}/groups/{$groupId}/organization-memberships",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId) . '/organization-memberships',
             body: $body,
             options: $options,
         );
@@ -237,7 +237,7 @@ class Groups
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "organizations/{$organizationId}/groups/{$groupId}/organization-memberships/{$omId}",
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId) . '/organization-memberships/' . rawurlencode($omId),
             options: $options,
         );
     }

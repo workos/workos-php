@@ -63,7 +63,7 @@ class FeatureFlags
     ): \WorkOS\Resource\Flag {
         $response = $this->client->request(
             method: 'GET',
-            path: "feature-flags/{$slug}",
+            path: 'feature-flags/' . rawurlencode($slug),
             options: $options,
         );
         return Flag::fromArray($response);
@@ -83,7 +83,7 @@ class FeatureFlags
     ): \WorkOS\Resource\FeatureFlag {
         $response = $this->client->request(
             method: 'PUT',
-            path: "feature-flags/{$slug}/disable",
+            path: 'feature-flags/' . rawurlencode($slug) . '/disable',
             options: $options,
         );
         return FeatureFlag::fromArray($response);
@@ -103,7 +103,7 @@ class FeatureFlags
     ): \WorkOS\Resource\FeatureFlag {
         $response = $this->client->request(
             method: 'PUT',
-            path: "feature-flags/{$slug}/enable",
+            path: 'feature-flags/' . rawurlencode($slug) . '/enable',
             options: $options,
         );
         return FeatureFlag::fromArray($response);
@@ -125,7 +125,7 @@ class FeatureFlags
     ): mixed {
         $response = $this->client->request(
             method: 'POST',
-            path: "feature-flags/{$slug}/targets/{$resourceId}",
+            path: 'feature-flags/' . rawurlencode($slug) . '/targets/' . rawurlencode($resourceId),
             options: $options,
         );
         return $response;
@@ -147,7 +147,7 @@ class FeatureFlags
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "feature-flags/{$slug}/targets/{$resourceId}",
+            path: 'feature-flags/' . rawurlencode($slug) . '/targets/' . rawurlencode($resourceId),
             options: $options,
         );
     }
@@ -180,7 +180,7 @@ class FeatureFlags
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "organizations/{$organizationId}/feature-flags",
+            path: 'organizations/' . rawurlencode($organizationId) . '/feature-flags',
             query: $query,
             modelClass: Flag::class,
             options: $options,
@@ -215,7 +215,7 @@ class FeatureFlags
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$userId}/feature-flags",
+            path: 'user_management/users/' . rawurlencode($userId) . '/feature-flags',
             query: $query,
             modelClass: Flag::class,
             options: $options,

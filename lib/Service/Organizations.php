@@ -108,7 +108,7 @@ class Organizations
     ): \WorkOS\Resource\Organization {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/external_id/{$externalId}",
+            path: 'organizations/external_id/' . rawurlencode($externalId),
             options: $options,
         );
         return Organization::fromArray($response);
@@ -128,7 +128,7 @@ class Organizations
     ): \WorkOS\Resource\Organization {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             options: $options,
         );
         return Organization::fromArray($response);
@@ -171,7 +171,7 @@ class Organizations
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -192,7 +192,7 @@ class Organizations
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -211,7 +211,7 @@ class Organizations
     ): \WorkOS\Resource\AuditLogConfiguration {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}/audit_log_configuration",
+            path: 'organizations/' . rawurlencode($id) . '/audit_log_configuration',
             options: $options,
         );
         return AuditLogConfiguration::fromArray($response);

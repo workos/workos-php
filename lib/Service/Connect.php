@@ -180,7 +180,7 @@ class Connect
     ): \WorkOS\Resource\ConnectApplication {
         $response = $this->client->request(
             method: 'GET',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             options: $options,
         );
         return ConnectApplication::fromArray($response);
@@ -214,7 +214,7 @@ class Connect
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -235,7 +235,7 @@ class Connect
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -254,7 +254,7 @@ class Connect
     ): array {
         $response = $this->client->request(
             method: 'GET',
-            path: "connect/applications/{$id}/client_secrets",
+            path: 'connect/applications/' . rawurlencode($id) . '/client_secrets',
             options: $options,
         );
         return array_map(fn ($item) => ApplicationCredentialsListItem::fromArray($item), $response);
@@ -276,7 +276,7 @@ class Connect
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "connect/applications/{$id}/client_secrets",
+            path: 'connect/applications/' . rawurlencode($id) . '/client_secrets',
             body: $body,
             options: $options,
         );
@@ -297,7 +297,7 @@ class Connect
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connect/client_secrets/{$id}",
+            path: 'connect/client_secrets/' . rawurlencode($id),
             options: $options,
         );
     }

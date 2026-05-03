@@ -77,7 +77,7 @@ class SSO
     ): \WorkOS\Resource\Connection {
         $response = $this->client->request(
             method: 'GET',
-            path: "connections/{$id}",
+            path: 'connections/' . rawurlencode($id),
             options: $options,
         );
         return Connection::fromArray($response);
@@ -97,7 +97,7 @@ class SSO
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connections/{$id}",
+            path: 'connections/' . rawurlencode($id),
             options: $options,
         );
     }

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-/** The API Key object if the value is valid, or `null` if invalid. */
 readonly class ApiKey implements \JsonSerializable
 {
     use JsonSerializableTrait;

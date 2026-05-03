@@ -6,15 +6,79 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\Resource\ApiKey;
 use WorkOS\Resource\ApiKeyValidationResponse;
-use WorkOS\Resource\ApiKeyWithValue;
+use WorkOS\Resource\OrganizationApiKey;
+use WorkOS\Resource\OrganizationApiKeyWithValue;
 
 class ApiKeys
 {
     public function __construct(
         private readonly \WorkOS\HttpClient $client,
     ) {
+    }
+
+    /**
+     * List API keys for an organization
+     *
+     * Get a list of all API keys for an organization.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\OrganizationApiKey>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listOrganizationApiKeys(
+        string $organizationId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'organizations/' . rawurlencode($organizationId) . '/api_keys',
+            query: $query,
+            modelClass: OrganizationApiKey::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create an API key for an organization
+     *
+     * Create a new API key for an organization.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string $name The name for the API key.
+     * @param array<string>|null $permissions The permission slugs to assign to the API key.
+     * @return \WorkOS\Resource\OrganizationApiKeyWithValue
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createOrganizationApiKey(
+        string $organizationId,
+        string $name,
+        ?array $permissions = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\OrganizationApiKeyWithValue {
+        $body = array_filter([
+            'name' => $name,
+            'permissions' => $permissions,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'organizations/' . rawurlencode($organizationId) . '/api_keys',
+            body: $body,
+            options: $options,
+        );
+        return OrganizationApiKeyWithValue::fromArray($response);
     }
 
     /**
@@ -55,72 +119,8 @@ class ApiKeys
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "api_keys/{$id}",
+            path: 'api_keys/' . rawurlencode($id),
             options: $options,
         );
-    }
-
-    /**
-     * List API keys for an organization
-     *
-     * Get a list of all API keys for an organization.
-     * @param string $organizationId Unique identifier of the Organization.
-     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
-     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ApiKey>
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function listOrganizationApiKeys(
-        string $organizationId,
-        ?string $before = null,
-        ?string $after = null,
-        ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\PaginatedResponse {
-        $query = array_filter([
-            'before' => $before,
-            'after' => $after,
-            'limit' => $limit,
-            'order' => $order->value,
-        ], fn ($v) => $v !== null);
-        return $this->client->requestPage(
-            method: 'GET',
-            path: "organizations/{$organizationId}/api_keys",
-            query: $query,
-            modelClass: ApiKey::class,
-            options: $options,
-        );
-    }
-
-    /**
-     * Create an API key for an organization
-     *
-     * Create a new API key for an organization.
-     * @param string $organizationId Unique identifier of the Organization.
-     * @param string $name The name for the API key.
-     * @param array<string>|null $permissions The permission slugs to assign to the API key.
-     * @return \WorkOS\Resource\ApiKeyWithValue
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function createOrganizationApiKey(
-        string $organizationId,
-        string $name,
-        ?array $permissions = null,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ApiKeyWithValue {
-        $body = array_filter([
-            'name' => $name,
-            'permissions' => $permissions,
-        ], fn ($v) => $v !== null);
-        $response = $this->client->request(
-            method: 'POST',
-            path: "organizations/{$organizationId}/api_keys",
-            body: $body,
-            options: $options,
-        );
-        return ApiKeyWithValue::fromArray($response);
     }
 }

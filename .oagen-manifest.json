@@ -1,7 +1,7 @@
 {
   "version": 2,
   "language": "php",
-  "generatedAt": "2026-04-28T15:07:27.545Z",
+  "generatedAt": "2026-05-03T22:57:49.369Z",
   "files": [
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
@@ -17,8 +17,6 @@
     "lib/Resource/ApiKeyRevokedData.php",
     "lib/Resource/ApiKeyRevokedDataOwner.php",
     "lib/Resource/ApiKeyValidationResponse.php",
-    "lib/Resource/ApiKeyWithValue.php",
-    "lib/Resource/ApiKeyWithValueOwner.php",
     "lib/Resource/ApplicationCredentialsListItem.php",
     "lib/Resource/AssignRole.php",
     "lib/Resource/AuditLogActionJson.php",
@@ -162,6 +160,7 @@
     "lib/Resource/CreateRedirectUri.php",
     "lib/Resource/CreateRole.php",
     "lib/Resource/CreateUser.php",
+    "lib/Resource/CreateUserApiKey.php",
     "lib/Resource/CreateUserInviteOptions.php",
     "lib/Resource/CreateUserInviteOptionsLocale.php",
     "lib/Resource/CreateUserOrganizationMembership.php",
@@ -298,6 +297,10 @@
     "lib/Resource/MagicAuthCreatedData.php",
     "lib/Resource/NewConnectApplicationSecret.php",
     "lib/Resource/Organization.php",
+    "lib/Resource/OrganizationApiKey.php",
+    "lib/Resource/OrganizationApiKeyOwner.php",
+    "lib/Resource/OrganizationApiKeyWithValue.php",
+    "lib/Resource/OrganizationApiKeyWithValueOwner.php",
     "lib/Resource/OrganizationCreated.php",
     "lib/Resource/OrganizationCreatedData.php",
     "lib/Resource/OrganizationCreatedDataDomain.php",
@@ -418,6 +421,10 @@
     "lib/Resource/UpdateUserOrganizationMembership.php",
     "lib/Resource/UpdateWebhookEndpoint.php",
     "lib/Resource/User.php",
+    "lib/Resource/UserApiKey.php",
+    "lib/Resource/UserApiKeyOwner.php",
+    "lib/Resource/UserApiKeyWithValue.php",
+    "lib/Resource/UserApiKeyWithValueOwner.php",
     "lib/Resource/UserAuthenticationFactorEnrollResponse.php",
     "lib/Resource/UserConsentOption.php",
     "lib/Resource/UserConsentOptionChoice.php",
@@ -439,9 +446,11 @@
     "lib/Resource/UserSessionsStatus.php",
     "lib/Resource/UserUpdated.php",
     "lib/Resource/ValidateApiKey.php",
+    "lib/Resource/VaultByokKeyDeleted.php",
+    "lib/Resource/VaultByokKeyDeletedData.php",
+    "lib/Resource/VaultByokKeyDeletedDataKeyProvider.php",
     "lib/Resource/VaultByokKeyVerificationCompleted.php",
     "lib/Resource/VaultByokKeyVerificationCompletedData.php",
-    "lib/Resource/VaultByokKeyVerificationCompletedDataKeyProvider.php",
     "lib/Resource/VaultDataCreated.php",
     "lib/Resource/VaultDataCreatedData.php",
     "lib/Resource/VaultDataDeleted.php",
@@ -518,8 +527,6 @@
     "tests/Fixtures/api_key_revoked_data.json",
     "tests/Fixtures/api_key_revoked_data_owner.json",
     "tests/Fixtures/api_key_validation_response.json",
-    "tests/Fixtures/api_key_with_value.json",
-    "tests/Fixtures/api_key_with_value_owner.json",
     "tests/Fixtures/application_credentials_list_item.json",
     "tests/Fixtures/assign_role.json",
     "tests/Fixtures/audit_log_action_json.json",
@@ -646,6 +653,7 @@
     "tests/Fixtures/create_redirect_uri.json",
     "tests/Fixtures/create_role.json",
     "tests/Fixtures/create_user.json",
+    "tests/Fixtures/create_user_api_key.json",
     "tests/Fixtures/create_user_invite_options.json",
     "tests/Fixtures/create_user_organization_membership.json",
     "tests/Fixtures/create_webhook_endpoint.json",
@@ -760,7 +768,6 @@
     "tests/Fixtures/jwks_response.json",
     "tests/Fixtures/jwks_response_keys.json",
     "tests/Fixtures/jwt_template_response.json",
-    "tests/Fixtures/list_api_key.json",
     "tests/Fixtures/list_audit_log_action_json.json",
     "tests/Fixtures/list_audit_log_schema_json.json",
     "tests/Fixtures/list_authentication_factor.json",
@@ -776,8 +783,10 @@
     "tests/Fixtures/list_flag.json",
     "tests/Fixtures/list_group.json",
     "tests/Fixtures/list_organization.json",
+    "tests/Fixtures/list_organization_api_key.json",
     "tests/Fixtures/list_role_assignment.json",
     "tests/Fixtures/list_user.json",
+    "tests/Fixtures/list_user_api_key.json",
     "tests/Fixtures/list_user_invite.json",
     "tests/Fixtures/list_user_organization_membership.json",
     "tests/Fixtures/list_user_organization_membership_base_list_data.json",
@@ -790,6 +799,10 @@
     "tests/Fixtures/mfa_totp_session_authenticate_request.json",
     "tests/Fixtures/new_connect_application_secret.json",
     "tests/Fixtures/organization.json",
+    "tests/Fixtures/organization_api_key.json",
+    "tests/Fixtures/organization_api_key_owner.json",
+    "tests/Fixtures/organization_api_key_with_value.json",
+    "tests/Fixtures/organization_api_key_with_value_owner.json",
     "tests/Fixtures/organization_created.json",
     "tests/Fixtures/organization_created_data.json",
     "tests/Fixtures/organization_created_data_domain.json",
@@ -897,6 +910,10 @@
     "tests/Fixtures/update_user_organization_membership.json",
     "tests/Fixtures/update_webhook_endpoint.json",
     "tests/Fixtures/user.json",
+    "tests/Fixtures/user_api_key.json",
+    "tests/Fixtures/user_api_key_owner.json",
+    "tests/Fixtures/user_api_key_with_value.json",
+    "tests/Fixtures/user_api_key_with_value_owner.json",
     "tests/Fixtures/user_authentication_factor_enroll_response.json",
     "tests/Fixtures/user_consent_option.json",
     "tests/Fixtures/user_consent_option_choice.json",
@@ -912,6 +929,8 @@
     "tests/Fixtures/user_sessions_list_item.json",
     "tests/Fixtures/user_updated.json",
     "tests/Fixtures/validate_api_key.json",
+    "tests/Fixtures/vault_byok_key_deleted.json",
+    "tests/Fixtures/vault_byok_key_deleted_data.json",
     "tests/Fixtures/vault_byok_key_verification_completed.json",
     "tests/Fixtures/vault_byok_key_verification_completed_data.json",
     "tests/Fixtures/vault_data_created.json",
@@ -962,14 +981,6 @@
     "tests/Service/WidgetsTest.php"
   ],
   "operations": {
-    "POST /api_keys/validations": {
-      "sdkMethod": "createValidation",
-      "service": "apiKeys"
-    },
-    "DELETE /api_keys/{id}": {
-      "sdkMethod": "deleteApiKey",
-      "service": "apiKeys"
-    },
     "POST /auth/challenges/{id}/verify": {
       "sdkMethod": "verifyChallenge",
       "service": "multiFactorAuth"
@@ -1506,6 +1517,10 @@
       "sdkMethod": "revokeInvitation",
       "service": "userManagement"
     },
+    "GET /user_management/jwt_template": {
+      "sdkMethod": "listJWTTemplate",
+      "service": "userManagement"
+    },
     "PUT /user_management/jwt_template": {
       "sdkMethod": "updateJWTTemplate",
       "service": "userManagement"
@@ -1605,6 +1620,22 @@
     "POST /widgets/token": {
       "sdkMethod": "createToken",
       "service": "widgets"
+    },
+    "POST /api_keys/validations": {
+      "sdkMethod": "createValidation",
+      "service": "apiKeys"
+    },
+    "DELETE /api_keys/{id}": {
+      "sdkMethod": "deleteApiKey",
+      "service": "apiKeys"
+    },
+    "GET /user_management/users/{userId}/api_keys": {
+      "sdkMethod": "listUserApiKeys",
+      "service": "userManagement"
+    },
+    "POST /user_management/users/{userId}/api_keys": {
+      "sdkMethod": "createUserApiKey",
+      "service": "userManagement"
     },
     "GET /audit_logs/actions": {
       "sdkMethod": "listActions",
