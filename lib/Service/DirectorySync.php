@@ -73,7 +73,7 @@ class DirectorySync
     ): \WorkOS\Resource\Directory {
         $response = $this->client->request(
             method: 'GET',
-            path: "directories/{$id}",
+            path: 'directories/' . rawurlencode($id),
             options: $options,
         );
         return Directory::fromArray($response);
@@ -93,7 +93,7 @@ class DirectorySync
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "directories/{$id}",
+            path: 'directories/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -151,7 +151,7 @@ class DirectorySync
     ): \WorkOS\Resource\DirectoryGroup {
         $response = $this->client->request(
             method: 'GET',
-            path: "directory_groups/{$id}",
+            path: 'directory_groups/' . rawurlencode($id),
             options: $options,
         );
         return DirectoryGroup::fromArray($response);
@@ -210,7 +210,7 @@ class DirectorySync
     ): \WorkOS\Resource\DirectoryUserWithGroups {
         $response = $this->client->request(
             method: 'GET',
-            path: "directory_users/{$id}",
+            path: 'directory_users/' . rawurlencode($id),
             options: $options,
         );
         return DirectoryUserWithGroups::fromArray($response);

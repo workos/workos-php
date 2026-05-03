@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum VaultByokKeyVerificationCompletedDataKeyProvider: string
+enum VaultByokKeyDeletedDataKeyProvider: string
 {
     case AwsKms = 'AWS_KMS';
     case GcpKms = 'GCP_KMS';

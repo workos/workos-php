@@ -43,7 +43,7 @@ class UserManagementOrganizationMembershipGroups
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/organization_memberships/{$omId}/groups",
+            path: 'user_management/organization_memberships/' . rawurlencode($omId) . '/groups',
             query: $query,
             modelClass: Group::class,
             options: $options,

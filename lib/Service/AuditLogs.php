@@ -33,7 +33,7 @@ class AuditLogs
     ): \WorkOS\Resource\AuditLogsRetentionJson {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}/audit_logs_retention",
+            path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',
             options: $options,
         );
         return AuditLogsRetentionJson::fromArray($response);
@@ -58,7 +58,7 @@ class AuditLogs
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "organizations/{$id}/audit_logs_retention",
+            path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',
             body: $body,
             options: $options,
         );
@@ -126,7 +126,7 @@ class AuditLogs
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "audit_logs/actions/{$actionName}/schemas",
+            path: 'audit_logs/actions/' . rawurlencode($actionName) . '/schemas',
             query: $query,
             modelClass: AuditLogSchemaJson::class,
             options: $options,
@@ -158,7 +158,7 @@ class AuditLogs
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "audit_logs/actions/{$actionName}/schemas",
+            path: 'audit_logs/actions/' . rawurlencode($actionName) . '/schemas',
             body: $body,
             options: $options,
         );
@@ -257,7 +257,7 @@ class AuditLogs
     ): \WorkOS\Resource\AuditLogExportJson {
         $response = $this->client->request(
             method: 'GET',
-            path: "audit_logs/exports/{$auditLogExportId}",
+            path: 'audit_logs/exports/' . rawurlencode($auditLogExportId),
             options: $options,
         );
         return AuditLogExportJson::fromArray($response);

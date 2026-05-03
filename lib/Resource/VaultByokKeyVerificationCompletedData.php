@@ -15,7 +15,7 @@ readonly class VaultByokKeyVerificationCompletedData implements \JsonSerializabl
         /** The unique identifier of the organization. */
         public string $organizationId,
         /** The external key provider used for BYOK. */
-        public VaultByokKeyVerificationCompletedDataKeyProvider $keyProvider,
+        public VaultByokKeyDeletedDataKeyProvider $keyProvider,
         /** Whether the BYOK key verification completed successfully. */
         public bool $verified,
     ) {
@@ -25,7 +25,7 @@ readonly class VaultByokKeyVerificationCompletedData implements \JsonSerializabl
     {
         return new self(
             organizationId: $data['organization_id'],
-            keyProvider: VaultByokKeyVerificationCompletedDataKeyProvider::from($data['key_provider']),
+            keyProvider: VaultByokKeyDeletedDataKeyProvider::from($data['key_provider']),
             verified: $data['verified'],
         );
     }

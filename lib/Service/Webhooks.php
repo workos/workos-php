@@ -100,7 +100,7 @@ class Webhooks
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "webhook_endpoints/{$id}",
+            path: 'webhook_endpoints/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -121,7 +121,7 @@ class Webhooks
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "webhook_endpoints/{$id}",
+            path: 'webhook_endpoints/' . rawurlencode($id),
             options: $options,
         );
     }

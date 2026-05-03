@@ -80,7 +80,7 @@ class Radar
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
-            path: "radar/attempts/{$id}",
+            path: 'radar/attempts/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -108,7 +108,7 @@ class Radar
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "radar/lists/{$type->value}/{$action->value}",
+            path: 'radar/lists/' . rawurlencode($type->value) . '/' . rawurlencode($action->value),
             body: $body,
             options: $options,
         );
@@ -136,7 +136,7 @@ class Radar
         ];
         $this->client->request(
             method: 'DELETE',
-            path: "radar/lists/{$type->value}/{$action->value}",
+            path: 'radar/lists/' . rawurlencode($type->value) . '/' . rawurlencode($action->value),
             body: $body,
             options: $options,
         );

@@ -49,7 +49,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/check",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/check',
             body: $body,
             options: $options,
         );
@@ -97,7 +97,7 @@ class Authorization
         }
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources',
             query: $query,
             modelClass: AuthorizationResource::class,
             options: $options,
@@ -134,7 +134,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceId}/permissions",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources/' . rawurlencode($resourceId) . '/permissions',
             query: $query,
             modelClass: AuthorizationPermission::class,
             options: $options,
@@ -173,7 +173,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceTypeSlug}/{$externalId}/permissions",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId) . '/permissions',
             query: $query,
             modelClass: AuthorizationPermission::class,
             options: $options,
@@ -208,7 +208,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             query: $query,
             modelClass: RoleAssignment::class,
             options: $options,
@@ -242,7 +242,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             body: $body,
             options: $options,
         );
@@ -276,7 +276,7 @@ class Authorization
         }
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             body: $body,
             options: $options,
         );
@@ -298,7 +298,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments/{$roleAssignmentId}",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments/' . rawurlencode($roleAssignmentId),
             options: $options,
         );
     }
@@ -317,7 +317,7 @@ class Authorization
     ): \WorkOS\Resource\RoleList {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/roles",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles',
             options: $options,
         );
         return RoleList::fromArray($response);
@@ -351,7 +351,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organizations/{$organizationId}/roles",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles',
             body: $body,
             options: $options,
         );
@@ -374,7 +374,7 @@ class Authorization
     ): \WorkOS\Resource\Role {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             options: $options,
         );
         return Role::fromArray($response);
@@ -404,7 +404,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -427,7 +427,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             options: $options,
         );
     }
@@ -453,7 +453,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -481,7 +481,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -506,7 +506,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions/{$permissionSlug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions/' . rawurlencode($permissionSlug),
             options: $options,
         );
     }
@@ -529,7 +529,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationResource {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             options: $options,
         );
         return AuthorizationResource::fromArray($response);
@@ -569,7 +569,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             body: $body,
             options: $options,
         );
@@ -599,7 +599,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             query: $query,
             options: $options,
         );
@@ -643,7 +643,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}/organization_memberships",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId) . '/organization_memberships',
             query: $query,
             modelClass: UserOrganizationMembershipBaseListData::class,
             options: $options,
@@ -761,7 +761,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationResource {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             options: $options,
         );
         return AuthorizationResource::fromArray($response);
@@ -797,7 +797,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             body: $body,
             options: $options,
         );
@@ -823,7 +823,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             query: $query,
             options: $options,
         );
@@ -863,7 +863,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/resources/{$resourceId}/organization_memberships",
+            path: 'authorization/resources/' . rawurlencode($resourceId) . '/organization_memberships',
             query: $query,
             modelClass: UserOrganizationMembershipBaseListData::class,
             options: $options,
@@ -935,7 +935,7 @@ class Authorization
     ): \WorkOS\Resource\Role {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/roles/{$slug}",
+            path: 'authorization/roles/' . rawurlencode($slug),
             options: $options,
         );
         return Role::fromArray($response);
@@ -963,7 +963,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/roles/{$slug}",
+            path: 'authorization/roles/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -989,7 +989,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/roles/{$slug}/permissions",
+            path: 'authorization/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -1015,7 +1015,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "authorization/roles/{$slug}/permissions",
+            path: 'authorization/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -1102,7 +1102,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationPermission {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             options: $options,
         );
         return AuthorizationPermission::fromArray($response);
@@ -1130,7 +1130,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -1151,7 +1151,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             options: $options,
         );
     }

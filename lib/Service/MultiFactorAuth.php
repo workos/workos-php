@@ -38,7 +38,7 @@ class MultiFactorAuth
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "auth/challenges/{$id}/verify",
+            path: 'auth/challenges/' . rawurlencode($id) . '/verify',
             body: $body,
             options: $options,
         );
@@ -95,7 +95,7 @@ class MultiFactorAuth
     ): \WorkOS\Resource\AuthenticationFactor {
         $response = $this->client->request(
             method: 'GET',
-            path: "auth/factors/{$id}",
+            path: 'auth/factors/' . rawurlencode($id),
             options: $options,
         );
         return AuthenticationFactor::fromArray($response);
@@ -115,7 +115,7 @@ class MultiFactorAuth
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "auth/factors/{$id}",
+            path: 'auth/factors/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -139,7 +139,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "auth/factors/{$id}/challenge",
+            path: 'auth/factors/' . rawurlencode($id) . '/challenge',
             body: $body,
             options: $options,
         );
@@ -174,7 +174,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$userlandUserId}/auth_factors",
+            path: 'user_management/users/' . rawurlencode($userlandUserId) . '/auth_factors',
             query: $query,
             modelClass: AuthenticationFactor::class,
             options: $options,
@@ -209,7 +209,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$userlandUserId}/auth_factors",
+            path: 'user_management/users/' . rawurlencode($userlandUserId) . '/auth_factors',
             body: $body,
             options: $options,
         );
