@@ -57,7 +57,7 @@ class OrganizationDomains
     ): \WorkOS\Resource\OrganizationDomainStandAlone {
         $response = $this->client->request(
             method: 'GET',
-            path: "organization_domains/{$id}",
+            path: 'organization_domains/' . rawurlencode($id),
             options: $options,
         );
         return OrganizationDomainStandAlone::fromArray($response);
@@ -77,7 +77,7 @@ class OrganizationDomains
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "organization_domains/{$id}",
+            path: 'organization_domains/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -96,7 +96,7 @@ class OrganizationDomains
     ): \WorkOS\Resource\OrganizationDomainStandAlone {
         $response = $this->client->request(
             method: 'POST',
-            path: "organization_domains/{$id}/verify",
+            path: 'organization_domains/' . rawurlencode($id) . '/verify',
             options: $options,
         );
         return OrganizationDomainStandAlone::fromArray($response);

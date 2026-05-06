@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Resource;
 
 /** The entity that owns the API Key. */
-readonly class ApiKeyWithValueOwner implements \JsonSerializable
+readonly class OrganizationApiKeyWithValueOwner implements \JsonSerializable
 {
     use JsonSerializableTrait;
 

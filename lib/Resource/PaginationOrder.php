@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum EventsOrder: string
+enum PaginationOrder: string
 {
     case Normal = 'normal';
     case Desc = 'desc';

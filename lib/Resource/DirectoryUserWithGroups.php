@@ -41,7 +41,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
         /**
-         * The directory groups the user belongs to. Use the List Directory Groups endpoint with a user filter instead.
+         * The directory groups the user belongs to. Deprecated: starting May 1, 2026, this field returns an empty array by default for newly created teams. Existing teams currently depending on this field should migrate to the new access pattern for better throughput performance — the field is unbounded by user, so users with many group memberships produce large, slow response payloads. Use the List Directory Groups endpoint with a `user` filter to fetch a user's group memberships.
          * @var array<\WorkOS\Resource\DirectoryGroup>
          * @deprecated
          */
@@ -50,6 +50,8 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         public ?string $firstName = null,
         /** The last name of the user. */
         public ?string $lastName = null,
+        /** The full name of the user. */
+        public ?string $name = null,
         /**
          * A list of email addresses for the user.
          * @var array<\WorkOS\Resource\DirectoryUserWithGroupsEmail>|null
@@ -92,6 +94,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             groups: array_map(fn ($item) => DirectoryGroup::fromArray($item), $data['groups']),
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
+            name: $data['name'] ?? null,
             emails: isset($data['emails']) ? array_map(fn ($item) => DirectoryUserWithGroupsEmail::fromArray($item), $data['emails']) : null,
             jobTitle: $data['job_title'] ?? null,
             username: $data['username'] ?? null,
@@ -117,6 +120,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             'groups' => array_map(fn ($item) => $item->toArray(), $this->groups),
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
+            'name' => $this->name,
             'emails' => $this->emails !== null ? array_map(fn ($item) => $item->toArray(), $this->emails) : null,
             'job_title' => $this->jobTitle,
             'username' => $this->username,

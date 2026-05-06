@@ -17,7 +17,7 @@ class EventsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_event_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->events()->listEvents(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, events: [], rangeStart: 'test_value', rangeEnd: 'test_value', organizationId: 'test_value');
+        $result = $client->events()->listEvents(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, events: [], rangeStart: 'test_value', rangeEnd: 'test_value', organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

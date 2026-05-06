@@ -44,6 +44,8 @@ readonly class DirectoryUser implements \JsonSerializable
         public ?string $firstName = null,
         /** The last name of the user. */
         public ?string $lastName = null,
+        /** The full name of the user. */
+        public ?string $name = null,
         /**
          * A list of email addresses for the user.
          * @var array<\WorkOS\Resource\DirectoryUserEmail>|null
@@ -85,6 +87,7 @@ readonly class DirectoryUser implements \JsonSerializable
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
+            name: $data['name'] ?? null,
             emails: isset($data['emails']) ? array_map(fn ($item) => DirectoryUserEmail::fromArray($item), $data['emails']) : null,
             jobTitle: $data['job_title'] ?? null,
             username: $data['username'] ?? null,
@@ -109,6 +112,7 @@ readonly class DirectoryUser implements \JsonSerializable
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
+            'name' => $this->name,
             'emails' => $this->emails !== null ? array_map(fn ($item) => $item->toArray(), $this->emails) : null,
             'job_title' => $this->jobTitle,
             'username' => $this->username,

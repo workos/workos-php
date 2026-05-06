@@ -29,6 +29,8 @@ readonly class Profile implements \JsonSerializable
         public ?string $firstName,
         /** The user's last name. */
         public ?string $lastName,
+        /** The user's full name. */
+        public ?string $name,
         /**
          * The complete set of raw attributes returned by the identity provider.
          * @var array<string, mixed>
@@ -66,6 +68,7 @@ readonly class Profile implements \JsonSerializable
             email: $data['email'],
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
+            name: $data['name'] ?? null,
             rawAttributes: $data['raw_attributes'],
             role: isset($data['role']) ? SlimRole::fromArray($data['role']) : null,
             roles: isset($data['roles']) ? array_map(fn ($item) => SlimRole::fromArray($item), $data['roles']) : null,
@@ -86,6 +89,7 @@ readonly class Profile implements \JsonSerializable
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
+            'name' => $this->name,
             'raw_attributes' => $this->rawAttributes,
             'role' => $this->role?->toArray(),
             'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,

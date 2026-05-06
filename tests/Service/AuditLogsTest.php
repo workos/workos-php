@@ -43,7 +43,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_audit_log_action_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listActions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->auditLogs()->listActions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -59,7 +59,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_audit_log_schema_json');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listActionSchemas('test_actionName', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->auditLogs()->listActionSchemas('test_actionName', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

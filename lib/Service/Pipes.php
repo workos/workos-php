@@ -43,7 +43,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "data-integrations/{$slug}/authorize",
+            path: 'data-integrations/' . rawurlencode($slug) . '/authorize',
             body: $body,
             options: $options,
         );
@@ -72,7 +72,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "data-integrations/{$slug}/token",
+            path: 'data-integrations/' . rawurlencode($slug) . '/token',
             body: $body,
             options: $options,
         );
@@ -100,7 +100,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/users/{$userId}/connected_accounts/{$slug}",
+            path: 'user_management/users/' . rawurlencode($userId) . '/connected_accounts/' . rawurlencode($slug),
             query: $query,
             options: $options,
         );
@@ -128,7 +128,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
-            path: "user_management/users/{$userId}/connected_accounts/{$slug}",
+            path: 'user_management/users/' . rawurlencode($userId) . '/connected_accounts/' . rawurlencode($slug),
             query: $query,
             options: $options,
         );
@@ -153,7 +153,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/users/{$userId}/data_providers",
+            path: 'user_management/users/' . rawurlencode($userId) . '/data_providers',
             query: $query,
             options: $options,
         );

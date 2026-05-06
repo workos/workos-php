@@ -161,7 +161,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organization: 'test_value', organizationId: 'test_value', email: 'test_value');
+        $result = $client->userManagement()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organization: 'test_value', organizationId: 'test_value', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -316,7 +316,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_sessions_list_item');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listSessions('test_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->userManagement()->listSessions('test_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -332,7 +332,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_invite');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listInvitations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', email: 'test_value');
+        $result = $client->userManagement()->listInvitations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -432,6 +432,19 @@ class UserManagementTest extends TestCase
         $this->assertStringEndsWith('user_management/invitations/test_id/revoke', $request->getUri()->getPath());
     }
 
+    public function testListJWTTemplate(): void
+    {
+        $fixture = $this->loadFixture('jwt_template_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listJWTTemplate();
+        $this->assertInstanceOf(\WorkOS\Resource\JWTTemplateResponse::class, $result);
+        $this->assertSame($fixture['content'], $result->content);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/jwt_template', $request->getUri()->getPath());
+    }
+
     public function testUpdateJWTTemplate(): void
     {
         $fixture = $this->loadFixture('jwt_template_response');
@@ -481,7 +494,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listOrganizationMemberships(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', statuses: [], userId: 'test_value');
+        $result = $client->userManagement()->listOrganizationMemberships(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', statuses: [], userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -597,7 +610,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authorized_connect_application_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUserAuthorizedApplications('test_user_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->userManagement()->listUserAuthorizedApplications('test_user_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -616,6 +629,40 @@ class UserManagementTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_user_id/authorized_applications/test_application_id', $request->getUri()->getPath());
+    }
+
+    public function testListUserApiKeys(): void
+    {
+        $fixture = $this->loadFixture('list_user_api_key');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listUserApiKeys('test_userId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/users/test_userId/api_keys', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['organization_id']);
+    }
+
+    public function testCreateUserApiKey(): void
+    {
+        $fixture = $this->loadFixture('user_api_key_with_value');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createUserApiKey('test_userId', name: 'test_value', organizationId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\UserApiKeyWithValue::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/users/test_userId/api_keys', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['name']);
+        $this->assertSame('test_value', $body['organization_id']);
     }
 
     public function testAuthenticateWithPassword(): void

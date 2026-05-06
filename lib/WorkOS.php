@@ -51,7 +51,6 @@ class WorkOS
     {
         self::$clientId = $id;
     }
-    private ?Service\ApiKeys $apiKeys = null;
     private ?Service\MultiFactorAuth $multiFactorAuth = null;
     private ?Service\Connect $connect = null;
     private ?Service\Authorization $authorization = null;
@@ -62,6 +61,7 @@ class WorkOS
     private ?Service\FeatureFlags $featureFlags = null;
     private ?Service\OrganizationDomains $organizationDomains = null;
     private ?Service\Organizations $organizations = null;
+    private ?Service\ApiKeys $apiKeys = null;
     private ?Service\Groups $groups = null;
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
@@ -83,11 +83,6 @@ class WorkOS
         $apiKey ??= getenv('WORKOS_API_KEY') ?: self::$apiKey ?? '';
         $clientId ??= getenv('WORKOS_CLIENT_ID') ?: self::$clientId;
         $this->httpClient = new HttpClient($apiKey, $clientId, $baseUrl, $timeout, $maxRetries, $handler, $userAgent);
-    }
-
-    public function apiKeys(): ApiKeys
-    {
-        return $this->apiKeys ??= new Service\ApiKeys($this->httpClient);
     }
 
     public function multiFactorAuth(): MultiFactorAuth
@@ -138,6 +133,11 @@ class WorkOS
     public function organizations(): Organizations
     {
         return $this->organizations ??= new Service\Organizations($this->httpClient);
+    }
+
+    public function apiKeys(): ApiKeys
+    {
+        return $this->apiKeys ??= new Service\ApiKeys($this->httpClient);
     }
 
     public function groups(): Groups

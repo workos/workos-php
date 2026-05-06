@@ -17,7 +17,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listOrganizationGroups('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->groups()->listOrganizationGroups('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -86,7 +86,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listGroupOrganizationMemberships('test_organizationId', 'test_groupId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->groups()->listGroupOrganizationMemberships('test_organizationId', 'test_groupId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

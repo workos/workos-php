@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class ApiKeyWithValue implements \JsonSerializable
+readonly class UserApiKeyWithValue implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -16,7 +16,7 @@ readonly class ApiKeyWithValue implements \JsonSerializable
         /** Unique identifier of the API Key. */
         public string $id,
         /** The entity that owns the API Key. */
-        public ApiKeyWithValueOwner $owner,
+        public UserApiKeyWithValueOwner $owner,
         /** A descriptive name for the API Key. */
         public string $name,
         /** An obfuscated representation of the API Key value. */
@@ -42,7 +42,7 @@ readonly class ApiKeyWithValue implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
-            owner: ApiKeyWithValueOwner::fromArray($data['owner']),
+            owner: UserApiKeyWithValueOwner::fromArray($data['owner']),
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
             lastUsedAt: isset($data['last_used_at']) ? new \DateTimeImmutable($data['last_used_at']) : null,

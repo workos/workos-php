@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class RoleAssignment implements \JsonSerializable
+readonly class UserRoleAssignment implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -15,10 +15,12 @@ readonly class RoleAssignment implements \JsonSerializable
         public string $object,
         /** Unique identifier of the role assignment. */
         public string $id,
+        /** The ID of the organization membership the role is assigned to. */
+        public string $organizationMembershipId,
         /** The role included in the assignment. */
         public SlimRole $role,
-        /** The resource to which the role is assigned. */
-        public RoleAssignmentResource $resource,
+        /** The resource the role is assigned on. */
+        public UserRoleAssignmentResource $resource,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -31,8 +33,9 @@ readonly class RoleAssignment implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'role_assignment',
             id: $data['id'],
+            organizationMembershipId: $data['organization_membership_id'],
             role: SlimRole::fromArray($data['role']),
-            resource: RoleAssignmentResource::fromArray($data['resource']),
+            resource: UserRoleAssignmentResource::fromArray($data['resource']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
@@ -43,6 +46,7 @@ readonly class RoleAssignment implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
+            'organization_membership_id' => $this->organizationMembershipId,
             'role' => $this->role->toArray(),
             'resource' => $this->resource->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),

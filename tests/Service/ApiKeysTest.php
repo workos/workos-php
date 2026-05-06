@@ -13,6 +13,38 @@ class ApiKeysTest extends TestCase
 {
     use TestHelper;
 
+    public function testListOrganizationApiKeys(): void
+    {
+        $fixture = $this->loadFixture('list_organization_api_key');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testCreateOrganizationApiKey(): void
+    {
+        $fixture = $this->loadFixture('organization_api_key_with_value');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->apiKeys()->createOrganizationApiKey('test_organizationId', name: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\OrganizationApiKeyWithValue::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['name']);
+    }
+
     public function testCreateValidation(): void
     {
         $fixture = $this->loadFixture('api_key_validation_response');
@@ -36,41 +68,9 @@ class ApiKeysTest extends TestCase
         $this->assertStringEndsWith('api_keys/test_id', $request->getUri()->getPath());
     }
 
-    public function testListOrganizationApiKeys(): void
-    {
-        $fixture = $this->loadFixture('list_api_key');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
-        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
-        parse_str($request->getUri()->getQuery(), $query);
-        $this->assertSame('test_value', $query['before']);
-        $this->assertSame('test_value', $query['after']);
-        $this->assertArrayHasKey('limit', $query);
-        $this->assertSame('normal', $query['order']);
-    }
-
-    public function testCreateOrganizationApiKey(): void
-    {
-        $fixture = $this->loadFixture('api_key_with_value');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->createOrganizationApiKey('test_organizationId', name: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\ApiKeyWithValue::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['name'], $result->name);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('POST', $request->getMethod());
-        $this->assertStringEndsWith('organizations/test_organizationId/api_keys', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['name']);
-    }
-
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_api_key');
+        $fixture = $this->loadFixture('list_organization_api_key');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;

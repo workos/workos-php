@@ -17,7 +17,7 @@ class UserManagementOrganizationMembershipGroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagementOrganizationMembershipGroups()->listOrganizationMembershipGroups('test_omId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->userManagementOrganizationMembershipGroups()->listOrganizationMembershipGroups('test_omId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
