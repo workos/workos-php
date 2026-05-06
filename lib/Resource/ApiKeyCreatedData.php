@@ -42,7 +42,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
             owner: match ($data['owner']['type'] ?? null) {
-                'organization' => ApiKeyCreatedDataOwner::fromArray($data['owner']), 'user' => UserApiKeyCreatedDataOwner::fromArray($data['owner']), default => $data['owner']
+                'organization' => ApiKeyCreatedDataOwner::fromArray($data['owner']), 'user' => UserApiKeyCreatedDataOwner::fromArray($data['owner']), default => throw new \UnexpectedValueException(sprintf('Unknown type: %s', json_encode($data['owner']['type'] ?? null)))
             },
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
@@ -58,7 +58,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner,
+            'owner' => $this->owner->toArray(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,

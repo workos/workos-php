@@ -23,7 +23,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -160,7 +160,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -195,7 +195,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
