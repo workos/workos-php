@@ -19,6 +19,7 @@ jobs:
         with:
           php-version: '8.2'
           tools: composer
+      - run: composer install --no-interaction --no-progress
       - run: ./script/docs
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Archive site
