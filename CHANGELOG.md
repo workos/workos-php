@@ -1,5 +1,33 @@
 # Changelog
 
+## [6.0.0](https://github.com/workos/workos-php/compare/5.2.1...6.0.0) (2026-05-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **user_management:** Add user API keys and update ordering enum
+* **api_keys:** Restructure API key models and rename ordering enum
+* **vault:** Rename BYOK key provider enum and add vault key deleted event
+* **authorization:** Rename RoleAssignment to UserRoleAssignment
+
+### Features
+
+* Add API docs generation and llms.txt index ([#382](https://github.com/workos/workos-php/issues/382)) ([ae03f03](https://github.com/workos/workos-php/commit/ae03f03a671b5ec9ec1d569457c96dca9aca6cc7))
+* **api_keys:** Restructure API key models and rename ordering enum ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **authorization:** Rename EventsOrder to PaginationOrder ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **authorization:** Rename RoleAssignment to UserRoleAssignment ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **directory_sync:** Add name field to directory users ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **sso:** Add full name support to user profiles ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **user_management:** Add user API keys and update ordering enum ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **user_management:** Add user context to organization memberships ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+* **vault:** Rename BYOK key provider enum and add vault key deleted event ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+
+
+### Bug Fixes
+
+* **ci:** install composer deps before building docs ([8f439e3](https://github.com/workos/workos-php/commit/8f439e3283f7f51cbe883f0871a28dc3142e6c9f))
+* **events:** Add admin_portal to actor source enum ([1bb2fe4](https://github.com/workos/workos-php/commit/1bb2fe4ba91575bc0db7eb056fd48f10c6653be1))
+
 ## [5.2.1](https://github.com/workos/workos-php/compare/5.2.0...5.2.1) (2026-04-28)
 
 
