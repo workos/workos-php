@@ -17,7 +17,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         /** Unique identifier of the API key. */
         public string $id,
         /** The owner of the API key. */
-        public ApiKeyCreatedDataOwner $owner,
+        public ApiKeyCreatedDataOwner|UserApiKeyCreatedDataOwner $owner,
         /** The name of the API key. */
         public string $name,
         /** The obfuscated value of the API key. */
@@ -41,7 +41,9 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
-            owner: ApiKeyCreatedDataOwner::fromArray($data['owner']),
+            owner: match ($data['owner']['type'] ?? null) {
+                'organization' => ApiKeyCreatedDataOwner::fromArray($data['owner']), 'user' => UserApiKeyCreatedDataOwner::fromArray($data['owner']), default => $data['owner']
+            },
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
             lastUsedAt: $data['last_used_at'] ?? null,
@@ -56,7 +58,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner,
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,

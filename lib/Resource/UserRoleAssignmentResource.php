@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-/** The resource to which the role is assigned. */
-readonly class RoleAssignmentResource implements \JsonSerializable
+/** The resource the role is assigned on. */
+readonly class UserRoleAssignmentResource implements \JsonSerializable
 {
     use JsonSerializableTrait;
 

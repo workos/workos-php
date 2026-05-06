@@ -33,7 +33,7 @@ class AuditLogs
     ): \WorkOS\Resource\AuditLogsRetentionJson {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}/audit_logs_retention",
+            path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',
             options: $options,
         );
         return AuditLogsRetentionJson::fromArray($response);
@@ -58,7 +58,7 @@ class AuditLogs
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "organizations/{$id}/audit_logs_retention",
+            path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',
             body: $body,
             options: $options,
         );
@@ -72,7 +72,7 @@ class AuditLogs
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogActionJson>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -80,7 +80,7 @@ class AuditLogs
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -106,7 +106,7 @@ class AuditLogs
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogSchemaJson>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -115,7 +115,7 @@ class AuditLogs
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -126,7 +126,7 @@ class AuditLogs
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "audit_logs/actions/{$actionName}/schemas",
+            path: 'audit_logs/actions/' . rawurlencode($actionName) . '/schemas',
             query: $query,
             modelClass: AuditLogSchemaJson::class,
             options: $options,
@@ -158,7 +158,7 @@ class AuditLogs
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "audit_logs/actions/{$actionName}/schemas",
+            path: 'audit_logs/actions/' . rawurlencode($actionName) . '/schemas',
             body: $body,
             options: $options,
         );
@@ -257,7 +257,7 @@ class AuditLogs
     ): \WorkOS\Resource\AuditLogExportJson {
         $response = $this->client->request(
             method: 'GET',
-            path: "audit_logs/exports/{$auditLogExportId}",
+            path: 'audit_logs/exports/' . rawurlencode($auditLogExportId),
             options: $options,
         );
         return AuditLogExportJson::fromArray($response);

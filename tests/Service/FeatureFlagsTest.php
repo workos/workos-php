@@ -17,7 +17,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listFeatureFlags(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->featureFlags()->listFeatureFlags(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -93,7 +93,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listOrganizationFeatureFlags('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->featureFlags()->listOrganizationFeatureFlags('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -109,7 +109,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listUserFeatureFlags('test_userId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->featureFlags()->listUserFeatureFlags('test_userId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

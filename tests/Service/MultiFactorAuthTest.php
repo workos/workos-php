@@ -80,7 +80,7 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authentication_factor');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal);
+        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

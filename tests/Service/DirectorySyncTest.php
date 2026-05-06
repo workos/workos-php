@@ -17,7 +17,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listDirectories(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, organizationId: 'test_value', search: 'test_value', domain: 'test_value');
+        $result = $client->directorySync()->listDirectories(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', search: 'test_value', domain: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -59,7 +59,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listGroups(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', user: 'test_value');
+        $result = $client->directorySync()->listGroups(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, directory: 'test_value', user: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -91,7 +91,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\EventsOrder::Normal, directory: 'test_value', group: 'test_value');
+        $result = $client->directorySync()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, directory: 'test_value', group: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

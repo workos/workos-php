@@ -38,7 +38,7 @@ class MultiFactorAuth
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "auth/challenges/{$id}/verify",
+            path: 'auth/challenges/' . rawurlencode($id) . '/verify',
             body: $body,
             options: $options,
         );
@@ -95,7 +95,7 @@ class MultiFactorAuth
     ): \WorkOS\Resource\AuthenticationFactor {
         $response = $this->client->request(
             method: 'GET',
-            path: "auth/factors/{$id}",
+            path: 'auth/factors/' . rawurlencode($id),
             options: $options,
         );
         return AuthenticationFactor::fromArray($response);
@@ -115,7 +115,7 @@ class MultiFactorAuth
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "auth/factors/{$id}",
+            path: 'auth/factors/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -139,7 +139,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "auth/factors/{$id}/challenge",
+            path: 'auth/factors/' . rawurlencode($id) . '/challenge',
             body: $body,
             options: $options,
         );
@@ -154,7 +154,7 @@ class MultiFactorAuth
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthenticationFactor>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -163,7 +163,7 @@ class MultiFactorAuth
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -174,7 +174,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$userlandUserId}/auth_factors",
+            path: 'user_management/users/' . rawurlencode($userlandUserId) . '/auth_factors',
             query: $query,
             modelClass: AuthenticationFactor::class,
             options: $options,
@@ -209,7 +209,7 @@ class MultiFactorAuth
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$userlandUserId}/auth_factors",
+            path: 'user_management/users/' . rawurlencode($userlandUserId) . '/auth_factors',
             body: $body,
             options: $options,
         );

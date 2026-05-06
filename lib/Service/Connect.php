@@ -64,7 +64,7 @@ class Connect
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId Filter Connect Applications by organization ID.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ConnectApplication>
      * @throws \WorkOS\Exception\WorkOSException
@@ -73,7 +73,7 @@ class Connect
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -180,7 +180,7 @@ class Connect
     ): \WorkOS\Resource\ConnectApplication {
         $response = $this->client->request(
             method: 'GET',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             options: $options,
         );
         return ConnectApplication::fromArray($response);
@@ -214,7 +214,7 @@ class Connect
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -235,7 +235,7 @@ class Connect
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connect/applications/{$id}",
+            path: 'connect/applications/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -254,7 +254,7 @@ class Connect
     ): array {
         $response = $this->client->request(
             method: 'GET',
-            path: "connect/applications/{$id}/client_secrets",
+            path: 'connect/applications/' . rawurlencode($id) . '/client_secrets',
             options: $options,
         );
         return array_map(fn ($item) => ApplicationCredentialsListItem::fromArray($item), $response);
@@ -276,7 +276,7 @@ class Connect
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "connect/applications/{$id}/client_secrets",
+            path: 'connect/applications/' . rawurlencode($id) . '/client_secrets',
             body: $body,
             options: $options,
         );
@@ -297,7 +297,7 @@ class Connect
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connect/client_secrets/{$id}",
+            path: 'connect/client_secrets/' . rawurlencode($id),
             options: $options,
         );
     }

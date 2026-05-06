@@ -25,7 +25,7 @@ class SSO
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @param \WorkOS\Resource\ConnectionsConnectionType|null $connectionType Filter Connections by their type.
      * @param string|null $domain Filter Connections by their associated domain.
      * @param string|null $organizationId Filter Connections by their associated organization.
@@ -37,7 +37,7 @@ class SSO
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\Resource\ConnectionsConnectionType $connectionType = null,
         ?string $domain = null,
         ?string $organizationId = null,
@@ -77,7 +77,7 @@ class SSO
     ): \WorkOS\Resource\Connection {
         $response = $this->client->request(
             method: 'GET',
-            path: "connections/{$id}",
+            path: 'connections/' . rawurlencode($id),
             options: $options,
         );
         return Connection::fromArray($response);
@@ -97,7 +97,7 @@ class SSO
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "connections/{$id}",
+            path: 'connections/' . rawurlencode($id),
             options: $options,
         );
     }
