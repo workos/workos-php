@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+PHPDOC_PHAR="bin/phpDocumentor.phar"
+if [ ! -f "$PHPDOC_PHAR" ]; then
+  mkdir -p bin
+  # Pin a recent stable version; check https://github.com/phpDocumentor/phpDocumentor/releases for latest
+  curl -fsSL -o "$PHPDOC_PHAR" "https://phpdoc.org/phpDocumentor.phar"
+  chmod +x "$PHPDOC_PHAR"
+fi
+rm -rf docs/_site
+
+# Pass 1: HTML output via the default template.
+php "$PHPDOC_PHAR" --config phpdoc.dist.xml
+
+# Pass 2: Markdown output alongside HTML for AI agents that want
+# parallel `.md` files. Uses the saggre/phpdocumentor-markdown
+# community template (require-dev). The markdown files are written
+# alongside the HTML in docs/_site/ — same paths, different extensions.
+MD_TEMPLATE="vendor/saggre/phpdocumentor-markdown/themes/markdown"
+if [ ! -d "$MD_TEMPLATE" ]; then
+  echo "Markdown template missing. Run 'composer install' first." >&2
+  exit 1
+fi
+php "$PHPDOC_PHAR" --config phpdoc.dist.xml --template="$MD_TEMPLATE"

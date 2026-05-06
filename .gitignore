@@ -9,3 +9,8 @@ vendor/
 
 # IDEs
 .idea/
+
+# API docs
+docs/_site/
+bin/phpDocumentor.phar
+.phpdoc/
