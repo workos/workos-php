@@ -1,0 +1,62 @@
+#!/bin/sh
+set -eu
+cd "$(dirname "$0")/.."
+PHPDOC_PHAR="bin/phpDocumentor.phar"
+if [ ! -f "$PHPDOC_PHAR" ]; then
+  mkdir -p bin
+  # Pin a recent stable version; check https://github.com/phpDocumentor/phpDocumentor/releases for latest
+  curl -fsSL -o "$PHPDOC_PHAR" "https://phpdoc.org/phpDocumentor.phar"
+  chmod +x "$PHPDOC_PHAR"
+fi
+rm -rf docs/_site
+
+# Pass 1: HTML output via the default template.
+php "$PHPDOC_PHAR" --config phpdoc.dist.xml
+
+# Pass 2: Markdown output alongside HTML for AI agents that want
+# parallel `.md` files. Uses the saggre/phpdocumentor-markdown
+# community template (require-dev). The markdown files are written
+# alongside the HTML in docs/_site/ — same paths, different extensions.
+MD_TEMPLATE="vendor/saggre/phpdocumentor-markdown/themes/markdown"
+if [ ! -d "$MD_TEMPLATE" ]; then
+  echo "Markdown template missing. Run 'composer install' first." >&2
+  exit 1
+fi
+php "$PHPDOC_PHAR" --config phpdoc.dist.xml --template="$MD_TEMPLATE"
+
+# Pass 3: llms.txt — curated index for AI agents, per llmstxt.org.
+# Lists the top-level entry points (Core, Services, Exceptions); the 600+
+# generated Resource DTOs are reachable by walking classes/WorkOS/Resource/.
+SITE="docs/_site"
+{
+  echo "# WorkOS PHP SDK"
+  echo
+  echo "> Official PHP SDK for the WorkOS API: authentication, SSO, Directory Sync, audit logs, and more."
+  echo
+  echo "API reference auto-generated from source. Each class has a parallel \`.md\` file alongside its HTML page."
+  echo
+  echo "## Core"
+  echo
+  find "$SITE/classes/WorkOS" -maxdepth 1 -name "*.md" | sort | while read -r f; do
+    name=$(basename "$f" .md)
+    echo "- [$name](${f#$SITE/})"
+  done
+  echo
+  echo "## Services"
+  echo
+  find "$SITE/classes/WorkOS/Service" -maxdepth 1 -name "*.md" | sort | while read -r f; do
+    name=$(basename "$f" .md)
+    echo "- [$name](${f#$SITE/})"
+  done
+  echo
+  echo "## Exceptions"
+  echo
+  find "$SITE/classes/WorkOS/Exception" -maxdepth 1 -name "*.md" | sort | while read -r f; do
+    name=$(basename "$f" .md)
+    echo "- [$name](${f#$SITE/})"
+  done
+  echo
+  echo "## Optional"
+  echo
+  echo "- [Resource DTOs](classes/WorkOS/Resource/): generated request/response types, one \`.md\` file per class."
+} > "$SITE/llms.txt"

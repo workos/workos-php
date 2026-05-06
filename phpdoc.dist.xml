@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+    configVersion="3"
+    xmlns="https://www.phpdoc.org"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org phpdoc.xsd">
+    <title>WorkOS PHP SDK</title>
+    <paths>
+        <output>docs/_site</output>
+        <cache>.phpdoc/cache</cache>
+    </paths>
+    <version number="latest">
+        <api format="php">
+            <source dsn=".">
+                <path>lib</path>
+            </source>
+            <ignore>
+                <path>tests/**/*</path>
+                <path>vendor/**/*</path>
+            </ignore>
+            <extensions>
+                <extension>php</extension>
+            </extensions>
+        </api>
+    </version>
+    <setting name="graphs.enabled" value="false"/>
+</phpdocumentor>
