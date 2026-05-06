@@ -23,6 +23,8 @@ use WorkOS\Resource\RedirectUri;
 use WorkOS\Resource\ResetPasswordResponse;
 use WorkOS\Resource\SendVerificationEmailResponse;
 use WorkOS\Resource\User;
+use WorkOS\Resource\UserApiKey;
+use WorkOS\Resource\UserApiKeyWithValue;
 use WorkOS\Resource\UserIdentitiesGetItem;
 use WorkOS\Resource\UserInvite;
 use WorkOS\Resource\UserOrganizationMembership;
@@ -50,7 +52,7 @@ class UserManagement
     ): \WorkOS\Resource\JwksResponse {
         $response = $this->client->request(
             method: 'GET',
-            path: "sso/jwks/{$clientId}",
+            path: 'sso/jwks/' . rawurlencode($clientId),
             options: $options,
         );
         return JwksResponse::fromArray($response);
@@ -528,7 +530,7 @@ class UserManagement
     ): \WorkOS\Resource\EmailVerification {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/email_verification/{$id}",
+            path: 'user_management/email_verification/' . rawurlencode($id),
             options: $options,
         );
         return EmailVerification::fromArray($response);
@@ -599,7 +601,7 @@ class UserManagement
     ): \WorkOS\Resource\PasswordReset {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/password_reset/{$id}",
+            path: 'user_management/password_reset/' . rawurlencode($id),
             options: $options,
         );
         return PasswordReset::fromArray($response);
@@ -612,7 +614,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organization (deprecated) Filter users by the organization they are a member of. Deprecated in favor of `organization_id`.
      * @param string|null $organizationId Filter users by the organization they are a member of.
      * @param string|null $email Filter users by their email address.
@@ -623,7 +625,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organization = null,
         ?string $organizationId = null,
         ?string $email = null,
@@ -708,7 +710,7 @@ class UserManagement
     ): \WorkOS\Resource\User {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/users/external_id/{$externalId}",
+            path: 'user_management/users/external_id/' . rawurlencode($externalId),
             options: $options,
         );
         return User::fromArray($response);
@@ -728,7 +730,7 @@ class UserManagement
     ): \WorkOS\Resource\User {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/users/{$id}",
+            path: 'user_management/users/' . rawurlencode($id),
             options: $options,
         );
         return User::fromArray($response);
@@ -779,7 +781,7 @@ class UserManagement
         }
         $response = $this->client->request(
             method: 'PUT',
-            path: "user_management/users/{$id}",
+            path: 'user_management/users/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -800,7 +802,7 @@ class UserManagement
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "user_management/users/{$id}",
+            path: 'user_management/users/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -824,7 +826,7 @@ class UserManagement
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$id}/email_change/confirm",
+            path: 'user_management/users/' . rawurlencode($id) . '/email_change/confirm',
             body: $body,
             options: $options,
         );
@@ -850,7 +852,7 @@ class UserManagement
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$id}/email_change/send",
+            path: 'user_management/users/' . rawurlencode($id) . '/email_change/send',
             body: $body,
             options: $options,
         );
@@ -876,7 +878,7 @@ class UserManagement
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$id}/email_verification/confirm",
+            path: 'user_management/users/' . rawurlencode($id) . '/email_verification/confirm',
             body: $body,
             options: $options,
         );
@@ -897,7 +899,7 @@ class UserManagement
     ): \WorkOS\Resource\SendVerificationEmailResponse {
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/users/{$id}/email_verification/send",
+            path: 'user_management/users/' . rawurlencode($id) . '/email_verification/send',
             options: $options,
         );
         return SendVerificationEmailResponse::fromArray($response);
@@ -917,7 +919,7 @@ class UserManagement
     ): array {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/users/{$id}/identities",
+            path: 'user_management/users/' . rawurlencode($id) . '/identities',
             options: $options,
         );
         return array_map(fn ($item) => UserIdentitiesGetItem::fromArray($item), $response);
@@ -931,7 +933,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserSessionsListItem>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -940,7 +942,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -951,7 +953,7 @@ class UserManagement
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$id}/sessions",
+            path: 'user_management/users/' . rawurlencode($id) . '/sessions',
             query: $query,
             modelClass: UserSessionsListItem::class,
             options: $options,
@@ -965,7 +967,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
      * @param string|null $email The email address of the recipient.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserInvite>
@@ -975,7 +977,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organizationId = null,
         ?string $email = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -1050,7 +1052,7 @@ class UserManagement
     ): \WorkOS\Resource\UserInvite {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/invitations/by_token/{$token}",
+            path: 'user_management/invitations/by_token/' . rawurlencode($token),
             options: $options,
         );
         return UserInvite::fromArray($response);
@@ -1070,7 +1072,7 @@ class UserManagement
     ): \WorkOS\Resource\UserInvite {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/invitations/{$id}",
+            path: 'user_management/invitations/' . rawurlencode($id),
             options: $options,
         );
         return UserInvite::fromArray($response);
@@ -1090,7 +1092,7 @@ class UserManagement
     ): \WorkOS\Resource\Invitation {
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/invitations/{$id}/accept",
+            path: 'user_management/invitations/' . rawurlencode($id) . '/accept',
             options: $options,
         );
         return Invitation::fromArray($response);
@@ -1115,7 +1117,7 @@ class UserManagement
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/invitations/{$id}/resend",
+            path: 'user_management/invitations/' . rawurlencode($id) . '/resend',
             body: $body,
             options: $options,
         );
@@ -1136,10 +1138,28 @@ class UserManagement
     ): \WorkOS\Resource\Invitation {
         $response = $this->client->request(
             method: 'POST',
-            path: "user_management/invitations/{$id}/revoke",
+            path: 'user_management/invitations/' . rawurlencode($id) . '/revoke',
             options: $options,
         );
         return Invitation::fromArray($response);
+    }
+
+    /**
+     * Get JWT template
+     *
+     * Get the JWT template for the current environment.
+     * @return \WorkOS\Resource\JWTTemplateResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listJWTTemplate(
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\JWTTemplateResponse {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'user_management/jwt_template',
+            options: $options,
+        );
+        return JWTTemplateResponse::fromArray($response);
     }
 
     /**
@@ -1207,7 +1227,7 @@ class UserManagement
     ): \WorkOS\Resource\MagicAuth {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/magic_auth/{$id}",
+            path: 'user_management/magic_auth/' . rawurlencode($id),
             options: $options,
         );
         return MagicAuth::fromArray($response);
@@ -1220,7 +1240,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
      * @param array<\WorkOS\Resource\OrganizationMembershipStatus>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
      * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
@@ -1231,7 +1251,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organizationId = null,
         ?array $statuses = null,
         ?string $userId = null,
@@ -1305,7 +1325,7 @@ class UserManagement
     ): \WorkOS\Resource\UserOrganizationMembership {
         $response = $this->client->request(
             method: 'GET',
-            path: "user_management/organization_memberships/{$id}",
+            path: 'user_management/organization_memberships/' . rawurlencode($id),
             options: $options,
         );
         return UserOrganizationMembership::fromArray($response);
@@ -1334,7 +1354,7 @@ class UserManagement
         }
         $response = $this->client->request(
             method: 'PUT',
-            path: "user_management/organization_memberships/{$id}",
+            path: 'user_management/organization_memberships/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -1355,7 +1375,7 @@ class UserManagement
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "user_management/organization_memberships/{$id}",
+            path: 'user_management/organization_memberships/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -1379,7 +1399,7 @@ class UserManagement
     ): \WorkOS\Resource\OrganizationMembership {
         $response = $this->client->request(
             method: 'PUT',
-            path: "user_management/organization_memberships/{$id}/deactivate",
+            path: 'user_management/organization_memberships/' . rawurlencode($id) . '/deactivate',
             options: $options,
         );
         return OrganizationMembership::fromArray($response);
@@ -1404,7 +1424,7 @@ class UserManagement
     ): \WorkOS\Resource\UserOrganizationMembership {
         $response = $this->client->request(
             method: 'PUT',
-            path: "user_management/organization_memberships/{$id}/reactivate",
+            path: 'user_management/organization_memberships/' . rawurlencode($id) . '/reactivate',
             options: $options,
         );
         return UserOrganizationMembership::fromArray($response);
@@ -1442,7 +1462,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizedConnectApplicationListData>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1451,7 +1471,7 @@ class UserManagement
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -1462,7 +1482,7 @@ class UserManagement
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$userId}/authorized_applications",
+            path: 'user_management/users/' . rawurlencode($userId) . '/authorized_applications',
             query: $query,
             modelClass: AuthorizedConnectApplicationListData::class,
             options: $options,
@@ -1485,8 +1505,78 @@ class UserManagement
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "user_management/users/{$userId}/authorized_applications/{$applicationId}",
+            path: 'user_management/users/' . rawurlencode($userId) . '/authorized_applications/' . rawurlencode($applicationId),
             options: $options,
         );
+    }
+
+    /**
+     * List API keys for a user
+     *
+     * Get a list of API keys owned by a specific user.
+     * @param string $userId Unique identifier of the user.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
+     * @param string|null $organizationId The ID of the organization to filter user API keys by. When provided, only API keys created against that organization membership are returned.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserApiKey>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listUserApiKeys(
+        string $userId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $organizationId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/users/' . rawurlencode($userId) . '/api_keys',
+            query: $query,
+            modelClass: UserApiKey::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create an API key for a user
+     *
+     * Create a new API key owned by a user. The user must have an active membership in the specified organization.
+     * @param string $userId Unique identifier of the user.
+     * @param string $name A descriptive name for the API key.
+     * @param string $organizationId The ID of the organization the user API key is associated with. The user must have an active membership in this organization.
+     * @param array<string>|null $permissions The permission slugs to assign to the API key. Each permission must be enabled for user API keys.
+     * @return \WorkOS\Resource\UserApiKeyWithValue
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createUserApiKey(
+        string $userId,
+        string $name,
+        string $organizationId,
+        ?array $permissions = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\UserApiKeyWithValue {
+        $body = array_filter([
+            'name' => $name,
+            'organization_id' => $organizationId,
+            'permissions' => $permissions,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/users/' . rawurlencode($userId) . '/api_keys',
+            body: $body,
+            options: $options,
+        );
+        return UserApiKeyWithValue::fromArray($response);
     }
 }

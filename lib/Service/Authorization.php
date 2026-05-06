@@ -11,9 +11,9 @@ use WorkOS\Resource\AuthorizationPermission;
 use WorkOS\Resource\AuthorizationResource;
 use WorkOS\Resource\Permission;
 use WorkOS\Resource\Role;
-use WorkOS\Resource\RoleAssignment;
 use WorkOS\Resource\RoleList;
 use WorkOS\Resource\UserOrganizationMembershipBaseListData;
+use WorkOS\Resource\UserRoleAssignment;
 
 class Authorization
 {
@@ -49,7 +49,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/check",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/check',
             body: $body,
             options: $options,
         );
@@ -67,7 +67,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string $permissionSlug The permission slug to filter by. Only child resources where the organization membership has this permission are returned.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
@@ -79,7 +79,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -97,7 +97,7 @@ class Authorization
         }
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources',
             query: $query,
             modelClass: AuthorizationResource::class,
             options: $options,
@@ -113,7 +113,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -123,7 +123,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -134,7 +134,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceId}/permissions",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources/' . rawurlencode($resourceId) . '/permissions',
             query: $query,
             modelClass: AuthorizationPermission::class,
             options: $options,
@@ -151,7 +151,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -162,7 +162,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -173,7 +173,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/resources/{$resourceTypeSlug}/{$externalId}/permissions",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId) . '/permissions',
             query: $query,
             modelClass: AuthorizationPermission::class,
             options: $options,
@@ -188,8 +188,8 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RoleAssignment>
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listRoleAssignments(
@@ -197,7 +197,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -208,9 +208,9 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             query: $query,
-            modelClass: RoleAssignment::class,
+            modelClass: UserRoleAssignment::class,
             options: $options,
         );
     }
@@ -222,7 +222,7 @@ class Authorization
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to assign.
      * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
-     * @return \WorkOS\Resource\RoleAssignment
+     * @return \WorkOS\Resource\UserRoleAssignment
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function assignRole(
@@ -230,7 +230,7 @@ class Authorization
         string $roleSlug,
         ResourceTargetById|ResourceTargetByExternalId $resourceTarget,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\RoleAssignment {
+    ): \WorkOS\Resource\UserRoleAssignment {
         $body = [
             'role_slug' => $roleSlug,
         ];
@@ -242,11 +242,11 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             body: $body,
             options: $options,
         );
-        return RoleAssignment::fromArray($response);
+        return UserRoleAssignment::fromArray($response);
     }
 
     /**
@@ -276,7 +276,7 @@ class Authorization
         }
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
             body: $body,
             options: $options,
         );
@@ -298,7 +298,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organization_memberships/{$organizationMembershipId}/role_assignments/{$roleAssignmentId}",
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments/' . rawurlencode($roleAssignmentId),
             options: $options,
         );
     }
@@ -317,7 +317,7 @@ class Authorization
     ): \WorkOS\Resource\RoleList {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/roles",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles',
             options: $options,
         );
         return RoleList::fromArray($response);
@@ -351,7 +351,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organizations/{$organizationId}/roles",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles',
             body: $body,
             options: $options,
         );
@@ -374,7 +374,7 @@ class Authorization
     ): \WorkOS\Resource\Role {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             options: $options,
         );
         return Role::fromArray($response);
@@ -404,7 +404,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -427,7 +427,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug),
             options: $options,
         );
     }
@@ -453,7 +453,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -481,7 +481,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -506,7 +506,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/roles/{$slug}/permissions/{$permissionSlug}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/roles/' . rawurlencode($slug) . '/permissions/' . rawurlencode($permissionSlug),
             options: $options,
         );
     }
@@ -529,7 +529,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationResource {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             options: $options,
         );
         return AuthorizationResource::fromArray($response);
@@ -569,7 +569,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             body: $body,
             options: $options,
         );
@@ -599,7 +599,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId),
             query: $query,
             options: $options,
         );
@@ -615,7 +615,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use "direct" for direct assignments only, or "indirect" to include inherited assignments.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
@@ -629,7 +629,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -643,9 +643,48 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/organizations/{$organizationId}/resources/{$resourceTypeSlug}/{$externalId}/organization_memberships",
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId) . '/organization_memberships',
             query: $query,
             modelClass: UserOrganizationMembershipBaseListData::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * List role assignments for a resource by external ID
+     *
+     * List all role assignments granted on a resource, identified by its external ID. Each assignment includes the organization membership it was granted to.
+     * @param string $organizationId The ID of the organization that owns the resource.
+     * @param string $resourceTypeSlug The slug of the resource type.
+     * @param string $externalId An identifier you provide to reference the resource in your system.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listRoleAssignmentsForResourceByExternalId(
+        string $organizationId,
+        string $resourceTypeSlug,
+        string $externalId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'authorization/organizations/' . rawurlencode($organizationId) . '/resources/' . rawurlencode($resourceTypeSlug) . '/' . rawurlencode($externalId) . '/role_assignments',
+            query: $query,
+            modelClass: UserRoleAssignment::class,
             options: $options,
         );
     }
@@ -658,7 +697,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $organizationId Filter resources by organization ID.
      * @param string|null $resourceTypeSlug Filter resources by resource type slug.
      * @param string|null $resourceExternalId Filter resources by external ID.
@@ -671,7 +710,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organizationId = null,
         ?string $resourceTypeSlug = null,
         ?string $resourceExternalId = null,
@@ -761,7 +800,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationResource {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             options: $options,
         );
         return AuthorizationResource::fromArray($response);
@@ -797,7 +836,7 @@ class Authorization
         }
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             body: $body,
             options: $options,
         );
@@ -823,7 +862,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/resources/{$resourceId}",
+            path: 'authorization/resources/' . rawurlencode($resourceId),
             query: $query,
             options: $options,
         );
@@ -837,7 +876,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string $permissionSlug The permission slug to filter by. Only users with this permission on the resource are returned.
      * @param \WorkOS\Resource\AuthorizationAssignment|null $assignment Filter by assignment type. Use `direct` for direct assignments only, or `indirect` to include inherited assignments.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembershipBaseListData>
@@ -849,7 +888,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\Resource\AuthorizationAssignment $assignment = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -863,9 +902,44 @@ class Authorization
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "authorization/resources/{$resourceId}/organization_memberships",
+            path: 'authorization/resources/' . rawurlencode($resourceId) . '/organization_memberships',
             query: $query,
             modelClass: UserOrganizationMembershipBaseListData::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * List role assignments for a resource
+     *
+     * List all role assignments granted on a specific resource instance. Each assignment includes the organization membership it was granted to.
+     * @param string $resourceId The ID of the authorization resource.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listRoleAssignmentsForResource(
+        string $resourceId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'authorization/resources/' . rawurlencode($resourceId) . '/role_assignments',
+            query: $query,
+            modelClass: UserRoleAssignment::class,
             options: $options,
         );
     }
@@ -935,7 +1009,7 @@ class Authorization
     ): \WorkOS\Resource\Role {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/roles/{$slug}",
+            path: 'authorization/roles/' . rawurlencode($slug),
             options: $options,
         );
         return Role::fromArray($response);
@@ -963,7 +1037,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/roles/{$slug}",
+            path: 'authorization/roles/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -989,7 +1063,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'POST',
-            path: "authorization/roles/{$slug}/permissions",
+            path: 'authorization/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -1015,7 +1089,7 @@ class Authorization
         ];
         $response = $this->client->request(
             method: 'PUT',
-            path: "authorization/roles/{$slug}/permissions",
+            path: 'authorization/roles/' . rawurlencode($slug) . '/permissions',
             body: $body,
             options: $options,
         );
@@ -1029,7 +1103,7 @@ class Authorization
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationPermission>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1037,7 +1111,7 @@ class Authorization
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -1102,7 +1176,7 @@ class Authorization
     ): \WorkOS\Resource\AuthorizationPermission {
         $response = $this->client->request(
             method: 'GET',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             options: $options,
         );
         return AuthorizationPermission::fromArray($response);
@@ -1130,7 +1204,7 @@ class Authorization
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PATCH',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             body: $body,
             options: $options,
         );
@@ -1151,7 +1225,7 @@ class Authorization
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "authorization/permissions/{$slug}",
+            path: 'authorization/permissions/' . rawurlencode($slug),
             options: $options,
         );
     }

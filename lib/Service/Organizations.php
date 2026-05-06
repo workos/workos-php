@@ -23,7 +23,7 @@ class Organizations
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param array<string>|null $domains The domains of an Organization. Any Organization with a matching domain will be returned.
      * @param string|null $search Searchable text for an Organization. Matches against the organization name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Organization>
@@ -33,7 +33,7 @@ class Organizations
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?array $domains = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -108,7 +108,7 @@ class Organizations
     ): \WorkOS\Resource\Organization {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/external_id/{$externalId}",
+            path: 'organizations/external_id/' . rawurlencode($externalId),
             options: $options,
         );
         return Organization::fromArray($response);
@@ -128,7 +128,7 @@ class Organizations
     ): \WorkOS\Resource\Organization {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             options: $options,
         );
         return Organization::fromArray($response);
@@ -171,7 +171,7 @@ class Organizations
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             body: $body,
             options: $options,
         );
@@ -192,7 +192,7 @@ class Organizations
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "organizations/{$id}",
+            path: 'organizations/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -211,7 +211,7 @@ class Organizations
     ): \WorkOS\Resource\AuditLogConfiguration {
         $response = $this->client->request(
             method: 'GET',
-            path: "organizations/{$id}/audit_log_configuration",
+            path: 'organizations/' . rawurlencode($id) . '/audit_log_configuration',
             options: $options,
         );
         return AuditLogConfiguration::fromArray($response);

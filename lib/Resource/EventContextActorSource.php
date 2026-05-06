@@ -10,5 +10,6 @@ enum EventContextActorSource: string
 {
     case Api = 'api';
     case Dashboard = 'dashboard';
+    case AdminPortal = 'admin_portal';
     case System = 'system';
 }

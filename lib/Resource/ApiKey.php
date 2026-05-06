@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-/** The API Key object if the value is valid, or `null` if invalid. */
 readonly class ApiKey implements \JsonSerializable
 {
     use JsonSerializableTrait;
@@ -17,7 +16,7 @@ readonly class ApiKey implements \JsonSerializable
         /** Unique identifier of the API Key. */
         public string $id,
         /** The entity that owns the API Key. */
-        public ApiKeyOwner $owner,
+        public ApiKeyOwner|UserApiKeyOwner $owner,
         /** A descriptive name for the API Key. */
         public string $name,
         /** An obfuscated representation of the API Key value. */
@@ -41,7 +40,9 @@ readonly class ApiKey implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
-            owner: ApiKeyOwner::fromArray($data['owner']),
+            owner: match ($data['owner']['type'] ?? null) {
+                'organization' => ApiKeyOwner::fromArray($data['owner']), 'user' => UserApiKeyOwner::fromArray($data['owner']), default => $data['owner']
+            },
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
             lastUsedAt: isset($data['last_used_at']) ? new \DateTimeImmutable($data['last_used_at']) : null,
@@ -56,7 +57,7 @@ readonly class ApiKey implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner,
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),

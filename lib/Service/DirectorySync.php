@@ -24,7 +24,7 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @param string|null $organizationId Filter Directories by their associated organization.
      * @param string|null $search Searchable text to match against Directory names.
      * @param string|null $domain (deprecated) Filter Directories by their associated domain.
@@ -35,7 +35,7 @@ class DirectorySync
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $organizationId = null,
         ?string $search = null,
         ?string $domain = null,
@@ -73,7 +73,7 @@ class DirectorySync
     ): \WorkOS\Resource\Directory {
         $response = $this->client->request(
             method: 'GET',
-            path: "directories/{$id}",
+            path: 'directories/' . rawurlencode($id),
             options: $options,
         );
         return Directory::fromArray($response);
@@ -93,7 +93,7 @@ class DirectorySync
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "directories/{$id}",
+            path: 'directories/' . rawurlencode($id),
             options: $options,
         );
     }
@@ -105,7 +105,7 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
@@ -115,7 +115,7 @@ class DirectorySync
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $directory = null,
         ?string $user = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -151,7 +151,7 @@ class DirectorySync
     ): \WorkOS\Resource\DirectoryGroup {
         $response = $this->client->request(
             method: 'GET',
-            path: "directory_groups/{$id}",
+            path: 'directory_groups/' . rawurlencode($id),
             options: $options,
         );
         return DirectoryGroup::fromArray($response);
@@ -164,7 +164,7 @@ class DirectorySync
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending.
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
@@ -174,7 +174,7 @@ class DirectorySync
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $directory = null,
         ?string $group = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -210,7 +210,7 @@ class DirectorySync
     ): \WorkOS\Resource\DirectoryUserWithGroups {
         $response = $this->client->request(
             method: 'GET',
-            path: "directory_users/{$id}",
+            path: 'directory_users/' . rawurlencode($id),
             options: $options,
         );
         return DirectoryUserWithGroups::fromArray($response);

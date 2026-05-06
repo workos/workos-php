@@ -23,7 +23,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -31,7 +31,7 @@ class FeatureFlags
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -63,7 +63,7 @@ class FeatureFlags
     ): \WorkOS\Resource\Flag {
         $response = $this->client->request(
             method: 'GET',
-            path: "feature-flags/{$slug}",
+            path: 'feature-flags/' . rawurlencode($slug),
             options: $options,
         );
         return Flag::fromArray($response);
@@ -83,7 +83,7 @@ class FeatureFlags
     ): \WorkOS\Resource\FeatureFlag {
         $response = $this->client->request(
             method: 'PUT',
-            path: "feature-flags/{$slug}/disable",
+            path: 'feature-flags/' . rawurlencode($slug) . '/disable',
             options: $options,
         );
         return FeatureFlag::fromArray($response);
@@ -103,7 +103,7 @@ class FeatureFlags
     ): \WorkOS\Resource\FeatureFlag {
         $response = $this->client->request(
             method: 'PUT',
-            path: "feature-flags/{$slug}/enable",
+            path: 'feature-flags/' . rawurlencode($slug) . '/enable',
             options: $options,
         );
         return FeatureFlag::fromArray($response);
@@ -125,7 +125,7 @@ class FeatureFlags
     ): mixed {
         $response = $this->client->request(
             method: 'POST',
-            path: "feature-flags/{$slug}/targets/{$resourceId}",
+            path: 'feature-flags/' . rawurlencode($slug) . '/targets/' . rawurlencode($resourceId),
             options: $options,
         );
         return $response;
@@ -147,7 +147,7 @@ class FeatureFlags
     ): void {
         $this->client->request(
             method: 'DELETE',
-            path: "feature-flags/{$slug}/targets/{$resourceId}",
+            path: 'feature-flags/' . rawurlencode($slug) . '/targets/' . rawurlencode($resourceId),
             options: $options,
         );
     }
@@ -160,7 +160,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -169,7 +169,7 @@ class FeatureFlags
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -180,7 +180,7 @@ class FeatureFlags
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "organizations/{$organizationId}/feature-flags",
+            path: 'organizations/' . rawurlencode($organizationId) . '/feature-flags',
             query: $query,
             modelClass: Flag::class,
             options: $options,
@@ -195,7 +195,7 @@ class FeatureFlags
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\EventsOrder $order Order the results by the creation time. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Flag>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -204,7 +204,7 @@ class FeatureFlags
         ?string $before = null,
         ?string $after = null,
         ?int $limit = null,
-        \WorkOS\Resource\EventsOrder $order = \WorkOS\Resource\EventsOrder::Desc,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -215,7 +215,7 @@ class FeatureFlags
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
-            path: "user_management/users/{$userId}/feature-flags",
+            path: 'user_management/users/' . rawurlencode($userId) . '/feature-flags',
             query: $query,
             modelClass: Flag::class,
             options: $options,
