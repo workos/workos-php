@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.0.1](https://github.com/workos/workos-php/compare/6.0.0...v6.0.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* Preserve full error response body on ApiException ([#385](https://github.com/workos/workos-php/issues/385)) ([57052ab](https://github.com/workos/workos-php/commit/57052ab3d844beb35d5088fb55beca79bf2d752f))
+
+
+### Miscellaneous Chores
+
+* **release:** include v prefix in tags ([5517b8b](https://github.com/workos/workos-php/commit/5517b8b9acd404cc987db61fb5ed26405cf1eb0d))
+
 ## [6.0.0](https://github.com/workos/workos-php/compare/5.2.1...6.0.0) (2026-05-06)
 
 
