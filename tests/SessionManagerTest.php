@@ -210,10 +210,13 @@ class SessionManagerTest extends TestCase
             'exp' => time() + 3600,
         ]);
 
-        // Flip the last byte of the signature segment.
+        // Flip a byte in the middle of the signature segment so the base64
+        // decoder produces a clearly different signature. Avoids the trailing
+        // padding bits that base64url can canonicalise away.
         $parts = explode('.', $jwt);
         $sig = $parts[2];
-        $parts[2] = substr($sig, 0, -1) . ($sig[-1] === 'A' ? 'B' : 'A');
+        $mid = intdiv(strlen($sig), 2);
+        $parts[2] = substr($sig, 0, $mid) . ($sig[$mid] === 'A' ? 'B' : 'A') . substr($sig, $mid + 1);
         $tampered = implode('.', $parts);
 
         $sealed = SessionManager::sealSessionFromAuthResponse(
