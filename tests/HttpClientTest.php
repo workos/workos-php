@@ -114,6 +114,52 @@ class HttpClientTest extends TestCase
             $this->assertSame(400, $e->statusCode);
             $this->assertSame('entity_not_found', $e->errorCode);
             $this->assertSame('not_found', $e->error);
+            $this->assertSame(
+                ['message' => 'Organization not found', 'code' => 'entity_not_found', 'error' => 'not_found'],
+                $e->rawBody,
+            );
+        }
+    }
+
+    public function testErrorResponseExposesAdditionalBodyFields(): void
+    {
+        // Headless AuthKit returns extra metadata (pending_authentication_token, email, etc.)
+        // alongside an error. Customers need access to these fields to drive next-step flows.
+        $body = json_encode([
+            'message' => 'Email verification required.',
+            'code' => 'email_verification_required',
+            'error' => 'email_verification_required',
+            'error_description' => 'The user must verify their email before signing in.',
+            'pending_authentication_token' => 'pat_01HXYZ',
+            'email' => 'user@example.com',
+            'email_verification_id' => 'email_verification_01HXYZ',
+        ]);
+
+        $mock = new MockHandler([
+            new Response(403, ['Content-Type' => 'application/json'], $body),
+        ]);
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: HandlerStack::create($mock),
+        );
+
+        try {
+            $client->request('GET', '/test');
+            $this->fail('Expected ApiException');
+        } catch (ApiException $e) {
+            $this->assertNotNull($e->rawBody);
+            $this->assertSame('pat_01HXYZ', $e->rawBody['pending_authentication_token']);
+            $this->assertSame('user@example.com', $e->rawBody['email']);
+            $this->assertSame('email_verification_01HXYZ', $e->rawBody['email_verification_id']);
+            $this->assertSame(
+                'The user must verify their email before signing in.',
+                $e->rawBody['error_description'],
+            );
         }
     }
 
@@ -202,6 +248,7 @@ class HttpClientTest extends TestCase
             $this->assertStringContainsString('WorkOS request failed with status 500', $e->getMessage());
             $this->assertNull($e->errorCode);
             $this->assertNull($e->error);
+            $this->assertNull($e->rawBody);
         }
     }
 
