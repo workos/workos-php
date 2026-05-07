@@ -252,6 +252,58 @@ class HttpClientTest extends TestCase
         }
     }
 
+    public function testResolveUrlPreservesEncodedIdAsSingleSegment(): void
+    {
+        // security-fix-plan.md finding #61: an untrusted ID like `om_xyz?/foo`
+        // must remain a single percent-encoded path segment instead of
+        // opening a new path/query when interpolated into a path template.
+        // Generated services already call `rawurlencode($id)`; the centralized
+        // fix must preserve that encoding (no double-encoding) and not re-split
+        // the encoded slash.
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+        $history = [];
+        $handler = HandlerStack::create($mock);
+        $handler->push(\GuzzleHttp\Middleware::history($history));
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+
+        $id = 'om_xyz?/foo';
+        $client->request('GET', 'organizations/' . rawurlencode($id));
+
+        $request = $history[array_key_last($history)]['request'];
+        $uri = $request->getUri();
+
+        // No query string — `?` inside the ID stayed percent-encoded.
+        $this->assertSame('', $uri->getQuery());
+        // The whole ID (including its `/`) stayed inside a single segment.
+        $this->assertSame('/organizations/om_xyz%3F%2Ffoo', $uri->getPath());
+
+        // Defense-in-depth: a path with the raw ID also has its `?` encoded
+        // and does not produce a stray query string.
+        $client2 = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+        $mock->append(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+        $client2->request('GET', 'organizations/om_xyz?/foo');
+        $rawRequest = $history[array_key_last($history)]['request'];
+        $this->assertSame('', $rawRequest->getUri()->getQuery());
+        $this->assertStringContainsString('om_xyz%3F', $rawRequest->getUri()->getPath());
+    }
+
     public function testNonStringCodeFieldIsIgnored(): void
     {
         $body = json_encode([
