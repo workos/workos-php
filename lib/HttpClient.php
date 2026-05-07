@@ -278,19 +278,30 @@ class HttpClient
         return $decoded;
     }
 
+    /**
+     * Map a 4xx/5xx HTTP response to the corresponding {@see ApiException} subclass.
+     *
+     * The full decoded JSON body (if any) is threaded through to the exception's
+     * `$rawBody` property so callers can read fields the SDK doesn't surface as
+     * dedicated properties (e.g. `pending_authentication_token` from headless AuthKit).
+     *
+     * @param ResponseInterface $response The error response.
+     * @param \Throwable|null   $previous Underlying transport exception, if any.
+     */
     private function mapApiException(ResponseInterface $response, ?\Throwable $previous = null): ApiException
     {
         $statusCode = $response->getStatusCode();
         $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
         $body = $this->decodeErrorBody($response);
+        $rawBody = $body['rawBody'];
 
         return match ($statusCode) {
-            400 => new BadRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            401 => new AuthenticationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            403 => new AuthorizationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            404 => new NotFoundException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            409 => new ConflictException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            422 => new UnprocessableEntityException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            400 => new BadRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            401 => new AuthenticationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            403 => new AuthorizationException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            404 => new NotFoundException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            409 => new ConflictException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            422 => new UnprocessableEntityException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
             429 => new RateLimitExceededException(
                 $body['message'],
                 $statusCode,
@@ -298,21 +309,34 @@ class HttpClient
                 $previous,
                 $body['code'],
                 $body['error'],
+                $rawBody,
                 $this->parseRetryAfter($response->getHeaderLine('Retry-After')),
             ),
-            500, 502, 503, 504 => new ServerException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
-            default => new BaseRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error']),
+            500, 502, 503, 504 => new ServerException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
+            default => new BaseRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
         };
     }
 
     /**
-     * @return array{message: string, code: ?string, error: ?string}
+     * Parse an error response body into the fields used to build an {@see ApiException}.
+     *
+     * Falls back to a synthetic message when the body is empty, and treats the
+     * raw contents as the message when the body isn't valid JSON. The decoded
+     * body itself (when JSON-shaped) is always returned in `rawBody` for callers
+     * that need to read additional response fields.
+     *
+     * @return array{message: string, code: ?string, error: ?string, rawBody: ?array<string, mixed>}
      */
     private function decodeErrorBody(ResponseInterface $response): array
     {
         $contents = (string) $response->getBody();
         if ($contents === '') {
-            return ['message' => sprintf('WorkOS request failed with status %d.', $response->getStatusCode()), 'code' => null, 'error' => null];
+            return [
+                'message' => sprintf('WorkOS request failed with status %d.', $response->getStatusCode()),
+                'code' => null,
+                'error' => null,
+                'rawBody' => null,
+            ];
         }
 
         $decoded = json_decode($contents, true);
@@ -321,11 +345,13 @@ class HttpClient
             if (is_string($message) && $message !== '') {
                 $code = isset($decoded['code']) && is_string($decoded['code']) ? $decoded['code'] : null;
                 $error = isset($decoded['error']) && is_string($decoded['error']) ? $decoded['error'] : null;
-                return ['message' => $message, 'code' => $code, 'error' => $error];
+                return ['message' => $message, 'code' => $code, 'error' => $error, 'rawBody' => $decoded];
             }
+
+            return ['message' => $contents, 'code' => null, 'error' => null, 'rawBody' => $decoded];
         }
 
-        return ['message' => $contents, 'code' => null, 'error' => null];
+        return ['message' => $contents, 'code' => null, 'error' => null, 'rawBody' => null];
     }
 
     private function mapTransportException(\Throwable $exception): \Exception
