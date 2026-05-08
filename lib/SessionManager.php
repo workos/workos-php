@@ -13,6 +13,23 @@ namespace WorkOS;
 
 class SessionManager
 {
+    /**
+     * In-memory JWKS cache, keyed by client ID. Values are
+     * `['keys' => array, 'fetched_at' => int]`. Cache lives for the
+     * lifetime of the SessionManager instance and is bypassed when a
+     * token's `kid` isn't found, so key rotation still resolves quickly.
+     *
+     * @var array<string, array{keys: array, fetched_at: int}>
+     */
+    private array $jwksCache = [];
+
+    /**
+     * JWKS cache TTL in seconds. WorkOS rotates signing keys on the order
+     * of weeks, so a few minutes is plenty to absorb traffic spikes
+     * without making session checks dependent on a live JWKS round-trip.
+     */
+    private const JWKS_CACHE_TTL_SECONDS = 300;
+
     public function __construct(
         private readonly HttpClient $client,
     ) {
@@ -303,6 +320,33 @@ class SessionManager
     }
 
     /**
+     * Return the JWKS for `$clientId`, served from an in-memory cache
+     * with a {@see JWKS_CACHE_TTL_SECONDS}-second TTL. Set
+     * `$forceRefresh` to bypass the cache after a `kid` miss, which
+     * lets newly-rotated keys be discovered without waiting for TTL
+     * expiry.
+     *
+     * @return array<string, mixed>
+     */
+    private function getCachedJwks(string $clientId, bool $forceRefresh = false): array
+    {
+        $now = time();
+        $entry = $this->jwksCache[$clientId] ?? null;
+        if (
+            !$forceRefresh
+            && $entry !== null
+            && ($now - $entry['fetched_at']) < self::JWKS_CACHE_TTL_SECONDS
+        ) {
+            return $entry['keys'];
+        }
+
+        $keys = $this->fetchJwks($clientId);
+        $this->jwksCache[$clientId] = ['keys' => $keys, 'fetched_at' => $now];
+
+        return $keys;
+    }
+
+    /**
      * Algorithms permitted on the JWS header. WorkOS access tokens are signed
      * with RS256; no other algorithm is accepted, in particular `none` is
      * always rejected.
@@ -370,8 +414,14 @@ class SessionManager
             throw new \InvalidArgumentException('JWT header missing kid');
         }
 
-        $jwks = $this->fetchJwks($clientId);
+        // Try the cached JWKS first; if the `kid` isn't present, force a
+        // refresh once to handle key rotation, then fail if still unknown.
+        $jwks = $this->getCachedJwks($clientId);
         $jwk = self::findJwkByKid($jwks, $kid);
+        if ($jwk === null) {
+            $jwks = $this->getCachedJwks($clientId, forceRefresh: true);
+            $jwk = self::findJwkByKid($jwks, $kid);
+        }
         if ($jwk === null) {
             throw new \InvalidArgumentException('No JWKS key matches JWT kid');
         }

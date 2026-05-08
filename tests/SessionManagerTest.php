@@ -289,4 +289,80 @@ class SessionManagerTest extends TestCase
         $this->assertFalse($result['authenticated']);
         $this->assertSame('invalid_jwt', $result['reason']);
     }
+
+    public function testAuthenticateCachesJwksAcrossCalls(): void
+    {
+        [$jwks, $jwt] = $this->buildSignedJwt([
+            'sid' => 'session_test',
+            'exp' => time() + 3600,
+        ]);
+
+        $sealed = SessionManager::sealSessionFromAuthResponse(
+            accessToken: $jwt,
+            refreshToken: 'ref_test',
+            cookiePassword: $this->cookiePassword,
+        );
+
+        // Only ONE JWKS response is queued; a second fetch would make
+        // the MockHandler throw, so successful back-to-back authenticate
+        // calls prove the cache served the second one.
+        $client = $this->createMockClient([['status' => 200, 'body' => $jwks]]);
+        $sessionManager = $client->sessionManager();
+
+        $first = $sessionManager->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+        $second = $sessionManager->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+
+        $this->assertTrue($first['authenticated']);
+        $this->assertTrue($second['authenticated']);
+        $this->assertCount(1, $this->requestHistory);
+    }
+
+    public function testAuthenticateRefreshesJwksOnUnknownKid(): void
+    {
+        // Seed the cache with a JWKS that only knows `kid_old`, then
+        // present a token signed with `kid_new`. The kid-miss path
+        // should force a refresh and find `kid_new` in the second
+        // JWKS response.
+        [$oldJwks] = $this->buildSignedJwt(
+            ['sid' => 'session_old', 'exp' => time() + 3600],
+            'RS256',
+            'kid_old',
+        );
+
+        [$newJwks, $newJwt] = $this->buildSignedJwt(
+            ['sid' => 'session_new', 'exp' => time() + 3600],
+            'RS256',
+            'kid_new',
+        );
+
+        $sealedNew = SessionManager::sealSessionFromAuthResponse(
+            accessToken: $newJwt,
+            refreshToken: 'ref_test',
+            cookiePassword: $this->cookiePassword,
+        );
+
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $oldJwks],
+            ['status' => 200, 'body' => $newJwks],
+        ]);
+        $sessionManager = $client->sessionManager();
+
+        $result = $sessionManager->authenticate(
+            sessionData: $sealedNew,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+
+        $this->assertTrue($result['authenticated']);
+        $this->assertSame('session_new', $result['session_id']);
+        $this->assertCount(2, $this->requestHistory);
+    }
 }
