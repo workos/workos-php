@@ -13,6 +13,23 @@ namespace WorkOS;
 
 class SessionManager
 {
+    /**
+     * In-memory JWKS cache, keyed by client ID. Values are
+     * `['keys' => array, 'fetched_at' => int]`. Cache lives for the
+     * lifetime of the SessionManager instance and is bypassed when a
+     * token's `kid` isn't found, so key rotation still resolves quickly.
+     *
+     * @var array<string, array{keys: array, fetched_at: int}>
+     */
+    private array $jwksCache = [];
+
+    /**
+     * JWKS cache TTL in seconds. WorkOS rotates signing keys on the order
+     * of weeks, so a few minutes is plenty to absorb traffic spikes
+     * without making session checks dependent on a live JWKS round-trip.
+     */
+    private const JWKS_CACHE_TTL_SECONDS = 300;
+
     public function __construct(
         private readonly HttpClient $client,
     ) {
@@ -147,7 +164,7 @@ class SessionManager
         }
 
         try {
-            $decoded = self::decodeAccessToken($session['access_token'], $clientId, $baseUrl);
+            $decoded = $this->decodeAccessToken($session['access_token'], $clientId);
         } catch (\Exception $e) {
             return [
                 'authenticated' => false,
@@ -296,50 +313,255 @@ class SessionManager
      */
     public function fetchJwks(string $clientId): array
     {
-        return $this->client->request(
+        $response = $this->client->request(
             method: 'GET',
             path: "sso/jwks/{$clientId}",
         );
+        if ($response === null) {
+            throw new \RuntimeException('Failed to fetch JWKS: empty response');
+        }
+        return $response;
     }
+
+    /**
+     * Return the JWKS for `$clientId`, served from an in-memory cache
+     * with a {@see JWKS_CACHE_TTL_SECONDS}-second TTL. Set
+     * `$forceRefresh` to bypass the cache after a `kid` miss, which
+     * lets newly-rotated keys be discovered without waiting for TTL
+     * expiry.
+     *
+     * @return array<string, mixed>
+     */
+    private function getCachedJwks(string $clientId, bool $forceRefresh = false): array
+    {
+        $now = time();
+        $entry = $this->jwksCache[$clientId] ?? null;
+        if (
+            !$forceRefresh
+            && $entry !== null
+            && ($now - $entry['fetched_at']) < self::JWKS_CACHE_TTL_SECONDS
+        ) {
+            return $entry['keys'];
+        }
+
+        $keys = $this->fetchJwks($clientId);
+        $this->jwksCache[$clientId] = ['keys' => $keys, 'fetched_at' => $now];
+
+        return $keys;
+    }
+
+    /**
+     * Algorithms permitted on the JWS header. WorkOS access tokens are signed
+     * with RS256; no other algorithm is accepted, in particular `none` is
+     * always rejected.
+     */
+    private const ALLOWED_JWS_ALGORITHMS = ['RS256'];
 
     /**
      * Decode and validate an access token JWT.
      *
-     * This is a basic JWT decode. For production use, fetch JWKS and validate
-     * the signature properly. This helper decodes without signature verification
-     * for extracting claims when the token has already been validated upstream.
+     * Verifies the JWS signature against the JWKS published for `$clientId`,
+     * enforces an algorithm allow-list, and rejects expired tokens. This is
+     * the only path used by {@see authenticate()}; callers must not bypass it.
      *
      * @param string $accessToken The JWT access token.
-     * @param string $clientId The WorkOS client ID (unused in basic decode).
-     * @param string $baseUrl The WorkOS API base URL (unused in basic decode).
+     * @param string $clientId The WorkOS client ID (used to fetch JWKS).
      * @return array The decoded JWT claims.
-     * @throws \InvalidArgumentException If the token cannot be decoded.
+     * @throws \InvalidArgumentException If the token cannot be decoded or fails verification.
      */
-    private static function decodeAccessToken(
+    private function decodeAccessToken(
         string $accessToken,
         string $clientId,
-        string $baseUrl,
     ): array {
         $parts = explode('.', $accessToken);
         if (count($parts) !== 3) {
             throw new \InvalidArgumentException('Invalid JWT format');
         }
 
-        $payload = base64_decode(strtr($parts[1], '-_', '+/'), true);
-        if ($payload === false) {
-            throw new \InvalidArgumentException('Invalid JWT payload encoding');
+        [$headerB64, $payloadB64, $signatureB64] = $parts;
+
+        $headerJson = self::base64UrlDecode($headerB64);
+        if ($headerJson === false) {
+            throw new \InvalidArgumentException('Invalid JWT header encoding');
+        }
+        $header = json_decode($headerJson, true);
+        if (!is_array($header)) {
+            throw new \InvalidArgumentException('Invalid JWT header JSON');
         }
 
-        $decoded = json_decode($payload, true);
-        if ($decoded === null) {
+        $alg = $header['alg'] ?? null;
+        if (!is_string($alg) || !in_array($alg, self::ALLOWED_JWS_ALGORITHMS, true)) {
+            throw new \InvalidArgumentException('Unsupported JWT algorithm');
+        }
+
+        $payloadJson = self::base64UrlDecode($payloadB64);
+        if ($payloadJson === false) {
+            throw new \InvalidArgumentException('Invalid JWT payload encoding');
+        }
+        $decoded = json_decode($payloadJson, true);
+        if (!is_array($decoded)) {
             throw new \InvalidArgumentException('Invalid JWT payload JSON');
         }
 
-        // Check expiration
-        if (isset($decoded['exp']) && $decoded['exp'] < time()) {
+        $signature = self::base64UrlDecode($signatureB64);
+        if ($signature === false || $signature === '') {
+            throw new \InvalidArgumentException('Invalid JWT signature encoding');
+        }
+
+        // Resolve a JWK matching the header `kid`. Without a `kid` we won't
+        // guess — refuse rather than try every key, which would mask key
+        // rotation bugs.
+        $kid = $header['kid'] ?? null;
+        if (!is_string($kid) || $kid === '') {
+            throw new \InvalidArgumentException('JWT header missing kid');
+        }
+
+        // Try the cached JWKS first; if the `kid` isn't present, force a
+        // refresh once to handle key rotation, then fail if still unknown.
+        $jwks = $this->getCachedJwks($clientId);
+        $jwk = self::findJwkByKid($jwks, $kid);
+        if ($jwk === null) {
+            $jwks = $this->getCachedJwks($clientId, forceRefresh: true);
+            $jwk = self::findJwkByKid($jwks, $kid);
+        }
+        if ($jwk === null) {
+            throw new \InvalidArgumentException('No JWKS key matches JWT kid');
+        }
+
+        $publicKeyPem = self::jwkToRsaPublicKeyPem($jwk);
+        $signingInput = $headerB64 . '.' . $payloadB64;
+
+        $verified = openssl_verify($signingInput, $signature, $publicKeyPem, OPENSSL_ALGO_SHA256);
+        if ($verified !== 1) {
+            throw new \InvalidArgumentException('JWT signature verification failed');
+        }
+
+        // Expiration check (after signature verification).
+        if (isset($decoded['exp']) && is_numeric($decoded['exp']) && (int) $decoded['exp'] < time()) {
             throw new \InvalidArgumentException('JWT has expired');
         }
 
+        // TODO(security-fix-plan.md, finding #60): enforce documented WorkOS
+        // `iss` and `aud` values once empirically confirmed. The other WorkOS
+        // SDKs (Ruby, Python) currently skip `aud` verification, so the
+        // canonical values are not authoritatively documented in this repo.
+        // Track resolution under "Open questions / follow-ups" in the plan.
+
         return $decoded;
+    }
+
+    /**
+     * Decode a base64url-encoded segment, tolerating missing padding.
+     *
+     * @return string|false The decoded bytes, or false on malformed input.
+     */
+    private static function base64UrlDecode(string $segment): string|false
+    {
+        $remainder = strlen($segment) % 4;
+        if ($remainder !== 0) {
+            $segment .= str_repeat('=', 4 - $remainder);
+        }
+
+        return base64_decode(strtr($segment, '-_', '+/'), true);
+    }
+
+    /**
+     * Locate a JWK in the JWKS response by `kid`.
+     *
+     * @param array<string, mixed> $jwks
+     * @return array<string, mixed>|null
+     */
+    private static function findJwkByKid(array $jwks, string $kid): ?array
+    {
+        $keys = $jwks['keys'] ?? null;
+        if (!is_array($keys)) {
+            return null;
+        }
+        foreach ($keys as $jwk) {
+            if (is_array($jwk) && ($jwk['kid'] ?? null) === $kid) {
+                return $jwk;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Convert an RSA JWK (`kty=RSA`, base64url `n`/`e`) to a PEM-encoded
+     * public key suitable for {@see openssl_verify()}.
+     *
+     * @param array<string, mixed> $jwk
+     */
+    private static function jwkToRsaPublicKeyPem(array $jwk): string
+    {
+        if (($jwk['kty'] ?? null) !== 'RSA') {
+            throw new \InvalidArgumentException('Unsupported JWK key type');
+        }
+        $n = $jwk['n'] ?? null;
+        $e = $jwk['e'] ?? null;
+        if (!is_string($n) || !is_string($e)) {
+            throw new \InvalidArgumentException('Malformed RSA JWK');
+        }
+
+        $modulus = self::base64UrlDecode($n);
+        $exponent = self::base64UrlDecode($e);
+        if ($modulus === false || $exponent === false) {
+            throw new \InvalidArgumentException('Malformed RSA JWK encoding');
+        }
+
+        // Build a DER-encoded SubjectPublicKeyInfo for an RSA public key, then
+        // wrap it as a PEM document. Avoids a hard dependency on a JWT library.
+        $modulusDer = self::derEncodeUnsignedInteger($modulus);
+        $exponentDer = self::derEncodeUnsignedInteger($exponent);
+        $rsaPublicKey = self::derEncodeSequence($modulusDer . $exponentDer);
+        $bitString = self::derEncodeBitString($rsaPublicKey);
+
+        // AlgorithmIdentifier: SEQUENCE { OID 1.2.840.113549.1.1.1, NULL }.
+        $rsaOid = "\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01";
+        $algorithmIdentifier = self::derEncodeSequence($rsaOid . "\x05\x00");
+        $spki = self::derEncodeSequence($algorithmIdentifier . $bitString);
+
+        $pem = "-----BEGIN PUBLIC KEY-----\n"
+            . chunk_split(base64_encode($spki), 64, "\n")
+            . "-----END PUBLIC KEY-----\n";
+
+        return $pem;
+    }
+
+    private static function derEncodeLength(int $length): string
+    {
+        if ($length < 0x80) {
+            return chr($length);
+        }
+        $bytes = '';
+        while ($length > 0) {
+            $bytes = chr($length & 0xff) . $bytes;
+            $length >>= 8;
+        }
+        return chr(0x80 | strlen($bytes)) . $bytes;
+    }
+
+    private static function derEncodeSequence(string $contents): string
+    {
+        return "\x30" . self::derEncodeLength(strlen($contents)) . $contents;
+    }
+
+    private static function derEncodeUnsignedInteger(string $bytes): string
+    {
+        // Strip leading zero bytes, then re-prepend a single 0x00 if the
+        // high bit of the first byte is set so the value remains positive.
+        $bytes = ltrim($bytes, "\x00");
+        if ($bytes === '') {
+            $bytes = "\x00";
+        } elseif ((ord($bytes[0]) & 0x80) !== 0) {
+            $bytes = "\x00" . $bytes;
+        }
+        return "\x02" . self::derEncodeLength(strlen($bytes)) . $bytes;
+    }
+
+    private static function derEncodeBitString(string $bytes): string
+    {
+        // 0x00 = number of unused bits in the final octet (always zero here).
+        $contents = "\x00" . $bytes;
+        return "\x03" . self::derEncodeLength(strlen($contents)) . $contents;
     }
 }

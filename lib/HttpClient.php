@@ -238,7 +238,53 @@ class HttpClient
 
         $baseUrl = $options !== null && $options->baseUrl !== null ? $options->baseUrl : $this->baseUrl;
         $baseUrl = rtrim($baseUrl, '/');
-        return $baseUrl . '/' . ltrim($path, '/');
+        return $baseUrl . '/' . self::encodePathSegments(ltrim($path, '/'));
+    }
+
+    /**
+     * RFC 3986 path-segment encoding for an entire path string.
+     *
+     * Splits `$path` on `/`, percent-encodes any unsafe characters in each
+     * segment, and reassembles with `/` separators. Existing valid
+     * percent-encoded triplets (`%XX`) are preserved verbatim, so generated
+     * services that already call `rawurlencode($id)` are not double-encoded.
+     *
+     * Defense-in-depth: when a service forgets to encode an interpolated ID
+     * like `om_xyz?foo`, non-slash unsafe characters (`?`, `#`, etc.) inside
+     * the segment are percent-encoded instead of opening a new query or
+     * fragment. A raw `/` inside an unencoded ID still acts as a path
+     * separator — callers are responsible for `rawurlencode`-ing IDs that can
+     * contain `/`.
+     */
+    private static function encodePathSegments(string $path): string
+    {
+        if ($path === '') {
+            return '';
+        }
+        $segments = explode('/', $path);
+        return implode('/', array_map([self::class, 'encodePathSegment'], $segments));
+    }
+
+    private static function encodePathSegment(string $segment): string
+    {
+        if ($segment === '') {
+            return '';
+        }
+        // Re-encode each character except RFC 3986 pchar safe characters and
+        // already-formed `%XX` triplets. Keeps idempotency for callers that
+        // already rawurlencoded their input.
+        return preg_replace_callback(
+            '/%[0-9A-Fa-f]{2}|[^A-Za-z0-9\-._~!$&\'()*+,;=:@]/',
+            static function (array $match): string {
+                $value = $match[0];
+                // Preserve existing percent-encoded triplets.
+                if (strlen($value) === 3 && $value[0] === '%') {
+                    return $value;
+                }
+                return rawurlencode($value);
+            },
+            $segment,
+        ) ?? $segment;
     }
 
     private function resolveTimeout(?RequestOptions $options): int
