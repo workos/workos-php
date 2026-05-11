@@ -279,7 +279,15 @@ class SessionManagerTest extends TestCase
             cookiePassword: $this->cookiePassword,
         );
 
-        $client = $this->createMockClient([['status' => 200, 'body' => $otherJwks]]);
+        // Queue TWO identical responses: the first satisfies the cached lookup,
+        // the second satisfies the forced refresh triggered by the kid miss.
+        // This exercises the "No JWKS key matches JWT kid" guard in
+        // decodeAccessToken rather than falsely passing on a MockHandler queue
+        // exhaustion (OutOfBoundsException caught by authenticate()).
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $otherJwks],
+            ['status' => 200, 'body' => $otherJwks],
+        ]);
         $result = $client->sessionManager()->authenticate(
             sessionData: $sealed,
             cookiePassword: $this->cookiePassword,

@@ -287,8 +287,12 @@ class HttpClientTest extends TestCase
         // The whole ID (including its `/`) stayed inside a single segment.
         $this->assertSame('/organizations/om_xyz%3F%2Ffoo', $uri->getPath());
 
-        // Defense-in-depth: a path with the raw ID also has its `?` encoded
-        // and does not produce a stray query string.
+        // Defense-in-depth: a path with a raw `?` in an interpolated ID has
+        // the `?` encoded so no stray query string opens. Note that a raw `/`
+        // inside an unencoded ID remains a path separator — callers must
+        // rawurlencode IDs that can contain `/` (covered by the first case
+        // above). Here we use `om_xyz?foo` (no slash) to assert exactly that
+        // boundary: `?` is encoded, segment count is preserved.
         $client2 = new HttpClient(
             apiKey: 'test_key',
             clientId: null,
@@ -298,10 +302,26 @@ class HttpClientTest extends TestCase
             handler: $handler,
         );
         $mock->append(new Response(200, ['Content-Type' => 'application/json'], '{}'));
-        $client2->request('GET', 'organizations/om_xyz?/foo');
+        $client2->request('GET', 'organizations/om_xyz?foo');
         $rawRequest = $history[array_key_last($history)]['request'];
         $this->assertSame('', $rawRequest->getUri()->getQuery());
-        $this->assertStringContainsString('om_xyz%3F', $rawRequest->getUri()->getPath());
+        $this->assertSame('/organizations/om_xyz%3Ffoo', $rawRequest->getUri()->getPath());
+
+        // And confirm the documented caveat: a raw `/` in an unencoded ID is
+        // NOT contained — it splits into a new segment. This pins the current
+        // behaviour so a future refactor that silently changes it is caught.
+        $client3 = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+        $mock->append(new Response(200, ['Content-Type' => 'application/json'], '{}'));
+        $client3->request('GET', 'organizations/om_xyz/foo');
+        $rawSlashRequest = $history[array_key_last($history)]['request'];
+        $this->assertSame('/organizations/om_xyz/foo', $rawSlashRequest->getUri()->getPath());
     }
 
     public function testNonStringCodeFieldIsIgnored(): void

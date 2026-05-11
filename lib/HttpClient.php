@@ -250,8 +250,11 @@ class HttpClient
      * services that already call `rawurlencode($id)` are not double-encoded.
      *
      * Defense-in-depth: when a service forgets to encode an interpolated ID
-     * like `om_xyz?/foo`, the `?` and `/` inside the ID become percent-encoded
-     * inside a single segment instead of opening a new path or query.
+     * like `om_xyz?foo`, non-slash unsafe characters (`?`, `#`, etc.) inside
+     * the segment are percent-encoded instead of opening a new query or
+     * fragment. A raw `/` inside an unencoded ID still acts as a path
+     * separator — callers are responsible for `rawurlencode`-ing IDs that can
+     * contain `/`.
      */
     private static function encodePathSegments(string $path): string
     {

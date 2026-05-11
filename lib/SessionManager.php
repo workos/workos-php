@@ -164,7 +164,7 @@ class SessionManager
         }
 
         try {
-            $decoded = $this->decodeAccessToken($session['access_token'], $clientId, $baseUrl);
+            $decoded = $this->decodeAccessToken($session['access_token'], $clientId);
         } catch (\Exception $e) {
             return [
                 'authenticated' => false,
@@ -313,10 +313,14 @@ class SessionManager
      */
     public function fetchJwks(string $clientId): array
     {
-        return $this->client->request(
+        $response = $this->client->request(
             method: 'GET',
             path: "sso/jwks/{$clientId}",
         );
+        if ($response === null) {
+            throw new \RuntimeException('Failed to fetch JWKS: empty response');
+        }
+        return $response;
     }
 
     /**
@@ -362,14 +366,12 @@ class SessionManager
      *
      * @param string $accessToken The JWT access token.
      * @param string $clientId The WorkOS client ID (used to fetch JWKS).
-     * @param string $baseUrl The WorkOS API base URL.
      * @return array The decoded JWT claims.
      * @throws \InvalidArgumentException If the token cannot be decoded or fails verification.
      */
     private function decodeAccessToken(
         string $accessToken,
         string $clientId,
-        string $baseUrl,
     ): array {
         $parts = explode('.', $accessToken);
         if (count($parts) !== 3) {
