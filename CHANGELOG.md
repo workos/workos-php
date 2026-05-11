@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.2](https://github.com/workos/workos-php/compare/v6.0.1...v6.0.2) (2026-05-11)
+
+
+### Bug Fixes
+
+* harden JWT signature verification and URL path encoding ([#386](https://github.com/workos/workos-php/issues/386)) ([aa64119](https://github.com/workos/workos-php/commit/aa6411916fd2d70ce043085bcc9f4ba21e9e85eb))
+
 ## [6.0.1](https://github.com/workos/workos-php/compare/6.0.0...v6.0.1) (2026-05-07)
 
 
