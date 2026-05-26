@@ -15,7 +15,7 @@ class WebhooksTest extends TestCase
 
     public function testListWebhookEndpoints(): void
     {
-        $fixture = $this->loadFixture('list_webhook_endpoint_json');
+        $fixture = $this->loadFixture('list_webhook_endpoint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->listWebhookEndpoints(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
@@ -31,10 +31,10 @@ class WebhooksTest extends TestCase
 
     public function testCreateWebhookEndpoint(): void
     {
-        $fixture = $this->loadFixture('webhook_endpoint_json');
+        $fixture = $this->loadFixture('webhook_endpoint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->createWebhookEndpoint(endpointUrl: 'test_value', events: []);
-        $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpoint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
         $this->assertIsArray($result->toArray());
@@ -47,10 +47,10 @@ class WebhooksTest extends TestCase
 
     public function testUpdateWebhookEndpoint(): void
     {
-        $fixture = $this->loadFixture('webhook_endpoint_json');
+        $fixture = $this->loadFixture('webhook_endpoint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->webhooks()->updateWebhookEndpoint('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpointJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpoint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
         $this->assertIsArray($result->toArray());
@@ -70,7 +70,7 @@ class WebhooksTest extends TestCase
 
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_webhook_endpoint_json');
+        $fixture = $this->loadFixture('list_webhook_endpoint');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
