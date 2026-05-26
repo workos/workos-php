@@ -6,11 +6,11 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\Resource\AuditLogActionJson;
+use WorkOS\Resource\AuditLogAction;
 use WorkOS\Resource\AuditLogEventCreateResponse;
-use WorkOS\Resource\AuditLogExportJson;
+use WorkOS\Resource\AuditLogExport;
 use WorkOS\Resource\AuditLogSchemaJson;
-use WorkOS\Resource\AuditLogsRetentionJson;
+use WorkOS\Resource\AuditLogsRetention;
 
 class AuditLogs
 {
@@ -24,19 +24,19 @@ class AuditLogs
      *
      * Get the configured event retention period for the given Organization.
      * @param string $id Unique identifier of the Organization.
-     * @return \WorkOS\Resource\AuditLogsRetentionJson
+     * @return \WorkOS\Resource\AuditLogsRetention
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationAuditLogsRetention(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuditLogsRetentionJson {
+    ): \WorkOS\Resource\AuditLogsRetention {
         $response = $this->client->request(
             method: 'GET',
             path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',
             options: $options,
         );
-        return AuditLogsRetentionJson::fromArray($response);
+        return AuditLogsRetention::fromArray($response);
     }
 
     /**
@@ -45,14 +45,14 @@ class AuditLogs
      * Set the event retention period for the given Organization.
      * @param string $id Unique identifier of the Organization.
      * @param int $retentionPeriodInDays The number of days Audit Log events will be retained. Valid values are `30` and `365`.
-     * @return \WorkOS\Resource\AuditLogsRetentionJson
+     * @return \WorkOS\Resource\AuditLogsRetention
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationAuditLogsRetention(
         string $id,
         int $retentionPeriodInDays,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuditLogsRetentionJson {
+    ): \WorkOS\Resource\AuditLogsRetention {
         $body = [
             'retention_period_in_days' => $retentionPeriodInDays,
         ];
@@ -62,7 +62,7 @@ class AuditLogs
             body: $body,
             options: $options,
         );
-        return AuditLogsRetentionJson::fromArray($response);
+        return AuditLogsRetention::fromArray($response);
     }
 
     /**
@@ -73,7 +73,7 @@ class AuditLogs
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Defaults to "desc".
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogActionJson>
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogAction>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listActions(
@@ -93,7 +93,7 @@ class AuditLogs
             method: 'GET',
             path: 'audit_logs/actions',
             query: $query,
-            modelClass: AuditLogActionJson::class,
+            modelClass: AuditLogAction::class,
             options: $options,
         );
     }
@@ -210,7 +210,7 @@ class AuditLogs
      * @param array<string>|null $actorNames List of actor names to filter against.
      * @param array<string>|null $actorIds List of actor IDs to filter against.
      * @param array<string>|null $targets List of target types to filter against.
-     * @return \WorkOS\Resource\AuditLogExportJson
+     * @return \WorkOS\Resource\AuditLogExport
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createExport(
@@ -223,7 +223,7 @@ class AuditLogs
         ?array $actorIds = null,
         ?array $targets = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuditLogExportJson {
+    ): \WorkOS\Resource\AuditLogExport {
         $body = array_filter([
             'organization_id' => $organizationId,
             'range_start' => $rangeStart,
@@ -240,7 +240,7 @@ class AuditLogs
             body: $body,
             options: $options,
         );
-        return AuditLogExportJson::fromArray($response);
+        return AuditLogExport::fromArray($response);
     }
 
     /**
@@ -248,18 +248,18 @@ class AuditLogs
      *
      * Get an Audit Log Export. The URL will expire after 10 minutes. If the export is needed again at a later time, refetching the export will regenerate the URL.
      * @param string $auditLogExportId The unique ID of the Audit Log Export.
-     * @return \WorkOS\Resource\AuditLogExportJson
+     * @return \WorkOS\Resource\AuditLogExport
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getExport(
         string $auditLogExportId,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuditLogExportJson {
+    ): \WorkOS\Resource\AuditLogExport {
         $response = $this->client->request(
             method: 'GET',
             path: 'audit_logs/exports/' . rawurlencode($auditLogExportId),
             options: $options,
         );
-        return AuditLogExportJson::fromArray($response);
+        return AuditLogExport::fromArray($response);
     }
 }

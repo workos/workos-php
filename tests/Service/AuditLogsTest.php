@@ -15,10 +15,10 @@ class AuditLogsTest extends TestCase
 
     public function testGetOrganizationAuditLogsRetention(): void
     {
-        $fixture = $this->loadFixture('audit_logs_retention_json');
+        $fixture = $this->loadFixture('audit_logs_retention');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->getOrganizationAuditLogsRetention('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetentionJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetention::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -27,10 +27,10 @@ class AuditLogsTest extends TestCase
 
     public function testUpdateOrganizationAuditLogsRetention(): void
     {
-        $fixture = $this->loadFixture('audit_logs_retention_json');
+        $fixture = $this->loadFixture('audit_logs_retention');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->updateOrganizationAuditLogsRetention('test_id', retentionPeriodInDays: 1);
-        $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetentionJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetention::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
@@ -41,7 +41,7 @@ class AuditLogsTest extends TestCase
 
     public function testListActions(): void
     {
-        $fixture = $this->loadFixture('list_audit_log_action_json');
+        $fixture = $this->loadFixture('list_audit_log_action');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->listActions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
@@ -99,10 +99,10 @@ class AuditLogsTest extends TestCase
 
     public function testCreateExport(): void
     {
-        $fixture = $this->loadFixture('audit_log_export_json');
+        $fixture = $this->loadFixture('audit_log_export');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->createExport(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogExport::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -116,10 +116,10 @@ class AuditLogsTest extends TestCase
 
     public function testGetExport(): void
     {
-        $fixture = $this->loadFixture('audit_log_export_json');
+        $fixture = $this->loadFixture('audit_log_export');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->getExport('test_auditLogExportId');
-        $this->assertInstanceOf(\WorkOS\Resource\AuditLogExportJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogExport::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -129,7 +129,7 @@ class AuditLogsTest extends TestCase
 
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_audit_log_action_json');
+        $fixture = $this->loadFixture('list_audit_log_action');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
