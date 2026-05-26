@@ -85,15 +85,15 @@ class Radar
      * Add an entry to a Radar list
      *
      * Add an entry to a Radar list.
-     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
-     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to add the entry to the allow or block list.
+     * @param \WorkOS\Resource\RadarListType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarListAction $action The list action indicating whether to add the entry to the allow or block list.
      * @param string $entry The value to add to the list. Must match the format of the list type (e.g. a valid IP address for `ip_address`, a valid email for `email`).
      * @return \WorkOS\Resource\RadarListEntryAlreadyPresentResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function addListEntry(
-        \WorkOS\Resource\RadarType $type,
-        \WorkOS\Resource\RadarAction $action,
+        \WorkOS\Resource\RadarListType $type,
+        \WorkOS\Resource\RadarListAction $action,
         string $entry,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RadarListEntryAlreadyPresentResponse {
@@ -113,15 +113,15 @@ class Radar
      * Remove an entry from a Radar list
      *
      * Remove an entry from a Radar list.
-     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
-     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to remove the entry from the allow or block list.
+     * @param \WorkOS\Resource\RadarListType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarListAction $action The list action indicating whether to remove the entry from the allow or block list.
      * @param string $entry The value to remove from the list. Must match an existing entry.
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeListEntry(
-        \WorkOS\Resource\RadarType $type,
-        \WorkOS\Resource\RadarAction $action,
+        \WorkOS\Resource\RadarListType $type,
+        \WorkOS\Resource\RadarListAction $action,
         string $entry,
         ?\WorkOS\RequestOptions $options = null,
     ): void {

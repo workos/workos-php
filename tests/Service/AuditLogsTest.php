@@ -57,7 +57,7 @@ class AuditLogsTest extends TestCase
 
     public function testListActionSchemas(): void
     {
-        $fixture = $this->loadFixture('list_audit_log_schema_json');
+        $fixture = $this->loadFixture('list_audit_log_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->listActionSchemas('test_actionName', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
@@ -73,10 +73,10 @@ class AuditLogsTest extends TestCase
 
     public function testCreateSchema(): void
     {
-        $fixture = $this->loadFixture('audit_log_schema_json');
+        $fixture = $this->loadFixture('audit_log_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->auditLogs()->createSchema('test_actionName', targets: []);
-        $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchemaJson::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchema::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());

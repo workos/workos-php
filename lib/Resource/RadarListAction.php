@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum RadarAction: string
+enum RadarListAction: string
 {
     case Block = 'block';
     case Allow = 'allow';

@@ -16,7 +16,7 @@ readonly class AuditLogAction implements \JsonSerializable
         /** Identifier of what action was taken. */
         public string $name,
         /** The schema associated with the action. */
-        public AuditLogSchemaJson $schema,
+        public AuditLogSchema $schema,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -29,7 +29,7 @@ readonly class AuditLogAction implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'audit_log_action',
             name: $data['name'],
-            schema: AuditLogSchemaJson::fromArray($data['schema']),
+            schema: AuditLogSchema::fromArray($data['schema']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
         );

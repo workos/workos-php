@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class AuditLogSchemaDto implements \JsonSerializable
+readonly class AuditLogSchemaInput implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
         /**
          * The list of targets for the schema.
-         * @var array<\WorkOS\Resource\AuditLogSchemaTarget>
+         * @var array<\WorkOS\Resource\AuditLogSchemaTargetInput>
          */
         public array $targets,
         /** The metadata schema for the actor. */
-        public ?AuditLogSchemaActor $actor = null,
+        public ?AuditLogSchemaActorInput $actor = null,
         /**
          * Optional JSON schema for event metadata.
          * @var array<string, mixed>|null
@@ -29,8 +29,8 @@ readonly class AuditLogSchemaDto implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            targets: array_map(fn ($item) => AuditLogSchemaTarget::fromArray($item), $data['targets']),
-            actor: isset($data['actor']) ? AuditLogSchemaActor::fromArray($data['actor']) : null,
+            targets: array_map(fn ($item) => AuditLogSchemaTargetInput::fromArray($item), $data['targets']),
+            actor: isset($data['actor']) ? AuditLogSchemaActorInput::fromArray($data['actor']) : null,
             metadata: $data['metadata'] ?? null,
         );
     }

@@ -6,31 +6,28 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-/** The metadata schema for the actor. */
-readonly class AuditLogSchemaJsonActor implements \JsonSerializable
+/** Error response body. */
+readonly class ErrorResponse implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
-        /**
-         * The JSON Schema definition for actor metadata.
-         * @var array<string, mixed>
-         */
-        public array $metadata,
+        /** A human-readable description of the error. */
+        public string $error,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            metadata: $data['metadata'],
+            error: $data['error'],
         );
     }
 
     public function toArray(): array
     {
         return [
-            'metadata' => $this->metadata,
+            'error' => $this->error,
         ];
     }
 }

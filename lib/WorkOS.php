@@ -189,7 +189,6 @@ class WorkOS
 
     // @oagen-ignore-start — non-spec service properties (hand-maintained)
     private ?Passwordless $passwordless = null;
-    private ?Vault $vault = null;
     private ?WebhookVerification $webhookVerification = null;
     private ?Actions $actions = null;
     private ?SessionManager $sessionManager = null;
@@ -201,11 +200,6 @@ class WorkOS
     public function passwordless(): Passwordless
     {
         return $this->passwordless ??= new Passwordless($this->httpClient);
-    }
-
-    public function vault(): Vault
-    {
-        return $this->vault ??= new Vault($this->httpClient);
     }
 
     public function webhookVerification(): WebhookVerification

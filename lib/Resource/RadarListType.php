@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum RadarType: string
+enum RadarListType: string
 {
     case IpAddress = 'ip_address';
     case Domain = 'domain';

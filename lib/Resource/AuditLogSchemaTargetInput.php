@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class AuditLogSchemaJsonTarget implements \JsonSerializable
+readonly class AuditLogSchemaTargetInput implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -14,7 +14,7 @@ readonly class AuditLogSchemaJsonTarget implements \JsonSerializable
         /** The type of the target resource. */
         public string $type,
         /**
-         * Additional data associated with the event or entity.
+         * Optional JSON schema for target metadata.
          * @var array<string, mixed>|null
          */
         public ?array $metadata = null,

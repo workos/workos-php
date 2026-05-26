@@ -9,7 +9,7 @@ namespace WorkOS\Service;
 use WorkOS\Resource\AuditLogAction;
 use WorkOS\Resource\AuditLogEventCreateResponse;
 use WorkOS\Resource\AuditLogExport;
-use WorkOS\Resource\AuditLogSchemaJson;
+use WorkOS\Resource\AuditLogSchema;
 use WorkOS\Resource\AuditLogsRetention;
 
 class AuditLogs
@@ -107,7 +107,7 @@ class AuditLogs
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Defaults to "desc".
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogSchemaJson>
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuditLogSchema>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listActionSchemas(
@@ -128,7 +128,7 @@ class AuditLogs
             method: 'GET',
             path: 'audit_logs/actions/' . rawurlencode($actionName) . '/schemas',
             query: $query,
-            modelClass: AuditLogSchemaJson::class,
+            modelClass: AuditLogSchema::class,
             options: $options,
         );
     }
@@ -138,19 +138,19 @@ class AuditLogs
      *
      * Creates a new Audit Log schema used to validate the payload of incoming Audit Log Events. If the `action` does not exist, it will also be created.
      * @param string $actionName The name of the Audit Log action.
-     * @param \WorkOS\Resource\AuditLogSchemaActor|null $actor The metadata schema for the actor.
-     * @param array<\WorkOS\Resource\AuditLogSchemaTarget> $targets The list of targets for the schema.
+     * @param \WorkOS\Resource\AuditLogSchemaActorInput|null $actor The metadata schema for the actor.
+     * @param array<\WorkOS\Resource\AuditLogSchemaTargetInput> $targets The list of targets for the schema.
      * @param array<string, mixed>|null $metadata Optional JSON schema for event metadata.
-     * @return \WorkOS\Resource\AuditLogSchemaJson
+     * @return \WorkOS\Resource\AuditLogSchema
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createSchema(
         string $actionName,
         array $targets,
-        ?\WorkOS\Resource\AuditLogSchemaActor $actor = null,
+        ?\WorkOS\Resource\AuditLogSchemaActorInput $actor = null,
         ?array $metadata = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\AuditLogSchemaJson {
+    ): \WorkOS\Resource\AuditLogSchema {
         $body = array_filter([
             'actor' => $actor,
             'targets' => $targets,
@@ -162,7 +162,7 @@ class AuditLogs
             body: $body,
             options: $options,
         );
-        return AuditLogSchemaJson::fromArray($response);
+        return AuditLogSchema::fromArray($response);
     }
 
     /**

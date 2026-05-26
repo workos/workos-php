@@ -14,7 +14,7 @@ readonly class AuditLogSchemaTarget implements \JsonSerializable
         /** The type of the target resource. */
         public string $type,
         /**
-         * Optional JSON schema for target metadata.
+         * Additional data associated with the event or entity.
          * @var array<string, mixed>|null
          */
         public ?array $metadata = null,

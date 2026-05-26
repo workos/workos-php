@@ -124,7 +124,7 @@ class Vault
             'after' => $after,
             'order' => $order?->value,
             'search' => $search,
-            'updatedAfter' => $updatedAfter,
+            'updatedAfter' => $updatedAfter?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',

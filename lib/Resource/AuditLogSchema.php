@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class AuditLogSchemaJson implements \JsonSerializable
+readonly class AuditLogSchema implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -17,13 +17,13 @@ readonly class AuditLogSchemaJson implements \JsonSerializable
         public int $version,
         /**
          * The list of targets for the schema.
-         * @var array<\WorkOS\Resource\AuditLogSchemaJsonTarget>
+         * @var array<\WorkOS\Resource\AuditLogSchemaTarget>
          */
         public array $targets,
         /** The timestamp when the Audit Log Schema was created. */
         public \DateTimeImmutable $createdAt,
         /** The metadata schema for the actor. */
-        public ?AuditLogSchemaJsonActor $actor = null,
+        public ?AuditLogSchemaActor $actor = null,
         /**
          * Additional data associated with the event or entity.
          * @var array<string, mixed>|null
@@ -37,9 +37,9 @@ readonly class AuditLogSchemaJson implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'audit_log_schema',
             version: $data['version'],
-            targets: array_map(fn ($item) => AuditLogSchemaJsonTarget::fromArray($item), $data['targets']),
+            targets: array_map(fn ($item) => AuditLogSchemaTarget::fromArray($item), $data['targets']),
             createdAt: new \DateTimeImmutable($data['created_at']),
-            actor: isset($data['actor']) ? AuditLogSchemaJsonActor::fromArray($data['actor']) : null,
+            actor: isset($data['actor']) ? AuditLogSchemaActor::fromArray($data['actor']) : null,
             metadata: $data['metadata'] ?? null,
         );
     }

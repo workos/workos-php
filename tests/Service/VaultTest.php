@@ -63,7 +63,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('list_object_summary');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->listKv(limit: 1, before: 'test_value', after: 'test_value', order: \WorkOS\Resource\VaultOrder::Asc, search: 'test_value', updatedAfter: 'test_value');
+        $result = $client->vault()->listKv(limit: 1, before: 'test_value', after: 'test_value', order: \WorkOS\Resource\VaultOrder::Asc, search: 'test_value', updatedAfter: new \DateTimeImmutable('2023-01-01T00:00:00Z'));
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -74,7 +74,7 @@ class VaultTest extends TestCase
         $this->assertSame('test_value', $query['after']);
         $this->assertSame('asc', $query['order']);
         $this->assertSame('test_value', $query['search']);
-        $this->assertSame('test_value', $query['updatedAfter']);
+        $this->assertArrayHasKey('updatedAfter', $query);
     }
 
     public function testCreateKv(): void

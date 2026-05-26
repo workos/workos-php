@@ -43,7 +43,7 @@ class RadarTest extends TestCase
     {
         $fixture = $this->loadFixture('radar_list_entry_already_present_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->radar()->addListEntry(\WorkOS\Resource\RadarType::IpAddress, \WorkOS\Resource\RadarAction::Block, entry: 'test_value');
+        $result = $client->radar()->addListEntry(\WorkOS\Resource\RadarListType::IpAddress, \WorkOS\Resource\RadarListAction::Block, entry: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\RadarListEntryAlreadyPresentResponse::class, $result);
         $this->assertSame($fixture['message'], $result->message);
         $this->assertIsArray($result->toArray());
@@ -57,7 +57,7 @@ class RadarTest extends TestCase
     public function testRemoveListEntry(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->radar()->removeListEntry(\WorkOS\Resource\RadarType::IpAddress, \WorkOS\Resource\RadarAction::Block, entry: 'test_value');
+        $client->radar()->removeListEntry(\WorkOS\Resource\RadarListType::IpAddress, \WorkOS\Resource\RadarListAction::Block, entry: 'test_value');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('radar/lists/ip_address/block', $request->getUri()->getPath());
