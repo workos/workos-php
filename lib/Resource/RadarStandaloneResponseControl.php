@@ -10,9 +10,7 @@ enum RadarStandaloneResponseControl: string
 {
     case BotDetection = 'bot_detection';
     case BruteForceAttack = 'brute_force_attack';
-    case CredentialStuffing = 'credential_stuffing';
     case DomainSignUpRateLimit = 'domain_sign_up_rate_limit';
-    case IpSignUpRateLimit = 'ip_sign_up_rate_limit';
     case ImpossibleTravel = 'impossible_travel';
     case RepeatSignUp = 'repeat_sign_up';
     case StaleAccount = 'stale_account';

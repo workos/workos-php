@@ -25,8 +25,6 @@ class Radar
      * @param string $email The email address of the user making the request.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod The authentication method being used.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $action The action being performed.
-     * @param string|null $deviceFingerprint An optional device fingerprint for the request.
-     * @param string|null $botScore An optional bot detection score for the request.
      * @return \WorkOS\Resource\RadarStandaloneResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -36,19 +34,15 @@ class Radar
         string $email,
         \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod,
         \WorkOS\Resource\RadarStandaloneAssessRequestAction $action,
-        ?string $deviceFingerprint = null,
-        ?string $botScore = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RadarStandaloneResponse {
-        $body = array_filter([
+        $body = [
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
             'email' => $email,
             'auth_method' => $authMethod->value,
             'action' => $action->value,
-            'device_fingerprint' => $deviceFingerprint,
-            'bot_score' => $botScore,
-        ], fn ($v) => $v !== null);
+        ];
         $response = $this->client->request(
             method: 'POST',
             path: 'radar/attempts',

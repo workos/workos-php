@@ -21,10 +21,6 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
         public RadarStandaloneAssessRequestAuthMethod $authMethod,
         /** The action being performed. */
         public RadarStandaloneAssessRequestAction $action,
-        /** An optional device fingerprint for the request. */
-        public ?string $deviceFingerprint = null,
-        /** An optional bot detection score for the request. */
-        public ?string $botScore = null,
     ) {
     }
 
@@ -36,8 +32,6 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             email: $data['email'],
             authMethod: RadarStandaloneAssessRequestAuthMethod::from($data['auth_method']),
             action: RadarStandaloneAssessRequestAction::from($data['action']),
-            deviceFingerprint: $data['device_fingerprint'] ?? null,
-            botScore: $data['bot_score'] ?? null,
         );
     }
 
@@ -49,8 +43,6 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             'email' => $this->email,
             'auth_method' => $this->authMethod->value,
             'action' => $this->action->value,
-            'device_fingerprint' => $this->deviceFingerprint,
-            'bot_score' => $this->botScore,
         ];
     }
 }
