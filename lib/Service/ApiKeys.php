@@ -59,6 +59,7 @@ class ApiKeys
      * @param string $organizationId Unique identifier of the Organization.
      * @param string $name The name for the API key.
      * @param array<string>|null $permissions The permission slugs to assign to the API key.
+     * @param \DateTimeImmutable|null $expiresAt The timestamp when the API key should expire. Must be a future timestamp. If omitted, the key does not expire.
      * @return \WorkOS\Resource\OrganizationApiKeyWithValue
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -66,11 +67,13 @@ class ApiKeys
         string $organizationId,
         string $name,
         ?array $permissions = null,
+        ?\DateTimeImmutable $expiresAt = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\OrganizationApiKeyWithValue {
         $body = array_filter([
             'name' => $name,
             'permissions' => $permissions,
+            'expires_at' => $expiresAt,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',

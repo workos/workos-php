@@ -18,6 +18,8 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
          * @var array<string>|null
          */
         public ?array $permissions = null,
+        /** The timestamp when the API key should expire. Must be a future timestamp. If omitted, the key does not expire. */
+        public ?\DateTimeImmutable $expiresAt = null,
     ) {
     }
 
@@ -26,6 +28,7 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
         return new self(
             name: $data['name'],
             permissions: $data['permissions'] ?? null,
+            expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
         );
     }
 
@@ -34,6 +37,7 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
         return [
             'name' => $this->name,
             'permissions' => $this->permissions,
+            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
     }
 }
