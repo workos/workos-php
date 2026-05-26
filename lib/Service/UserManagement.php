@@ -17,7 +17,6 @@ use WorkOS\Resource\Invitation;
 use WorkOS\Resource\JwksResponse;
 use WorkOS\Resource\JWTTemplateResponse;
 use WorkOS\Resource\MagicAuth;
-use WorkOS\Resource\OrganizationMembership;
 use WorkOS\Resource\PasswordReset;
 use WorkOS\Resource\RedirectUri;
 use WorkOS\Resource\ResetPasswordResponse;
@@ -27,7 +26,6 @@ use WorkOS\Resource\UserApiKey;
 use WorkOS\Resource\UserApiKeyWithValue;
 use WorkOS\Resource\UserIdentitiesGetItem;
 use WorkOS\Resource\UserInvite;
-use WorkOS\Resource\UserOrganizationMembership;
 use WorkOS\Resource\UserSessionsListItem;
 use WorkOS\Resource\VerifyEmailResponse;
 
@@ -373,7 +371,7 @@ class UserManagement
      * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider.
      * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider.
      * @param string|null $invitationToken A token representing a user invitation to redeem during authentication.
-     * @param \WorkOS\Resource\UserManagementAuthenticationScreenHint $screenHint Used to specify which screen to display when the provider is `authkit`. Defaults to "sign-in".
+     * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint Used to specify which screen to display when the provider is `authkit`. Defaults to "sign-in".
      * @param string|null $loginHint A hint to the authorization server about the login identifier the user might use.
      * @param \WorkOS\Resource\UserManagementAuthenticationProvider|null $provider The OAuth provider to authenticate with (e.g., GoogleOAuth, MicrosoftOAuth, GitHubOAuth).
      * @param string|null $prompt Controls the authentication flow behavior for the user.
@@ -392,7 +390,7 @@ class UserManagement
         ?array $providerQueryParams = null,
         ?array $providerScopes = null,
         ?string $invitationToken = null,
-        \WorkOS\Resource\UserManagementAuthenticationScreenHint $screenHint = \WorkOS\Resource\UserManagementAuthenticationScreenHint::SignIn,
+        \WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint = \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignIn,
         ?string $loginHint = null,
         ?\WorkOS\Resource\UserManagementAuthenticationProvider $provider = null,
         ?string $prompt = null,
@@ -1234,203 +1232,6 @@ class UserManagement
     }
 
     /**
-     * List organization memberships
-     *
-     * Get a list of all organization memberships matching the criteria specified. At least one of `user_id` or `organization_id` must be provided. By default only active memberships are returned. Use the `statuses` parameter to filter by other statuses.
-     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
-     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
-     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
-     * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
-     * @param array<\WorkOS\Resource\OrganizationMembershipStatus>|null $statuses Filter by the status of the organization membership. Array including any of `active`, `inactive`, or `pending`.
-     * @param string|null $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserOrganizationMembership>
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function listOrganizationMemberships(
-        ?string $before = null,
-        ?string $after = null,
-        ?int $limit = null,
-        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
-        ?string $organizationId = null,
-        ?array $statuses = null,
-        ?string $userId = null,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\PaginatedResponse {
-        $query = array_filter([
-            'before' => $before,
-            'after' => $after,
-            'limit' => $limit,
-            'order' => $order->value,
-            'organization_id' => $organizationId,
-            'statuses' => $statuses,
-            'user_id' => $userId,
-        ], fn ($v) => $v !== null);
-        return $this->client->requestPage(
-            method: 'GET',
-            path: 'user_management/organization_memberships',
-            query: $query,
-            modelClass: UserOrganizationMembership::class,
-            options: $options,
-        );
-    }
-
-    /**
-     * Create an organization membership
-     *
-     * Creates a new `active` organization membership for the given organization and user.
-     *
-     * Calling this API with an organization and user that match an `inactive` organization membership will activate the membership with the specified role(s).
-     * @param string $userId The ID of the [user](https://workos.com/docs/reference/authkit/user).
-     * @param string $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) which the user belongs to.
-     * @param null|RoleSingle|RoleMultiple $role
-     * @return \WorkOS\Resource\OrganizationMembership
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function createOrganizationMembership(
-        string $userId,
-        string $organizationId,
-        null|RoleSingle|RoleMultiple $role = null,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\OrganizationMembership {
-        $body = [
-            'user_id' => $userId,
-            'organization_id' => $organizationId,
-        ];
-        if ($role instanceof RoleSingle) {
-            $body['role_slug'] = $role->slug;
-        } elseif ($role instanceof RoleMultiple) {
-            $body['role_slugs'] = $role->slugs;
-        }
-        $response = $this->client->request(
-            method: 'POST',
-            path: 'user_management/organization_memberships',
-            body: $body,
-            options: $options,
-        );
-        return OrganizationMembership::fromArray($response);
-    }
-
-    /**
-     * Get an organization membership
-     *
-     * Get the details of an existing organization membership.
-     * @param string $id The unique ID of the organization membership.
-     * @return \WorkOS\Resource\UserOrganizationMembership
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function getOrganizationMembership(
-        string $id,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\UserOrganizationMembership {
-        $response = $this->client->request(
-            method: 'GET',
-            path: 'user_management/organization_memberships/' . rawurlencode($id),
-            options: $options,
-        );
-        return UserOrganizationMembership::fromArray($response);
-    }
-
-    /**
-     * Update an organization membership
-     *
-     * Update the details of an existing organization membership.
-     * @param string $id The unique ID of the organization membership.
-     * @param null|RoleSingle|RoleMultiple $role
-     * @return \WorkOS\Resource\UserOrganizationMembership
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function updateOrganizationMembership(
-        string $id,
-        null|RoleSingle|RoleMultiple $role = null,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\UserOrganizationMembership {
-        $body = [
-        ];
-        if ($role instanceof RoleSingle) {
-            $body['role_slug'] = $role->slug;
-        } elseif ($role instanceof RoleMultiple) {
-            $body['role_slugs'] = $role->slugs;
-        }
-        $response = $this->client->request(
-            method: 'PUT',
-            path: 'user_management/organization_memberships/' . rawurlencode($id),
-            body: $body,
-            options: $options,
-        );
-        return UserOrganizationMembership::fromArray($response);
-    }
-
-    /**
-     * Delete an organization membership
-     *
-     * Permanently deletes an existing organization membership. It cannot be undone.
-     * @param string $id The unique ID of the organization membership.
-     * @return void
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function deleteOrganizationMembership(
-        string $id,
-        ?\WorkOS\RequestOptions $options = null,
-    ): void {
-        $this->client->request(
-            method: 'DELETE',
-            path: 'user_management/organization_memberships/' . rawurlencode($id),
-            options: $options,
-        );
-    }
-
-    /**
-     * Deactivate an organization membership
-     *
-     * Deactivates an `active` organization membership. Emits an [organization_membership.updated](https://workos.com/docs/events/organization-membership) event upon successful deactivation.
-     *
-     * - Deactivating an `inactive` membership is a no-op and does not emit an event.
-     * - Deactivating a `pending` membership returns an error. This membership should be [deleted](https://workos.com/docs/reference/authkit/organization-membership/delete) instead.
-     *
-     * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
-     * @param string $id The unique ID of the organization membership.
-     * @return \WorkOS\Resource\OrganizationMembership
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function deactivateOrganizationMembership(
-        string $id,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\OrganizationMembership {
-        $response = $this->client->request(
-            method: 'PUT',
-            path: 'user_management/organization_memberships/' . rawurlencode($id) . '/deactivate',
-            options: $options,
-        );
-        return OrganizationMembership::fromArray($response);
-    }
-
-    /**
-     * Reactivate an organization membership
-     *
-     * Reactivates an `inactive` organization membership, retaining the pre-existing role(s). Emits an [organization_membership.updated](https://workos.com/docs/events/organization-membership) event upon successful reactivation.
-     *
-     * - Reactivating an `active` membership is a no-op and does not emit an event.
-     * - Reactivating a `pending` membership returns an error. The user needs to [accept the invitation](https://workos.com/docs/authkit/invitations) instead.
-     *
-     * See the [membership management documentation](https://workos.com/docs/authkit/users-organizations/organizations/membership-management) for additional details.
-     * @param string $id The unique ID of the organization membership.
-     * @return \WorkOS\Resource\UserOrganizationMembership
-     * @throws \WorkOS\Exception\WorkOSException
-     */
-    public function reactivateOrganizationMembership(
-        string $id,
-        ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\UserOrganizationMembership {
-        $response = $this->client->request(
-            method: 'PUT',
-            path: 'user_management/organization_memberships/' . rawurlencode($id) . '/reactivate',
-            options: $options,
-        );
-        return UserOrganizationMembership::fromArray($response);
-    }
-
-    /**
      * Create a redirect URI
      *
      * Creates a new redirect URI for an environment.
@@ -1556,6 +1357,7 @@ class UserManagement
      * @param string $name A descriptive name for the API key.
      * @param string $organizationId The ID of the organization the user API key is associated with. The user must have an active membership in this organization.
      * @param array<string>|null $permissions The permission slugs to assign to the API key. Each permission must be enabled for user API keys.
+     * @param \DateTimeImmutable|null $expiresAt The timestamp when the API key should expire. Must be a future timestamp. If omitted, the key does not expire.
      * @return \WorkOS\Resource\UserApiKeyWithValue
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1564,12 +1366,14 @@ class UserManagement
         string $name,
         string $organizationId,
         ?array $permissions = null,
+        ?\DateTimeImmutable $expiresAt = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserApiKeyWithValue {
         $body = array_filter([
             'name' => $name,
             'organization_id' => $organizationId,
             'permissions' => $permissions,
+            'expires_at' => $expiresAt,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
