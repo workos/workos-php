@@ -189,6 +189,9 @@ class Authorization
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param string|null $resourceId Filter assignments by the ID of the resource.
+     * @param string|null $resourceExternalId Filter assignments by the external ID of the resource.
+     * @param string|null $resourceTypeSlug Filter assignments by the slug of the resource type.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -198,6 +201,9 @@ class Authorization
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $resourceId = null,
+        ?string $resourceExternalId = null,
+        ?string $resourceTypeSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -205,6 +211,9 @@ class Authorization
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'resource_id' => $resourceId,
+            'resource_external_id' => $resourceExternalId,
+            'resource_type_slug' => $resourceTypeSlug,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -661,6 +670,7 @@ class Authorization
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param string|null $roleSlug Filter assignments by the slug of the role.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -672,6 +682,7 @@ class Authorization
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $roleSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -679,6 +690,7 @@ class Authorization
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'role_slug' => $roleSlug,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -701,7 +713,6 @@ class Authorization
      * @param string|null $organizationId Filter resources by organization ID.
      * @param string|null $resourceTypeSlug Filter resources by resource type slug.
      * @param string|null $resourceExternalId Filter resources by external ID.
-     * @param string|null $search Search resources by name.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizationResource>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -714,7 +725,6 @@ class Authorization
         ?string $organizationId = null,
         ?string $resourceTypeSlug = null,
         ?string $resourceExternalId = null,
-        ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -725,7 +735,6 @@ class Authorization
             'organization_id' => $organizationId,
             'resource_type_slug' => $resourceTypeSlug,
             'resource_external_id' => $resourceExternalId,
-            'search' => $search,
         ], fn ($v) => $v !== null);
         if ($parent instanceof ParentById) {
             $query['parent_resource_id'] = $parent->resourceId;
@@ -918,6 +927,7 @@ class Authorization
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param string|null $roleSlug Filter assignments by the slug of the role.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserRoleAssignment>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -927,6 +937,7 @@ class Authorization
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $roleSlug = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -934,6 +945,7 @@ class Authorization
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'role_slug' => $roleSlug,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
