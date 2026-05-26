@@ -1,5 +1,36 @@
 # Changelog
 
+## [7.0.0](https://github.com/workos/workos-php/compare/v6.0.2...v7.0.0) (2026-05-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **radar:** Remove device fingerprint and bot score from RadarStandaloneAssessRequest ([#392](https://github.com/workos/workos-php/issues/392))
+* **audit_logs:** Rename audit log models for consistency ([#392](https://github.com/workos/workos-php/issues/392))
+* **webhooks:** Rename webhook endpoint models and update status field type ([#392](https://github.com/workos/workos-php/issues/392))
+* **authorization:** Update Authorization API with new filters and remove search parameter ([#392](https://github.com/workos/workos-php/issues/392))
+* **user_management:** Remove organization membership methods from UserManagement service ([#392](https://github.com/workos/workos-php/issues/392))
+
+### Features
+
+* **api_keys:** Add expires_at field to API key models and creation methods ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **applications:** Update ApplicationCredentialsListItem and NewConnectApplicationSecret field types ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **audit_logs:** Rename audit log models for consistency ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **authorization:** Update Authorization API with new filters and remove search parameter ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **organization_membership:** Introduce OrganizationMembershipService with membership and group operations ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **pipes:** Add connected account event models and related types ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **radar:** Remove device fingerprint and bot score from RadarStandaloneAssessRequest ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **user_management:** Remove organization membership methods from UserManagement service ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **vault:** Add new Vault service for encrypted key-value storage ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+* **webhooks:** Rename webhook endpoint models and update status field type ([#392](https://github.com/workos/workos-php/issues/392)) ([fc280eb](https://github.com/workos/workos-php/commit/fc280eb6b465cd6bb5396f31a3ba70a848a026d9))
+
+
+### Miscellaneous Chores
+
+* **deps:** update googleapis/release-please-action action to v5 ([#389](https://github.com/workos/workos-php/issues/389)) ([f973f21](https://github.com/workos/workos-php/commit/f973f21cccdddbf1a22feae7db4f91b95be59173))
+* **deps:** update shivammathur/setup-php action to v2.37.0 ([#388](https://github.com/workos/workos-php/issues/388)) ([f9e113f](https://github.com/workos/workos-php/commit/f9e113fbfc5842895b65ce80cde67be392c34ec1))
+* use shared workos/renovate-config preset ([99aad6c](https://github.com/workos/workos-php/commit/99aad6c4cbb3c3f2267849fe09f72491da026eaf))
+
 ## [6.0.2](https://github.com/workos/workos-php/compare/v6.0.1...v6.0.2) (2026-05-11)
 
 
