@@ -298,4 +298,176 @@ class Vault
         );
         return VersionListResponse::fromArray($response);
     }
+
+    // @oagen-ignore-start — client-side AES-GCM encrypt/decrypt (H18, vault_local_crypto)
+
+    /**
+     * Encrypt data locally using AES-GCM with a data key derived from the context.
+     *
+     * @param string $data The plaintext data to encrypt.
+     * @param array<string, string> $context The key context for data key derivation.
+     * @param string|null $associatedData Additional authenticated data (AAD).
+     * @return string The base64-encoded encrypted payload.
+     */
+    public function encrypt(
+        string $data,
+        array $context,
+        ?string $associatedData = null,
+    ): string {
+        $keyPair = $this->createDataKey($context);
+
+        $key = base64_decode($keyPair->dataKey);
+        $keyBlob = base64_decode($keyPair->encryptedKeys);
+        $prefixLenBuffer = self::encodeU32Leb128(strlen($keyBlob));
+        $iv = random_bytes(12);
+
+        $result = self::aesGcmEncrypt($data, $key, $iv, $associatedData);
+
+        $combined = $result['iv'] . $result['tag'] . $prefixLenBuffer . $keyBlob . $result['ciphertext'];
+        return base64_encode($combined);
+    }
+
+    /**
+     * Decrypt data that was previously encrypted using the encrypt method.
+     *
+     * @param string $encryptedData The base64-encoded encrypted payload.
+     * @param string|null $associatedData Additional authenticated data (AAD).
+     * @return string The decrypted plaintext.
+     */
+    public function decrypt(
+        string $encryptedData,
+        ?string $associatedData = null,
+    ): string {
+        $decoded = self::decodeEncryptedPayload($encryptedData);
+        $dataKey = $this->createDecrypt($decoded['keys']);
+
+        $key = base64_decode($dataKey->dataKey);
+
+        return self::aesGcmDecrypt(
+            $decoded['ciphertext'],
+            $key,
+            $decoded['iv'],
+            $decoded['tag'],
+            $associatedData,
+        );
+    }
+
+    /**
+     * @return array{ciphertext: string, iv: string, tag: string}
+     */
+    private static function aesGcmEncrypt(
+        string $plaintext,
+        string $key,
+        string $iv,
+        ?string $aad,
+    ): array {
+        $tag = '';
+        $ciphertext = openssl_encrypt(
+            $plaintext,
+            'aes-256-gcm',
+            $key,
+            OPENSSL_RAW_DATA,
+            $iv,
+            $tag,
+            $aad ?? '',
+            16,
+        );
+
+        if ($ciphertext === false) {
+            throw new \RuntimeException('AES-GCM encryption failed');
+        }
+
+        return ['ciphertext' => $ciphertext, 'iv' => $iv, 'tag' => $tag];
+    }
+
+    private static function aesGcmDecrypt(
+        string $ciphertext,
+        string $key,
+        string $iv,
+        string $tag,
+        ?string $aad,
+    ): string {
+        $plaintext = openssl_decrypt(
+            $ciphertext,
+            'aes-256-gcm',
+            $key,
+            OPENSSL_RAW_DATA,
+            $iv,
+            $tag,
+            $aad ?? '',
+        );
+
+        if ($plaintext === false) {
+            throw new \RuntimeException('AES-GCM decryption failed');
+        }
+
+        return $plaintext;
+    }
+
+    private static function encodeU32Leb128(int $value): string
+    {
+        if ($value < 0 || $value > 0xFFFFFFFF) {
+            throw new \InvalidArgumentException('Value must be a 32-bit unsigned integer');
+        }
+
+        $encoded = '';
+        do {
+            $byte = $value & 0x7F;
+            $value >>= 7;
+            if ($value !== 0) {
+                $byte |= 0x80;
+            }
+            $encoded .= chr($byte);
+        } while ($value !== 0);
+
+        return $encoded;
+    }
+
+    /**
+     * @return array{0: int, 1: int}
+     */
+    private static function decodeU32Leb128(string $buf): array
+    {
+        $res = 0;
+        $bit = 0;
+        $len = strlen($buf);
+
+        for ($i = 0; $i < $len; $i++) {
+            if ($i > 4) {
+                throw new \InvalidArgumentException('LEB128 integer overflow');
+            }
+            $b = ord($buf[$i]);
+            $res |= ($b & 0x7F) << (7 * $bit);
+            if (($b & 0x80) === 0) {
+                return [$res, $i + 1];
+            }
+            $bit++;
+        }
+
+        throw new \InvalidArgumentException('LEB128 integer not found');
+    }
+
+    /**
+     * @return array{iv: string, tag: string, keys: string, ciphertext: string}
+     */
+    private static function decodeEncryptedPayload(string $encryptedDataB64): array
+    {
+        $payload = base64_decode($encryptedDataB64, true);
+        if ($payload === false) {
+            throw new \InvalidArgumentException('Base64 decoding failed');
+        }
+
+        $iv = substr($payload, 0, 12);
+        $tag = substr($payload, 12, 16);
+        [$keyLen, $lebLen] = self::decodeU32Leb128(substr($payload, 28));
+        $keysIndex = 28 + $lebLen;
+        $keysEnd = $keysIndex + $keyLen;
+        $keysSlice = substr($payload, $keysIndex, $keyLen);
+        $keys = base64_encode($keysSlice);
+        $ciphertext = substr($payload, $keysEnd);
+
+        return ['iv' => $iv, 'tag' => $tag, 'keys' => $keys, 'ciphertext' => $ciphertext];
+    }
+
+    // @oagen-ignore-end
 }

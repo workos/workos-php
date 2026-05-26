@@ -191,4 +191,120 @@ class VaultTest extends TestCase
             break;
         }
     }
+
+    // @oagen-ignore-start — client-side encrypt/decrypt tests (H18)
+
+    public function testEncryptRoundTrip(): void
+    {
+        $dataKey = random_bytes(32);
+        $encryptedKeys = random_bytes(48);
+
+        $createKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+            'encrypted_keys' => base64_encode($encryptedKeys),
+            'context' => ['env' => 'test'],
+        ];
+        $decryptKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+        ];
+
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $createKeyFixture],
+            ['status' => 200, 'body' => $decryptKeyFixture],
+        ]);
+
+        $plaintext = 'hello, vault!';
+        $encrypted = $client->vault()->encrypt($plaintext, ['env' => 'test']);
+
+        $this->assertNotSame($plaintext, $encrypted);
+        $this->assertNotEmpty($encrypted);
+
+        $decrypted = $client->vault()->decrypt($encrypted);
+        $this->assertSame($plaintext, $decrypted);
+    }
+
+    public function testEncryptWithAAD(): void
+    {
+        $dataKey = random_bytes(32);
+        $encryptedKeys = random_bytes(48);
+
+        $createKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+            'encrypted_keys' => base64_encode($encryptedKeys),
+            'context' => ['env' => 'test'],
+        ];
+        $decryptKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+        ];
+
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $createKeyFixture],
+            ['status' => 200, 'body' => $decryptKeyFixture],
+        ]);
+
+        $plaintext = 'sensitive data';
+        $aad = 'user:123';
+        $encrypted = $client->vault()->encrypt($plaintext, ['env' => 'test'], $aad);
+        $decrypted = $client->vault()->decrypt($encrypted, $aad);
+        $this->assertSame($plaintext, $decrypted);
+    }
+
+    public function testDecryptWithWrongAADFails(): void
+    {
+        $dataKey = random_bytes(32);
+        $encryptedKeys = random_bytes(48);
+
+        $createKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+            'encrypted_keys' => base64_encode($encryptedKeys),
+            'context' => ['env' => 'test'],
+        ];
+        $decryptKeyFixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+        ];
+
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $createKeyFixture],
+            ['status' => 200, 'body' => $decryptKeyFixture],
+        ]);
+
+        $encrypted = $client->vault()->encrypt('secret', ['env' => 'test'], 'correct-aad');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('AES-GCM decryption failed');
+        $client->vault()->decrypt($encrypted, 'wrong-aad');
+    }
+
+    public function testEncryptCallsCreateDataKey(): void
+    {
+        $dataKey = random_bytes(32);
+        $encryptedKeys = random_bytes(48);
+
+        $fixture = [
+            'id' => 'dk_1',
+            'data_key' => base64_encode($dataKey),
+            'encrypted_keys' => base64_encode($encryptedKeys),
+            'context' => ['env' => 'prod'],
+        ];
+
+        $client = $this->createMockClient([
+            ['status' => 200, 'body' => $fixture],
+        ]);
+
+        $client->vault()->encrypt('data', ['env' => 'prod']);
+
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('vault/v1/keys/data-key', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame(['env' => 'prod'], $body['context']);
+    }
+
+    // @oagen-ignore-end
 }
