@@ -33,6 +33,8 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         public string $createdAt,
         /** The timestamp when the API key was last updated. */
         public string $updatedAt,
+        /** Timestamp when the API Key expires. Null means the key does not expire. */
+        public ?\DateTimeImmutable $expiresAt = null,
     ) {
     }
 
@@ -50,6 +52,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
             permissions: $data['permissions'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
+            expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
         );
     }
 
@@ -65,6 +68,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
+            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
     }
 }

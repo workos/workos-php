@@ -8,12 +8,6 @@ namespace WorkOS\Resource;
 
 enum RadarStandaloneAssessRequestAction: string
 {
-    case Login = 'login';
-    case Signup = 'signup';
     case SignUp = 'sign-up';
     case SignIn = 'sign-in';
-    case SignUp2 = 'sign_up';
-    case SignIn2 = 'sign_in';
-    case SignIn3 = 'sign in';
-    case SignUp3 = 'sign up';
 }

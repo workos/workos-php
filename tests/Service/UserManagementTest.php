@@ -28,7 +28,7 @@ class UserManagementTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->userManagement()->getAuthorizationUrl(codeChallengeMethod: 'test_value', codeChallenge: 'test_value', domainHint: 'test_value', connectionId: 'test_value', providerQueryParams: [], providerScopes: [], invitationToken: 'test_value', screenHint: \WorkOS\Resource\UserManagementAuthenticationScreenHint::SignUp, loginHint: 'test_value', provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit, prompt: 'test_value', state: 'test_value', organizationId: 'test_value', redirectUri: 'test_value');
+        $result = $client->userManagement()->getAuthorizationUrl(codeChallengeMethod: 'test_value', codeChallenge: 'test_value', domainHint: 'test_value', connectionId: 'test_value', providerQueryParams: [], providerScopes: [], invitationToken: 'test_value', screenHint: \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignUp, loginHint: 'test_value', provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit, prompt: 'test_value', state: 'test_value', organizationId: 'test_value', redirectUri: 'test_value');
         $this->assertIsString($result);
         $this->assertStringContainsString('user_management/authorize', $result);
         parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
@@ -488,106 +488,6 @@ class UserManagementTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/magic_auth/test_id', $request->getUri()->getPath());
-    }
-
-    public function testListOrganizationMemberships(): void
-    {
-        $fixture = $this->loadFixture('list_user_organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listOrganizationMemberships(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', statuses: [], userId: 'test_value');
-        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships', $request->getUri()->getPath());
-        parse_str($request->getUri()->getQuery(), $query);
-        $this->assertSame('test_value', $query['before']);
-        $this->assertSame('test_value', $query['after']);
-        $this->assertArrayHasKey('limit', $query);
-        $this->assertSame('normal', $query['order']);
-        $this->assertSame('test_value', $query['organization_id']);
-        $this->assertSame('test_value', $query['user_id']);
-    }
-
-    public function testCreateOrganizationMembership(): void
-    {
-        $fixture = $this->loadFixture('organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->createOrganizationMembership(userId: 'test_value', organizationId: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\OrganizationMembership::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('POST', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['user_id']);
-        $this->assertSame('test_value', $body['organization_id']);
-    }
-
-    public function testGetOrganizationMembership(): void
-    {
-        $fixture = $this->loadFixture('user_organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->getOrganizationMembership('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
-    }
-
-    public function testUpdateOrganizationMembership(): void
-    {
-        $fixture = $this->loadFixture('user_organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->updateOrganizationMembership('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('PUT', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
-    }
-
-    public function testDeleteOrganizationMembership(): void
-    {
-        $client = $this->createMockClient([['status' => 204]]);
-        $client->userManagement()->deleteOrganizationMembership('test_id');
-        $request = $this->getLastRequest();
-        $this->assertSame('DELETE', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
-    }
-
-    public function testDeactivateOrganizationMembership(): void
-    {
-        $fixture = $this->loadFixture('organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->deactivateOrganizationMembership('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\OrganizationMembership::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('PUT', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships/test_id/deactivate', $request->getUri()->getPath());
-    }
-
-    public function testReactivateOrganizationMembership(): void
-    {
-        $fixture = $this->loadFixture('user_organization_membership');
-        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->reactivateOrganizationMembership('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
-        $this->assertIsArray($result->toArray());
-        $request = $this->getLastRequest();
-        $this->assertSame('PUT', $request->getMethod());
-        $this->assertStringEndsWith('user_management/organization_memberships/test_id/reactivate', $request->getUri()->getPath());
     }
 
     public function testCreateRedirectUri(): void

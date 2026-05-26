@@ -17,12 +17,13 @@ use WorkOS\Service\FeatureFlags;
 use WorkOS\Service\Groups;
 use WorkOS\Service\MultiFactorAuth;
 use WorkOS\Service\OrganizationDomains;
+use WorkOS\Service\OrganizationMembershipService;
 use WorkOS\Service\Organizations;
 use WorkOS\Service\Pipes;
 use WorkOS\Service\Radar;
 use WorkOS\Service\SSO;
 use WorkOS\Service\UserManagement;
-use WorkOS\Service\UserManagementOrganizationMembershipGroups;
+use WorkOS\Service\Vault;
 use WorkOS\Service\Webhooks;
 use WorkOS\Service\Widgets;
 
@@ -66,7 +67,8 @@ class WorkOS
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
     private ?Service\UserManagement $userManagement = null;
-    private ?Service\UserManagementOrganizationMembershipGroups $userManagementOrganizationMembershipGroups = null;
+    private ?Service\OrganizationMembershipService $organizationMembership = null;
+    private ?Service\Vault $vault = null;
     private ?Service\Webhooks $webhooks = null;
     private ?Service\Widgets $widgets = null;
     private ?Service\AuditLogs $auditLogs = null;
@@ -160,9 +162,14 @@ class WorkOS
         return $this->userManagement ??= new Service\UserManagement($this->httpClient);
     }
 
-    public function userManagementOrganizationMembershipGroups(): UserManagementOrganizationMembershipGroups
+    public function organizationMembership(): OrganizationMembershipService
     {
-        return $this->userManagementOrganizationMembershipGroups ??= new Service\UserManagementOrganizationMembershipGroups($this->httpClient);
+        return $this->organizationMembership ??= new Service\OrganizationMembershipService($this->httpClient);
+    }
+
+    public function vault(): Vault
+    {
+        return $this->vault ??= new Service\Vault($this->httpClient);
     }
 
     public function webhooks(): Webhooks
@@ -180,25 +187,11 @@ class WorkOS
         return $this->auditLogs ??= new Service\AuditLogs($this->httpClient);
     }
 
-    // @oagen-ignore-start — non-spec service properties (hand-maintained)
-    private ?Passwordless $passwordless = null;
-    private ?Vault $vault = null;
-    private ?WebhookVerification $webhookVerification = null;
-    private ?Actions $actions = null;
-    private ?SessionManager $sessionManager = null;
-    private ?PKCEHelper $pkce = null;
-    // @oagen-ignore-end
-
     // @oagen-ignore-start — non-spec service accessors (hand-maintained)
 
     public function passwordless(): Passwordless
     {
         return $this->passwordless ??= new Passwordless($this->httpClient);
-    }
-
-    public function vault(): Vault
-    {
-        return $this->vault ??= new Vault($this->httpClient);
     }
 
     public function webhookVerification(): WebhookVerification
@@ -220,5 +213,13 @@ class WorkOS
     {
         return $this->pkce ??= new PKCEHelper($this->httpClient);
     }
+    // @oagen-ignore-end
+
+    // @oagen-ignore-start — non-spec service properties (hand-maintained)
+    private ?Passwordless $passwordless = null;
+    private ?WebhookVerification $webhookVerification = null;
+    private ?Actions $actions = null;
+    private ?SessionManager $sessionManager = null;
+    private ?PKCEHelper $pkce = null;
     // @oagen-ignore-end
 }

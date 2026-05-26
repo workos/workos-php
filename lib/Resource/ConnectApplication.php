@@ -32,6 +32,17 @@ readonly class ConnectApplication implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /** The type of the application. */
         public ?string $applicationType = null,
+        /**
+         * The redirect URIs configured for this application.
+         * @var array<\WorkOS\Resource\ConnectApplicationRedirectUri>|null
+         */
+        public ?array $redirectUris = null,
+        /** Whether the application uses PKCE for authorization. */
+        public ?bool $usesPkce = null,
+        /** Whether the application is a first-party application. */
+        public ?bool $isFirstParty = null,
+        /** Whether the application was dynamically registered. */
+        public ?bool $wasDynamicallyRegistered = null,
         /** The ID of the organization the application belongs to. */
         public ?string $organizationId = null,
     ) {
@@ -49,6 +60,10 @@ readonly class ConnectApplication implements \JsonSerializable
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             applicationType: $data['application_type'] ?? null,
+            redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => ConnectApplicationRedirectUri::fromArray($item), $data['redirect_uris']) : null,
+            usesPkce: $data['uses_pkce'] ?? null,
+            isFirstParty: $data['is_first_party'] ?? null,
+            wasDynamicallyRegistered: $data['was_dynamically_registered'] ?? null,
             organizationId: $data['organization_id'] ?? null,
         );
     }
@@ -65,6 +80,10 @@ readonly class ConnectApplication implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'application_type' => $this->applicationType,
+            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'uses_pkce' => $this->usesPkce,
+            'is_first_party' => $this->isFirstParty,
+            'was_dynamically_registered' => $this->wasDynamicallyRegistered,
             'organization_id' => $this->organizationId,
         ];
     }

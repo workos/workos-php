@@ -11,6 +11,8 @@ readonly class FlagUpdated implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Event object. */
+        public string $object,
         /** Unique identifier for the event. */
         public string $id,
         public string $event,
@@ -20,32 +22,30 @@ readonly class FlagUpdated implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** Additional context about the event. */
         public FlagUpdatedContext $context,
-        /** Distinguishes the Event object. */
-        public string $object,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
+            object: $data['object'] ?? 'event',
             id: $data['id'],
             event: $data['event'] ?? 'flag.updated',
             data: FlagUpdatedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             context: FlagUpdatedContext::fromArray($data['context']),
-            object: $data['object'] ?? 'event',
         );
     }
 
     public function toArray(): array
     {
         return [
+            'object' => $this->object,
             'id' => $this->id,
             'event' => $this->event,
             'data' => $this->data->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'context' => $this->context->toArray(),
-            'object' => $this->object,
         ];
     }
 }

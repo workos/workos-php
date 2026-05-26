@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
-use WorkOS\Resource\WebhookEndpointJson;
+use WorkOS\Resource\WebhookEndpoint;
 
 class Webhooks
 {
@@ -23,7 +23,7 @@ class Webhooks
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\WebhookEndpointJson>
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\WebhookEndpoint>
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listWebhookEndpoints(
@@ -43,7 +43,7 @@ class Webhooks
             method: 'GET',
             path: 'webhook_endpoints',
             query: $query,
-            modelClass: WebhookEndpointJson::class,
+            modelClass: WebhookEndpoint::class,
             options: $options,
         );
     }
@@ -54,14 +54,14 @@ class Webhooks
      * Create a new webhook endpoint to receive event notifications.
      * @param string $endpointUrl The HTTPS URL where webhooks will be sent.
      * @param array<\WorkOS\Resource\CreateWebhookEndpointEvents> $events The events that the Webhook Endpoint is subscribed to.
-     * @return \WorkOS\Resource\WebhookEndpointJson
+     * @return \WorkOS\Resource\WebhookEndpoint
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createWebhookEndpoint(
         string $endpointUrl,
         array $events,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\WebhookEndpointJson {
+    ): \WorkOS\Resource\WebhookEndpoint {
         $body = [
             'endpoint_url' => $endpointUrl,
             'events' => $events,
@@ -72,7 +72,7 @@ class Webhooks
             body: $body,
             options: $options,
         );
-        return WebhookEndpointJson::fromArray($response);
+        return WebhookEndpoint::fromArray($response);
     }
 
     /**
@@ -81,18 +81,18 @@ class Webhooks
      * Update the properties of an existing webhook endpoint.
      * @param string $id Unique identifier of the Webhook Endpoint.
      * @param string|null $endpointUrl The HTTPS URL where webhooks will be sent.
-     * @param \WorkOS\Resource\WebhookEndpointJsonStatus|null $status Whether the Webhook Endpoint is enabled or disabled.
+     * @param \WorkOS\Resource\WebhookEndpointStatus|null $status Whether the Webhook Endpoint is enabled or disabled.
      * @param array<\WorkOS\Resource\CreateWebhookEndpointEvents>|null $events The events that the Webhook Endpoint is subscribed to.
-     * @return \WorkOS\Resource\WebhookEndpointJson
+     * @return \WorkOS\Resource\WebhookEndpoint
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateWebhookEndpoint(
         string $id,
         ?string $endpointUrl = null,
-        ?\WorkOS\Resource\WebhookEndpointJsonStatus $status = null,
+        ?\WorkOS\Resource\WebhookEndpointStatus $status = null,
         ?array $events = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\WebhookEndpointJson {
+    ): \WorkOS\Resource\WebhookEndpoint {
         $body = array_filter([
             'endpoint_url' => $endpointUrl,
             'status' => $status?->value,
@@ -104,7 +104,7 @@ class Webhooks
             body: $body,
             options: $options,
         );
-        return WebhookEndpointJson::fromArray($response);
+        return WebhookEndpoint::fromArray($response);
     }
 
     /**

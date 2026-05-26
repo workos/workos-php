@@ -17,7 +17,7 @@ class RadarTest extends TestCase
     {
         $fixture = $this->loadFixture('radar_standalone_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->radar()->createAttempt(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::Login);
+        $result = $client->radar()->createAttempt(ipAddress: 'test_value', userAgent: 'test_value', email: 'test_value', authMethod: \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod::Password, action: \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignUp);
         $this->assertInstanceOf(\WorkOS\Resource\RadarStandaloneResponse::class, $result);
         $this->assertSame($fixture['reason'], $result->reason);
         $this->assertIsArray($result->toArray());
@@ -43,7 +43,7 @@ class RadarTest extends TestCase
     {
         $fixture = $this->loadFixture('radar_list_entry_already_present_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->radar()->addListEntry(\WorkOS\Resource\RadarType::IpAddress, \WorkOS\Resource\RadarAction::Block, entry: 'test_value');
+        $result = $client->radar()->addListEntry(\WorkOS\Resource\RadarListType::IpAddress, \WorkOS\Resource\RadarListAction::Block, entry: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\RadarListEntryAlreadyPresentResponse::class, $result);
         $this->assertSame($fixture['message'], $result->message);
         $this->assertIsArray($result->toArray());
@@ -57,7 +57,7 @@ class RadarTest extends TestCase
     public function testRemoveListEntry(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->radar()->removeListEntry(\WorkOS\Resource\RadarType::IpAddress, \WorkOS\Resource\RadarAction::Block, entry: 'test_value');
+        $client->radar()->removeListEntry(\WorkOS\Resource\RadarListType::IpAddress, \WorkOS\Resource\RadarListAction::Block, entry: 'test_value');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('radar/lists/ip_address/block', $request->getUri()->getPath());

@@ -18,7 +18,7 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
         /** A hint showing the last few characters of the secret value. */
         public string $secretHint,
         /** The timestamp when the client secret was last used, or null if never used. */
-        public ?string $lastUsedAt,
+        public ?\DateTimeImmutable $lastUsedAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -34,7 +34,7 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
             object: $data['object'] ?? 'connect_application_secret',
             id: $data['id'],
             secretHint: $data['secret_hint'],
-            lastUsedAt: $data['last_used_at'] ?? null,
+            lastUsedAt: isset($data['last_used_at']) ? new \DateTimeImmutable($data['last_used_at']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             secret: $data['secret'],
@@ -47,7 +47,7 @@ readonly class NewConnectApplicationSecret implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'secret_hint' => $this->secretHint,
-            'last_used_at' => $this->lastUsedAt,
+            'last_used_at' => $this->lastUsedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'secret' => $this->secret,

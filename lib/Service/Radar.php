@@ -25,8 +25,6 @@ class Radar
      * @param string $email The email address of the user making the request.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod The authentication method being used.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $action The action being performed.
-     * @param string|null $deviceFingerprint An optional device fingerprint for the request.
-     * @param string|null $botScore An optional bot detection score for the request.
      * @return \WorkOS\Resource\RadarStandaloneResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -36,19 +34,15 @@ class Radar
         string $email,
         \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod,
         \WorkOS\Resource\RadarStandaloneAssessRequestAction $action,
-        ?string $deviceFingerprint = null,
-        ?string $botScore = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RadarStandaloneResponse {
-        $body = array_filter([
+        $body = [
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
             'email' => $email,
             'auth_method' => $authMethod->value,
             'action' => $action->value,
-            'device_fingerprint' => $deviceFingerprint,
-            'bot_score' => $botScore,
-        ], fn ($v) => $v !== null);
+        ];
         $response = $this->client->request(
             method: 'POST',
             path: 'radar/attempts',
@@ -91,15 +85,15 @@ class Radar
      * Add an entry to a Radar list
      *
      * Add an entry to a Radar list.
-     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
-     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to add the entry to the allow or block list.
+     * @param \WorkOS\Resource\RadarListType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarListAction $action The list action indicating whether to add the entry to the allow or block list.
      * @param string $entry The value to add to the list. Must match the format of the list type (e.g. a valid IP address for `ip_address`, a valid email for `email`).
      * @return \WorkOS\Resource\RadarListEntryAlreadyPresentResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function addListEntry(
-        \WorkOS\Resource\RadarType $type,
-        \WorkOS\Resource\RadarAction $action,
+        \WorkOS\Resource\RadarListType $type,
+        \WorkOS\Resource\RadarListAction $action,
         string $entry,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RadarListEntryAlreadyPresentResponse {
@@ -119,15 +113,15 @@ class Radar
      * Remove an entry from a Radar list
      *
      * Remove an entry from a Radar list.
-     * @param \WorkOS\Resource\RadarType $type The type of the Radar list (e.g. ip_address, domain, email).
-     * @param \WorkOS\Resource\RadarAction $action The list action indicating whether to remove the entry from the allow or block list.
+     * @param \WorkOS\Resource\RadarListType $type The type of the Radar list (e.g. ip_address, domain, email).
+     * @param \WorkOS\Resource\RadarListAction $action The list action indicating whether to remove the entry from the allow or block list.
      * @param string $entry The value to remove from the list. Must match an existing entry.
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function removeListEntry(
-        \WorkOS\Resource\RadarType $type,
-        \WorkOS\Resource\RadarAction $action,
+        \WorkOS\Resource\RadarListType $type,
+        \WorkOS\Resource\RadarListAction $action,
         string $entry,
         ?\WorkOS\RequestOptions $options = null,
     ): void {

@@ -80,6 +80,9 @@ enum CreateWebhookEndpointEvents: string
     case PermissionCreated = 'permission.created';
     case PermissionDeleted = 'permission.deleted';
     case PermissionUpdated = 'permission.updated';
+    case PipesConnectedAccountConnected = 'pipes.connected_account.connected';
+    case PipesConnectedAccountDisconnected = 'pipes.connected_account.disconnected';
+    case PipesConnectedAccountReauthorizationNeeded = 'pipes.connected_account.reauthorization_needed';
     case SessionCreated = 'session.created';
     case SessionRevoked = 'session.revoked';
     case WaitlistUserApproved = 'waitlist_user.approved';
