@@ -96,10 +96,10 @@ class VaultTest extends TestCase
 
     public function testGetName(): void
     {
-        $fixture = $this->loadFixture('object');
+        $fixture = $this->loadFixture('vault_object');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->vault()->getName('test_name');
-        $this->assertInstanceOf(\WorkOS\Resource\ObjectModel::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\VaultObject::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
         $this->assertIsArray($result->toArray());
@@ -110,10 +110,10 @@ class VaultTest extends TestCase
 
     public function testGetKv(): void
     {
-        $fixture = $this->loadFixture('object');
+        $fixture = $this->loadFixture('vault_object');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->vault()->getKv('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\ObjectModel::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\VaultObject::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
         $this->assertIsArray($result->toArray());

@@ -9,9 +9,9 @@ namespace WorkOS\Service;
 use WorkOS\Resource\CreateDataKeyResponse;
 use WorkOS\Resource\DecryptResponse;
 use WorkOS\Resource\ObjectMetadata;
-use WorkOS\Resource\ObjectModel;
 use WorkOS\Resource\ObjectSummary;
 use WorkOS\Resource\ObjectWithoutValue;
+use WorkOS\Resource\VaultObject;
 use WorkOS\Resource\VersionListResponse;
 
 class Vault
@@ -170,19 +170,19 @@ class Vault
      *
      * Fetch and decrypt an object by its unique name.
      * @param string $name Unique name of the object.
-     * @return \WorkOS\Resource\ObjectModel
+     * @return \WorkOS\Resource\VaultObject
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getName(
         string $name,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ObjectModel {
+    ): \WorkOS\Resource\VaultObject {
         $response = $this->client->request(
             method: 'GET',
             path: 'vault/v1/kv/name/' . rawurlencode($name),
             options: $options,
         );
-        return ObjectModel::fromArray($response);
+        return VaultObject::fromArray($response);
     }
 
     /**
@@ -190,19 +190,19 @@ class Vault
      *
      * Fetch and decrypt an object by its unique identifier.
      * @param string $id Unique identifier of the object.
-     * @return \WorkOS\Resource\ObjectModel
+     * @return \WorkOS\Resource\VaultObject
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getKv(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\ObjectModel {
+    ): \WorkOS\Resource\VaultObject {
         $response = $this->client->request(
             method: 'GET',
             path: 'vault/v1/kv/' . rawurlencode($id),
             options: $options,
         );
-        return ObjectModel::fromArray($response);
+        return VaultObject::fromArray($response);
     }
 
     /**

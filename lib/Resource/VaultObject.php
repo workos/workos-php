@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Resource;
 
 /** An encrypted object with its decrypted value and metadata. */
-readonly class ObjectModel implements \JsonSerializable
+readonly class VaultObject implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
