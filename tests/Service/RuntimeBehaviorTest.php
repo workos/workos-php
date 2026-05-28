@@ -103,6 +103,23 @@ class RuntimeBehaviorTest extends TestCase
         $this->assertSame('api_key_b', $requestBodyB['client_secret']);
     }
 
+    public function testAuthorizationUrlOmitsScreenHintUnlessProvided(): void
+    {
+        $client = $this->createMockClient([]);
+
+        $url = $client->userManagement()->getAuthorizationUrl(
+            redirectUri: 'https://example.com/callback',
+            provider: \WorkOS\Resource\UserManagementAuthenticationProvider::GoogleOAuth,
+            state: 'abc',
+        );
+
+        parse_str(parse_url($url, PHP_URL_QUERY) ?? '', $query);
+
+        $this->assertSame('GoogleOAuth', $query['provider']);
+        $this->assertSame('abc', $query['state']);
+        $this->assertArrayNotHasKey('screen_hint', $query);
+    }
+
     public function testAuthenticationErrorsAreMapped(): void
     {
         $client = $this->createMockClient([
