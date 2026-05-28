@@ -1,5 +1,14 @@
 # Changelog
 
+## [7.0.1](https://github.com/workos/workos-php/compare/v7.0.0...v7.0.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* renamed misleading Object to VaultObject ([c7cef60](https://github.com/workos/workos-php/commit/c7cef60df1e19e8664b3713b07ac44c5a491a5a7))
+* **renovate:** explicitly enable minor and patch updates ([#393](https://github.com/workos/workos-php/issues/393)) ([e1705f1](https://github.com/workos/workos-php/commit/e1705f1d0b6cadf84f5a540673b59868d4b82fec))
+* **sdk:** omit defaulted screen_hint from auth URLs ([#396](https://github.com/workos/workos-php/issues/396)) ([d583c7c](https://github.com/workos/workos-php/commit/d583c7ce64920da86153fe19c0e8b5f3a1069604))
+
 ## [7.0.0](https://github.com/workos/workos-php/compare/v6.0.2...v7.0.0) (2026-05-26)
 
 ### Miscellaneous Chores
