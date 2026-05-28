@@ -371,7 +371,7 @@ class UserManagement
      * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider.
      * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider.
      * @param string|null $invitationToken A token representing a user invitation to redeem during authentication.
-     * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint Used to specify which screen to display when the provider is `authkit`. Defaults to "sign-in".
+     * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction|null $screenHint Used to specify which screen to display when the provider is `authkit`. Defaults to "sign-in".
      * @param string|null $loginHint A hint to the authorization server about the login identifier the user might use.
      * @param \WorkOS\Resource\UserManagementAuthenticationProvider|null $provider The OAuth provider to authenticate with (e.g., GoogleOAuth, MicrosoftOAuth, GitHubOAuth).
      * @param string|null $prompt Controls the authentication flow behavior for the user.
@@ -390,7 +390,7 @@ class UserManagement
         ?array $providerQueryParams = null,
         ?array $providerScopes = null,
         ?string $invitationToken = null,
-        \WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint = \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignIn,
+        ?\WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint = null,
         ?string $loginHint = null,
         ?\WorkOS\Resource\UserManagementAuthenticationProvider $provider = null,
         ?string $prompt = null,
@@ -406,7 +406,7 @@ class UserManagement
             'provider_query_params' => $providerQueryParams,
             'provider_scopes' => $providerScopes,
             'invitation_token' => $invitationToken,
-            'screen_hint' => $screenHint->value,
+            'screen_hint' => $screenHint?->value,
             'login_hint' => $loginHint,
             'provider' => $provider?->value,
             'prompt' => $prompt,
