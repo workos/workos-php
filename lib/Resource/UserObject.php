@@ -19,6 +19,8 @@ readonly class UserObject implements \JsonSerializable
         public ?string $firstName = null,
         /** The user's last name. */
         public ?string $lastName = null,
+        /** The user's full name. */
+        public ?string $name = null,
         /**
          * A set of key-value pairs to attach to the user.
          * @var array<string, string>|null
@@ -34,6 +36,7 @@ readonly class UserObject implements \JsonSerializable
             email: $data['email'],
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
+            name: $data['name'] ?? null,
             metadata: $data['metadata'] ?? null,
         );
     }
@@ -45,6 +48,7 @@ readonly class UserObject implements \JsonSerializable
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
+            'name' => $this->name,
             'metadata' => $this->metadata,
         ];
     }
