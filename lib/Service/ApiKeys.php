@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
+use WorkOS\Resource\ApiKey;
 use WorkOS\Resource\ApiKeyValidationResponse;
 use WorkOS\Resource\OrganizationApiKey;
 use WorkOS\Resource\OrganizationApiKeyWithValue;
@@ -125,5 +126,31 @@ class ApiKeys
             path: 'api_keys/' . rawurlencode($id),
             options: $options,
         );
+    }
+
+    /**
+     * Expire an API key
+     *
+     * Expire an API key immediately, schedule a future expiration, or clear a scheduled future expiration.
+     * @param string $id The unique ID of the API key.
+     * @param \DateTimeImmutable|null $expiresAt When the API key should expire. If omitted or in the past, the key expires immediately. Use null to clear a scheduled future expiration.
+     * @return \WorkOS\Resource\ApiKey
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createApiKeyExpire(
+        string $id,
+        ?\DateTimeImmutable $expiresAt = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ApiKey {
+        $body = array_filter([
+            'expires_at' => $expiresAt,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'api_keys/' . rawurlencode($id) . '/expire',
+            body: $body,
+            options: $options,
+        );
+        return ApiKey::fromArray($response);
     }
 }
