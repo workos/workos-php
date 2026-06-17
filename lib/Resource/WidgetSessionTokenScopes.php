@@ -14,4 +14,5 @@ enum WidgetSessionTokenScopes: string
     case WidgetsApiKeysManage = 'widgets:api-keys:manage';
     case WidgetsDsyncManage = 'widgets:dsync:manage';
     case WidgetsAuditLogStreamingManage = 'widgets:audit-log-streaming:manage';
+    case WidgetsPipesManage = 'widgets:pipes:manage';
 }
