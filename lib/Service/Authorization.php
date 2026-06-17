@@ -9,6 +9,8 @@ namespace WorkOS\Service;
 use WorkOS\Resource\AuthorizationCheck;
 use WorkOS\Resource\AuthorizationPermission;
 use WorkOS\Resource\AuthorizationResource;
+use WorkOS\Resource\GroupRoleAssignment;
+use WorkOS\Resource\GroupRoleAssignmentList;
 use WorkOS\Resource\Permission;
 use WorkOS\Resource\Role;
 use WorkOS\Resource\RoleList;
@@ -20,6 +22,179 @@ class Authorization
     public function __construct(
         private readonly \WorkOS\HttpClient $client,
     ) {
+    }
+
+    /**
+     * List role assignments for a group
+     *
+     * List all role assignments granted to a group. Each assignment represents a role granted to the group on a resource.
+     * @param string $groupId The ID of the group.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\GroupRoleAssignment>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listGroupRoleAssignments(
+        string $groupId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments',
+            query: $query,
+            modelClass: GroupRoleAssignment::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Assign a role to a group
+     *
+     * Assign a role to a group on a specific resource.
+     * @param string $groupId The ID of the group.
+     * @param string $roleSlug The slug of the role to assign to the group.
+     * @param string|null $resourceId The ID of the resource. Omit along with the external-id fields to target the organization itself.
+     * @param string|null $resourceExternalId The external ID of the resource.
+     * @param string|null $resourceTypeSlug The resource type slug.
+     * @return \WorkOS\Resource\GroupRoleAssignment
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createGroupRoleAssignment(
+        string $groupId,
+        string $roleSlug,
+        ?string $resourceId = null,
+        ?string $resourceExternalId = null,
+        ?string $resourceTypeSlug = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\GroupRoleAssignment {
+        $body = array_filter([
+            'role_slug' => $roleSlug,
+            'resource_id' => $resourceId,
+            'resource_external_id' => $resourceExternalId,
+            'resource_type_slug' => $resourceTypeSlug,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments',
+            body: $body,
+            options: $options,
+        );
+        return GroupRoleAssignment::fromArray($response);
+    }
+
+    /**
+     * Replace all role assignments for a group
+     *
+     * Replace all role assignments for a group with the provided list. Existing assignments not in the list will be removed.
+     * @param string $groupId The ID of the group.
+     * @param array<\WorkOS\Resource\ReplaceGroupRoleAssignmentEntry> $roleAssignments The list of role assignments that should exist for the group. All existing assignments will be replaced.
+     * @return \WorkOS\Resource\GroupRoleAssignmentList
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateGroupRoleAssignments(
+        string $groupId,
+        array $roleAssignments,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\GroupRoleAssignmentList {
+        $body = [
+            'role_assignments' => $roleAssignments,
+        ];
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments',
+            body: $body,
+            options: $options,
+        );
+        return GroupRoleAssignmentList::fromArray($response);
+    }
+
+    /**
+     * Remove group role assignments by criteria
+     *
+     * Remove role assignments from a group that match the provided criteria. Returns 404 when no matching active assignment is found.
+     * @param string $groupId The ID of the group.
+     * @param string $roleSlug The slug of the role to remove assignments for.
+     * @param string|null $resourceId The ID of the resource. Mutually exclusive with `resource_external_id` and `resource_type_slug`.
+     * @param string|null $resourceExternalId The external ID of the resource.
+     * @param string|null $resourceTypeSlug The resource type slug.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteGroupRoleAssignments(
+        string $groupId,
+        string $roleSlug,
+        ?string $resourceId = null,
+        ?string $resourceExternalId = null,
+        ?string $resourceTypeSlug = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $body = array_filter([
+            'role_slug' => $roleSlug,
+            'resource_id' => $resourceId,
+            'resource_external_id' => $resourceExternalId,
+            'resource_type_slug' => $resourceTypeSlug,
+        ], fn ($v) => $v !== null);
+        $this->client->request(
+            method: 'DELETE',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments',
+            body: $body,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get a group role assignment
+     *
+     * Get a specific role assignment for a group by its ID.
+     * @param string $groupId The ID of the group.
+     * @param string $roleAssignmentId The ID of the group role assignment.
+     * @return \WorkOS\Resource\GroupRoleAssignment
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getGroupRoleAssignment(
+        string $groupId,
+        string $roleAssignmentId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\GroupRoleAssignment {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments/' . rawurlencode($roleAssignmentId),
+            options: $options,
+        );
+        return GroupRoleAssignment::fromArray($response);
+    }
+
+    /**
+     * Remove a group role assignment
+     *
+     * Remove a specific role assignment from a group by its ID.
+     * @param string $groupId The ID of the group.
+     * @param string $roleAssignmentId The ID of the group role assignment to remove.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteGroupRoleAssignment(
+        string $groupId,
+        string $roleAssignmentId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments/' . rawurlencode($roleAssignmentId),
+            options: $options,
+        );
     }
 
     /**
