@@ -28,16 +28,16 @@ class PipesTest extends TestCase
         $this->assertSame('test_value', $body['user_id']);
     }
 
-    public function testCreateDataIntegrationToken(): void
+    public function testGetAccessToken(): void
     {
         $fixture = $this->loadFixture('data_integration_access_token_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->createDataIntegrationToken('test_slug', userId: 'test_value');
+        $result = $client->pipes()->getAccessToken('test_provider', userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationAccessTokenResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
-        $this->assertStringEndsWith('data-integrations/test_slug/token', $request->getUri()->getPath());
+        $this->assertStringEndsWith('data-integrations/test_provider/token', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['user_id']);
     }

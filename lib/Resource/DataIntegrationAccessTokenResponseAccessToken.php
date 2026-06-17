@@ -17,7 +17,7 @@ readonly class DataIntegrationAccessTokenResponseAccessToken implements \JsonSer
         /** The OAuth access token for the connected integration. */
         public string $accessToken,
         /** The ISO-8601 formatted timestamp indicating when the access token expires. */
-        public ?string $expiresAt,
+        public ?\DateTimeImmutable $expiresAt,
         /**
          * The scopes granted to the access token.
          * @var array<string>
@@ -36,7 +36,7 @@ readonly class DataIntegrationAccessTokenResponseAccessToken implements \JsonSer
         return new self(
             object: $data['object'] ?? 'access_token',
             accessToken: $data['access_token'],
-            expiresAt: $data['expires_at'] ?? null,
+            expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
             scopes: $data['scopes'],
             missingScopes: $data['missing_scopes'],
         );
@@ -47,7 +47,7 @@ readonly class DataIntegrationAccessTokenResponseAccessToken implements \JsonSer
         return [
             'object' => $this->object,
             'access_token' => $this->accessToken,
-            'expires_at' => $this->expiresAt,
+            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'scopes' => $this->scopes,
             'missing_scopes' => $this->missingScopes,
         ];

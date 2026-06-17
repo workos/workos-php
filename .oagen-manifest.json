@@ -1,7 +1,7 @@
 {
   "version": 2,
   "language": "php",
-  "generatedAt": "2026-06-03T19:19:56.689Z",
+  "generatedAt": "2026-06-17T20:55:54.166Z",
   "files": [
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
@@ -118,6 +118,9 @@
     "lib/Resource/CORSOriginResponse.php",
     "lib/Resource/ChallengeAuthenticationFactor.php",
     "lib/Resource/CheckAuthorization.php",
+    "lib/Resource/ClientApiToken.php",
+    "lib/Resource/ClientApiTokenResponse.php",
+    "lib/Resource/ConfigureDataIntegrationBody.php",
     "lib/Resource/ConfirmEmailChange.php",
     "lib/Resource/ConnectApplication.php",
     "lib/Resource/ConnectApplicationM2M.php",
@@ -125,6 +128,7 @@
     "lib/Resource/ConnectApplicationOAuthRedirectUris.php",
     "lib/Resource/ConnectApplicationRedirectUri.php",
     "lib/Resource/ConnectedAccount.php",
+    "lib/Resource/ConnectedAccountAuthMethod.php",
     "lib/Resource/ConnectedAccountState.php",
     "lib/Resource/Connection.php",
     "lib/Resource/ConnectionActivated.php",
@@ -160,6 +164,7 @@
     "lib/Resource/CreateDataKeyResponse.php",
     "lib/Resource/CreateGroup.php",
     "lib/Resource/CreateGroupMembership.php",
+    "lib/Resource/CreateGroupRoleAssignment.php",
     "lib/Resource/CreateM2MApplication.php",
     "lib/Resource/CreateMagicCodeAndReturn.php",
     "lib/Resource/CreateOAuthApplication.php",
@@ -183,6 +188,10 @@
     "lib/Resource/DataIntegrationAccessTokenResponseAccessToken.php",
     "lib/Resource/DataIntegrationAccessTokenResponseError.php",
     "lib/Resource/DataIntegrationAuthorizeUrlResponse.php",
+    "lib/Resource/DataIntegrationConfigurationListResponse.php",
+    "lib/Resource/DataIntegrationConfigurationResponse.php",
+    "lib/Resource/DataIntegrationCredentials.php",
+    "lib/Resource/DataIntegrationCredentialsCredentialsType.php",
     "lib/Resource/DataIntegrationsGetDataIntegrationAuthorizeUrlRequest.php",
     "lib/Resource/DataIntegrationsGetUserTokenRequest.php",
     "lib/Resource/DataIntegrationsListResponse.php",
@@ -191,6 +200,7 @@
     "lib/Resource/DataIntegrationsListResponseDataOwnership.php",
     "lib/Resource/DecryptRequest.php",
     "lib/Resource/DecryptResponse.php",
+    "lib/Resource/DeleteGroupRoleAssignmentsByCriteria.php",
     "lib/Resource/DeleteObjectResponse.php",
     "lib/Resource/DeviceAuthorizationResponse.php",
     "lib/Resource/DeviceCodeSessionAuthenticateRequest.php",
@@ -292,6 +302,9 @@
     "lib/Resource/GroupMemberAddedData.php",
     "lib/Resource/GroupMemberRemoved.php",
     "lib/Resource/GroupMemberRemovedData.php",
+    "lib/Resource/GroupRoleAssignment.php",
+    "lib/Resource/GroupRoleAssignmentList.php",
+    "lib/Resource/GroupRoleAssignmentResource.php",
     "lib/Resource/GroupUpdated.php",
     "lib/Resource/IntentOptions.php",
     "lib/Resource/Invitation.php",
@@ -404,6 +417,8 @@
     "lib/Resource/RefreshTokenSessionAuthenticateRequest.php",
     "lib/Resource/RekeyRequest.php",
     "lib/Resource/RemoveRole.php",
+    "lib/Resource/ReplaceGroupRoleAssignmentEntry.php",
+    "lib/Resource/ReplaceGroupRoleAssignments.php",
     "lib/Resource/ResendUserInviteOptions.php",
     "lib/Resource/ResetPasswordResponse.php",
     "lib/Resource/RevokeSession.php",
@@ -521,6 +536,7 @@
     "lib/Service/ApiKeys.php",
     "lib/Service/AuditLogs.php",
     "lib/Service/Authorization.php",
+    "lib/Service/ClientApi.php",
     "lib/Service/Connect.php",
     "lib/Service/DirectorySync.php",
     "lib/Service/Events.php",
@@ -537,6 +553,7 @@
     "lib/Service/PasswordHashed.php",
     "lib/Service/PasswordPlaintext.php",
     "lib/Service/Pipes.php",
+    "lib/Service/PipesProvider.php",
     "lib/Service/Radar.php",
     "lib/Service/ResourceTargetByExternalId.php",
     "lib/Service/ResourceTargetById.php",
@@ -654,6 +671,9 @@
     "tests/Fixtures/authorized_connect_application_list_data.json",
     "tests/Fixtures/challenge_authentication_factor.json",
     "tests/Fixtures/check_authorization.json",
+    "tests/Fixtures/client_api_token.json",
+    "tests/Fixtures/client_api_token_response.json",
+    "tests/Fixtures/configure_data_integration_body.json",
     "tests/Fixtures/confirm_email_change.json",
     "tests/Fixtures/connect_application.json",
     "tests/Fixtures/connect_application_m2m.json",
@@ -688,6 +708,7 @@
     "tests/Fixtures/create_data_key_response.json",
     "tests/Fixtures/create_group.json",
     "tests/Fixtures/create_group_membership.json",
+    "tests/Fixtures/create_group_role_assignment.json",
     "tests/Fixtures/create_m2m_application.json",
     "tests/Fixtures/create_magic_code_and_return.json",
     "tests/Fixtures/create_oauth_application.json",
@@ -707,6 +728,9 @@
     "tests/Fixtures/data_integration_access_token_response.json",
     "tests/Fixtures/data_integration_access_token_response_access_token.json",
     "tests/Fixtures/data_integration_authorize_url_response.json",
+    "tests/Fixtures/data_integration_configuration_list_response.json",
+    "tests/Fixtures/data_integration_configuration_response.json",
+    "tests/Fixtures/data_integration_credentials.json",
     "tests/Fixtures/data_integrations_get_data_integration_authorize_url_request.json",
     "tests/Fixtures/data_integrations_get_user_token_request.json",
     "tests/Fixtures/data_integrations_list_response.json",
@@ -714,6 +738,7 @@
     "tests/Fixtures/data_integrations_list_response_data_connected_account.json",
     "tests/Fixtures/decrypt_request.json",
     "tests/Fixtures/decrypt_response.json",
+    "tests/Fixtures/delete_group_role_assignments_by_criteria.json",
     "tests/Fixtures/delete_object_response.json",
     "tests/Fixtures/device_authorization_response.json",
     "tests/Fixtures/device_code_session_authenticate_request.json",
@@ -807,6 +832,8 @@
     "tests/Fixtures/group_member_added_data.json",
     "tests/Fixtures/group_member_removed.json",
     "tests/Fixtures/group_member_removed_data.json",
+    "tests/Fixtures/group_role_assignment.json",
+    "tests/Fixtures/group_role_assignment_resource.json",
     "tests/Fixtures/group_updated.json",
     "tests/Fixtures/intent_options.json",
     "tests/Fixtures/invitation.json",
@@ -835,6 +862,7 @@
     "tests/Fixtures/list_event_schema.json",
     "tests/Fixtures/list_flag.json",
     "tests/Fixtures/list_group.json",
+    "tests/Fixtures/list_group_role_assignment.json",
     "tests/Fixtures/list_metadata.json",
     "tests/Fixtures/list_object_summary.json",
     "tests/Fixtures/list_organization.json",
@@ -930,6 +958,8 @@
     "tests/Fixtures/refresh_token_session_authenticate_request.json",
     "tests/Fixtures/rekey_request.json",
     "tests/Fixtures/remove_role.json",
+    "tests/Fixtures/replace_group_role_assignment_entry.json",
+    "tests/Fixtures/replace_group_role_assignments.json",
     "tests/Fixtures/resend_user_invite_options.json",
     "tests/Fixtures/reset_password_response.json",
     "tests/Fixtures/revoke_session.json",
@@ -1033,6 +1063,7 @@
     "tests/Service/ApiKeysTest.php",
     "tests/Service/AuditLogsTest.php",
     "tests/Service/AuthorizationTest.php",
+    "tests/Service/ClientApiTest.php",
     "tests/Service/ConnectTest.php",
     "tests/Service/DirectorySyncTest.php",
     "tests/Service/EventsTest.php",
@@ -1042,6 +1073,7 @@
     "tests/Service/OrganizationDomainsTest.php",
     "tests/Service/OrganizationMembershipTest.php",
     "tests/Service/OrganizationsTest.php",
+    "tests/Service/PipesProviderTest.php",
     "tests/Service/PipesTest.php",
     "tests/Service/RadarTest.php",
     "tests/Service/SSOTest.php",
@@ -1074,6 +1106,30 @@
     "POST /authkit/oauth2/complete": {
       "sdkMethod": "completeOAuth2",
       "service": "connect"
+    },
+    "GET /authorization/groups/{group_id}/role_assignments": {
+      "sdkMethod": "listGroupRoleAssignments",
+      "service": "authorization"
+    },
+    "POST /authorization/groups/{group_id}/role_assignments": {
+      "sdkMethod": "createGroupRoleAssignment",
+      "service": "authorization"
+    },
+    "PUT /authorization/groups/{group_id}/role_assignments": {
+      "sdkMethod": "updateGroupRoleAssignments",
+      "service": "authorization"
+    },
+    "DELETE /authorization/groups/{group_id}/role_assignments": {
+      "sdkMethod": "deleteGroupRoleAssignments",
+      "service": "authorization"
+    },
+    "GET /authorization/groups/{group_id}/role_assignments/{role_assignment_id}": {
+      "sdkMethod": "getGroupRoleAssignment",
+      "service": "authorization"
+    },
+    "DELETE /authorization/groups/{group_id}/role_assignments/{role_assignment_id}": {
+      "sdkMethod": "deleteGroupRoleAssignment",
+      "service": "authorization"
     },
     "POST /authorization/organization_memberships/{organization_membership_id}/check": {
       "sdkMethod": "check",
@@ -1231,6 +1287,10 @@
       "sdkMethod": "deletePermission",
       "service": "authorization"
     },
+    "POST /client/token": {
+      "sdkMethod": "createToken",
+      "service": "clientApi"
+    },
     "GET /connect/applications": {
       "sdkMethod": "listApplications",
       "service": "connect"
@@ -1279,8 +1339,8 @@
       "sdkMethod": "authorizeDataIntegration",
       "service": "pipes"
     },
-    "POST /data-integrations/{slug}/token": {
-      "sdkMethod": "createDataIntegrationToken",
+    "POST /data-integrations/{provider}/token": {
+      "sdkMethod": "getAccessToken",
       "service": "pipes"
     },
     "GET /directories": {
@@ -1398,6 +1458,14 @@
     "POST /organizations/{organizationId}/api_keys": {
       "sdkMethod": "createOrganizationApiKey",
       "service": "apiKeys"
+    },
+    "GET /organizations/{organizationId}/data_integration_configurations": {
+      "sdkMethod": "listOrganizationDataIntegrationConfigurations",
+      "service": "pipesProvider"
+    },
+    "PUT /organizations/{organizationId}/data_integration_configurations/{slug}": {
+      "sdkMethod": "updateOrganizationDataIntegrationConfiguration",
+      "service": "pipesProvider"
     },
     "GET /organizations/{organizationId}/feature-flags": {
       "sdkMethod": "listOrganizationFeatureFlags",

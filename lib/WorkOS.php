@@ -10,6 +10,7 @@ use WorkOS\Service\AdminPortal;
 use WorkOS\Service\ApiKeys;
 use WorkOS\Service\AuditLogs;
 use WorkOS\Service\Authorization;
+use WorkOS\Service\ClientApi;
 use WorkOS\Service\Connect;
 use WorkOS\Service\DirectorySync;
 use WorkOS\Service\Events;
@@ -20,6 +21,7 @@ use WorkOS\Service\OrganizationDomains;
 use WorkOS\Service\OrganizationMembershipService;
 use WorkOS\Service\Organizations;
 use WorkOS\Service\Pipes;
+use WorkOS\Service\PipesProvider;
 use WorkOS\Service\Radar;
 use WorkOS\Service\SSO;
 use WorkOS\Service\UserManagement;
@@ -55,6 +57,7 @@ class WorkOS
     private ?Service\MultiFactorAuth $multiFactorAuth = null;
     private ?Service\Connect $connect = null;
     private ?Service\Authorization $authorization = null;
+    private ?Service\ClientApi $clientApi = null;
     private ?Service\SSO $sso = null;
     private ?Service\Pipes $pipes = null;
     private ?Service\DirectorySync $directorySync = null;
@@ -63,6 +66,7 @@ class WorkOS
     private ?Service\OrganizationDomains $organizationDomains = null;
     private ?Service\Organizations $organizations = null;
     private ?Service\ApiKeys $apiKeys = null;
+    private ?Service\PipesProvider $pipesProvider = null;
     private ?Service\Groups $groups = null;
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
@@ -100,6 +104,11 @@ class WorkOS
     public function authorization(): Authorization
     {
         return $this->authorization ??= new Service\Authorization($this->httpClient);
+    }
+
+    public function clientApi(): ClientApi
+    {
+        return $this->clientApi ??= new Service\ClientApi($this->httpClient);
     }
 
     public function sso(): SSO
@@ -140,6 +149,11 @@ class WorkOS
     public function apiKeys(): ApiKeys
     {
         return $this->apiKeys ??= new Service\ApiKeys($this->httpClient);
+    }
+
+    public function pipesProvider(): PipesProvider
+    {
+        return $this->pipesProvider ??= new Service\PipesProvider($this->httpClient);
     }
 
     public function groups(): Groups
