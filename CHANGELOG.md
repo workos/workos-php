@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.1.0](https://github.com/workos/workos-php/compare/v7.0.1...v7.1.0) (2026-06-17)
+
+
+### Features
+
+* **api_keys:** Add expire API key operation and update expires_at requirement ([#397](https://github.com/workos/workos-php/issues/397)) ([d8a3804](https://github.com/workos/workos-php/commit/d8a3804be8760da96db14f3f97e90dd25a06b149))
+* **audit_logs:** Add Snowflake log stream type ([#397](https://github.com/workos/workos-php/issues/397)) ([d8a3804](https://github.com/workos/workos-php/commit/d8a3804be8760da96db14f3f97e90dd25a06b149))
+* **directory_sync:** Replace dsync deactivated events with token lifecycle events ([#397](https://github.com/workos/workos-php/issues/397)) ([d8a3804](https://github.com/workos/workos-php/commit/d8a3804be8760da96db14f3f97e90dd25a06b149))
+* **radar:** Remove DOMAIN_SIGN_UP_RATE_LIMIT control type ([#397](https://github.com/workos/workos-php/issues/397)) ([d8a3804](https://github.com/workos/workos-php/commit/d8a3804be8760da96db14f3f97e90dd25a06b149))
+* **user_management:** Add name field to user models and remove returnTo from revokeSession ([#397](https://github.com/workos/workos-php/issues/397)) ([d8a3804](https://github.com/workos/workos-php/commit/d8a3804be8760da96db14f3f97e90dd25a06b149))
+
+
+### Miscellaneous Chores
+
+* **deps:** update github actions non-major ([#398](https://github.com/workos/workos-php/issues/398)) ([79fc78c](https://github.com/workos/workos-php/commit/79fc78c82457f6735e580b348355e0dfe412ef62))
+
 ## [7.0.1](https://github.com/workos/workos-php/compare/v7.0.0...v7.0.1) (2026-05-28)
 
 
