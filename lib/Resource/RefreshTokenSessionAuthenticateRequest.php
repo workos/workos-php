@@ -13,11 +13,11 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
     public function __construct(
         /** The client ID of the application. */
         public string $clientId,
-        /** The client secret of the application. */
-        public string $clientSecret,
         public string $grantType,
         /** The refresh token to exchange for new tokens. */
         public string $refreshToken,
+        /** The client secret of the application. May be omitted by public clients that authenticate through other means, such as a PKCE `code_verifier`. */
+        public ?string $clientSecret = null,
         /** The ID of the organization to scope the session to. */
         public ?string $organizationId = null,
         /** The IP address of the user's request. */
@@ -33,9 +33,9 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
     {
         return new self(
             clientId: $data['client_id'],
-            clientSecret: $data['client_secret'],
             grantType: $data['grant_type'] ?? 'refresh_token',
             refreshToken: $data['refresh_token'],
+            clientSecret: $data['client_secret'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
@@ -47,9 +47,9 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
     {
         return [
             'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType,
             'refresh_token' => $this->refreshToken,
+            'client_secret' => $this->clientSecret,
             'organization_id' => $this->organizationId,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
