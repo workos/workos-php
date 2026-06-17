@@ -38,6 +38,11 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
         public string $updatedAt,
         /** The user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` if the user has not connected. */
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
+        /**
+         * The authentication methods supported by this provider (`oauth`, `api_key`, or both). Defaults to `["oauth"]` if absent.
+         * @var array<\WorkOS\Resource\ConnectedAccountAuthMethod>|null
+         */
+        public ?array $authMethods = null,
     ) {
     }
 
@@ -56,6 +61,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             connectedAccount: isset($data['connected_account']) ? DataIntegrationsListResponseDataConnectedAccount::fromArray($data['connected_account']) : null,
+            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => ConnectedAccountAuthMethod::from($item), $data['auth_methods']) : null,
         );
     }
 
@@ -74,6 +80,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
             'connected_account' => $this->connectedAccount?->toArray(),
+            'auth_methods' => $this->authMethods !== null ? array_map(fn ($item) => $item->value, $this->authMethods) : null,
         ];
     }
 }

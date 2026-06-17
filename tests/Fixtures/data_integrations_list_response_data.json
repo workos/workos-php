@@ -32,6 +32,11 @@
     "userlandUserId": "test_userlandUserId",
     "organizationId": "test_organizationId",
     "createdAt": "test_createdAt",
-    "updatedAt": "test_updatedAt"
-  }
+    "updatedAt": "test_updatedAt",
+    "auth_method": "oauth",
+    "api_key_last_4": null
+  },
+  "auth_methods": [
+    "oauth"
+  ]
 }
