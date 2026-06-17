@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Resource;
 
 /** The event payload. */
-readonly class ApiKeyCreatedData implements \JsonSerializable
+readonly class ApiKeyUpdatedData implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -17,7 +17,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         /** Unique identifier of the API key. */
         public string $id,
         /** The owner of the API key. */
-        public ApiKeyCreatedDataOwner|UserApiKeyCreatedDataOwner $owner,
+        public ApiKeyUpdatedDataOwner|UserApiKeyUpdatedDataOwner $owner,
         /** The name of the API key. */
         public string $name,
         /** The obfuscated value of the API key. */
@@ -35,6 +35,8 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
         public string $createdAt,
         /** The timestamp when the API key was last updated. */
         public string $updatedAt,
+        /** Previous API key attributes before the update. */
+        public ApiKeyUpdatedDataPreviousAttribute $previousAttributes,
     ) {
     }
 
@@ -44,7 +46,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
             object: $data['object'] ?? 'api_key',
             id: $data['id'],
             owner: match ($data['owner']['type'] ?? null) {
-                'organization' => ApiKeyCreatedDataOwner::fromArray($data['owner']), 'user' => UserApiKeyCreatedDataOwner::fromArray($data['owner']), default => throw new \UnexpectedValueException(sprintf('Unknown type: %s', json_encode($data['owner']['type'] ?? null)))
+                'organization' => ApiKeyUpdatedDataOwner::fromArray($data['owner']), 'user' => UserApiKeyUpdatedDataOwner::fromArray($data['owner']), default => throw new \UnexpectedValueException(sprintf('Unknown type: %s', json_encode($data['owner']['type'] ?? null)))
             },
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
@@ -53,6 +55,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
             permissions: $data['permissions'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
+            previousAttributes: ApiKeyUpdatedDataPreviousAttribute::fromArray($data['previous_attributes']),
         );
     }
 
@@ -69,6 +72,7 @@ readonly class ApiKeyCreatedData implements \JsonSerializable
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
+            'previous_attributes' => $this->previousAttributes->toArray(),
         ];
     }
 }

@@ -24,6 +24,8 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         public string $obfuscatedValue,
         /** The timestamp when the API key was last used. */
         public ?string $lastUsedAt,
+        /** Timestamp when the API Key expires. Null means the key does not expire. */
+        public ?\DateTimeImmutable $expiresAt,
         /**
          * The permissions granted to the API key.
          * @var array<string>
@@ -33,8 +35,6 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         public string $createdAt,
         /** The timestamp when the API key was last updated. */
         public string $updatedAt,
-        /** Timestamp when the API Key expires. Null means the key does not expire. */
-        public ?\DateTimeImmutable $expiresAt = null,
     ) {
     }
 
@@ -49,10 +49,10 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
             name: $data['name'],
             obfuscatedValue: $data['obfuscated_value'],
             lastUsedAt: $data['last_used_at'] ?? null,
+            expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
             permissions: $data['permissions'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
-            expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
         );
     }
 
@@ -65,10 +65,10 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,
+            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];
     }
 }

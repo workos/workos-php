@@ -25,6 +25,7 @@ enum CreateWebhookEndpointEvents: string
     case AuthenticationRadarRiskDetected = 'authentication.radar_risk_detected';
     case ApiKeyCreated = 'api_key.created';
     case ApiKeyRevoked = 'api_key.revoked';
+    case ApiKeyUpdated = 'api_key.updated';
     case ConnectionActivated = 'connection.activated';
     case ConnectionDeactivated = 'connection.deactivated';
     case ConnectionSAMLCertificateRenewalRequired = 'connection.saml_certificate_renewal_required';

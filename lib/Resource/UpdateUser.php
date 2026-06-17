@@ -17,6 +17,8 @@ readonly class UpdateUser implements \JsonSerializable
         public ?string $firstName = null,
         /** The last name of the user. */
         public ?string $lastName = null,
+        /** The user's full name. */
+        public ?string $name = null,
         /** Whether the user's email has been verified. */
         public ?bool $emailVerified = null,
         /**
@@ -43,6 +45,7 @@ readonly class UpdateUser implements \JsonSerializable
             email: $data['email'] ?? null,
             firstName: $data['first_name'] ?? null,
             lastName: $data['last_name'] ?? null,
+            name: $data['name'] ?? null,
             emailVerified: $data['email_verified'] ?? null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
@@ -59,6 +62,7 @@ readonly class UpdateUser implements \JsonSerializable
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
+            'name' => $this->name,
             'email_verified' => $this->emailVerified,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,

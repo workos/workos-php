@@ -68,6 +68,20 @@ class ApiKeysTest extends TestCase
         $this->assertStringEndsWith('api_keys/test_id', $request->getUri()->getPath());
     }
 
+    public function testCreateApiKeyExpire(): void
+    {
+        $fixture = $this->loadFixture('api_key');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->apiKeys()->createApiKeyExpire('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\ApiKey::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('api_keys/test_id/expire', $request->getUri()->getPath());
+    }
+
     public function testPaginationBoundary(): void
     {
         $fixture = $this->loadFixture('list_organization_api_key');

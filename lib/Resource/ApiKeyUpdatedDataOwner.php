@@ -6,35 +6,31 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class DsyncDeactivatedDataDomain implements \JsonSerializable
+readonly class ApiKeyUpdatedDataOwner implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
-        /** Distinguishes the organization domain object. */
-        public string $object,
-        /** Unique identifier of the organization domain. */
+        /** The type of the API key owner. */
+        public string $type,
+        /** The unique identifier of the API key owner. */
         public string $id,
-        /** The domain value. */
-        public string $domain,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'] ?? 'organization_domain',
+            type: $data['type'] ?? 'organization',
             id: $data['id'],
-            domain: $data['domain'],
         );
     }
 
     public function toArray(): array
     {
         return [
-            'object' => $this->object,
+            'type' => $this->type,
             'id' => $this->id,
-            'domain' => $this->domain,
         ];
     }
 }

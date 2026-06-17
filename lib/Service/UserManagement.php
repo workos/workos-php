@@ -447,8 +447,8 @@ class UserManagement
      * Logout
      *
      * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
-     * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
-     * @param string|null $returnTo The URL to redirect the user to after session revocation.
+     * @param string $sessionId The ID of the session. This can be extracted from the `sid` claim of the access token.
+     * @param string|null $returnTo The URL to redirect the user to after logout.
      * @return string
      */
     public function getLogoutUrl(
@@ -468,19 +468,16 @@ class UserManagement
      *
      * Revoke a [user session](https://workos.com/docs/reference/authkit/session).
      * @param string $sessionId The ID of the session to revoke. This can be extracted from the `sid` claim of the access token.
-     * @param string|null $returnTo The URL to redirect the user to after session revocation.
      * @return mixed
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function revokeSession(
         string $sessionId,
-        ?string $returnTo = null,
         ?\WorkOS\RequestOptions $options = null,
     ): mixed {
-        $body = array_filter([
+        $body = [
             'session_id' => $sessionId,
-            'return_to' => $returnTo,
-        ], fn ($v) => $v !== null);
+        ];
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/sessions/revoke',
@@ -612,7 +609,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
      * @param string|null $organization (deprecated) Filter users by the organization they are a member of. Deprecated in favor of `organization_id`.
      * @param string|null $organizationId Filter users by the organization they are a member of.
      * @param string|null $email Filter users by their email address.
@@ -654,6 +651,7 @@ class UserManagement
      * @param string $email The email address of the user.
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
+     * @param string|null $name The user's full name.
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
@@ -665,6 +663,7 @@ class UserManagement
         string $email,
         ?string $firstName = null,
         ?string $lastName = null,
+        ?string $name = null,
         ?bool $emailVerified = null,
         ?array $metadata = null,
         ?string $externalId = null,
@@ -675,6 +674,7 @@ class UserManagement
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
+            'name' => $name,
             'email_verified' => $emailVerified,
             'metadata' => $metadata,
             'external_id' => $externalId,
@@ -742,6 +742,7 @@ class UserManagement
      * @param string|null $email The email address of the user.
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
+     * @param string|null $name The user's full name.
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
@@ -755,6 +756,7 @@ class UserManagement
         ?string $email = null,
         ?string $firstName = null,
         ?string $lastName = null,
+        ?string $name = null,
         ?bool $emailVerified = null,
         ?array $metadata = null,
         ?string $externalId = null,
@@ -766,6 +768,7 @@ class UserManagement
             'email' => $email,
             'first_name' => $firstName,
             'last_name' => $lastName,
+            'name' => $name,
             'email_verified' => $emailVerified,
             'metadata' => $metadata,
             'external_id' => $externalId,
@@ -931,7 +934,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserSessionsListItem>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -965,7 +968,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
      * @param string|null $organizationId The ID of the [organization](https://workos.com/docs/reference/organization) that the recipient will join.
      * @param string|null $email The email address of the recipient.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\UserInvite>
@@ -1263,7 +1266,7 @@ class UserManagement
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
-     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to descending. Defaults to "desc".
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthorizedConnectApplicationListData>
      * @throws \WorkOS\Exception\WorkOSException
      */

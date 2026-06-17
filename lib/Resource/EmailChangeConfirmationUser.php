@@ -34,6 +34,8 @@ readonly class EmailChangeConfirmationUser implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The user's full name. */
+        public ?string $name = null,
         /**
          * Object containing metadata key/value pairs associated with the user.
          * @var array<string, string>|null
@@ -58,6 +60,7 @@ readonly class EmailChangeConfirmationUser implements \JsonSerializable
             lastSignInAt: isset($data['last_sign_in_at']) ? new \DateTimeImmutable($data['last_sign_in_at']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            name: $data['name'] ?? null,
             metadata: $data['metadata'] ?? null,
             locale: $data['locale'] ?? null,
         );
@@ -77,6 +80,7 @@ readonly class EmailChangeConfirmationUser implements \JsonSerializable
             'last_sign_in_at' => $this->lastSignInAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'name' => $this->name,
             'metadata' => $this->metadata,
             'locale' => $this->locale,
         ];

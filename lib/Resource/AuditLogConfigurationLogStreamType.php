@@ -13,5 +13,6 @@ enum AuditLogConfigurationLogStreamType: string
     case GenericHttps = 'GenericHttps';
     case GoogleCloudStorage = 'GoogleCloudStorage';
     case S3 = 'S3';
+    case Snowflake = 'Snowflake';
     case Splunk = 'Splunk';
 }

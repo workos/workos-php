@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class DsyncDeactivated implements \JsonSerializable
+readonly class ApiKeyUpdated implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -17,7 +17,7 @@ readonly class DsyncDeactivated implements \JsonSerializable
         public string $id,
         public string $event,
         /** The event payload. */
-        public DsyncDeactivatedData $data,
+        public ApiKeyUpdatedData $data,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         public ?EventContext $context = null,
@@ -29,8 +29,8 @@ readonly class DsyncDeactivated implements \JsonSerializable
         return new self(
             object: $data['object'] ?? 'event',
             id: $data['id'],
-            event: $data['event'] ?? 'dsync.deactivated',
-            data: DsyncDeactivatedData::fromArray($data['data']),
+            event: $data['event'] ?? 'api_key.updated',
+            data: ApiKeyUpdatedData::fromArray($data['data']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             context: isset($data['context']) ? EventContext::fromArray($data['context']) : null,
         );
