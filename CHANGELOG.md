@@ -2,22 +2,6 @@
 
 ## [7.2.0](https://github.com/workos/workos-php/compare/v7.1.0...v7.2.0) (2026-06-18)
 
-
-### Features
-
-* **authorization:** Add authorization operations and models ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **client:** Add client API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **connect:** Add Connect API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **groups:** Add groups API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **organization_membership:** Add organization membership API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **organization_membership:** Change response for `UserManagementOrganizationMembership.list` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **pipes:** Add Pipes API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **pipes:** SDK surface change: Symbol "Pipes.createDataIntegrationToken" was removed ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **user_management:** Change response for `UserManagementInvitations.list` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **user_management:** Update user management API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-* **widgets:** Add `widgets:pipes:manage` to `WidgetSessionTokenScopes` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
-
-
 ### Bug Fixes
 
 * Fix empty body serializing as JSON array instead of object ([#403](https://github.com/workos/workos-php/issues/403)) ([29d0099](https://github.com/workos/workos-php/commit/29d0099fc05bae3860a40cb8cf2db9b4cc05cc0f))
@@ -26,6 +10,64 @@
 ### Miscellaneous Chores
 
 * commit publishing fixes ([c7ba478](https://github.com/workos/workos-php/commit/c7ba47825e20a91cdc40d00cb001ccee94aba288))
+
+- [#401](https://github.com/workos/workos-php/pull/401) feat(generated)!: regenerate from spec (11 changes)
+
+  **⚠️ Breaking**
+  - **[pipes](https://workos.com/docs/reference/pipes)**:
+    - SDK surface change: `Pipes.createDataIntegrationToken` was renamed to `Pipes.getAccessToken`
+
+  **Features**
+  - **[authorization](https://workos.com/docs/reference/fga)**:
+    - Added model `ReplaceGroupRoleAssignmentEntry`
+    - Added model `ReplaceGroupRoleAssignments`
+    - Added model `DeleteGroupRoleAssignmentsByCriteria`
+    - Added endpoint `POST /authorization/groups/{group_id}/role_assignments`
+    - Added endpoint `PUT /authorization/groups/{group_id}/role_assignments`
+    - Added endpoint `DELETE /authorization/groups/{group_id}/role_assignments`
+    - Added endpoint `GET /authorization/groups/{group_id}/role_assignments/{role_assignment_id}`
+    - Added endpoint `DELETE /authorization/groups/{group_id}/role_assignments/{role_assignment_id}`
+  - **[client](https://workos.com/docs/reference)**:
+    - Added model `ClientApiToken`
+    - Added model `ClientApiTokenResponse`
+    - Added service `Client`
+  - **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    - Added `auth_method` to `ConnectedAccount`
+    - Added `api_key_last_4` to `ConnectedAccount`
+    - Added enum `ConnectedAccountAuthMethod`
+  - **[groups](https://workos.com/docs/reference/groups)**:
+    - Added model `CreateGroupRoleAssignment`
+    - Added model `GroupRoleAssignment`
+    - Added model `GroupRoleAssignmentList`
+    - Added model `GroupRoleAssignmentResource`
+  - **[organization_membership](https://workos.com/docs/reference/authkit/organization-membership)**:
+    - Added model `UserOrganizationMembershipList`
+    - Added model `UserOrganizationMembershipListListMetadata`
+  - **[pipes](https://workos.com/docs/reference/pipes)**:
+    - Added model `DataIntegrationCredentials`
+    - Added model `DataIntegrationConfigurationResponse`
+    - Added model `DataIntegrationConfigurationListResponse`
+    - Added model `ConfigureDataIntegrationBody`
+    - Added `auth_methods` to `DataIntegrationsListResponseData`
+    - Added `auth_method` to `DataIntegrationsListResponseDataConnectedAccount`
+    - Added `api_key_last_4` to `DataIntegrationsListResponseDataConnectedAccount`
+    - Added enum `DataIntegrationCredentialsCredentialsType`
+    - Added enum `DataIntegrationsListResponseDataAuthMethods`
+    - Added enum `DataIntegrationsListResponseDataConnectedAccountAuthMethod`
+    - Added service `PipesProvider`
+  - **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    - Added model `UserInviteList`
+    - Added model `UserInviteListListMetadata`
+    - Made `AuthorizationCodeSessionAuthenticateRequest.client_secret` optional
+    - Made `RefreshTokenSessionAuthenticateRequest.client_secret` optional
+  - **[widgets](https://workos.com/docs/reference/widgets)**:
+    - Added `widgets:pipes:manage` to `WidgetSessionTokenScopes`
+
+  **Fixes**
+  - **[organization_membership](https://workos.com/docs/reference/authkit/organization-membership)**:
+    - Changed response of `UserManagementOrganizationMembership.list` from `UserOrganizationMembership` to `UserOrganizationMembershipList`
+  - **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    - Changed response of `UserManagementInvitations.list` from `UserInvite` to `UserInviteList`
 
 ## [7.1.0](https://github.com/workos/workos-php/compare/v7.0.1...v7.1.0) (2026-06-17)
 
