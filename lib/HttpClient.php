@@ -224,7 +224,12 @@ class HttpClient
         }
 
         if ($body !== null) {
-            $requestOptions['json'] = $body;
+            // An empty array serializes to the JSON array `[]`, but JSON-object
+            // endpoints expect an object `{}`. This happens whenever a body is
+            // entirely optional and every field is omitted (e.g. challengeFactor
+            // on a TOTP factor). Cast to an object so the empty case encodes as
+            // `{}`; non-empty associative arrays already encode as objects.
+            $requestOptions['json'] = $body === [] ? (object) $body : $body;
         }
 
         return $requestOptions;
