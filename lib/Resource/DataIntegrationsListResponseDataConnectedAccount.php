@@ -40,6 +40,10 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
          * @deprecated
          */
         public ?string $userlandUserId,
+        /** The authentication method used for this connection (`oauth` or `api_key`). Defaults to `oauth` if absent. */
+        public ?ConnectedAccountAuthMethod $authMethod = null,
+        /** The last four characters of the API key, or `null` for OAuth connections. */
+        public ?string $apiKeyLast4 = null,
     ) {
     }
 
@@ -55,6 +59,8 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             userlandUserId: $data['userlandUserId'] ?? null,
+            authMethod: isset($data['auth_method']) ? ConnectedAccountAuthMethod::from($data['auth_method']) : null,
+            apiKeyLast4: $data['api_key_last_4'] ?? null,
         );
     }
 
@@ -70,6 +76,8 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
             'userlandUserId' => $this->userlandUserId,
+            'auth_method' => $this->authMethod?->value,
+            'api_key_last_4' => $this->apiKeyLast4,
         ];
     }
 }

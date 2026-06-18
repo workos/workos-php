@@ -13,6 +13,84 @@ class AuthorizationTest extends TestCase
 {
     use TestHelper;
 
+    public function testListGroupRoleAssignments(): void
+    {
+        $fixture = $this->loadFixture('list_group_role_assignment');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->listGroupRoleAssignments('test_group_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testCreateGroupRoleAssignment(): void
+    {
+        $fixture = $this->loadFixture('group_role_assignment');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->createGroupRoleAssignment('test_group_id', roleSlug: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\GroupRoleAssignment::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['group_id'], $result->groupId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['role_slug']);
+    }
+
+    public function testUpdateGroupRoleAssignments(): void
+    {
+        $fixture = $this->loadFixture('group_role_assignment_list');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->updateGroupRoleAssignments('test_group_id', roleAssignments: []);
+        $this->assertInstanceOf(\WorkOS\Resource\GroupRoleAssignmentList::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments', $request->getUri()->getPath());
+    }
+
+    public function testDeleteGroupRoleAssignments(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->authorization()->deleteGroupRoleAssignments('test_group_id', roleSlug: 'test_value');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['role_slug']);
+    }
+
+    public function testGetGroupRoleAssignment(): void
+    {
+        $fixture = $this->loadFixture('group_role_assignment');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->authorization()->getGroupRoleAssignment('test_group_id', 'test_role_assignment_id');
+        $this->assertInstanceOf(\WorkOS\Resource\GroupRoleAssignment::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['group_id'], $result->groupId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments/test_role_assignment_id', $request->getUri()->getPath());
+    }
+
+    public function testDeleteGroupRoleAssignment(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->authorization()->deleteGroupRoleAssignment('test_group_id', 'test_role_assignment_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments/test_role_assignment_id', $request->getUri()->getPath());
+    }
+
     public function testCheck(): void
     {
         $fixture = $this->loadFixture('authorization_check');
@@ -574,12 +652,12 @@ class AuthorizationTest extends TestCase
 
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_authorization_resource');
+        $fixture = $this->loadFixture('list_group_role_assignment');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->authorization()->listResourcesForMembership('test_organization_membership_id', parentResource: new \WorkOS\Service\ParentResourceById(id: 'test_value'), permissionSlug: 'test_value');
+        $result = $client->authorization()->listGroupRoleAssignments('test_group_id');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);

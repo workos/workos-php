@@ -13,11 +13,11 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
     public function __construct(
         /** The client ID of the application. */
         public string $clientId,
-        /** The client secret of the application. */
-        public string $clientSecret,
         public string $grantType,
         /** The authorization code received from the redirect. */
         public string $code,
+        /** The client secret of the application. May be omitted by public clients that authenticate through other means, such as a PKCE `code_verifier`. */
+        public ?string $clientSecret = null,
         /** The PKCE code verifier used to derive the code challenge passed to the authorization URL. */
         public ?string $codeVerifier = null,
         /** An invitation token to accept during authentication. */
@@ -35,9 +35,9 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
     {
         return new self(
             clientId: $data['client_id'],
-            clientSecret: $data['client_secret'],
             grantType: $data['grant_type'] ?? 'authorization_code',
             code: $data['code'],
+            clientSecret: $data['client_secret'] ?? null,
             codeVerifier: $data['code_verifier'] ?? null,
             invitationToken: $data['invitation_token'] ?? null,
             ipAddress: $data['ip_address'] ?? null,
@@ -50,9 +50,9 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
     {
         return [
             'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType,
             'code' => $this->code,
+            'client_secret' => $this->clientSecret,
             'code_verifier' => $this->codeVerifier,
             'invitation_token' => $this->invitationToken,
             'ip_address' => $this->ipAddress,

@@ -54,14 +54,14 @@ class Pipes
      * Get an access token for a connected account
      *
      * Fetches a valid OAuth access token for a user's connected account. WorkOS automatically handles token refresh, ensuring you always receive a valid, non-expired token.
-     * @param string $slug The identifier of the integration.
+     * @param string $provider The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
      * @return \WorkOS\Resource\DataIntegrationAccessTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function createDataIntegrationToken(
-        string $slug,
+    public function getAccessToken(
+        string $provider,
         string $userId,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -72,7 +72,7 @@ class Pipes
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
-            path: 'data-integrations/' . rawurlencode($slug) . '/token',
+            path: 'data-integrations/' . rawurlencode($provider) . '/token',
             body: $body,
             options: $options,
         );
@@ -135,7 +135,7 @@ class Pipes
     }
 
     /**
-     * List providers
+     * List providers for a user
      *
      * Retrieves a list of available providers and the user's connection status for each. Returns all providers configured for your environment, along with the user's [connected account](https://workos.com/docs/reference/pipes/connected-account) information where applicable.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier to list providers and connected accounts for.
