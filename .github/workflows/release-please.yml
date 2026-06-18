@@ -14,12 +14,18 @@ permissions:
   pull-requests: write
 
 jobs:
+  # release-please owns tag + GitHub Release creation (no
+  # skip-github-release). Because it tags every release inside its own run
+  # — before it computes the next release PR — it always knows the previous
+  # release boundary, so it never regenerates the changelog from the start
+  # of history or proposes a spurious major bump. This job is kept minimal
+  # so nothing downstream (changelog enrichment, release notes) can fail it.
   release-please:
-    needs: publish-release
-    if: needs.publish-release.outputs.is-release != 'true'
     runs-on: ubuntu-latest
     outputs:
       pr: ${{ steps.release.outputs.pr }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # 3.2.0
         id: app-token
@@ -27,22 +33,29 @@ jobs:
           app-id: ${{ vars.SDK_BOT_APP_ID }}
           private-key: ${{ secrets.SDK_BOT_PRIVATE_KEY }}
 
-      # skip-github-release means release-please opens/updates release
-      # PRs and updates CHANGELOG.md as usual, but does NOT tag or create
-      # the GitHub Release on merge. Those are owned by publish-release
-      # below so we can set the Release body from the rich CHANGELOG.md
-      # section instead of release-please's terse default rendering.
       - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         id: release
         with:
           token: ${{ steps.app-token.outputs.token }}
-          skip-github-release: true
+
+  # While the release PR is open, enrich it before it merges. Runs as its
+  # own job (gated on the PR existing) so a failure here can never block the
+  # release or any publish that depends on release-please.
+  enrich-release-pr:
+    needs: release-please
+    if: needs.release-please.outputs.pr
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # 3.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.SDK_BOT_APP_ID }}
+          private-key: ${{ secrets.SDK_BOT_PRIVATE_KEY }}
 
       - name: Checkout release PR branch
-        if: steps.release.outputs.pr
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # 6.0.3
         with:
-          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+          ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
           token: ${{ steps.app-token.outputs.token }}
 
       # Inline pending changelog fragments under the version heading
@@ -53,9 +66,8 @@ jobs:
       # release-please wrote. Fragments are deleted in the same commit.
       # Idempotent: if no fragments exist, skip silently.
       - name: Inline rich changelog fragments
-        if: steps.release.outputs.pr
         env:
-          PR_JSON: ${{ steps.release.outputs.pr }}
+          PR_JSON: ${{ needs.release-please.outputs.pr }}
         run: |
           set -euo pipefail
           shopt -s nullglob
@@ -134,94 +146,39 @@ jobs:
           git commit -m "chore: inline release notes from .changelog-pending"
           git push
 
-  # Detect when a release-please release PR has merged, then tag and
-  # create the GitHub Release whose body is extracted from CHANGELOG.md
-  # (now rich, after the inline step above). Runs on every push to main;
-  # the detect step gates everything else.
-  publish-release:
+  # After release-please tags the release and creates the GitHub Release,
+  # replace its body with the rich section from CHANGELOG.md (release-please
+  # writes only its terse default rendering). Cosmetic-only: never fails the
+  # release if the section can't be found.
+  update-release-notes:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    outputs:
-      is-release: ${{ steps.detect.outputs.is-release }}
-      version: ${{ steps.detect.outputs.version }}
     steps:
-      - name: Generate token
-        id: generate-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # 3.2.0
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # 3.2.0
+        id: app-token
         with:
           app-id: ${{ vars.SDK_BOT_APP_ID }}
           private-key: ${{ secrets.SDK_BOT_PRIVATE_KEY }}
 
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # 6.0.3
         with:
-          fetch-depth: 0
-          token: ${{ steps.generate-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
 
-      - name: Detect release PR merge
-        id: detect
-        run: |
-          set -euo pipefail
-          SUBJECT=$(git log -1 --format=%s)
-          # release-please's default release PR title:
-          #   chore(main): release X.Y.Z
-          if [[ "$SUBJECT" =~ ^chore\(.*\):[[:space:]]release[[:space:]]([0-9]+\.[0-9]+\.[0-9]+) ]]; then
-            VERSION="${BASH_REMATCH[1]}"
-            echo "is-release=true"  >> "$GITHUB_OUTPUT"
-            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-            if [[ "$SUBJECT" =~ \#([0-9]+) ]]; then
-              echo "pr-number=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
-            fi
-            echo "Detected release PR merge for v$VERSION"
-          else
-            echo "Not a release PR merge: $SUBJECT"
-            echo "is-release=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Extract release notes from CHANGELOG.md
-        if: steps.detect.outputs.is-release == 'true'
+      - name: Set rich release notes from CHANGELOG.md
         env:
-          VERSION: ${{ steps.detect.outputs.version }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
         run: |
           set -euo pipefail
+          VERSION="${TAG#v}"
           awk -v v="$VERSION" '
             $0 ~ ("^## \\[" v "\\]") { found=1; next }
             found && /^## \[/ { exit }
             found
           ' CHANGELOG.md > /tmp/release-notes.md
-          if [ ! -s /tmp/release-notes.md ]; then
-            echo "::error::CHANGELOG.md has no body for v$VERSION"
-            exit 1
+          if [ -s /tmp/release-notes.md ]; then
+            gh release edit "$TAG" --notes-file /tmp/release-notes.md
+          else
+            echo "No CHANGELOG.md body for $TAG; keeping release-please default notes."
           fi
-
-      - name: Tag and create GitHub Release
-        if: steps.detect.outputs.is-release == 'true'
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          VERSION: ${{ steps.detect.outputs.version }}
-        run: |
-          set -euo pipefail
-          TAG="v$VERSION"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists; skipping."
-            exit 0
-          fi
-          git config user.name "workos-sdk-automation[bot]"
-          git config user.email "255426317+workos-sdk-automation[bot]@users.noreply.github.com"
-          git tag -a "$TAG" -m "Release $TAG"
-          git push origin "$TAG"
-          gh release create "$TAG" \
-            --title "$TAG" \
-            --notes-file /tmp/release-notes.md
-
-      - name: Mark release PR as tagged
-        if: steps.detect.outputs.is-release == 'true' && steps.detect.outputs['pr-number']
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          PR_NUMBER: ${{ steps.detect.outputs['pr-number'] }}
-        run: |
-          set -euo pipefail
-          gh pr edit "$PR_NUMBER" \
-            --remove-label "autorelease: pending" \
-            --add-label "autorelease: tagged"
