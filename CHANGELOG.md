@@ -1,5 +1,32 @@
 # Changelog
 
+## [7.2.0](https://github.com/workos/workos-php/compare/v7.1.0...v7.2.0) (2026-06-18)
+
+
+### Features
+
+* **authorization:** Add authorization operations and models ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **client:** Add client API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **connect:** Add Connect API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **groups:** Add groups API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **organization_membership:** Add organization membership API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **organization_membership:** Change response for `UserManagementOrganizationMembership.list` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **pipes:** Add Pipes API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **pipes:** SDK surface change: Symbol "Pipes.createDataIntegrationToken" was removed ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **user_management:** Change response for `UserManagementInvitations.list` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **user_management:** Update user management API surface ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+* **widgets:** Add `widgets:pipes:manage` to `WidgetSessionTokenScopes` ([#401](https://github.com/workos/workos-php/issues/401)) ([ccad23b](https://github.com/workos/workos-php/commit/ccad23bf52566641466a44be793e1fb42229bd15))
+
+
+### Bug Fixes
+
+* Fix empty body serializing as JSON array instead of object ([#403](https://github.com/workos/workos-php/issues/403)) ([29d0099](https://github.com/workos/workos-php/commit/29d0099fc05bae3860a40cb8cf2db9b4cc05cc0f))
+
+
+### Miscellaneous Chores
+
+* commit publishing fixes ([c7ba478](https://github.com/workos/workos-php/commit/c7ba47825e20a91cdc40d00cb001ccee94aba288))
+
 ## [7.1.0](https://github.com/workos/workos-php/compare/v7.0.1...v7.1.0) (2026-06-17)
 
 ### Miscellaneous Chores
