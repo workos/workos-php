@@ -324,6 +324,58 @@ class HttpClientTest extends TestCase
         $this->assertSame('/organizations/om_xyz/foo', $rawSlashRequest->getUri()->getPath());
     }
 
+    public function testEmptyBodySerializesAsJsonObject(): void
+    {
+        // Issue #400: an all-optional body with every field omitted reduces to
+        // an empty PHP array. Guzzle's `json` option encodes that to the JSON
+        // array `[]`, which JSON-object endpoints (e.g. challengeFactor on a
+        // TOTP factor) reject with a 422. The body must serialize to `{}`.
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+        $history = [];
+        $handler = HandlerStack::create($mock);
+        $handler->push(\GuzzleHttp\Middleware::history($history));
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+
+        $client->request('POST', 'auth/factors/auth_factor_123/challenge', body: []);
+
+        $request = $history[array_key_last($history)]['request'];
+        $this->assertSame('{}', (string) $request->getBody());
+    }
+
+    public function testNonEmptyBodyStillSerializesAsJsonObject(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+        $history = [];
+        $handler = HandlerStack::create($mock);
+        $handler->push(\GuzzleHttp\Middleware::history($history));
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+
+        $client->request('POST', 'auth/factors/auth_factor_123/challenge', body: ['sms_template' => 'Your code is {{code}}']);
+
+        $request = $history[array_key_last($history)]['request'];
+        $this->assertSame('{"sms_template":"Your code is {{code}}"}', (string) $request->getBody());
+    }
+
     public function testNonStringCodeFieldIsIgnored(): void
     {
         $body = json_encode([
