@@ -29,6 +29,11 @@ readonly class UserOrganizationMembership implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /** The primary role assigned to the user within the organization. */
         public SlimRole $role,
+        /**
+         * The list of roles assigned to the user within the organization.
+         * @var array<\WorkOS\Resource\SlimRole>
+         */
+        public array $roles,
         /** The user that belongs to the organization through this membership. */
         public User $user,
         /** The name of the organization which the user belongs to. */
@@ -53,6 +58,7 @@ readonly class UserOrganizationMembership implements \JsonSerializable
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             role: SlimRole::fromArray($data['role']),
+            roles: array_map(fn ($item) => SlimRole::fromArray($item), $data['roles']),
             user: User::fromArray($data['user']),
             organizationName: $data['organization_name'] ?? null,
             customAttributes: $data['custom_attributes'] ?? null,
@@ -71,6 +77,7 @@ readonly class UserOrganizationMembership implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'role' => $this->role->toArray(),
+            'roles' => array_map(fn ($item) => $item->toArray(), $this->roles),
             'user' => $this->user->toArray(),
             'organization_name' => $this->organizationName,
             'custom_attributes' => $this->customAttributes,
