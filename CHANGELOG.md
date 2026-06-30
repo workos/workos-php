@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.3.0](https://github.com/workos/workos-php/compare/v7.2.0...v7.3.0) (2026-06-30)
+
+* [#405](https://github.com/workos/workos-php/pull/405) fix(generated): regenerate from spec
+
+  **Fixes**
+  * **[organization_membership](https://workos.com/docs/reference/authkit/organization-membership)**:
+    * Added `roles` to organization membership models
+
 ## [7.2.0](https://github.com/workos/workos-php/compare/v7.1.0...v7.2.0) (2026-06-18)
 
 ### Bug Fixes
