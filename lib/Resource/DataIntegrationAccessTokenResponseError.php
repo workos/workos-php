@@ -8,6 +8,6 @@ namespace WorkOS\Resource;
 
 enum DataIntegrationAccessTokenResponseError: string
 {
-    case NeedsReauthorization = 'needs_reauthorization';
     case NotInstalled = 'not_installed';
+    case NeedsReauthorization = 'needs_reauthorization';
 }
