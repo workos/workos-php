@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.3.0](https://github.com/workos/workos-php/compare/v7.2.0...v7.3.0) (2026-06-30)
+
+
+### Features
+
+* **generated:** OrganizationMembership (batch 4a353f07) ([#405](https://github.com/workos/workos-php/issues/405)) ([a51bb46](https://github.com/workos/workos-php/commit/a51bb46a29b2712094a4af3f856e956ca390cc4d))
+
 ## [7.2.0](https://github.com/workos/workos-php/compare/v7.1.0...v7.2.0) (2026-06-18)
 
 ### Bug Fixes
