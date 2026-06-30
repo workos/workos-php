@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace WorkOS;
 
 use WorkOS\Service\AdminPortal;
+use WorkOS\Service\Agents;
 use WorkOS\Service\ApiKeys;
 use WorkOS\Service\AuditLogs;
 use WorkOS\Service\Authorization;
@@ -54,6 +55,7 @@ class WorkOS
     {
         self::$clientId = $id;
     }
+    private ?Service\Agents $agents = null;
     private ?Service\MultiFactorAuth $multiFactorAuth = null;
     private ?Service\Connect $connect = null;
     private ?Service\Authorization $authorization = null;
@@ -89,6 +91,11 @@ class WorkOS
         $apiKey ??= getenv('WORKOS_API_KEY') ?: self::$apiKey ?? '';
         $clientId ??= getenv('WORKOS_CLIENT_ID') ?: self::$clientId;
         $this->httpClient = new HttpClient($apiKey, $clientId, $baseUrl, $timeout, $maxRetries, $handler, $userAgent);
+    }
+
+    public function agents(): Agents
+    {
+        return $this->agents ??= new Service\Agents($this->httpClient);
     }
 
     public function multiFactorAuth(): MultiFactorAuth
