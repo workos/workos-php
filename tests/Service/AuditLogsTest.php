@@ -101,7 +101,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_log_export');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->createExport(organizationId: 'test_value', rangeStart: 'test_value', rangeEnd: 'test_value');
+        $result = $client->auditLogs()->createExport(organizationId: 'test_value', rangeStart: new \DateTimeImmutable('2023-01-01T00:00:00Z'), rangeEnd: new \DateTimeImmutable('2023-01-01T00:00:00Z'));
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExport::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
@@ -110,8 +110,8 @@ class AuditLogsTest extends TestCase
         $this->assertStringEndsWith('audit_logs/exports', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['organization_id']);
-        $this->assertSame('test_value', $body['range_start']);
-        $this->assertSame('test_value', $body['range_end']);
+        $this->assertSame('2023-01-01T00:00:00.000+00:00', $body['range_start']);
+        $this->assertSame('2023-01-01T00:00:00.000+00:00', $body['range_end']);
     }
 
     public function testGetExport(): void

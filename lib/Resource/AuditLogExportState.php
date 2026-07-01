@@ -11,4 +11,5 @@ enum AuditLogExportState: string
     case Pending = 'pending';
     case Ready = 'ready';
     case Error = 'error';
+    case Expired = 'expired';
 }
