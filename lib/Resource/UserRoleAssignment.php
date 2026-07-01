@@ -21,6 +21,8 @@ readonly class UserRoleAssignment implements \JsonSerializable
         public SlimRole $role,
         /** The resource the role is assigned on. */
         public UserRoleAssignmentResource $resource,
+        /** The origin of the role assignment. */
+        public UserRoleAssignmentSource $source,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -36,6 +38,7 @@ readonly class UserRoleAssignment implements \JsonSerializable
             organizationMembershipId: $data['organization_membership_id'],
             role: SlimRole::fromArray($data['role']),
             resource: UserRoleAssignmentResource::fromArray($data['resource']),
+            source: UserRoleAssignmentSource::fromArray($data['source']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
@@ -49,6 +52,7 @@ readonly class UserRoleAssignment implements \JsonSerializable
             'organization_membership_id' => $this->organizationMembershipId,
             'role' => $this->role->toArray(),
             'resource' => $this->resource->toArray(),
+            'source' => $this->source->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];

@@ -31,7 +31,6 @@ class AdminPortal
      *         - `domain_verification` - Launch Admin Portal for Domain Verification
      *         - `certificate_renewal` - Launch Admin Portal for renewing SAML Certificates
      *         - `bring_your_own_key` - Launch Admin Portal for configuring Bring Your Own Key
-     * @param \WorkOS\Resource\IntentOptions|null $intentOptions Options to configure the Admin Portal based on the intent.
      * @param array<string>|null $itContactEmails The email addresses of the IT contacts to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
      * @return \WorkOS\Resource\PortalLinkResponse
      * @throws \WorkOS\Exception\WorkOSException
@@ -41,7 +40,6 @@ class AdminPortal
         ?string $returnUrl = null,
         ?string $successUrl = null,
         ?\WorkOS\Resource\GenerateLinkIntent $intent = null,
-        ?\WorkOS\Resource\IntentOptions $intentOptions = null,
         ?array $itContactEmails = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\PortalLinkResponse {
@@ -50,7 +48,6 @@ class AdminPortal
             'success_url' => $successUrl,
             'organization' => $organization,
             'intent' => $intent?->value,
-            'intent_options' => $intentOptions,
             'it_contact_emails' => $itContactEmails,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
