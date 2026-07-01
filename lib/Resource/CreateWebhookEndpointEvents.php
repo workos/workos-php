@@ -8,6 +8,11 @@ namespace WorkOS\Resource;
 
 enum CreateWebhookEndpointEvents: string
 {
+    case AgentRegistrationCreated = 'agent.registration.created';
+    case AgentRegistrationClaimAttemptCreated = 'agent.registration.claim.attempt.created';
+    case AgentRegistrationClaimCompleted = 'agent.registration.claim.completed';
+    case AgentRegistrationCredentialIssued = 'agent.registration.credential.issued';
+    case AgentRegistrationOrganizationSwitched = 'agent.registration.organization.switched';
     case AuthenticationEmailVerificationSucceeded = 'authentication.email_verification_succeeded';
     case AuthenticationMagicAuthFailed = 'authentication.magic_auth_failed';
     case AuthenticationMagicAuthSucceeded = 'authentication.magic_auth_succeeded';
@@ -23,6 +28,7 @@ enum CreateWebhookEndpointEvents: string
     case AuthenticationSSOSucceeded = 'authentication.sso_succeeded';
     case AuthenticationSSOTimedOut = 'authentication.sso_timed_out';
     case AuthenticationRadarRiskDetected = 'authentication.radar_risk_detected';
+    case AuthenticationReauthenticationSucceeded = 'authentication.reauthentication_succeeded';
     case ApiKeyCreated = 'api_key.created';
     case ApiKeyRevoked = 'api_key.revoked';
     case ApiKeyUpdated = 'api_key.updated';
@@ -82,6 +88,7 @@ enum CreateWebhookEndpointEvents: string
     case PermissionDeleted = 'permission.deleted';
     case PermissionUpdated = 'permission.updated';
     case PipesConnectedAccountConnected = 'pipes.connected_account.connected';
+    case PipesConnectedAccountConnectionFailed = 'pipes.connected_account.connection_failed';
     case PipesConnectedAccountDisconnected = 'pipes.connected_account.disconnected';
     case PipesConnectedAccountReauthorizationNeeded = 'pipes.connected_account.reauthorization_needed';
     case SessionCreated = 'session.created';

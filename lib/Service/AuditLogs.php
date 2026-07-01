@@ -203,8 +203,8 @@ class AuditLogs
      *
      * Create an Audit Log Export. Exports are scoped to a single organization within a specified date range.
      * @param string $organizationId The unique ID of the Organization.
-     * @param string $rangeStart ISO-8601 value for start of the export range.
-     * @param string $rangeEnd ISO-8601 value for end of the export range.
+     * @param \DateTimeImmutable $rangeStart ISO-8601 value for start of the export range.
+     * @param \DateTimeImmutable $rangeEnd ISO-8601 value for end of the export range.
      * @param array<string>|null $actions List of actions to filter against.
      * @param array<string>|null $actors (deprecated) Deprecated. Use `actor_names` instead.
      * @param array<string>|null $actorNames List of actor names to filter against.
@@ -215,8 +215,8 @@ class AuditLogs
      */
     public function createExport(
         string $organizationId,
-        string $rangeStart,
-        string $rangeEnd,
+        \DateTimeImmutable $rangeStart,
+        \DateTimeImmutable $rangeEnd,
         ?array $actions = null,
         ?array $actors = null,
         ?array $actorNames = null,
@@ -226,8 +226,8 @@ class AuditLogs
     ): \WorkOS\Resource\AuditLogExport {
         $body = array_filter([
             'organization_id' => $organizationId,
-            'range_start' => $rangeStart,
-            'range_end' => $rangeEnd,
+            'range_start' => $rangeStart->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'range_end' => $rangeEnd->format(\DateTimeInterface::RFC3339_EXTENDED),
             'actions' => $actions,
             'actors' => $actors,
             'actor_names' => $actorNames,

@@ -14,9 +14,9 @@ readonly class AuditLogExportCreation implements \JsonSerializable
         /** The unique ID of the Organization. */
         public string $organizationId,
         /** ISO-8601 value for start of the export range. */
-        public string $rangeStart,
+        public \DateTimeImmutable $rangeStart,
         /** ISO-8601 value for end of the export range. */
-        public string $rangeEnd,
+        public \DateTimeImmutable $rangeEnd,
         /**
          * List of actions to filter against.
          * @var array<string>|null
@@ -50,8 +50,8 @@ readonly class AuditLogExportCreation implements \JsonSerializable
     {
         return new self(
             organizationId: $data['organization_id'],
-            rangeStart: $data['range_start'],
-            rangeEnd: $data['range_end'],
+            rangeStart: new \DateTimeImmutable($data['range_start']),
+            rangeEnd: new \DateTimeImmutable($data['range_end']),
             actions: $data['actions'] ?? null,
             actors: $data['actors'] ?? null,
             actorNames: $data['actor_names'] ?? null,
@@ -64,8 +64,8 @@ readonly class AuditLogExportCreation implements \JsonSerializable
     {
         return [
             'organization_id' => $this->organizationId,
-            'range_start' => $this->rangeStart,
-            'range_end' => $this->rangeEnd,
+            'range_start' => $this->rangeStart->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'range_end' => $this->rangeEnd->format(\DateTimeInterface::RFC3339_EXTENDED),
             'actions' => $this->actions,
             'actors' => $this->actors,
             'actor_names' => $this->actorNames,

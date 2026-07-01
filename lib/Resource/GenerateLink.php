@@ -29,8 +29,6 @@ readonly class GenerateLink implements \JsonSerializable
          *         - `bring_your_own_key` - Launch Admin Portal for configuring Bring Your Own Key
          */
         public ?GenerateLinkIntent $intent = null,
-        /** Options to configure the Admin Portal based on the intent. */
-        public ?IntentOptions $intentOptions = null,
         /**
          * The email addresses of the IT contacts to grant access to the Admin Portal for the given organization. Accepts up to 20 emails.
          * @var array<string>|null
@@ -46,7 +44,6 @@ readonly class GenerateLink implements \JsonSerializable
             returnUrl: $data['return_url'] ?? null,
             successUrl: $data['success_url'] ?? null,
             intent: isset($data['intent']) ? GenerateLinkIntent::from($data['intent']) : null,
-            intentOptions: isset($data['intent_options']) ? IntentOptions::fromArray($data['intent_options']) : null,
             itContactEmails: $data['it_contact_emails'] ?? null,
         );
     }
@@ -58,7 +55,6 @@ readonly class GenerateLink implements \JsonSerializable
             'return_url' => $this->returnUrl,
             'success_url' => $this->successUrl,
             'intent' => $this->intent?->value,
-            'intent_options' => $this->intentOptions?->toArray(),
             'it_contact_emails' => $this->itContactEmails,
         ];
     }

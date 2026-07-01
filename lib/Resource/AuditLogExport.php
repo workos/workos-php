@@ -15,7 +15,7 @@ readonly class AuditLogExport implements \JsonSerializable
         public string $object,
         /** The unique ID of the Audit Log Export. */
         public string $id,
-        /** The state of the export. Possible values: pending, ready, error. */
+        /** The state of the export. Possible values: pending, ready, error, expired. */
         public AuditLogExportState $state,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,

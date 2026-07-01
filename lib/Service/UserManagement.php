@@ -371,6 +371,7 @@ class UserManagement
      * @param array<string, string>|null $providerQueryParams Key/value pairs of query parameters to pass to the OAuth provider.
      * @param array<string>|null $providerScopes Additional OAuth scopes to request from the identity provider.
      * @param string|null $invitationToken A token representing a user invitation to redeem during authentication.
+     * @param int|null $maxAge Maximum allowable elapsed time, in seconds, since the user last actively authenticated. If the last authentication is older than this value, the user is prompted to re-authenticate; a value of `0` forces re-authentication. Only supported when the provider is `authkit`.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction|null $screenHint Used to specify which screen to display when the provider is `authkit`. Defaults to "sign-in".
      * @param string|null $loginHint A hint to the authorization server about the login identifier the user might use.
      * @param \WorkOS\Resource\UserManagementAuthenticationProvider|null $provider The OAuth provider to authenticate with (e.g., GoogleOAuth, MicrosoftOAuth, GitHubOAuth).
@@ -390,6 +391,7 @@ class UserManagement
         ?array $providerQueryParams = null,
         ?array $providerScopes = null,
         ?string $invitationToken = null,
+        ?int $maxAge = null,
         ?\WorkOS\Resource\RadarStandaloneAssessRequestAction $screenHint = null,
         ?string $loginHint = null,
         ?\WorkOS\Resource\UserManagementAuthenticationProvider $provider = null,
@@ -406,6 +408,7 @@ class UserManagement
             'provider_query_params' => $providerQueryParams,
             'provider_scopes' => $providerScopes,
             'invitation_token' => $invitationToken,
+            'max_age' => $maxAge,
             'screen_hint' => $screenHint?->value,
             'login_hint' => $loginHint,
             'provider' => $provider?->value,
@@ -485,6 +488,39 @@ class UserManagement
             options: $options,
         );
         return $response;
+    }
+
+    /**
+     * List CORS origins
+     *
+     * Lists the CORS origins for the current environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\CORSOriginResponse>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listCorsOrigins(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/cors_origins',
+            query: $query,
+            modelClass: CORSOriginResponse::class,
+            options: $options,
+        );
     }
 
     /**
@@ -1235,6 +1271,39 @@ class UserManagement
     }
 
     /**
+     * List redirect URIs
+     *
+     * Lists the redirect URIs for an environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\RedirectUri>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listRedirectUris(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/redirect_uris',
+            query: $query,
+            modelClass: RedirectUri::class,
+            options: $options,
+        );
+    }
+
+    /**
      * Create a redirect URI
      *
      * Creates a new redirect URI for an application.
@@ -1376,7 +1445,7 @@ class UserManagement
             'name' => $name,
             'organization_id' => $organizationId,
             'permissions' => $permissions,
-            'expires_at' => $expiresAt,
+            'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',

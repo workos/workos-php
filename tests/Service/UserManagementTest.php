@@ -28,7 +28,7 @@ class UserManagementTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->userManagement()->getAuthorizationUrl(codeChallengeMethod: 'test_value', codeChallenge: 'test_value', domainHint: 'test_value', connectionId: 'test_value', providerQueryParams: [], providerScopes: [], invitationToken: 'test_value', screenHint: \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignUp, loginHint: 'test_value', provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit, prompt: 'test_value', state: 'test_value', organizationId: 'test_value', redirectUri: 'test_value');
+        $result = $client->userManagement()->getAuthorizationUrl(codeChallengeMethod: 'test_value', codeChallenge: 'test_value', domainHint: 'test_value', connectionId: 'test_value', providerQueryParams: [], providerScopes: [], invitationToken: 'test_value', maxAge: 1, screenHint: \WorkOS\Resource\RadarStandaloneAssessRequestAction::SignUp, loginHint: 'test_value', provider: \WorkOS\Resource\UserManagementAuthenticationProvider::Authkit, prompt: 'test_value', state: 'test_value', organizationId: 'test_value', redirectUri: 'test_value');
         $this->assertIsString($result);
         $this->assertStringContainsString('user_management/authorize', $result);
         parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);
@@ -36,6 +36,7 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $query['domain_hint']);
         $this->assertSame('test_value', $query['connection_id']);
         $this->assertSame('test_value', $query['invitation_token']);
+        $this->assertArrayHasKey('max_age', $query);
         $this->assertSame('sign-up', $query['screen_hint']);
         $this->assertSame('test_value', $query['login_hint']);
         $this->assertSame('authkit', $query['provider']);
@@ -80,6 +81,22 @@ class UserManagementTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/sessions/revoke', $request->getUri()->getPath());
+    }
+
+    public function testListCorsOrigins(): void
+    {
+        $fixture = $this->loadFixture('list_cors_origin_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listCorsOrigins(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/cors_origins', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
     }
 
     public function testCreateCorsOrigin(): void
@@ -490,6 +507,22 @@ class UserManagementTest extends TestCase
         $this->assertStringEndsWith('user_management/magic_auth/test_id', $request->getUri()->getPath());
     }
 
+    public function testListRedirectUris(): void
+    {
+        $fixture = $this->loadFixture('list_redirect_uri');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listRedirectUris(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/redirect_uris', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
     public function testCreateRedirectUri(): void
     {
         $fixture = $this->loadFixture('redirect_uri');
@@ -631,12 +664,12 @@ class UserManagementTest extends TestCase
 
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_user');
+        $fixture = $this->loadFixture('list_cors_origin_response');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listUsers();
+        $result = $client->userManagement()->listCorsOrigins();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);
