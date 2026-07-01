@@ -1,5 +1,17 @@
 # Changelog
 
+## [8.0.0](https://github.com/workos/workos-php/compare/v7.3.0...v8.0.0) (2026-07-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **audit_logs:** SDK surface change: Parameter type changed for "rangeStart" on "AuditLogs.createExport" ([#411](https://github.com/workos/workos-php/issues/411))
+
+### Features
+
+* **audit_logs:** SDK surface change: Parameter type changed for "rangeStart" on "AuditLogs.createExport" ([#411](https://github.com/workos/workos-php/issues/411)) ([6d966dc](https://github.com/workos/workos-php/commit/6d966dce92126d41963fde752c3afdc51325c28c))
+* **generated:** Pipes (batch 77e46600) ([#409](https://github.com/workos/workos-php/issues/409)) ([d21501e](https://github.com/workos/workos-php/commit/d21501ed0e4b45f605eec77766d80218e4001c34))
+
 ## [7.3.0](https://github.com/workos/workos-php/compare/v7.2.0...v7.3.0) (2026-06-30)
 
 * [#405](https://github.com/workos/workos-php/pull/405) fix(generated): regenerate from spec
