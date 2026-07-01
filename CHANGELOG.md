@@ -1,5 +1,69 @@
 # Changelog
 
+## [8.0.0](https://github.com/workos/workos-php/compare/v7.3.0...v8.0.0) (2026-07-01)
+
+* [#409](https://github.com/workos/workos-php/pull/409) fix(generated): regenerate from spec
+
+  **Features**
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added model `DataIntegrationCredentialsResponse`
+    * Added model `DataIntegrationCredentialsResponseCredential`
+    * Added model `DataIntegrationsUpsertApiKeyRequest`
+    * Added model `DataIntegrationsVendCredentialsRequest`
+    * Added enum `DataIntegrationCredentialsResponseError`
+    * Added endpoint `PUT /data-integrations/{slug}/api-key`
+    * Added endpoint `POST /data-integrations/{slug}/credentials`
+
+* [#411](https://github.com/workos/workos-php/pull/411) feat(generated)!: regenerate from spec (1 change)
+
+  **⚠️ Breaking**
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Removed model `SessionReauthenticated`
+    * Removed model `SessionReauthenticatedData`
+    * Removed model `SessionReauthenticatedDataImpersonator`
+    * Removed enum `SessionReauthenticatedDataAuthMethod`
+    * Removed enum `SessionReauthenticatedDataStatus`
+
+  **Features**
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `agent.registration.created` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.claim.attempt.created` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.claim.completed` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.credential.issued` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.organization.switched` to `CreateWebhookEndpointEvents`
+    * Added `authentication.reauthentication_succeeded` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.claim.attempt.created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.claim.completed` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.credential.issued` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.organization.switched` to `UpdateWebhookEndpointEvents`
+    * Added `authentication.reauthentication_succeeded` to `UpdateWebhookEndpointEvents`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `session.reauthenticated` to `CreateWebhookEndpointEvents`
+    * Added `session.reauthenticated` to `UpdateWebhookEndpointEvents`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `pipes.connected_account.connection_failed` to `CreateWebhookEndpointEvents`
+    * Added `pipes.connected_account.connection_failed` to `UpdateWebhookEndpointEvents`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added model `UserRoleAssignmentSource`
+    * Added `source` to `UserRoleAssignment`
+    * Added enum `UserRoleAssignmentSourceType`
+    * Added parameter `UserManagementAuthentication.authorize.max_age`
+    * Added endpoint `GET /user_management/cors_origins`
+    * Added endpoint `GET /user_management/redirect_uris`
+  * **[audit_logs](https://workos.com/docs/reference/audit-logs)**:
+    * Changed the format of `AuditLogExportCreation.range_start`
+    * Changed the format of `AuditLogExportCreation.range_end`
+  * **[audit_logs](https://workos.com/docs/reference/audit-logs)**:
+    * Added `expired` to `AuditLogExportState`
+
+  **Fixes**
+  * **[admin_portal](https://workos.com/docs/reference/admin-portal)**:
+    * Removed `intent_options` from `GenerateLink`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Removed `session.reauthenticated` from `CreateWebhookEndpointEvents`
+    * Removed `session.reauthenticated` from `UpdateWebhookEndpointEvents`
+
 ## [7.3.0](https://github.com/workos/workos-php/compare/v7.2.0...v7.3.0) (2026-06-30)
 
 * [#405](https://github.com/workos/workos-php/pull/405) fix(generated): regenerate from spec
