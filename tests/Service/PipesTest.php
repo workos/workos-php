@@ -13,6 +13,23 @@ class PipesTest extends TestCase
 {
     use TestHelper;
 
+    public function testUpdateDataIntegrationApiKey(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateDataIntegrationApiKey('test_slug', userId: 'test_value', secret: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/api-key', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+        $this->assertSame('test_value', $body['secret']);
+    }
+
     public function testAuthorizeDataIntegration(): void
     {
         $fixture = $this->loadFixture('data_integration_authorize_url_response');
@@ -24,6 +41,20 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('data-integrations/test_slug/authorize', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+    }
+
+    public function testCreateDataIntegrationCredential(): void
+    {
+        $fixture = $this->loadFixture('data_integration_credentials_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createDataIntegrationCredential('test_slug', userId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationCredentialsResponse::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/credentials', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['user_id']);
     }

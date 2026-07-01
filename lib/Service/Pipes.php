@@ -9,6 +9,7 @@ namespace WorkOS\Service;
 use WorkOS\Resource\ConnectedAccount;
 use WorkOS\Resource\DataIntegrationAccessTokenResponse;
 use WorkOS\Resource\DataIntegrationAuthorizeUrlResponse;
+use WorkOS\Resource\DataIntegrationCredentialsResponse;
 use WorkOS\Resource\DataIntegrationsListResponse;
 
 class Pipes
@@ -16,6 +17,38 @@ class Pipes
     public function __construct(
         private readonly \WorkOS\HttpClient $client,
     ) {
+    }
+
+    /**
+     * Upsert an API key for a connected account
+     *
+     * Creates or updates an API-key-based installation for the specified integration and user. If an installation already exists, the stored API key is rotated to the new value.
+     * @param string $slug The identifier of the integration.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string $secret The API key secret to store for this integration.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegrationApiKey(
+        string $slug,
+        string $userId,
+        string $secret,
+        ?string $organizationId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = array_filter([
+            'user_id' => $userId,
+            'organization_id' => $organizationId,
+            'secret' => $secret,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'data-integrations/' . rawurlencode($slug) . '/api-key',
+            body: $body,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
     }
 
     /**
@@ -48,6 +81,35 @@ class Pipes
             options: $options,
         );
         return DataIntegrationAuthorizeUrlResponse::fromArray($response);
+    }
+
+    /**
+     * Vend credentials for a connected account
+     *
+     * Returns credentials for a user's connected account. Branches on the installation's `auth_method`: OAuth installations return an access token (refreshed if needed); API-key installations return the stored secret.
+     * @param string $slug The identifier of the integration.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @return \WorkOS\Resource\DataIntegrationCredentialsResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createDataIntegrationCredential(
+        string $slug,
+        string $userId,
+        ?string $organizationId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegrationCredentialsResponse {
+        $body = array_filter([
+            'user_id' => $userId,
+            'organization_id' => $organizationId,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'data-integrations/' . rawurlencode($slug) . '/credentials',
+            body: $body,
+            options: $options,
+        );
+        return DataIntegrationCredentialsResponse::fromArray($response);
     }
 
     /**
