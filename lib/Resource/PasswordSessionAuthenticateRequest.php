@@ -28,6 +28,10 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
         public ?string $deviceId = null,
         /** The user agent string from the user's browser. */
         public ?string $userAgent = null,
+        /** An optional Radar signals ID to correlate client-side signals with this authentication attempt. */
+        public ?string $signalsId = null,
+        /** The ID of an existing Radar authentication attempt to associate with this authentication. */
+        public ?string $radarAuthAttemptId = null,
     ) {
     }
 
@@ -43,6 +47,8 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
             userAgent: $data['user_agent'] ?? null,
+            signalsId: $data['signals_id'] ?? null,
+            radarAuthAttemptId: $data['radar_auth_attempt_id'] ?? null,
         );
     }
 
@@ -58,6 +64,8 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
+            'signals_id' => $this->signalsId,
+            'radar_auth_attempt_id' => $this->radarAuthAttemptId,
         ];
     }
 }

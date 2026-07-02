@@ -17,13 +17,16 @@ use WorkOS\Resource\Invitation;
 use WorkOS\Resource\JwksResponse;
 use WorkOS\Resource\JWTTemplateResponse;
 use WorkOS\Resource\MagicAuth;
+use WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse;
 use WorkOS\Resource\PasswordReset;
 use WorkOS\Resource\RedirectUri;
 use WorkOS\Resource\ResetPasswordResponse;
+use WorkOS\Resource\SendRadarSmsChallengeResponse;
 use WorkOS\Resource\SendVerificationEmailResponse;
 use WorkOS\Resource\User;
 use WorkOS\Resource\UserApiKey;
 use WorkOS\Resource\UserApiKeyWithValue;
+use WorkOS\Resource\UserCreateResponse;
 use WorkOS\Resource\UserIdentitiesGetItem;
 use WorkOS\Resource\UserInvite;
 use WorkOS\Resource\UserSessionsListItem;
@@ -447,6 +450,42 @@ class UserManagement
     }
 
     /**
+     * Send a Radar SMS challenge
+     *
+     * Sends a one-time verification code over SMS to a user as part of a Radar challenge. Use the returned `verification_id` to authenticate the user with the `urn:workos:oauth:grant-type:radar-sms-challenge:code` grant type.
+     * @param string $userId The ID of the user to send the SMS challenge to.
+     * @param string $pendingAuthenticationToken The pending authentication token from a previous authentication attempt that triggered the Radar challenge.
+     * @param string $phoneNumber The phone number to send the SMS verification code to.
+     * @param string|null $ipAddress The IP address of the user's request.
+     * @param string|null $userAgent The user agent string from the user's request.
+     * @return \WorkOS\Resource\SendRadarSmsChallengeResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createRadarChallenge(
+        string $userId,
+        string $pendingAuthenticationToken,
+        string $phoneNumber,
+        ?string $ipAddress = null,
+        ?string $userAgent = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SendRadarSmsChallengeResponse {
+        $body = array_filter([
+            'user_id' => $userId,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'phone_number' => $phoneNumber,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/radar_challenges',
+            body: $body,
+            options: $options,
+        );
+        return SendRadarSmsChallengeResponse::fromArray($response);
+    }
+
+    /**
      * Logout
      *
      * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
@@ -691,8 +730,11 @@ class UserManagement
      * @param bool|null $emailVerified Whether the user's email has been verified.
      * @param array<string, string>|null $metadata Object containing metadata key/value pairs associated with the user.
      * @param string|null $externalId The external ID of the user.
+     * @param string|null $ipAddress The IP address of the user's request.
+     * @param string|null $userAgent The user agent string from the user's request.
+     * @param string|null $signalsId An optional Radar signals ID to correlate client-side signals with this request.
      * @param null|PasswordPlaintext|PasswordHashed $password
-     * @return \WorkOS\Resource\User
+     * @return \WorkOS\Resource\UserCreateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createUser(
@@ -703,9 +745,12 @@ class UserManagement
         ?bool $emailVerified = null,
         ?array $metadata = null,
         ?string $externalId = null,
+        ?string $ipAddress = null,
+        ?string $userAgent = null,
+        ?string $signalsId = null,
         null|PasswordPlaintext|PasswordHashed $password = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\User {
+    ): \WorkOS\Resource\UserCreateResponse {
         $body = array_filter([
             'email' => $email,
             'first_name' => $firstName,
@@ -714,6 +759,9 @@ class UserManagement
             'email_verified' => $emailVerified,
             'metadata' => $metadata,
             'external_id' => $externalId,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'signals_id' => $signalsId,
         ], fn ($v) => $v !== null);
         if ($password instanceof PasswordPlaintext) {
             $body['password'] = $password->password;
@@ -727,7 +775,7 @@ class UserManagement
             body: $body,
             options: $options,
         );
-        return User::fromArray($response);
+        return UserCreateResponse::fromArray($response);
     }
 
     /**
@@ -1229,17 +1277,29 @@ class UserManagement
      * Creates a one-time authentication code that can be sent to the user's email address. The code expires in 10 minutes. To verify the code, [authenticate the user with Magic Auth](https://workos.com/docs/reference/authkit/authentication/magic-auth).
      * @param string $email The email address to send the magic code to.
      * @param string|null $invitationToken The invitation token to associate with this magic code.
-     * @return \WorkOS\Resource\MagicAuth
+     * @param string|null $ipAddress The IP address of the user's request.
+     * @param string|null $userAgent The user agent string from the user's request.
+     * @param string|null $radarAuthAttemptId The ID of an existing Radar authentication attempt to associate with this request.
+     * @param string|null $signalsId An optional Radar signals ID to correlate client-side signals with this request.
+     * @return \WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createMagicAuth(
         string $email,
         ?string $invitationToken = null,
+        ?string $ipAddress = null,
+        ?string $userAgent = null,
+        ?string $radarAuthAttemptId = null,
+        ?string $signalsId = null,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\MagicAuth {
+    ): \WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse {
         $body = array_filter([
             'email' => $email,
             'invitation_token' => $invitationToken,
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent,
+            'radar_auth_attempt_id' => $radarAuthAttemptId,
+            'signals_id' => $signalsId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -1247,7 +1307,7 @@ class UserManagement
             body: $body,
             options: $options,
         );
-        return MagicAuth::fromArray($response);
+        return MagicAuthSendMagicAuthCodeAndReturnResponse::fromArray($response);
     }
 
     /**

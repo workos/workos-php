@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializable
+readonly class RadarSmsChallengeCodeSessionAuthenticateRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -16,20 +16,20 @@ readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializa
         /** The client secret of the application. */
         public string $clientSecret,
         public string $grantType,
-        /** The one-time code for Magic Auth authentication. */
+        /** The one-time code from the Radar SMS challenge. */
         public string $code,
-        /** The user's email address. */
-        public string $email,
-        /** An invitation token to accept during authentication. */
-        public ?string $invitationToken = null,
+        /** The ID of the Radar SMS verification being confirmed. */
+        public string $verificationId,
+        /** The phone number the Radar SMS challenge was sent to. */
+        public string $phoneNumber,
+        /** The pending authentication token from a previous authentication attempt. */
+        public string $pendingAuthenticationToken,
         /** The IP address of the user's request. */
         public ?string $ipAddress = null,
         /** A unique identifier for the device. */
         public ?string $deviceId = null,
         /** The user agent string from the user's browser. */
         public ?string $userAgent = null,
-        /** The ID of an existing Radar authentication attempt to associate with this authentication. */
-        public ?string $radarAuthAttemptId = null,
     ) {
     }
 
@@ -38,14 +38,14 @@ readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializa
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:magic-auth:code',
+            grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:radar-sms-challenge:code',
             code: $data['code'],
-            email: $data['email'],
-            invitationToken: $data['invitation_token'] ?? null,
+            verificationId: $data['verification_id'],
+            phoneNumber: $data['phone_number'],
+            pendingAuthenticationToken: $data['pending_authentication_token'],
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
             userAgent: $data['user_agent'] ?? null,
-            radarAuthAttemptId: $data['radar_auth_attempt_id'] ?? null,
         );
     }
 
@@ -56,12 +56,12 @@ readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializa
             'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType,
             'code' => $this->code,
-            'email' => $this->email,
-            'invitation_token' => $this->invitationToken,
+            'verification_id' => $this->verificationId,
+            'phone_number' => $this->phoneNumber,
+            'pending_authentication_token' => $this->pendingAuthenticationToken,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-            'radar_auth_attempt_id' => $this->radarAuthAttemptId,
         ];
     }
 }
