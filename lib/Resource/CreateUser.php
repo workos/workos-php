@@ -28,6 +28,12 @@ readonly class CreateUser implements \JsonSerializable
         public ?array $metadata = null,
         /** The external ID of the user. */
         public ?string $externalId = null,
+        /** The IP address of the user's request. */
+        public ?string $ipAddress = null,
+        /** The user agent string from the user's request. */
+        public ?string $userAgent = null,
+        /** An optional Radar signals ID to correlate client-side signals with this request. */
+        public ?string $signalsId = null,
         /** The password to set for the user. Mutually exclusive with `password_hash` and `password_hash_type`. */
         public ?string $password = null,
         /** The hashed password to set for the user. Required with `password_hash_type`. Mutually exclusive with `password`. */
@@ -47,6 +53,9 @@ readonly class CreateUser implements \JsonSerializable
             emailVerified: $data['email_verified'] ?? null,
             metadata: $data['metadata'] ?? null,
             externalId: $data['external_id'] ?? null,
+            ipAddress: $data['ip_address'] ?? null,
+            userAgent: $data['user_agent'] ?? null,
+            signalsId: $data['signals_id'] ?? null,
             password: $data['password'] ?? null,
             passwordHash: $data['password_hash'] ?? null,
             passwordHashType: isset($data['password_hash_type']) ? CreateUserPasswordHashType::from($data['password_hash_type']) : null,
@@ -63,6 +72,9 @@ readonly class CreateUser implements \JsonSerializable
             'email_verified' => $this->emailVerified,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
+            'ip_address' => $this->ipAddress,
+            'user_agent' => $this->userAgent,
+            'signals_id' => $this->signalsId,
             'password' => $this->password,
             'password_hash' => $this->passwordHash,
             'password_hash_type' => $this->passwordHashType?->value,
