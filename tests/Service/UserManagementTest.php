@@ -63,6 +63,23 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $body['client_id']);
     }
 
+    public function testCreateRadarChallenge(): void
+    {
+        $fixture = $this->loadFixture('send_radar_sms_challenge_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createRadarChallenge(userId: 'test_value', pendingAuthenticationToken: 'test_value', phoneNumber: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\SendRadarSmsChallengeResponse::class, $result);
+        $this->assertSame($fixture['verification_id'], $result->verificationId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/radar_challenges', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+        $this->assertSame('test_value', $body['pending_authentication_token']);
+        $this->assertSame('test_value', $body['phone_number']);
+    }
+
     public function testGetLogoutUrl(): void
     {
         $client = $this->createMockClient([]);
@@ -195,12 +212,10 @@ class UserManagementTest extends TestCase
 
     public function testCreateUser(): void
     {
-        $fixture = $this->loadFixture('user');
+        $fixture = $this->loadFixture('user_create_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->createUser(email: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\User::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['email'], $result->email);
+        $this->assertInstanceOf(\WorkOS\Resource\UserCreateResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
@@ -479,12 +494,10 @@ class UserManagementTest extends TestCase
 
     public function testCreateMagicAuth(): void
     {
-        $fixture = $this->loadFixture('magic_auth');
+        $fixture = $this->loadFixture('magic_auth_send_magic_auth_code_and_return_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->createMagicAuth(email: 'test_value');
-        $this->assertInstanceOf(\WorkOS\Resource\MagicAuth::class, $result);
-        $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertInstanceOf(\WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());

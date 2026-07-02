@@ -28,6 +28,8 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
         public ?string $deviceId = null,
         /** The user agent string from the user's browser. */
         public ?string $userAgent = null,
+        /** An optional Radar signals ID to correlate client-side signals with this authentication attempt. */
+        public ?string $signalsId = null,
     ) {
     }
 
@@ -43,6 +45,7 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
             userAgent: $data['user_agent'] ?? null,
+            signalsId: $data['signals_id'] ?? null,
         );
     }
 
@@ -58,6 +61,7 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
+            'signals_id' => $this->signalsId,
         ];
     }
 }
