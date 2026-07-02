@@ -21,6 +21,8 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
         public RadarStandaloneAssessRequestAuthMethod $authMethod,
         /** The action being performed. */
         public RadarStandaloneAssessRequestAction $action,
+        /** An optional Radar signals ID for the request. */
+        public ?string $signalsId = null,
     ) {
     }
 
@@ -32,6 +34,7 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             email: $data['email'],
             authMethod: RadarStandaloneAssessRequestAuthMethod::from($data['auth_method']),
             action: RadarStandaloneAssessRequestAction::from($data['action']),
+            signalsId: $data['signals_id'] ?? null,
         );
     }
 
@@ -43,6 +46,7 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             'email' => $this->email,
             'auth_method' => $this->authMethod->value,
             'action' => $this->action->value,
+            'signals_id' => $this->signalsId,
         ];
     }
 }

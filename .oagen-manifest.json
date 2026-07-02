@@ -1,7 +1,7 @@
 {
   "version": 2,
   "language": "php",
-  "generatedAt": "2026-07-01T18:19:15.811Z",
+  "generatedAt": "2026-07-02T14:11:07.085Z",
   "files": [
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
@@ -331,6 +331,7 @@
     "lib/Resource/MagicAuthCodeSessionAuthenticateRequest.php",
     "lib/Resource/MagicAuthCreated.php",
     "lib/Resource/MagicAuthCreatedData.php",
+    "lib/Resource/MagicAuthSendMagicAuthCodeAndReturnResponse.php",
     "lib/Resource/NewConnectApplicationSecret.php",
     "lib/Resource/ObjectMetadata.php",
     "lib/Resource/ObjectSummary.php",
@@ -405,9 +406,11 @@
     "lib/Resource/PipesConnectedAccountReauthorizationNeeded.php",
     "lib/Resource/PortalLinkResponse.php",
     "lib/Resource/Profile.php",
+    "lib/Resource/RadarEmailChallengeCodeSessionAuthenticateRequest.php",
     "lib/Resource/RadarListAction.php",
     "lib/Resource/RadarListEntryAlreadyPresentResponse.php",
     "lib/Resource/RadarListType.php",
+    "lib/Resource/RadarSmsChallengeCodeSessionAuthenticateRequest.php",
     "lib/Resource/RadarStandaloneAssessRequest.php",
     "lib/Resource/RadarStandaloneAssessRequestAction.php",
     "lib/Resource/RadarStandaloneAssessRequestAuthMethod.php",
@@ -445,6 +448,8 @@
     "lib/Resource/SSOTokenResponse.php",
     "lib/Resource/SSOTokenResponseOAuthToken.php",
     "lib/Resource/SendEmailChange.php",
+    "lib/Resource/SendRadarSmsChallenge.php",
+    "lib/Resource/SendRadarSmsChallengeResponse.php",
     "lib/Resource/SendVerificationEmailResponse.php",
     "lib/Resource/SessionCreated.php",
     "lib/Resource/SessionCreatedData.php",
@@ -479,6 +484,7 @@
     "lib/Resource/UserAuthenticationFactorEnrollResponse.php",
     "lib/Resource/UserConsentOption.php",
     "lib/Resource/UserConsentOptionChoice.php",
+    "lib/Resource/UserCreateResponse.php",
     "lib/Resource/UserCreated.php",
     "lib/Resource/UserDeleted.php",
     "lib/Resource/UserIdentitiesGetItem.php",
@@ -893,6 +899,7 @@
     "tests/Fixtures/magic_auth_code_session_authenticate_request.json",
     "tests/Fixtures/magic_auth_created.json",
     "tests/Fixtures/magic_auth_created_data.json",
+    "tests/Fixtures/magic_auth_send_magic_auth_code_and_return_response.json",
     "tests/Fixtures/mfa_totp_session_authenticate_request.json",
     "tests/Fixtures/new_connect_application_secret.json",
     "tests/Fixtures/object_metadata.json",
@@ -963,7 +970,9 @@
     "tests/Fixtures/pipes_connected_account_reauthorization_needed.json",
     "tests/Fixtures/portal_link_response.json",
     "tests/Fixtures/profile.json",
+    "tests/Fixtures/radar_email_challenge_code_session_authenticate_request.json",
     "tests/Fixtures/radar_list_entry_already_present_response.json",
+    "tests/Fixtures/radar_sms_challenge_code_session_authenticate_request.json",
     "tests/Fixtures/radar_standalone_assess_request.json",
     "tests/Fixtures/radar_standalone_delete_radar_list_entry_request.json",
     "tests/Fixtures/radar_standalone_response.json",
@@ -988,6 +997,8 @@
     "tests/Fixtures/role_updated.json",
     "tests/Fixtures/role_updated_data.json",
     "tests/Fixtures/send_email_change.json",
+    "tests/Fixtures/send_radar_sms_challenge.json",
+    "tests/Fixtures/send_radar_sms_challenge_response.json",
     "tests/Fixtures/send_verification_email_response.json",
     "tests/Fixtures/session_created.json",
     "tests/Fixtures/session_created_data.json",
@@ -1032,6 +1043,7 @@
     "tests/Fixtures/user_authentication_factor_enroll_response.json",
     "tests/Fixtures/user_consent_option.json",
     "tests/Fixtures/user_consent_option_choice.json",
+    "tests/Fixtures/user_create_response.json",
     "tests/Fixtures/user_created.json",
     "tests/Fixtures/user_deleted.json",
     "tests/Fixtures/user_identities_get_item.json",
@@ -1890,6 +1902,38 @@
     "GET /user_management/redirect_uris": {
       "sdkMethod": "listRedirectUris",
       "service": "userManagement"
+    },
+    "GET /data-integrations": {
+      "sdkMethod": "listDataIntegrations",
+      "service": "pipes"
+    },
+    "POST /data-integrations": {
+      "sdkMethod": "createDataIntegration",
+      "service": "pipes"
+    },
+    "GET /data-integrations/{slug}": {
+      "sdkMethod": "getDataIntegration",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}": {
+      "sdkMethod": "updateDataIntegration",
+      "service": "pipes"
+    },
+    "DELETE /data-integrations/{slug}": {
+      "sdkMethod": "deleteDataIntegration",
+      "service": "pipes"
+    },
+    "POST /user_management/radar_challenges": {
+      "sdkMethod": "createRadarChallenge",
+      "service": "userManagement"
+    },
+    "POST /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "createUserConnectedAccount",
+      "service": "pipes"
+    },
+    "PUT /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "updateUserConnectedAccount",
+      "service": "pipes"
     }
   }
 }

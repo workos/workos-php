@@ -25,6 +25,7 @@ class Radar
      * @param string $email The email address of the user making the request.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod The authentication method being used.
      * @param \WorkOS\Resource\RadarStandaloneAssessRequestAction $action The action being performed.
+     * @param string|null $signalsId An optional Radar signals ID for the request.
      * @return \WorkOS\Resource\RadarStandaloneResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -34,15 +35,17 @@ class Radar
         string $email,
         \WorkOS\Resource\RadarStandaloneAssessRequestAuthMethod $authMethod,
         \WorkOS\Resource\RadarStandaloneAssessRequestAction $action,
+        ?string $signalsId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\RadarStandaloneResponse {
-        $body = [
+        $body = array_filter([
             'ip_address' => $ipAddress,
             'user_agent' => $userAgent,
             'email' => $email,
             'auth_method' => $authMethod->value,
             'action' => $action->value,
-        ];
+            'signals_id' => $signalsId,
+        ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
             path: 'radar/attempts',
