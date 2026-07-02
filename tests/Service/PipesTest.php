@@ -13,6 +13,75 @@ class PipesTest extends TestCase
 {
     use TestHelper;
 
+    public function testListDataIntegrations(): void
+    {
+        $fixture = $this->loadFixture('list_data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->listDataIntegrations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testCreateDataIntegration(): void
+    {
+        $fixture = $this->loadFixture('data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createDataIntegration(provider: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['provider']);
+    }
+
+    public function testGetDataIntegration(): void
+    {
+        $fixture = $this->loadFixture('data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->getDataIntegration('test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testUpdateDataIntegration(): void
+    {
+        $fixture = $this->loadFixture('data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateDataIntegration('test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testDeleteDataIntegration(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->pipes()->deleteDataIntegration('test_slug');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug', $request->getUri()->getPath());
+    }
+
     public function testUpdateDataIntegrationApiKey(): void
     {
         $fixture = $this->loadFixture('connected_account');
@@ -87,6 +156,34 @@ class PipesTest extends TestCase
         $this->assertStringEndsWith('user_management/users/test_user_id/connected_accounts/test_slug', $request->getUri()->getPath());
     }
 
+    public function testCreateUserConnectedAccount(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createUserConnectedAccount('test_user_id', 'test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/users/test_user_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testUpdateUserConnectedAccount(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateUserConnectedAccount('test_user_id', 'test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('user_management/users/test_user_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
     public function testDeleteUserConnectedAccount(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
@@ -106,5 +203,24 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_user_id/data_providers', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_data_integration');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->listDataIntegrations();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "language": "php",
-  "generatedAt": "2026-07-01T18:19:15.811Z",
+  "generatedAt": "2026-07-02T14:58:50.844Z",
   "files": [
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
@@ -130,6 +130,7 @@
     "lib/Resource/ConnectApplicationRedirectUri.php",
     "lib/Resource/ConnectedAccount.php",
     "lib/Resource/ConnectedAccountAuthMethod.php",
+    "lib/Resource/ConnectedAccountDto.php",
     "lib/Resource/ConnectedAccountState.php",
     "lib/Resource/Connection.php",
     "lib/Resource/ConnectionActivated.php",
@@ -161,6 +162,7 @@
     "lib/Resource/CreateAuthorizationPermission.php",
     "lib/Resource/CreateAuthorizationResource.php",
     "lib/Resource/CreateCORSOrigin.php",
+    "lib/Resource/CreateDataIntegration.php",
     "lib/Resource/CreateDataKeyRequest.php",
     "lib/Resource/CreateDataKeyResponse.php",
     "lib/Resource/CreateGroup.php",
@@ -185,21 +187,30 @@
     "lib/Resource/CreateUserPasswordHashType.php",
     "lib/Resource/CreateWebhookEndpoint.php",
     "lib/Resource/CreateWebhookEndpointEvents.php",
+    "lib/Resource/CustomProviderDefinition.php",
+    "lib/Resource/CustomProviderDefinitionAuthenticateVia.php",
+    "lib/Resource/DataIntegration.php",
     "lib/Resource/DataIntegrationAccessTokenResponse.php",
     "lib/Resource/DataIntegrationAccessTokenResponseAccessToken.php",
     "lib/Resource/DataIntegrationAccessTokenResponseError.php",
     "lib/Resource/DataIntegrationAuthorizeUrlResponse.php",
     "lib/Resource/DataIntegrationConfigurationListResponse.php",
     "lib/Resource/DataIntegrationConfigurationResponse.php",
+    "lib/Resource/DataIntegrationCredential.php",
+    "lib/Resource/DataIntegrationCredentialType.php",
     "lib/Resource/DataIntegrationCredentials.php",
     "lib/Resource/DataIntegrationCredentialsCredentialsType.php",
+    "lib/Resource/DataIntegrationCredentialsDto.php",
     "lib/Resource/DataIntegrationCredentialsResponse.php",
     "lib/Resource/DataIntegrationCredentialsResponseCredential.php",
+    "lib/Resource/DataIntegrationCustomProvider.php",
+    "lib/Resource/DataIntegrationState.php",
     "lib/Resource/DataIntegrationsGetDataIntegrationAuthorizeUrlRequest.php",
     "lib/Resource/DataIntegrationsGetUserTokenRequest.php",
     "lib/Resource/DataIntegrationsListResponse.php",
     "lib/Resource/DataIntegrationsListResponseData.php",
     "lib/Resource/DataIntegrationsListResponseDataConnectedAccount.php",
+    "lib/Resource/DataIntegrationsListResponseDataConnectedAccountState.php",
     "lib/Resource/DataIntegrationsListResponseDataOwnership.php",
     "lib/Resource/DataIntegrationsUpsertApiKeyRequest.php",
     "lib/Resource/DataIntegrationsVendCredentialsRequest.php",
@@ -458,6 +469,8 @@
     "lib/Resource/UpdateAuditLogsRetention.php",
     "lib/Resource/UpdateAuthorizationPermission.php",
     "lib/Resource/UpdateAuthorizationResource.php",
+    "lib/Resource/UpdateCustomProviderDefinition.php",
+    "lib/Resource/UpdateDataIntegration.php",
     "lib/Resource/UpdateGroup.php",
     "lib/Resource/UpdateJWTTemplate.php",
     "lib/Resource/UpdateOAuthApplication.php",
@@ -688,6 +701,7 @@
     "tests/Fixtures/connect_application_oauth.json",
     "tests/Fixtures/connect_application_oauth_redirect_uris.json",
     "tests/Fixtures/connected_account.json",
+    "tests/Fixtures/connected_account_dto.json",
     "tests/Fixtures/connection.json",
     "tests/Fixtures/connection_activated.json",
     "tests/Fixtures/connection_activated_data.json",
@@ -712,6 +726,7 @@
     "tests/Fixtures/create_authorization_permission.json",
     "tests/Fixtures/create_authorization_resource.json",
     "tests/Fixtures/create_cors_origin.json",
+    "tests/Fixtures/create_data_integration.json",
     "tests/Fixtures/create_data_key_request.json",
     "tests/Fixtures/create_data_key_response.json",
     "tests/Fixtures/create_group.json",
@@ -733,14 +748,19 @@
     "tests/Fixtures/create_user_invite_options.json",
     "tests/Fixtures/create_user_organization_membership.json",
     "tests/Fixtures/create_webhook_endpoint.json",
+    "tests/Fixtures/custom_provider_definition.json",
+    "tests/Fixtures/data_integration.json",
     "tests/Fixtures/data_integration_access_token_response.json",
     "tests/Fixtures/data_integration_access_token_response_access_token.json",
     "tests/Fixtures/data_integration_authorize_url_response.json",
     "tests/Fixtures/data_integration_configuration_list_response.json",
     "tests/Fixtures/data_integration_configuration_response.json",
+    "tests/Fixtures/data_integration_credential.json",
     "tests/Fixtures/data_integration_credentials.json",
+    "tests/Fixtures/data_integration_credentials_dto.json",
     "tests/Fixtures/data_integration_credentials_response.json",
     "tests/Fixtures/data_integration_credentials_response_credential.json",
+    "tests/Fixtures/data_integration_custom_provider.json",
     "tests/Fixtures/data_integrations_get_data_integration_authorize_url_request.json",
     "tests/Fixtures/data_integrations_get_user_token_request.json",
     "tests/Fixtures/data_integrations_list_response.json",
@@ -869,6 +889,7 @@
     "tests/Fixtures/list_connect_application.json",
     "tests/Fixtures/list_connection.json",
     "tests/Fixtures/list_cors_origin_response.json",
+    "tests/Fixtures/list_data_integration.json",
     "tests/Fixtures/list_directory.json",
     "tests/Fixtures/list_directory_group.json",
     "tests/Fixtures/list_directory_user_with_groups.json",
@@ -1011,6 +1032,8 @@
     "tests/Fixtures/update_audit_logs_retention.json",
     "tests/Fixtures/update_authorization_permission.json",
     "tests/Fixtures/update_authorization_resource.json",
+    "tests/Fixtures/update_custom_provider_definition.json",
+    "tests/Fixtures/update_data_integration.json",
     "tests/Fixtures/update_group.json",
     "tests/Fixtures/update_jwt_template.json",
     "tests/Fixtures/update_oauth_application.json",
@@ -1890,6 +1913,38 @@
     "GET /user_management/redirect_uris": {
       "sdkMethod": "listRedirectUris",
       "service": "userManagement"
+    },
+    "GET /data-integrations": {
+      "sdkMethod": "listDataIntegrations",
+      "service": "pipes"
+    },
+    "POST /data-integrations": {
+      "sdkMethod": "createDataIntegration",
+      "service": "pipes"
+    },
+    "GET /data-integrations/{slug}": {
+      "sdkMethod": "getDataIntegration",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}": {
+      "sdkMethod": "updateDataIntegration",
+      "service": "pipes"
+    },
+    "DELETE /data-integrations/{slug}": {
+      "sdkMethod": "deleteDataIntegration",
+      "service": "pipes"
+    },
+    "POST /user_management/radar_challenges": {
+      "sdkMethod": "createRadarChallenge",
+      "service": "userManagement"
+    },
+    "POST /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "createUserConnectedAccount",
+      "service": "pipes"
+    },
+    "PUT /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "updateUserConnectedAccount",
+      "service": "pipes"
     }
   }
 }

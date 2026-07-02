@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Service;
 
 use WorkOS\Resource\ConnectedAccount;
+use WorkOS\Resource\DataIntegration;
 use WorkOS\Resource\DataIntegrationAccessTokenResponse;
 use WorkOS\Resource\DataIntegrationAuthorizeUrlResponse;
 use WorkOS\Resource\DataIntegrationCredentialsResponse;
@@ -17,6 +18,155 @@ class Pipes
     public function __construct(
         private readonly \WorkOS\HttpClient $client,
     ) {
+    }
+
+    /**
+     * List data integrations
+     *
+     * Lists the environment's data integrations configured with `custom` or `organization` credentials, including custom providers.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DataIntegration>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listDataIntegrations(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'data-integrations',
+            query: $query,
+            modelClass: DataIntegration::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create a data integration
+     *
+     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials, or `organization` to have each organization supply its own. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
+     * @param string $provider The provider to create a Data Integration for. For a built-in provider use its slug (e.g. `github`, `slack`). For a custom provider, this is the new provider slug and `custom_provider` must be supplied. A custom provider slug cannot shadow an existing global provider slug.
+     * @param string|null $description An optional description of the Data Integration.
+     * @param bool|null $enabled Whether the Data Integration is enabled. Defaults to `false`.
+     * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Defaults to the provider's configured scopes when omitted.
+     * @param \WorkOS\Resource\DataIntegrationCredentialsDto|null $credentials The credentials to configure for the Data Integration. Required for both built-in and custom providers.
+     * @param \WorkOS\Resource\CustomProviderDefinition|null $customProvider The OAuth definition for a custom provider. Supply this to define a custom provider; omit it to create an integration for a built-in provider.
+     * @return \WorkOS\Resource\DataIntegration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createDataIntegration(
+        string $provider,
+        ?string $description = null,
+        ?bool $enabled = null,
+        ?array $scopes = null,
+        ?\WorkOS\Resource\DataIntegrationCredentialsDto $credentials = null,
+        ?\WorkOS\Resource\CustomProviderDefinition $customProvider = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegration {
+        $body = array_filter([
+            'provider' => $provider,
+            'description' => $description,
+            'enabled' => $enabled,
+            'scopes' => $scopes,
+            'credentials' => $credentials,
+            'custom_provider' => $customProvider,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'data-integrations',
+            body: $body,
+            options: $options,
+        );
+        return DataIntegration::fromArray($response);
+    }
+
+    /**
+     * Get a data integration
+     *
+     * Retrieves a data integration by its slug.
+     * @param string $slug The slug identifier of the data integration.
+     * @return \WorkOS\Resource\DataIntegration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getDataIntegration(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegration {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'data-integrations/' . rawurlencode($slug),
+            options: $options,
+        );
+        return DataIntegration::fromArray($response);
+    }
+
+    /**
+     * Update a data integration
+     *
+     * Updates the description, enabled state, or custom credentials of a data integration. For custom providers, `custom_provider` updates the OAuth definition.
+     * @param string $slug The slug identifier of the data integration.
+     * @param string|null $description An optional description of the Data Integration.
+     * @param bool|null $enabled Whether the Data Integration is enabled.
+     * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Pass `null` to reset to the provider's configured scopes.
+     * @param \WorkOS\Resource\DataIntegrationCredentialsDto|null $credentials New credentials for the Data Integration. When provided, rotates the stored client secret.
+     * @param \WorkOS\Resource\UpdateCustomProviderDefinition|null $customProvider Updates to a custom provider's OAuth definition. Only valid for custom-provider integrations.
+     * @return \WorkOS\Resource\DataIntegration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegration(
+        string $slug,
+        ?string $description = null,
+        ?bool $enabled = null,
+        ?array $scopes = null,
+        ?\WorkOS\Resource\DataIntegrationCredentialsDto $credentials = null,
+        ?\WorkOS\Resource\UpdateCustomProviderDefinition $customProvider = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegration {
+        $body = array_filter([
+            'description' => $description,
+            'enabled' => $enabled,
+            'scopes' => $scopes,
+            'credentials' => $credentials,
+            'custom_provider' => $customProvider,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'data-integrations/' . rawurlencode($slug),
+            body: $body,
+            options: $options,
+        );
+        return DataIntegration::fromArray($response);
+    }
+
+    /**
+     * Delete a data integration
+     *
+     * Deletes a data integration and all of its connected installations. For a custom provider, also deletes the custom provider definition.
+     * @param string $slug The slug identifier of the data integration.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteDataIntegration(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'data-integrations/' . rawurlencode($slug),
+            options: $options,
+        );
     }
 
     /**
@@ -164,6 +314,90 @@ class Pipes
             method: 'GET',
             path: 'user_management/users/' . rawurlencode($userId) . '/connected_accounts/' . rawurlencode($slug),
             query: $query,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
+    }
+
+    /**
+     * Import a connected account
+     *
+     * Imports a [connected account](https://workos.com/docs/reference/pipes/connected-account) for a user by providing OAuth tokens directly. Use this to migrate existing connections or set up connections without going through the OAuth flow.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
+     * @param string|null $accessToken The OAuth access token for the connected account.
+     * @param string|null $refreshToken The OAuth refresh token for the connected account.
+     * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
+     * @param array<string>|null $scopes The OAuth scopes granted for this connection.
+     * @param \WorkOS\Resource\ConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createUserConnectedAccount(
+        string $userId,
+        string $slug,
+        ?string $accessToken = null,
+        ?string $refreshToken = null,
+        ?\DateTimeImmutable $expiresAt = null,
+        ?array $scopes = null,
+        ?\WorkOS\Resource\ConnectedAccountState $state = null,
+        ?string $organizationId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = array_filter([
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'scopes' => $scopes,
+            'state' => $state?->value,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/users/' . rawurlencode($userId) . '/connected_accounts/' . rawurlencode($slug),
+            body: $body,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
+    }
+
+    /**
+     * Update a connected account
+     *
+     * Updates a user's [connected account](https://workos.com/docs/reference/pipes/connected-account) tokens, scopes, or state for a specific provider.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
+     * @param string|null $accessToken The OAuth access token for the connected account.
+     * @param string|null $refreshToken The OAuth refresh token for the connected account.
+     * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
+     * @param array<string>|null $scopes The OAuth scopes granted for this connection.
+     * @param \WorkOS\Resource\ConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateUserConnectedAccount(
+        string $userId,
+        string $slug,
+        ?string $accessToken = null,
+        ?string $refreshToken = null,
+        ?\DateTimeImmutable $expiresAt = null,
+        ?array $scopes = null,
+        ?\WorkOS\Resource\ConnectedAccountState $state = null,
+        ?string $organizationId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = array_filter([
+            'access_token' => $accessToken,
+            'refresh_token' => $refreshToken,
+            'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'scopes' => $scopes,
+            'state' => $state?->value,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'user_management/users/' . rawurlencode($userId) . '/connected_accounts/' . rawurlencode($slug),
+            body: $body,
             options: $options,
         );
         return ConnectedAccount::fromArray($response);
