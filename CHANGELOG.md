@@ -1,5 +1,21 @@
 # Changelog
 
+## [8.1.0](https://github.com/workos/workos-php/compare/v8.0.0...v8.1.0) (2026-07-06)
+
+* [#416](https://github.com/workos/workos-php/pull/416) fix(generated): regenerate from spec
+
+  **Features**
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added model `UserRoleAssignmentSource`
+    * Added `source` to `UserRoleAssignment`
+    * Added enum `UserRoleAssignmentSourceType`
+    * Added parameter `UserManagementAuthentication.authorize.max_age`
+    * Added endpoint `GET /user_management/cors_origins`
+    * Added endpoint `GET /user_management/redirect_uris`
+
+  **Fixes**
+  * Restore mistakenly removed CreateMagicAuth logic from previous release
+
 ## [8.0.0](https://github.com/workos/workos-php/compare/v7.3.0...v8.0.0) (2026-07-02)
 
 * [#409](https://github.com/workos/workos-php/pull/409) fix(generated): regenerate from spec
