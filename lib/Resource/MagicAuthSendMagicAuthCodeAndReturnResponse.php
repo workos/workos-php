@@ -11,6 +11,22 @@ readonly class MagicAuthSendMagicAuthCodeAndReturnResponse implements \JsonSeria
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the Magic Auth object. */
+        public string $object,
+        /** The unique ID of the Magic Auth code. */
+        public string $id,
+        /** The unique ID of the user. */
+        public string $userId,
+        /** The email address of the user. */
+        public string $email,
+        /** The timestamp when the Magic Auth code expires. */
+        public \DateTimeImmutable $expiresAt,
+        /** An ISO 8601 timestamp. */
+        public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
+        public \DateTimeImmutable $updatedAt,
+        /** The code used to verify the Magic Auth code. */
+        public string $code,
         /** The ID of the Radar authentication attempt created for this request when Radar is enabled. Pass this value to the authenticate endpoint to associate the subsequent authentication with this Radar attempt. */
         public ?string $radarAuthAttemptId = null,
     ) {
@@ -19,6 +35,14 @@ readonly class MagicAuthSendMagicAuthCodeAndReturnResponse implements \JsonSeria
     public static function fromArray(array $data): self
     {
         return new self(
+            object: $data['object'] ?? 'magic_auth',
+            id: $data['id'],
+            userId: $data['user_id'],
+            email: $data['email'],
+            expiresAt: new \DateTimeImmutable($data['expires_at']),
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
+            code: $data['code'],
             radarAuthAttemptId: $data['radar_auth_attempt_id'] ?? null,
         );
     }
@@ -26,6 +50,14 @@ readonly class MagicAuthSendMagicAuthCodeAndReturnResponse implements \JsonSeria
     public function toArray(): array
     {
         return [
+            'object' => $this->object,
+            'id' => $this->id,
+            'user_id' => $this->userId,
+            'email' => $this->email,
+            'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'code' => $this->code,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
         ];
     }

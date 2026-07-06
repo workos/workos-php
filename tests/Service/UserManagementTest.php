@@ -216,6 +216,8 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->createUser(email: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\UserCreateResponse::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['email'], $result->email);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
@@ -498,6 +500,8 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->createMagicAuth(email: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['user_id'], $result->userId);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
@@ -672,6 +676,22 @@ class UserManagementTest extends TestCase
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->authenticateWithDeviceCode(deviceCode: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
+    }
+
+    public function testAuthenticateWithRadarEmailChallenge(): void
+    {
+        $fixture = $this->loadFixture('authenticate_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->authenticateWithRadarEmailChallenge(code: 'test_value', radarChallengeId: 'test_value', pendingAuthenticationToken: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
+    }
+
+    public function testAuthenticateWithRadarSmsChallenge(): void
+    {
+        $fixture = $this->loadFixture('authenticate_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->authenticateWithRadarSmsChallenge(code: 'test_value', verificationId: 'test_value', phoneNumber: 'test_value', pendingAuthenticationToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 

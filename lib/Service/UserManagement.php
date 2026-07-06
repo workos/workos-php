@@ -66,6 +66,8 @@ class UserManagement
      * @param string|null $ipAddress
      * @param string|null $deviceId
      * @param string|null $userAgent
+     * @param string|null $signalsId
+     * @param string|null $radarAuthAttemptId
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -76,6 +78,8 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $deviceId = null,
         ?string $userAgent = null,
+        ?string $signalsId = null,
+        ?string $radarAuthAttemptId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -86,6 +90,8 @@ class UserManagement
             'ip_address' => $ipAddress,
             'device_id' => $deviceId,
             'user_agent' => $userAgent,
+            'signals_id' => $signalsId,
+            'radar_auth_attempt_id' => $radarAuthAttemptId,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -106,6 +112,7 @@ class UserManagement
      * @param string|null $ipAddress
      * @param string|null $deviceId
      * @param string|null $userAgent
+     * @param string|null $signalsId
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -116,6 +123,7 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $deviceId = null,
         ?string $userAgent = null,
+        ?string $signalsId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -126,6 +134,7 @@ class UserManagement
             'ip_address' => $ipAddress,
             'device_id' => $deviceId,
             'user_agent' => $userAgent,
+            'signals_id' => $signalsId,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -183,6 +192,7 @@ class UserManagement
      * @param string|null $ipAddress
      * @param string|null $deviceId
      * @param string|null $userAgent
+     * @param string|null $radarAuthAttemptId
      * @return \WorkOS\Resource\AuthenticateResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -193,6 +203,7 @@ class UserManagement
         ?string $ipAddress = null,
         ?string $deviceId = null,
         ?string $userAgent = null,
+        ?string $radarAuthAttemptId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuthenticateResponse {
         $body = array_filter([
@@ -203,6 +214,7 @@ class UserManagement
             'ip_address' => $ipAddress,
             'device_id' => $deviceId,
             'user_agent' => $userAgent,
+            'radar_auth_attempt_id' => $radarAuthAttemptId,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
@@ -353,6 +365,89 @@ class UserManagement
             'user_agent' => $userAgent,
         ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
+
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/authenticate',
+            body: $body,
+            options: $options,
+        );
+        return AuthenticateResponse::fromArray($response);
+    }
+
+    /**
+     * @param string $code
+     * @param string $radarChallengeId
+     * @param string $pendingAuthenticationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
+     * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function authenticateWithRadarEmailChallenge(
+        string $code,
+        string $radarChallengeId,
+        string $pendingAuthenticationToken,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AuthenticateResponse {
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:radar-email-challenge:code',
+            'code' => $code,
+            'radar_challenge_id' => $radarChallengeId,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
+
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/authenticate',
+            body: $body,
+            options: $options,
+        );
+        return AuthenticateResponse::fromArray($response);
+    }
+
+    /**
+     * @param string $code
+     * @param string $verificationId
+     * @param string $phoneNumber
+     * @param string $pendingAuthenticationToken
+     * @param string|null $ipAddress
+     * @param string|null $deviceId
+     * @param string|null $userAgent
+     * @return \WorkOS\Resource\AuthenticateResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function authenticateWithRadarSmsChallenge(
+        string $code,
+        string $verificationId,
+        string $phoneNumber,
+        string $pendingAuthenticationToken,
+        ?string $ipAddress = null,
+        ?string $deviceId = null,
+        ?string $userAgent = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AuthenticateResponse {
+        $body = array_filter([
+            'grant_type' => 'urn:workos:oauth:grant-type:radar-sms-challenge:code',
+            'code' => $code,
+            'verification_id' => $verificationId,
+            'phone_number' => $phoneNumber,
+            'pending_authentication_token' => $pendingAuthenticationToken,
+            'ip_address' => $ipAddress,
+            'device_id' => $deviceId,
+            'user_agent' => $userAgent,
+        ], fn ($v) => $v !== null);
+        $body['client_id'] = $this->client->requireClientId();
+        $body['client_secret'] = $this->client->requireApiKey();
 
         $response = $this->client->request(
             method: 'POST',

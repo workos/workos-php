@@ -11,6 +11,37 @@ readonly class UserCreateResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** Distinguishes the user object. */
+        public string $object,
+        /** The unique ID of the user. */
+        public string $id,
+        /** The first name of the user. */
+        public ?string $firstName,
+        /** The last name of the user. */
+        public ?string $lastName,
+        /** A URL reference to an image representing the user. */
+        public ?string $profilePictureUrl,
+        /** The email address of the user. */
+        public string $email,
+        /** Whether the user's email has been verified. */
+        public bool $emailVerified,
+        /** The external ID of the user. */
+        public ?string $externalId,
+        /** The timestamp when the user last signed in. */
+        public ?\DateTimeImmutable $lastSignInAt,
+        /** An ISO 8601 timestamp. */
+        public \DateTimeImmutable $createdAt,
+        /** An ISO 8601 timestamp. */
+        public \DateTimeImmutable $updatedAt,
+        /** The user's full name. */
+        public ?string $name = null,
+        /**
+         * Object containing metadata key/value pairs associated with the user.
+         * @var array<string, string>|null
+         */
+        public ?array $metadata = null,
+        /** The user's preferred locale. */
+        public ?string $locale = null,
         /** The ID of the Radar authentication attempt created for this request when Radar is enabled. Pass this value to the authenticate endpoint to associate the subsequent authentication with this Radar attempt. */
         public ?string $radarAuthAttemptId = null,
     ) {
@@ -19,6 +50,20 @@ readonly class UserCreateResponse implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
+            object: $data['object'] ?? 'user',
+            id: $data['id'],
+            firstName: $data['first_name'] ?? null,
+            lastName: $data['last_name'] ?? null,
+            profilePictureUrl: $data['profile_picture_url'] ?? null,
+            email: $data['email'],
+            emailVerified: $data['email_verified'],
+            externalId: $data['external_id'] ?? null,
+            lastSignInAt: isset($data['last_sign_in_at']) ? new \DateTimeImmutable($data['last_sign_in_at']) : null,
+            createdAt: new \DateTimeImmutable($data['created_at']),
+            updatedAt: new \DateTimeImmutable($data['updated_at']),
+            name: $data['name'] ?? null,
+            metadata: $data['metadata'] ?? null,
+            locale: $data['locale'] ?? null,
             radarAuthAttemptId: $data['radar_auth_attempt_id'] ?? null,
         );
     }
@@ -26,6 +71,20 @@ readonly class UserCreateResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'object' => $this->object,
+            'id' => $this->id,
+            'first_name' => $this->firstName,
+            'last_name' => $this->lastName,
+            'profile_picture_url' => $this->profilePictureUrl,
+            'email' => $this->email,
+            'email_verified' => $this->emailVerified,
+            'external_id' => $this->externalId,
+            'last_sign_in_at' => $this->lastSignInAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'name' => $this->name,
+            'metadata' => $this->metadata,
+            'locale' => $this->locale,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
         ];
     }
