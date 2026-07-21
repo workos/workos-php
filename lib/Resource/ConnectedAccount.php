@@ -36,7 +36,7 @@ readonly class ConnectedAccount implements \JsonSerializable
         /** The timestamp when the connection was last updated. */
         public string $updatedAt,
         /** The authentication method used for this connection (`oauth` or `api_key`). Defaults to `oauth` if absent. */
-        public ?ConnectedAccountAuthMethod $authMethod = null,
+        public ?DataIntegrationAuthMethods $authMethod = null,
         /** The last four characters of the API key, or `null` for OAuth connections. */
         public ?string $apiKeyLast4 = null,
     ) {
@@ -53,7 +53,7 @@ readonly class ConnectedAccount implements \JsonSerializable
             state: ConnectedAccountState::from($data['state']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
-            authMethod: isset($data['auth_method']) ? ConnectedAccountAuthMethod::from($data['auth_method']) : null,
+            authMethod: isset($data['auth_method']) ? DataIntegrationAuthMethods::from($data['auth_method']) : null,
             apiKeyLast4: $data['api_key_last_4'] ?? null,
         );
     }
