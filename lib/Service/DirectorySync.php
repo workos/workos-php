@@ -167,6 +167,8 @@ class DirectorySync
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
      * @param string|null $directory Unique identifier of the WorkOS Directory. This value can be obtained from the WorkOS dashboard or from the WorkOS API.
      * @param string|null $group Unique identifier of the WorkOS Directory Group. This value can be obtained from the WorkOS API.
+     * @param string|null $idpId Filter Directory Users by the identity provider's unique identifier (`idp_id`). Requires the `directory` parameter to also be provided.
+     * @param string|null $email Filter Directory Users by their primary email address. Requires the `directory` parameter to also be provided.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -177,6 +179,8 @@ class DirectorySync
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
         ?string $directory = null,
         ?string $group = null,
+        ?string $idpId = null,
+        ?string $email = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -186,6 +190,8 @@ class DirectorySync
             'order' => $order->value,
             'directory' => $directory,
             'group' => $group,
+            'idp_id' => $idpId,
+            'email' => $email,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',

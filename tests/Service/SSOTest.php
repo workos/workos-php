@@ -59,7 +59,7 @@ class SSOTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->sso()->getAuthorizationUrl(providerScopes: [], providerQueryParams: [], domain: 'test_value', provider: \WorkOS\Resource\SSOProvider::AppleOAuth, redirectUri: 'test_value', state: 'test_value', connection: 'test_value', organization: 'test_value', domainHint: 'test_value', loginHint: 'test_value', nonce: 'test_value');
+        $result = $client->sso()->getAuthorizationUrl(providerScopes: [], providerQueryParams: [], domain: 'test_value', provider: \WorkOS\Resource\SSOProvider::AppleOAuth, redirectUri: 'test_value', state: 'test_value', connection: 'test_value', organization: 'test_value', domainHint: 'test_value', loginHint: 'test_value', nonce: 'test_value', prompt: 'test_value');
         $this->assertIsString($result);
         $this->assertStringContainsString('sso/authorize', $result);
         parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);

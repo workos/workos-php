@@ -32,8 +32,15 @@ readonly class DataIntegration implements \JsonSerializable
         public ?array $scopes,
         /** The OAuth redirect URI to register with the provider when configuring the custom application. */
         public string $redirectUri,
+        /**
+         * How accounts authenticate with the provider for this Data Integration.
+         * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>
+         */
+        public array $authMethods,
         /** The credentials configured for the Data Integration. */
         public DataIntegrationCredential $credentials,
+        /** The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses. */
+        public ?DataIntegrationInstallation $installation,
         /** The OAuth definition when this is a custom provider; `null` for built-in providers. */
         public ?DataIntegrationCustomProvider $customProvider,
         /** An ISO 8601 timestamp. */
@@ -55,7 +62,9 @@ readonly class DataIntegration implements \JsonSerializable
             state: DataIntegrationState::from($data['state']),
             scopes: $data['scopes'] ?? null,
             redirectUri: $data['redirect_uri'],
+            authMethods: array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']),
             credentials: DataIntegrationCredential::fromArray($data['credentials']),
+            installation: isset($data['installation']) ? DataIntegrationInstallation::fromArray($data['installation']) : null,
             customProvider: isset($data['custom_provider']) ? DataIntegrationCustomProvider::fromArray($data['custom_provider']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
@@ -74,7 +83,9 @@ readonly class DataIntegration implements \JsonSerializable
             'state' => $this->state->value,
             'scopes' => $this->scopes,
             'redirect_uri' => $this->redirectUri,
+            'auth_methods' => array_map(fn ($item) => $item->value, $this->authMethods),
             'credentials' => $this->credentials->toArray(),
+            'installation' => $this->installation?->toArray(),
             'custom_provider' => $this->customProvider?->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),

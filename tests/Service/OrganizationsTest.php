@@ -110,6 +110,22 @@ class OrganizationsTest extends TestCase
         $this->assertStringEndsWith('organizations/test_id/audit_log_configuration', $request->getUri()->getPath());
     }
 
+    public function testListAuthorizedApplications(): void
+    {
+        $fixture = $this->loadFixture('list_organization_authorized_connect_application_list_data');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->organizations()->listAuthorizedApplications('test_organization_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/authorized_applications', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
     public function testPaginationBoundary(): void
     {
         $fixture = $this->loadFixture('list_organization');

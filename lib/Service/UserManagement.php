@@ -19,6 +19,7 @@ use WorkOS\Resource\JWTTemplateResponse;
 use WorkOS\Resource\MagicAuth;
 use WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse;
 use WorkOS\Resource\PasswordReset;
+use WorkOS\Resource\RadarChallenge;
 use WorkOS\Resource\RedirectUri;
 use WorkOS\Resource\ResetPasswordResponse;
 use WorkOS\Resource\SendRadarSmsChallengeResponse;
@@ -581,6 +582,26 @@ class UserManagement
     }
 
     /**
+     * Get Radar Challenge details
+     *
+     * Get the details of an existing Radar Challenge, including the OTP code.
+     * @param string $id The unique ID of the Radar Challenge.
+     * @return \WorkOS\Resource\RadarChallenge
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getRadarChallenge(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\RadarChallenge {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'user_management/radar_challenges/' . rawurlencode($id),
+            options: $options,
+        );
+        return RadarChallenge::fromArray($response);
+    }
+
+    /**
      * Logout
      *
      * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
@@ -660,7 +681,7 @@ class UserManagement
     /**
      * Create a CORS origin
      *
-     * Creates a new CORS origin for the current environment. CORS origins allow browser-based applications to make requests to the WorkOS API.
+     * Creates a new CORS origin for the API key's application. CORS origins allow browser-based applications to make requests to the WorkOS API.
      * @param string $origin The origin URL to allow for CORS requests.
      * @return \WorkOS\Resource\CORSOriginResponse
      * @throws \WorkOS\Exception\WorkOSException
@@ -1480,6 +1501,25 @@ class UserManagement
             options: $options,
         );
         return RedirectUri::fromArray($response);
+    }
+
+    /**
+     * Delete a redirect URI
+     *
+     * Deletes a redirect URI from an application.
+     * @param string $id The ID of the redirect URI to delete.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteRedirectUris(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'user_management/redirect_uris/' . rawurlencode($id),
+            options: $options,
+        );
     }
 
     /**

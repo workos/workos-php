@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace WorkOS\Service;
 
 use WorkOS\Resource\OrganizationDomain;
-use WorkOS\Resource\OrganizationDomainStandAlone;
 
 class OrganizationDomains
 {
@@ -48,19 +47,19 @@ class OrganizationDomains
      *
      * Get the details of an existing organization domain.
      * @param string $id Unique identifier of the organization domain.
-     * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     * @return \WorkOS\Resource\OrganizationDomain
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getOrganizationDomain(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\OrganizationDomainStandAlone {
+    ): \WorkOS\Resource\OrganizationDomain {
         $response = $this->client->request(
             method: 'GET',
             path: 'organization_domains/' . rawurlencode($id),
             options: $options,
         );
-        return OrganizationDomainStandAlone::fromArray($response);
+        return OrganizationDomain::fromArray($response);
     }
 
     /**
@@ -87,18 +86,18 @@ class OrganizationDomains
      *
      * Initiates verification process for an Organization Domain.
      * @param string $id Unique identifier of the organization domain.
-     * @return \WorkOS\Resource\OrganizationDomainStandAlone
+     * @return \WorkOS\Resource\OrganizationDomain
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function verifyOrganizationDomain(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\Resource\OrganizationDomainStandAlone {
+    ): \WorkOS\Resource\OrganizationDomain {
         $response = $this->client->request(
             method: 'POST',
             path: 'organization_domains/' . rawurlencode($id) . '/verify',
             options: $options,
         );
-        return OrganizationDomainStandAlone::fromArray($response);
+        return OrganizationDomain::fromArray($response);
     }
 }

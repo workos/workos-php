@@ -80,6 +80,20 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $body['phone_number']);
     }
 
+    public function testGetRadarChallenge(): void
+    {
+        $fixture = $this->loadFixture('radar_challenge');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->getRadarChallenge('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\RadarChallenge::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/radar_challenges/test_id', $request->getUri()->getPath());
+    }
+
     public function testGetLogoutUrl(): void
     {
         $client = $this->createMockClient([]);
@@ -554,6 +568,15 @@ class UserManagementTest extends TestCase
         $this->assertStringEndsWith('user_management/redirect_uris', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['uri']);
+    }
+
+    public function testDeleteRedirectUris(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->userManagement()->deleteRedirectUris('test_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('user_management/redirect_uris/test_id', $request->getUri()->getPath());
     }
 
     public function testListUserAuthorizedApplications(): void
