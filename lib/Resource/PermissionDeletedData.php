@@ -24,6 +24,8 @@ readonly class PermissionDeletedData implements \JsonSerializable
         public ?string $description,
         /** Whether the permission is a system permission. */
         public bool $system,
+        /** The slug of the resource type the permission applies to. */
+        public string $resourceTypeSlug,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
@@ -40,6 +42,7 @@ readonly class PermissionDeletedData implements \JsonSerializable
             name: $data['name'],
             description: $data['description'] ?? null,
             system: $data['system'],
+            resourceTypeSlug: $data['resource_type_slug'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
         );
@@ -54,6 +57,7 @@ readonly class PermissionDeletedData implements \JsonSerializable
             'name' => $this->name,
             'description' => $this->description,
             'system' => $this->system,
+            'resource_type_slug' => $this->resourceTypeSlug,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
         ];

@@ -18,15 +18,15 @@ class Widgets
     /**
      * Generate a widget token
      *
-     * Generate a widget token scoped to an organization and user with the specified scopes.
-     * @param string $organizationId The ID of the organization to scope the widget session to.
+     * Generate a widget token for a user, optionally scoped to an organization. When an organization is specified, org-scoped widgets are enabled; omitting it issues a user-only token for widgets like `UserProfile` and `UserSecurity`.
+     * @param string|null $organizationId The ID of the organization to scope the widget session to. Required when scopes are provided. Optional when issuing a token for user-only widgets (e.g. `UserProfile`, `UserSecurity`) that do not require organization context.
      * @param string|null $userId The ID of the user to issue the widget session token for.
      * @param array<\WorkOS\Resource\WidgetSessionTokenScopes>|null $scopes The scopes to grant the widget session.
      * @return \WorkOS\Resource\WidgetSessionTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createToken(
-        string $organizationId,
+        ?string $organizationId = null,
         ?string $userId = null,
         ?array $scopes = null,
         ?\WorkOS\RequestOptions $options = null,

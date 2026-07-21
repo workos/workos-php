@@ -23,7 +23,7 @@ class Pipes
     /**
      * List data integrations
      *
-     * Lists the environment's data integrations configured with `custom` or `organization` credentials, including custom providers.
+     * Lists the environment's data integrations configured with `custom` or `organization` credentials, including custom providers and API key integrations.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
@@ -56,12 +56,14 @@ class Pipes
     /**
      * Create a data integration
      *
-     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials, or `organization` to have each organization supply its own. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
+     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials or `organization` to have each organization supply its own. Set `auth_methods` to `["api_key"]` to create an API key integration; you may optionally supply an `api_key` block to install a first tenant in the same call. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
      * @param string $provider The provider to create a Data Integration for. For a built-in provider use its slug (e.g. `github`, `slack`). For a custom provider, this is the new provider slug and `custom_provider` must be supplied. A custom provider slug cannot shadow an existing global provider slug.
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled. Defaults to `false`.
      * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Defaults to the provider's configured scopes when omitted.
-     * @param \WorkOS\Resource\DataIntegrationCredentialsDto|null $credentials The credentials to configure for the Data Integration. Required for both built-in and custom providers.
+     * @param array<\WorkOS\Resource\DataIntegrationAuthMethods>|null $authMethods How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
+     * @param \WorkOS\Resource\DataIntegrationCredentialsInput|null $credentials The OAuth credentials to configure for the Data Integration. Required for OAuth integrations; omit when `auth_methods` is `["api_key"]`.
+     * @param \WorkOS\Resource\ApiKeyInstallation|null $apiKey An optional API key to install for the first tenant on an `api_key` integration. Omit to declare a keyless integration; tenants can be added later via the per-installation API key path.
      * @param \WorkOS\Resource\CustomProviderDefinition|null $customProvider The OAuth definition for a custom provider. Supply this to define a custom provider; omit it to create an integration for a built-in provider.
      * @return \WorkOS\Resource\DataIntegration
      * @throws \WorkOS\Exception\WorkOSException
@@ -71,7 +73,9 @@ class Pipes
         ?string $description = null,
         ?bool $enabled = null,
         ?array $scopes = null,
-        ?\WorkOS\Resource\DataIntegrationCredentialsDto $credentials = null,
+        ?array $authMethods = null,
+        ?\WorkOS\Resource\DataIntegrationCredentialsInput $credentials = null,
+        ?\WorkOS\Resource\ApiKeyInstallation $apiKey = null,
         ?\WorkOS\Resource\CustomProviderDefinition $customProvider = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegration {
@@ -80,7 +84,9 @@ class Pipes
             'description' => $description,
             'enabled' => $enabled,
             'scopes' => $scopes,
+            'auth_methods' => $authMethods,
             'credentials' => $credentials,
+            'api_key' => $apiKey,
             'custom_provider' => $customProvider,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -120,7 +126,8 @@ class Pipes
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled.
      * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Pass `null` to reset to the provider's configured scopes.
-     * @param \WorkOS\Resource\DataIntegrationCredentialsDto|null $credentials New credentials for the Data Integration. When provided, rotates the stored client secret.
+     * @param \WorkOS\Resource\DataIntegrationCredentialsInput|null $credentials New OAuth credentials for the Data Integration. When provided, rotates the stored client secret. Mutually exclusive with `api_key`.
+     * @param \WorkOS\Resource\ApiKeyInstallation|null $apiKey An API key to install or rotate for a tenant on an `api_key` integration. Upserts the tenant installation identified by `user_id` (and optional `organization_id`).
      * @param \WorkOS\Resource\UpdateCustomProviderDefinition|null $customProvider Updates to a custom provider's OAuth definition. Only valid for custom-provider integrations.
      * @return \WorkOS\Resource\DataIntegration
      * @throws \WorkOS\Exception\WorkOSException
@@ -130,7 +137,8 @@ class Pipes
         ?string $description = null,
         ?bool $enabled = null,
         ?array $scopes = null,
-        ?\WorkOS\Resource\DataIntegrationCredentialsDto $credentials = null,
+        ?\WorkOS\Resource\DataIntegrationCredentialsInput $credentials = null,
+        ?\WorkOS\Resource\ApiKeyInstallation $apiKey = null,
         ?\WorkOS\Resource\UpdateCustomProviderDefinition $customProvider = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegration {
@@ -139,6 +147,7 @@ class Pipes
             'enabled' => $enabled,
             'scopes' => $scopes,
             'credentials' => $credentials,
+            'api_key' => $apiKey,
             'custom_provider' => $customProvider,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -329,7 +338,7 @@ class Pipes
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
-     * @param \WorkOS\Resource\ConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -341,7 +350,7 @@ class Pipes
         ?string $refreshToken = null,
         ?\DateTimeImmutable $expiresAt = null,
         ?array $scopes = null,
-        ?\WorkOS\Resource\ConnectedAccountState $state = null,
+        ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
@@ -371,7 +380,7 @@ class Pipes
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
-     * @param \WorkOS\Resource\ConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -383,7 +392,7 @@ class Pipes
         ?string $refreshToken = null,
         ?\DateTimeImmutable $expiresAt = null,
         ?array $scopes = null,
-        ?\WorkOS\Resource\ConnectedAccountState $state = null,
+        ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {

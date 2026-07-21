@@ -12,7 +12,10 @@ enum CreateWebhookEndpointEvents: string
     case AgentRegistrationClaimAttemptCreated = 'agent.registration.claim.attempt.created';
     case AgentRegistrationClaimCompleted = 'agent.registration.claim.completed';
     case AgentRegistrationCredentialIssued = 'agent.registration.credential.issued';
+    case AgentRegistrationDeleted = 'agent.registration.deleted';
+    case AgentRegistrationExpired = 'agent.registration.expired';
     case AgentRegistrationOrganizationSwitched = 'agent.registration.organization.switched';
+    case AgentRegistrationRevoked = 'agent.registration.revoked';
     case AuthenticationEmailVerificationSucceeded = 'authentication.email_verification_succeeded';
     case AuthenticationMagicAuthFailed = 'authentication.magic_auth_failed';
     case AuthenticationMagicAuthSucceeded = 'authentication.magic_auth_succeeded';
@@ -27,6 +30,7 @@ enum CreateWebhookEndpointEvents: string
     case AuthenticationSSOStarted = 'authentication.sso_started';
     case AuthenticationSSOSucceeded = 'authentication.sso_succeeded';
     case AuthenticationSSOTimedOut = 'authentication.sso_timed_out';
+    case RadarChallengeCreated = 'radar.challenge_created';
     case AuthenticationRadarRiskDetected = 'authentication.radar_risk_detected';
     case AuthenticationReauthenticationSucceeded = 'authentication.reauthentication_succeeded';
     case ApiKeyCreated = 'api_key.created';

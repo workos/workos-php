@@ -40,7 +40,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
         /**
          * The authentication methods supported by this provider (`oauth`, `api_key`, or both). Defaults to `["oauth"]` if absent.
-         * @var array<\WorkOS\Resource\ConnectedAccountAuthMethod>|null
+         * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>|null
          */
         public ?array $authMethods = null,
     ) {
@@ -61,7 +61,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             connectedAccount: isset($data['connected_account']) ? DataIntegrationsListResponseDataConnectedAccount::fromArray($data['connected_account']) : null,
-            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => ConnectedAccountAuthMethod::from($item), $data['auth_methods']) : null,
+            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
         );
     }
 
