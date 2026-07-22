@@ -2,36 +2,98 @@
 
 ## [9.0.0](https://github.com/workos/workos-php/compare/v8.1.0...v9.0.0) (2026-07-22)
 
-
-### ⚠ BREAKING CHANGES
-
-* **connect:** SDK surface change: Symbol "ConnectedAccountDto" was removed ([#422](https://github.com/workos/workos-php/issues/422))
-* **organization_domains:** SDK surface change: Symbol "DomainVerificationIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
-* **pipes:** SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed ([#422](https://github.com/workos/workos-php/issues/422))
-* **sso:** SDK surface change: Symbol "SSOIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
-* **admin_portal:** SDK surface change: Symbol "IntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
-* **pipes:** SDK surface change: Parameter type changed for "credentials" on "Pipes.createDataIntegration" ([#421](https://github.com/workos/workos-php/issues/421))
-* **widgets:** SDK surface change: Parameter type changed for "organizationId" on "Widgets.createToken" ([#421](https://github.com/workos/workos-php/issues/421))
-* **connect:** SDK surface change: `Connection.options` was renamed to `Connection.callbackEndpoint` ([#421](https://github.com/workos/workos-php/issues/421))
-
-### Features
-
-* **admin_portal:** SDK surface change: Symbol "IntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
-* **connect:** SDK surface change: `Connection.options` was renamed to `Connection.callbackEndpoint` ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
-* **connect:** SDK surface change: Symbol "ConnectedAccountDto" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
-* **generated:** AuditLogs (batch 56391ebd) ([#420](https://github.com/workos/workos-php/issues/420)) ([1b1a524](https://github.com/workos/workos-php/commit/1b1a5247135c7a7f1f43a94bb17c18422af80e2b))
-* **organization_domains:** SDK surface change: Symbol "DomainVerificationIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
-* **pipes:** SDK surface change: Parameter type changed for "credentials" on "Pipes.createDataIntegration" ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
-* **pipes:** SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
-* **sso:** SDK surface change: Symbol "SSOIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
-* **widgets:** SDK surface change: Parameter type changed for "organizationId" on "Widgets.createToken" ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
-
-
 ### Miscellaneous Chores
 
 * **deps:** update actions/cache action to v5.1.0 ([#419](https://github.com/workos/workos-php/issues/419)) ([d963179](https://github.com/workos/workos-php/commit/d9631791e928d45d1decf18ea24e250077482dae))
 * prevent oagen generated files from being PR'ed ([26d03a0](https://github.com/workos/workos-php/commit/26d03a018e021962a4ac29c58f816a88a78865ad))
 * scope SDK bot App token permissions ([293b5ef](https://github.com/workos/workos-php/commit/293b5ef84709f4bbe8048072bdaadd3f84abf514))
+
+* [#420](https://github.com/workos/workos-php/pull/420) fix(generated): regenerate from spec
+
+  **Features**
+  * **[audit_logs](https://workos.com/docs/reference/audit-logs)**:
+    * Added `expired` to `AuditLogExportState`
+
+* [#421](https://github.com/workos/workos-php/pull/421) feat(generated)!: regenerate from spec (3 changes)
+
+  **Features**
+  * **agents**:
+    * Added model `ClaimViewResponse`
+    * Added model `ClaimViewResponseOrganization`
+    * Added model `AgentAdminLinkClaimAttemptToExternalUserRequest`
+    * Added model `AgentAdminLinkClaimAttemptToExternalUserRequestUser`
+    * Added enum `ClaimViewResponseStatus`
+    * Added endpoint `PATCH /agents/claims/attempts`
+    * Added model `AgentRegistration`
+    * Added model `AgentCredentialValidation`
+    * Added model `AgentRegistrationAgentIdentity`
+    * Added model `AgentRegistrationClaim`
+    * Added model `AgentAdminValidateCredentialRequest`
+    * Added model `AgentRegistrationClaimClaimCompletion`
+    * Added enum `AgentRegistrationStatus`
+    * Added enum `AgentRegistrationKind`
+    * Added enum `AgentAdminValidateCredentialRequestType`
+    * Added service `Agents`
+  * **[api_keys](https://workos.com/docs/reference/authkit/api-keys)**:
+    * Added `agent_registration_id` to `ApiKeyValidationResponse`
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * Added enum `ApplicationsRegistrationTypes`
+    * Added parameter `Applications.list.registration_types`
+  * **[directory_sync](https://workos.com/docs/reference/directory-sync)**:
+    * Added parameter `DirectoryUsers.list.idp_id`
+    * Added parameter `DirectoryUsers.list.email`
+  * **[organizations](https://workos.com/docs/reference/organization)**:
+    * Added model `OrganizationAuthorizedConnectApplicationList`
+    * Added model `OrganizationAuthorizedConnectApplicationListData`
+    * Added model `OrganizationAuthorizedConnectApplicationListListMetadata`
+    * Added service `OrganizationsAuthorizedApplications`
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added model `DataIntegrationInstallation`
+    * Added `auth_methods` to `CreateDataIntegration`
+    * Added `api_key` to `CreateDataIntegration`
+    * Added `api_key` to `UpdateDataIntegration`
+    * Added `auth_methods` to `DataIntegration`
+    * Added `installation` to `DataIntegration`
+    * Added enum `CreateDataIntegrationAuthMethods`
+    * Added enum `DataIntegrationAuthMethods`
+    * Added model `DataIntegrationCredentialsResponse`
+    * Added model `DataIntegrationCredentialsResponseCredential`
+    * Added model `DataIntegrationsUpsertApiKeyRequest`
+    * Added model `DataIntegrationsVendCredentialsRequest`
+    * Added enum `DataIntegrationCredentialsResponseError`
+    * Added endpoint `PUT /data-integrations/{slug}/api-key`
+    * Added endpoint `POST /data-integrations/{slug}/credentials`
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Added parameter `SSO.authorize.prompt`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added `ssha256` to `CreateUserPasswordHashType`
+    * Added `ssha256` to `UpdateUserPasswordHashType`
+    * Added endpoint `GET /user_management/radar_challenges/{id}`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `agent.registration.revoked` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.revoked` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.deleted` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.deleted` to `UpdateWebhookEndpointEvents`
+    * Added `radar.challenge_created` to `CreateWebhookEndpointEvents`
+    * Added `radar.challenge_created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.expired` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.expired` to `UpdateWebhookEndpointEvents`
+  * **[widgets](https://workos.com/docs/reference/widgets)**:
+    * Made `WidgetSessionToken.organization_id` optional
+
+* [#422](https://github.com/workos/workos-php/pull/422) feat(generated)!: regenerate from spec (5 changes)
+
+  **⚠️ Breaking**
+  * **[admin_portal](https://workos.com/docs/reference/admin-portal)**:
+    * SDK surface change: Symbol "IntentOptions" was removed
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * SDK surface change: Symbol "ConnectedAccountDto" was removed
+  * **[organization_domains](https://workos.com/docs/reference/domain-verification)**:
+    * SDK surface change: Symbol "DomainVerificationIntentOptions" was removed
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * SDK surface change: Symbol "SSOIntentOptions" was removed
 
 ## [8.1.0](https://github.com/workos/workos-php/compare/v8.0.0...v8.1.0) (2026-07-06)
 
