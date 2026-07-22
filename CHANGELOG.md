@@ -1,5 +1,38 @@
 # Changelog
 
+## [9.0.0](https://github.com/workos/workos-php/compare/v8.1.0...v9.0.0) (2026-07-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **connect:** SDK surface change: Symbol "ConnectedAccountDto" was removed ([#422](https://github.com/workos/workos-php/issues/422))
+* **organization_domains:** SDK surface change: Symbol "DomainVerificationIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
+* **pipes:** SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed ([#422](https://github.com/workos/workos-php/issues/422))
+* **sso:** SDK surface change: Symbol "SSOIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
+* **admin_portal:** SDK surface change: Symbol "IntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422))
+* **pipes:** SDK surface change: Parameter type changed for "credentials" on "Pipes.createDataIntegration" ([#421](https://github.com/workos/workos-php/issues/421))
+* **widgets:** SDK surface change: Parameter type changed for "organizationId" on "Widgets.createToken" ([#421](https://github.com/workos/workos-php/issues/421))
+* **connect:** SDK surface change: `Connection.options` was renamed to `Connection.callbackEndpoint` ([#421](https://github.com/workos/workos-php/issues/421))
+
+### Features
+
+* **admin_portal:** SDK surface change: Symbol "IntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
+* **connect:** SDK surface change: `Connection.options` was renamed to `Connection.callbackEndpoint` ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
+* **connect:** SDK surface change: Symbol "ConnectedAccountDto" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
+* **generated:** AuditLogs (batch 56391ebd) ([#420](https://github.com/workos/workos-php/issues/420)) ([1b1a524](https://github.com/workos/workos-php/commit/1b1a5247135c7a7f1f43a94bb17c18422af80e2b))
+* **organization_domains:** SDK surface change: Symbol "DomainVerificationIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
+* **pipes:** SDK surface change: Parameter type changed for "credentials" on "Pipes.createDataIntegration" ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
+* **pipes:** SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
+* **sso:** SDK surface change: Symbol "SSOIntentOptions" was removed ([#422](https://github.com/workos/workos-php/issues/422)) ([94eddd5](https://github.com/workos/workos-php/commit/94eddd5d405cb2ab34237756d86d14b781e16307))
+* **widgets:** SDK surface change: Parameter type changed for "organizationId" on "Widgets.createToken" ([#421](https://github.com/workos/workos-php/issues/421)) ([b28f1d4](https://github.com/workos/workos-php/commit/b28f1d4467f1a626da99078fd4da5bf3ccbcd405))
+
+
+### Miscellaneous Chores
+
+* **deps:** update actions/cache action to v5.1.0 ([#419](https://github.com/workos/workos-php/issues/419)) ([d963179](https://github.com/workos/workos-php/commit/d9631791e928d45d1decf18ea24e250077482dae))
+* prevent oagen generated files from being PR'ed ([26d03a0](https://github.com/workos/workos-php/commit/26d03a018e021962a4ac29c58f816a88a78865ad))
+* scope SDK bot App token permissions ([293b5ef](https://github.com/workos/workos-php/commit/293b5ef84709f4bbe8048072bdaadd3f84abf514))
+
 ## [8.1.0](https://github.com/workos/workos-php/compare/v8.0.0...v8.1.0) (2026-07-06)
 
 * [#416](https://github.com/workos/workos-php/pull/416) fix(generated): regenerate from spec
