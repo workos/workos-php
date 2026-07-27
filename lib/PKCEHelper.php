@@ -75,7 +75,7 @@ class PKCEHelper
      * Generate an AuthKit authorization URL with auto-generated PKCE parameters and state.
      *
      * @param string $redirectUri The redirect URI.
-     * @param string $clientId The WorkOS client ID.
+     * @param string|null $clientId The WorkOS client ID. Defaults to the client's configured client ID.
      * @param string|null $state Optional state parameter. Auto-generated if null.
      * @param string|null $provider Optional auth provider.
      * @param string|null $connectionId Optional connection ID.
@@ -87,7 +87,7 @@ class PKCEHelper
      */
     public function getAuthKitAuthorizationUrl(
         string $redirectUri,
-        string $clientId,
+        ?string $clientId = null,
         ?string $state = null,
         ?string $provider = null,
         ?string $connectionId = null,
@@ -96,6 +96,7 @@ class PKCEHelper
         ?string $loginHint = null,
         ?string $screenHint = null,
     ): array {
+        $clientId ??= $this->client->requireClientId();
         $pkce = self::generate();
         $state ??= bin2hex(random_bytes(16));
 
@@ -134,14 +135,16 @@ class PKCEHelper
      *
      * @param string $code The authorization code.
      * @param string $codeVerifier The PKCE code verifier.
-     * @param string $clientId The WorkOS client ID.
+     * @param string|null $clientId The WorkOS client ID. Defaults to the client's configured client ID.
      * @return array The authentication response.
      */
     public function authKitCodeExchange(
         string $code,
         string $codeVerifier,
-        string $clientId,
+        ?string $clientId = null,
     ): array {
+        $clientId ??= $this->client->requireClientId();
+
         return $this->client->request(
             method: 'POST',
             path: 'user_management/authenticate',
@@ -160,7 +163,7 @@ class PKCEHelper
      * Generate an SSO authorization URL with auto-generated PKCE parameters and state.
      *
      * @param string $redirectUri The redirect URI.
-     * @param string $clientId The WorkOS client ID.
+     * @param string|null $clientId The WorkOS client ID. Defaults to the client's configured client ID.
      * @param string|null $state Optional state parameter. Auto-generated if null.
      * @param string|null $domain Optional SSO domain.
      * @param string|null $provider Optional SSO provider.
@@ -172,7 +175,7 @@ class PKCEHelper
      */
     public function getSsoAuthorizationUrl(
         string $redirectUri,
-        string $clientId,
+        ?string $clientId = null,
         ?string $state = null,
         ?string $domain = null,
         ?string $provider = null,
@@ -181,6 +184,7 @@ class PKCEHelper
         ?string $domainHint = null,
         ?string $loginHint = null,
     ): array {
+        $clientId ??= $this->client->requireClientId();
         $pkce = self::generate();
         $state ??= bin2hex(random_bytes(16));
 
@@ -219,14 +223,16 @@ class PKCEHelper
      *
      * @param string $code The authorization code.
      * @param string $codeVerifier The PKCE code verifier.
-     * @param string $clientId The WorkOS client ID.
+     * @param string|null $clientId The WorkOS client ID. Defaults to the client's configured client ID.
      * @return array The SSO token response.
      */
     public function ssoCodeExchange(
         string $code,
         string $codeVerifier,
-        string $clientId,
+        ?string $clientId = null,
     ): array {
+        $clientId ??= $this->client->requireClientId();
+
         return $this->client->request(
             method: 'POST',
             path: 'sso/token',
