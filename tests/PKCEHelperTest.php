@@ -86,6 +86,41 @@ class PKCEHelperTest extends TestCase
         $this->assertSame('S256', $query['code_challenge_method']);
     }
 
+    public function testGetAuthKitAuthorizationUrlFallsBackToConfiguredClientId(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => ['url' => 'https://auth.workos.com/...']]]);
+        $client->pkce()->getAuthKitAuthorizationUrl(
+            redirectUri: 'https://example.com/callback',
+        );
+        $query = [];
+        parse_str($this->getLastRequest()->getUri()->getQuery(), $query);
+        $this->assertSame('test_client_id', $query['client_id']);
+    }
+
+    public function testGetAuthKitAuthorizationUrlExplicitClientIdWins(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => ['url' => 'https://auth.workos.com/...']]]);
+        $client->pkce()->getAuthKitAuthorizationUrl(
+            redirectUri: 'https://example.com/callback',
+            clientId: 'client_override',
+        );
+        $query = [];
+        parse_str($this->getLastRequest()->getUri()->getQuery(), $query);
+        $this->assertSame('client_override', $query['client_id']);
+    }
+
+    public function testGetAuthKitAuthorizationUrlThrowsWithoutAnyClientId(): void
+    {
+        $client = $this->createMockClient(
+            [['status' => 200, 'body' => []]],
+            clientId: null,
+        );
+        $this->expectException(\WorkOS\Exception\ConfigurationException::class);
+        $client->pkce()->getAuthKitAuthorizationUrl(
+            redirectUri: 'https://example.com/callback',
+        );
+    }
+
     // -- H11: AuthKit PKCE code exchange --
 
     public function testAuthKitCodeExchange(): void
@@ -103,6 +138,17 @@ class PKCEHelperTest extends TestCase
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('authorization_code', $body['grant_type']);
         $this->assertSame('verifier_123', $body['code_verifier']);
+    }
+
+    public function testAuthKitCodeExchangeFallsBackToConfiguredClientId(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => ['access_token' => 'at_123']]]);
+        $client->pkce()->authKitCodeExchange(
+            code: 'auth_code_123',
+            codeVerifier: 'verifier_123',
+        );
+        $body = json_decode((string) $this->getLastRequest()->getBody(), true);
+        $this->assertSame('test_client_id', $body['client_id']);
     }
 
     // -- H15: SSO PKCE authorization URL --
