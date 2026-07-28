@@ -6,9 +6,8 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum DataIntegrationAuthMethods: string
+enum CreateDataIntegrationAuthMethods: string
 {
     case OAuth = 'oauth';
     case ApiKey = 'api_key';
-    case ClientCredentials = 'client_credentials';
 }

@@ -198,6 +198,7 @@
     "lib/Resource/CreateAuthorizationResource.php",
     "lib/Resource/CreateCORSOrigin.php",
     "lib/Resource/CreateDataIntegration.php",
+    "lib/Resource/CreateDataIntegrationAuthMethods.php",
     "lib/Resource/CreateDataKeyRequest.php",
     "lib/Resource/CreateDataKeyResponse.php",
     "lib/Resource/CreateGroup.php",

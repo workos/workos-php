@@ -39,7 +39,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
         /** The user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` if the user has not connected. */
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
         /**
-         * The authentication methods supported by this provider (`oauth`, `api_key`, or both). Defaults to `["oauth"]` if absent.
+         * The authentication methods supported by this provider (`oauth`, `api_key`, `client_credentials`, or a combination). Defaults to `["oauth"]` if absent.
          * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>|null
          */
         public ?array $authMethods = null,

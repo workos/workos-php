@@ -61,7 +61,8 @@ class Pipes
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled. Defaults to `false`.
      * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Defaults to the provider's configured scopes when omitted.
-     * @param array<\WorkOS\Resource\DataIntegrationAuthMethods>|null $authMethods How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
+     * @param array<\WorkOS\Resource\CreateDataIntegrationAuthMethods>|null $authMethods How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
+     * @param array<string, string>|null $config Provider-specific config values (e.g. a Snowflake `account_identifier`), keyed by the config field. Only fields the built-in provider declares are accepted.
      * @param \WorkOS\Resource\DataIntegrationCredentialsInput|null $credentials The OAuth credentials to configure for the Data Integration. Required for OAuth integrations; omit when `auth_methods` is `["api_key"]`.
      * @param \WorkOS\Resource\ApiKeyInstallation|null $apiKey An optional API key to install for the first tenant on an `api_key` integration. Omit to declare a keyless integration; tenants can be added later via the per-installation API key path.
      * @param \WorkOS\Resource\CustomProviderDefinition|null $customProvider The OAuth definition for a custom provider. Supply this to define a custom provider; omit it to create an integration for a built-in provider.
@@ -74,6 +75,7 @@ class Pipes
         ?bool $enabled = null,
         ?array $scopes = null,
         ?array $authMethods = null,
+        ?array $config = null,
         ?\WorkOS\Resource\DataIntegrationCredentialsInput $credentials = null,
         ?\WorkOS\Resource\ApiKeyInstallation $apiKey = null,
         ?\WorkOS\Resource\CustomProviderDefinition $customProvider = null,
@@ -85,6 +87,7 @@ class Pipes
             'enabled' => $enabled,
             'scopes' => $scopes,
             'auth_methods' => $authMethods,
+            'config' => $config,
             'credentials' => $credentials,
             'api_key' => $apiKey,
             'custom_provider' => $customProvider,
@@ -218,6 +221,7 @@ class Pipes
      * @param string $userId The ID of the user to authorize.
      * @param string|null $organizationId An organization ID to scope the authorization to a specific organization.
      * @param string|null $returnTo The URL to redirect the user to after authorization.
+     * @param array<string, string>|null $config Connect-time config values for the provider-declared `installation`-scope fields (e.g. a Zendesk `subdomain`), keyed by the config field. Only fields the provider declares may be supplied, and required fields must be provided unless already pinned on the integration.
      * @return \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -226,12 +230,14 @@ class Pipes
         string $userId,
         ?string $organizationId = null,
         ?string $returnTo = null,
+        ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
             'return_to' => $returnTo,
+            'config' => $config,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',

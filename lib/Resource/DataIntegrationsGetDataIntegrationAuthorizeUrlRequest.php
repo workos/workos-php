@@ -17,6 +17,11 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
         public ?string $organizationId = null,
         /** The URL to redirect the user to after authorization. */
         public ?string $returnTo = null,
+        /**
+         * Connect-time config values for the provider-declared `installation`-scope fields (e.g. a Zendesk `subdomain`), keyed by the config field. Only fields the provider declares may be supplied, and required fields must be provided unless already pinned on the integration.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
     ) {
     }
 
@@ -26,6 +31,7 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             userId: $data['user_id'],
             organizationId: $data['organization_id'] ?? null,
             returnTo: $data['return_to'] ?? null,
+            config: $data['config'] ?? null,
         );
     }
 
@@ -35,6 +41,7 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
             'return_to' => $this->returnTo,
+            'config' => $this->config,
         ];
     }
 }
