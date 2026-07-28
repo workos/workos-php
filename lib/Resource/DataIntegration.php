@@ -41,6 +41,11 @@ readonly class DataIntegration implements \JsonSerializable
         public DataIntegrationCredential $credentials,
         /** The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses. */
         public ?DataIntegrationInstallation $installation,
+        /**
+         * Provider-specific config values set on the Data Integration (e.g. a Snowflake `account_identifier`), keyed by config field. Only fields the provider declares are accepted.
+         * @var array<string, string>
+         */
+        public array $config,
         /** The OAuth definition when this is a custom provider; `null` for built-in providers. */
         public ?DataIntegrationCustomProvider $customProvider,
         /** An ISO 8601 timestamp. */
@@ -65,6 +70,7 @@ readonly class DataIntegration implements \JsonSerializable
             authMethods: array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']),
             credentials: DataIntegrationCredential::fromArray($data['credentials']),
             installation: isset($data['installation']) ? DataIntegrationInstallation::fromArray($data['installation']) : null,
+            config: $data['config'],
             customProvider: isset($data['custom_provider']) ? DataIntegrationCustomProvider::fromArray($data['custom_provider']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
@@ -86,6 +92,7 @@ readonly class DataIntegration implements \JsonSerializable
             'auth_methods' => array_map(fn ($item) => $item->value, $this->authMethods),
             'credentials' => $this->credentials->toArray(),
             'installation' => $this->installation?->toArray(),
+            'config' => $this->config,
             'custom_provider' => $this->customProvider?->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),

@@ -24,9 +24,14 @@ readonly class CreateDataIntegration implements \JsonSerializable
         public ?array $scopes = null,
         /**
          * How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
-         * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>|null
+         * @var array<\WorkOS\Resource\CreateDataIntegrationAuthMethods>|null
          */
         public ?array $authMethods = null,
+        /**
+         * Provider-specific config values (e.g. a Snowflake `account_identifier`), keyed by the config field. Only fields the built-in provider declares are accepted.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
         /** The OAuth credentials to configure for the Data Integration. Required for OAuth integrations; omit when `auth_methods` is `["api_key"]`. */
         public ?DataIntegrationCredentialsInput $credentials = null,
         /** An optional API key to install for the first tenant on an `api_key` integration. Omit to declare a keyless integration; tenants can be added later via the per-installation API key path. */
@@ -43,7 +48,8 @@ readonly class CreateDataIntegration implements \JsonSerializable
             description: $data['description'] ?? null,
             enabled: $data['enabled'] ?? null,
             scopes: $data['scopes'] ?? null,
-            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
+            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => CreateDataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
+            config: $data['config'] ?? null,
             credentials: isset($data['credentials']) ? DataIntegrationCredentialsInput::fromArray($data['credentials']) : null,
             apiKey: isset($data['api_key']) ? ApiKeyInstallation::fromArray($data['api_key']) : null,
             customProvider: isset($data['custom_provider']) ? CustomProviderDefinition::fromArray($data['custom_provider']) : null,
@@ -58,6 +64,7 @@ readonly class CreateDataIntegration implements \JsonSerializable
             'enabled' => $this->enabled,
             'scopes' => $this->scopes,
             'auth_methods' => $this->authMethods !== null ? array_map(fn ($item) => $item->value, $this->authMethods) : null,
+            'config' => $this->config,
             'credentials' => $this->credentials?->toArray(),
             'api_key' => $this->apiKey?->toArray(),
             'custom_provider' => $this->customProvider?->toArray(),

@@ -40,7 +40,7 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
          * @deprecated
          */
         public ?string $userlandUserId,
-        /** The authentication method used for this connection (`oauth` or `api_key`). Defaults to `oauth` if absent. */
+        /** The authentication method used for this connection (`oauth`, `api_key`, or `client_credentials`). Defaults to `oauth` if absent. */
         public ?DataIntegrationAuthMethods $authMethod = null,
         /** The last four characters of the API key, or `null` for OAuth connections. */
         public ?string $apiKeyLast4 = null,

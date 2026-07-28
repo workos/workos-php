@@ -28,6 +28,11 @@ readonly class DataIntegrationConfigurationResponse implements \JsonSerializable
          * @var array<string>|null
          */
         public ?array $scopes,
+        /**
+         * The provider-specific config values in effect for this organization, keyed by config field. Reflects the organization override for organization-credential providers, otherwise the provider root. Empty when none are configured.
+         * @var array<string, string>
+         */
+        public array $config,
         /** The timestamp when the configuration was created. */
         public string $createdAt,
         /** The timestamp when the configuration was last updated. */
@@ -46,6 +51,7 @@ readonly class DataIntegrationConfigurationResponse implements \JsonSerializable
             name: $data['name'],
             enabled: $data['enabled'],
             scopes: $data['scopes'] ?? null,
+            config: $data['config'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             credentials: isset($data['credentials']) ? DataIntegrationCredentials::fromArray($data['credentials']) : null,
@@ -62,6 +68,7 @@ readonly class DataIntegrationConfigurationResponse implements \JsonSerializable
             'name' => $this->name,
             'enabled' => $this->enabled,
             'scopes' => $this->scopes,
+            'config' => $this->config,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
             'credentials' => $this->credentials?->toArray(),
