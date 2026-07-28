@@ -37,8 +37,6 @@ readonly class Connection implements \JsonSerializable
         public \DateTimeImmutable $updatedAt,
         /** Unique identifier for the Organization in which the Connection resides. */
         public ?string $organizationId = null,
-        /** The immutable callback endpoint for this Connection. For SAML connections this is the ACS URL; for OIDC connections this is the redirect URI. */
-        public ?string $callbackEndpoint = null,
     ) {
     }
 
@@ -55,7 +53,6 @@ readonly class Connection implements \JsonSerializable
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             organizationId: $data['organization_id'] ?? null,
-            callbackEndpoint: $data['callback_endpoint'] ?? null,
         );
     }
 
@@ -72,7 +69,6 @@ readonly class Connection implements \JsonSerializable
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'organization_id' => $this->organizationId,
-            'callback_endpoint' => $this->callbackEndpoint,
         ];
     }
 }
