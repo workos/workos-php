@@ -1,5 +1,15 @@
 # Changelog
 
+## [9.1.0](https://github.com/workos/workos-php/compare/v9.0.0...v9.1.0) (2026-07-29)
+
+
+### Features
+
+* **generated:** Pipes, PipesProvider, UserManagement (batch 6c21f6dc) ([#425](https://github.com/workos/workos-php/issues/425)) ([e8855cb](https://github.com/workos/workos-php/commit/e8855cb5a3b7adb14a7d960311ba45d6bc714847))
+* **generated:** SSO (batch 16283437) ([#426](https://github.com/workos/workos-php/issues/426)) ([870e754](https://github.com/workos/workos-php/commit/870e754949f07205389ef480d34a861513f3debb))
+* **pkce:** Default clientId to the client's configured client ID ([#423](https://github.com/workos/workos-php/issues/423)) ([f65713b](https://github.com/workos/workos-php/commit/f65713b054f92d096ae3962c1a2e0bebbde64c7d))
+* support for guzzle 8 ([#427](https://github.com/workos/workos-php/issues/427)) ([81c2384](https://github.com/workos/workos-php/commit/81c2384c544e2329ab5fb098dbf43f285488cb1e))
+
 ## [9.0.0](https://github.com/workos/workos-php/compare/v8.1.0...v9.0.0) (2026-07-22)
 
 ### Miscellaneous Chores
