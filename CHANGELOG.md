@@ -1,5 +1,37 @@
 # Changelog
 
+## [9.1.0](https://github.com/workos/workos-php/compare/v9.0.0...v9.1.0) (2026-07-29)
+
+### Features
+
+* **pkce:** Default clientId to the client's configured client ID ([#423](https://github.com/workos/workos-php/issues/423)) ([f65713b](https://github.com/workos/workos-php/commit/f65713b054f92d096ae3962c1a2e0bebbde64c7d))
+* support for guzzle 8 ([#427](https://github.com/workos/workos-php/issues/427)) ([81c2384](https://github.com/workos/workos-php/commit/81c2384c544e2329ab5fb098dbf43f285488cb1e))
+
+* [#425](https://github.com/workos/workos-php/pull/425) fix(generated): regenerate from spec
+
+  **Features**
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added `config` to `DataIntegrationsGetDataIntegrationAuthorizeUrlRequest`
+    * Added `client_credentials` to `DataIntegrationAuthMethods`
+    * Added `client_credentials` to `DataIntegrationsListResponseDataAuthMethods`
+    * Added `client_credentials` to `DataIntegrationsListResponseDataConnectedAccountAuthMethod`
+    * Added `config` to Pipes models
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * Added `client_credentials` to `ConnectedAccountAuthMethod`
+
+  **Fixes**
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Changed errors for endpoint `POST /user_management/invitations`
+    * Changed errors for endpoint `POST /user_management/invitations/{id}/resend`
+    * Changed errors for endpoint `POST /user_management/magic_auth`
+    * Changed errors for endpoint `POST /user_management/authenticate`
+
+* [#426](https://github.com/workos/workos-php/pull/426) fix(generated): regenerate from spec
+
+  **Fixes**
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Removed `callback_endpoint` from `Connection`
+
 ## [9.0.0](https://github.com/workos/workos-php/compare/v8.1.0...v9.0.0) (2026-07-22)
 
 ### Miscellaneous Chores
