@@ -30,6 +30,8 @@ enum ConnectionDeletedDataConnectionType: string
     case GoogleOAuth = 'GoogleOAuth';
     case GoogleOidc = 'GoogleOIDC';
     case GoogleSAML = 'GoogleSAML';
+    case GrokOAuth = 'GrokOAuth';
+    case XoAuth = 'XOAuth';
     case IntuitOAuth = 'IntuitOAuth';
     case JumpCloudSAML = 'JumpCloudSAML';
     case KeycloakSAML = 'KeycloakSAML';

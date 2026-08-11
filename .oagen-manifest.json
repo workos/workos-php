@@ -37,6 +37,8 @@
     "lib/Resource/AgentRegistrationKind.php",
     "lib/Resource/AgentRegistrationOrganizationSwitched.php",
     "lib/Resource/AgentRegistrationOrganizationSwitchedData.php",
+    "lib/Resource/AgentRegistrationRefreshed.php",
+    "lib/Resource/AgentRegistrationRefreshedData.php",
     "lib/Resource/AgentRegistrationRevoked.php",
     "lib/Resource/AgentRegistrationRevokedData.php",
     "lib/Resource/AgentRegistrationStatus.php",
@@ -221,6 +223,7 @@
     "lib/Resource/CreateUserInviteOptionsLocale.php",
     "lib/Resource/CreateUserOrganizationMembership.php",
     "lib/Resource/CreateUserPasswordHashType.php",
+    "lib/Resource/CreateUserPasswordSaltPosition.php",
     "lib/Resource/CreateWebhookEndpoint.php",
     "lib/Resource/CreateWebhookEndpointEvents.php",
     "lib/Resource/CustomProviderDefinition.php",
@@ -250,6 +253,7 @@
     "lib/Resource/DataIntegrationsListResponseDataConnectedAccount.php",
     "lib/Resource/DataIntegrationsListResponseDataOwnership.php",
     "lib/Resource/DataIntegrationsUpsertApiKeyRequest.php",
+    "lib/Resource/DataIntegrationsUpsertClientCredentialsRequest.php",
     "lib/Resource/DataIntegrationsVendCredentialsRequest.php",
     "lib/Resource/DecryptRequest.php",
     "lib/Resource/DecryptResponse.php",
@@ -666,6 +670,8 @@
     "tests/Fixtures/agent_registration_expired_data.json",
     "tests/Fixtures/agent_registration_organization_switched.json",
     "tests/Fixtures/agent_registration_organization_switched_data.json",
+    "tests/Fixtures/agent_registration_refreshed.json",
+    "tests/Fixtures/agent_registration_refreshed_data.json",
     "tests/Fixtures/agent_registration_revoked.json",
     "tests/Fixtures/agent_registration_revoked_data.json",
     "tests/Fixtures/api_key.json",
@@ -848,6 +854,7 @@
     "tests/Fixtures/data_integrations_list_response_data.json",
     "tests/Fixtures/data_integrations_list_response_data_connected_account.json",
     "tests/Fixtures/data_integrations_upsert_api_key_request.json",
+    "tests/Fixtures/data_integrations_upsert_client_credentials_request.json",
     "tests/Fixtures/data_integrations_vend_credentials_request.json",
     "tests/Fixtures/decrypt_request.json",
     "tests/Fixtures/decrypt_response.json",
@@ -2057,6 +2064,10 @@
     "GET /audit_logs/exports/{auditLogExportId}": {
       "sdkMethod": "getExport",
       "service": "auditLogs"
+    },
+    "PUT /data-integrations/{slug}/client-credentials": {
+      "sdkMethod": "updateDataIntegrationClientCredentials",
+      "service": "pipes"
     }
   }
 }

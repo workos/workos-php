@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-/** The credentials configured for the Data Integration. */
 readonly class DataIntegrationCredential implements \JsonSerializable
 {
     use JsonSerializableTrait;

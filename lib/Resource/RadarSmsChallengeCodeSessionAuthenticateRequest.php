@@ -18,12 +18,12 @@ readonly class RadarSmsChallengeCodeSessionAuthenticateRequest implements \JsonS
         public string $grantType,
         /** The one-time code from the Radar SMS challenge. */
         public string $code,
-        /** The ID of the Radar SMS verification being confirmed. */
-        public string $verificationId,
-        /** The phone number the Radar SMS challenge was sent to. */
-        public string $phoneNumber,
         /** The pending authentication token from a previous authentication attempt. */
         public string $pendingAuthenticationToken,
+        /** The ID of the Radar SMS verification being confirmed. Required for sign-up challenges; omitted for sign-in challenges, where the verification is resolved server-side. */
+        public ?string $verificationId = null,
+        /** The phone number the Radar SMS challenge was sent to. Required for sign-up challenges; omitted for sign-in challenges, where the phone number on file is resolved server-side. */
+        public ?string $phoneNumber = null,
         /** The IP address of the user's request. */
         public ?string $ipAddress = null,
         /** A unique identifier for the device. */
@@ -40,9 +40,9 @@ readonly class RadarSmsChallengeCodeSessionAuthenticateRequest implements \JsonS
             clientSecret: $data['client_secret'],
             grantType: $data['grant_type'] ?? 'urn:workos:oauth:grant-type:radar-sms-challenge:code',
             code: $data['code'],
-            verificationId: $data['verification_id'],
-            phoneNumber: $data['phone_number'],
             pendingAuthenticationToken: $data['pending_authentication_token'],
+            verificationId: $data['verification_id'] ?? null,
+            phoneNumber: $data['phone_number'] ?? null,
             ipAddress: $data['ip_address'] ?? null,
             deviceId: $data['device_id'] ?? null,
             userAgent: $data['user_agent'] ?? null,
@@ -56,9 +56,9 @@ readonly class RadarSmsChallengeCodeSessionAuthenticateRequest implements \JsonS
             'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType,
             'code' => $this->code,
+            'pending_authentication_token' => $this->pendingAuthenticationToken,
             'verification_id' => $this->verificationId,
             'phone_number' => $this->phoneNumber,
-            'pending_authentication_token' => $this->pendingAuthenticationToken,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,

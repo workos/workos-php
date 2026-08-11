@@ -19,6 +19,8 @@ enum AuthenticateResponseAuthenticationMethod: string
     case GitHubOAuth = 'GitHubOAuth';
     case GitLabOAuth = 'GitLabOAuth';
     case GoogleOAuth = 'GoogleOAuth';
+    case GrokOAuth = 'GrokOAuth';
+    case XoAuth = 'XOAuth';
     case IntuitOAuth = 'IntuitOAuth';
     case LinkedInOAuth = 'LinkedInOAuth';
     case MicrosoftOAuth = 'MicrosoftOAuth';
