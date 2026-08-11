@@ -1,5 +1,13 @@
 # Changelog
 
+## [9.2.0](https://github.com/workos/workos-php/compare/v9.1.0...v9.2.0) (2026-08-11)
+
+
+### Features
+
+* **events:** Change required status for parameter `Events.list.events` ([#428](https://github.com/workos/workos-php/issues/428)) ([d7cb2d5](https://github.com/workos/workos-php/commit/d7cb2d54dc2132ae18cd94420d39ea0a8557a802))
+* **user_management:** SDK surface change: Parameter type changed for "verificationId" on "UserManagement.authenticateWithRadarSmsChallenge" ([#428](https://github.com/workos/workos-php/issues/428)) ([d7cb2d5](https://github.com/workos/workos-php/commit/d7cb2d54dc2132ae18cd94420d39ea0a8557a802))
+
 ## [9.1.0](https://github.com/workos/workos-php/compare/v9.0.0...v9.1.0) (2026-07-29)
 
 ### Features
