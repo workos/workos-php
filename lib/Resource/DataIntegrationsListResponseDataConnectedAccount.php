@@ -44,6 +44,15 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
         public ?DataIntegrationAuthMethods $authMethod = null,
         /** The last four characters of the API key, or `null` for OAuth connections. */
         public ?string $apiKeyLast4 = null,
+        /** The client ID supplied for this connection. Only present when `auth_method` is `client_credentials`. */
+        public ?string $clientId = null,
+        /** The last four characters of the client secret supplied for this connection, or `null` when it can't be read. Only present when `auth_method` is `client_credentials`. */
+        public ?string $clientSecretLast4 = null,
+        /**
+         * The connection-level configuration values stored for this connection — the fields the provider declares at `installation` scope, excluding any it declares as secret. Only present when `auth_method` is `client_credentials`.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
     ) {
     }
 
@@ -61,6 +70,9 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
             userlandUserId: $data['userlandUserId'] ?? null,
             authMethod: isset($data['auth_method']) ? DataIntegrationAuthMethods::from($data['auth_method']) : null,
             apiKeyLast4: $data['api_key_last_4'] ?? null,
+            clientId: $data['client_id'] ?? null,
+            clientSecretLast4: $data['client_secret_last_4'] ?? null,
+            config: $data['config'] ?? null,
         );
     }
 
@@ -78,6 +90,9 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
             'userlandUserId' => $this->userlandUserId,
             'auth_method' => $this->authMethod?->value,
             'api_key_last_4' => $this->apiKeyLast4,
+            'client_id' => $this->clientId,
+            'client_secret_last_4' => $this->clientSecretLast4,
+            'config' => $this->config,
         ];
     }
 }

@@ -25,6 +25,8 @@ readonly class WaitlistUser implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** The unique ID of the Waitlist that the Waitlist User joined. */
+        public ?string $waitlistId = null,
     ) {
     }
 
@@ -38,6 +40,7 @@ readonly class WaitlistUser implements \JsonSerializable
             approvedAt: isset($data['approved_at']) ? new \DateTimeImmutable($data['approved_at']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            waitlistId: $data['waitlist_id'] ?? null,
         );
     }
 
@@ -51,6 +54,7 @@ readonly class WaitlistUser implements \JsonSerializable
             'approved_at' => $this->approvedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'waitlist_id' => $this->waitlistId,
         ];
     }
 }
