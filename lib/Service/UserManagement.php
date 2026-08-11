@@ -418,8 +418,8 @@ class UserManagement
 
     /**
      * @param string $code
-     * @param string $verificationId
-     * @param string $phoneNumber
+     * @param string|null $verificationId
+     * @param string|null $phoneNumber
      * @param string $pendingAuthenticationToken
      * @param string|null $ipAddress
      * @param string|null $deviceId
@@ -429,9 +429,9 @@ class UserManagement
      */
     public function authenticateWithRadarSmsChallenge(
         string $code,
-        string $verificationId,
-        string $phoneNumber,
         string $pendingAuthenticationToken,
+        ?string $verificationId = null,
+        ?string $phoneNumber = null,
         ?string $ipAddress = null,
         ?string $deviceId = null,
         ?string $userAgent = null,
@@ -884,6 +884,9 @@ class UserManagement
         } elseif ($password instanceof PasswordHashed) {
             $body['password_hash'] = $password->hash;
             $body['password_hash_type'] = $password->hashType;
+            if ($password->saltPosition !== null) {
+                $body['password_salt_position'] = $password->saltPosition;
+            }
         }
         $response = $this->client->request(
             method: 'POST',
@@ -979,6 +982,9 @@ class UserManagement
         } elseif ($password instanceof PasswordHashed) {
             $body['password_hash'] = $password->hash;
             $body['password_hash_type'] = $password->hashType;
+            if ($password->saltPosition !== null) {
+                $body['password_salt_position'] = $password->saltPosition;
+            }
         }
         $response = $this->client->request(
             method: 'PUT',
