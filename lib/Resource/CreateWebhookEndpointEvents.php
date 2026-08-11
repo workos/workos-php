@@ -13,6 +13,7 @@ enum CreateWebhookEndpointEvents: string
     case AgentRegistrationClaimCompleted = 'agent.registration.claim.completed';
     case AgentRegistrationCredentialIssued = 'agent.registration.credential.issued';
     case AgentRegistrationDeleted = 'agent.registration.deleted';
+    case AgentRegistrationRefreshed = 'agent.registration.refreshed';
     case AgentRegistrationExpired = 'agent.registration.expired';
     case AgentRegistrationOrganizationSwitched = 'agent.registration.organization.switched';
     case AgentRegistrationRevoked = 'agent.registration.revoked';

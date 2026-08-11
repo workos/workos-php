@@ -13,10 +13,10 @@ readonly class CustomProviderDefinition implements \JsonSerializable
     public function __construct(
         /** A descriptive name for the custom provider. */
         public string $name,
-        /** The provider's OAuth authorization endpoint. */
-        public string $authorizationUrl,
-        /** The provider's OAuth token endpoint. */
-        public string $tokenUrl,
+        /** The provider's OAuth authorization endpoint. Required for OAuth providers; omit for `api_key` providers. */
+        public ?string $authorizationUrl = null,
+        /** The provider's OAuth token endpoint. Required for OAuth providers; omit for `api_key` providers. */
+        public ?string $tokenUrl = null,
         /** The endpoint used to refresh tokens, if different from the token endpoint. */
         public ?string $refreshTokenUrl = null,
         /** Whether PKCE is used during the authorization code flow. Defaults to `true`. */
@@ -43,8 +43,8 @@ readonly class CustomProviderDefinition implements \JsonSerializable
     {
         return new self(
             name: $data['name'],
-            authorizationUrl: $data['authorization_url'],
-            tokenUrl: $data['token_url'],
+            authorizationUrl: $data['authorization_url'] ?? null,
+            tokenUrl: $data['token_url'] ?? null,
             refreshTokenUrl: $data['refresh_token_url'] ?? null,
             pkceEnabled: $data['pkce_enabled'] ?? null,
             requestScopeSeparator: $data['request_scope_separator'] ?? null,

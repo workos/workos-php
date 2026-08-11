@@ -56,13 +56,13 @@ class Pipes
     /**
      * Create a data integration
      *
-     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials or `organization` to have each organization supply its own. Set `auth_methods` to `["api_key"]` to create an API key integration; you may optionally supply an `api_key` block to install a first tenant in the same call. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
+     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials or `organization` to have each organization supply its own. Set `auth_methods` to `["api_key"]` to create an API key integration; you may optionally supply an `api_key` block to install a first tenant in the same call. Set `auth_methods` to `["client_credentials"]` to create a client-credentials integration; client credentials are installed per-tenant afterwards. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
      * @param string $provider The provider to create a Data Integration for. For a built-in provider use its slug (e.g. `github`, `slack`). For a custom provider, this is the new provider slug and `custom_provider` must be supplied. A custom provider slug cannot shadow an existing global provider slug.
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled. Defaults to `false`.
      * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Defaults to the provider's configured scopes when omitted.
-     * @param array<\WorkOS\Resource\CreateDataIntegrationAuthMethods>|null $authMethods How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
-     * @param array<string, string>|null $config Provider-specific config values (e.g. a Snowflake `account_identifier`), keyed by the config field. Only fields the built-in provider declares are accepted.
+     * @param array<\WorkOS\Resource\DataIntegrationAuthMethods>|null $authMethods How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request). Use `["client_credentials"]` to declare a client-credentials integration; `credentials` is likewise not required and client credentials are supplied per-tenant.
+     * @param array<string, string>|null $config Provider-specific config values (e.g. a Snowflake `account`), keyed by the config field. Only fields the built-in provider declares are accepted.
      * @param \WorkOS\Resource\DataIntegrationCredentialsInput|null $credentials The OAuth credentials to configure for the Data Integration. Required for OAuth integrations; omit when `auth_methods` is `["api_key"]`.
      * @param \WorkOS\Resource\ApiKeyInstallation|null $apiKey An optional API key to install for the first tenant on an `api_key` integration. Omit to declare a keyless integration; tenants can be added later via the per-installation API key path.
      * @param \WorkOS\Resource\CustomProviderDefinition|null $customProvider The OAuth definition for a custom provider. Supply this to define a custom provider; omit it to create an integration for a built-in provider.
@@ -246,6 +246,44 @@ class Pipes
             options: $options,
         );
         return DataIntegrationAuthorizeUrlResponse::fromArray($response);
+    }
+
+    /**
+     * Upsert client credentials for a connected account
+     *
+     * Creates or updates a client-credentials-based installation for the specified integration and user. If an installation already exists, the stored client credentials are rotated to the new values.
+     * @param string $slug The identifier of the integration.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string $clientId The OAuth client ID to store for this integration.
+     * @param string $clientSecret The OAuth client secret to store for this integration.
+     * @param array<string, string>|null $config Provider-specific configuration values collected for this installation, keyed by the provider's config field descriptors.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegrationClientCredentials(
+        string $slug,
+        string $userId,
+        string $clientId,
+        string $clientSecret,
+        ?string $organizationId = null,
+        ?array $config = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = array_filter([
+            'user_id' => $userId,
+            'organization_id' => $organizationId,
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'config' => $config,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'data-integrations/' . rawurlencode($slug) . '/client-credentials',
+            body: $body,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
     }
 
     /**

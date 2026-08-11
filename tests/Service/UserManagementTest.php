@@ -714,7 +714,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->authenticateWithRadarSmsChallenge(code: 'test_value', verificationId: 'test_value', phoneNumber: 'test_value', pendingAuthenticationToken: 'test_value');
+        $result = $client->userManagement()->authenticateWithRadarSmsChallenge(code: 'test_value', pendingAuthenticationToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 

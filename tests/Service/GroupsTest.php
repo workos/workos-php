@@ -17,7 +17,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listOrganizationGroups('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->groups()->listOrganizationGroups('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -27,6 +27,7 @@ class GroupsTest extends TestCase
         $this->assertSame('test_value', $query['after']);
         $this->assertArrayHasKey('limit', $query);
         $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['search']);
     }
 
     public function testCreateOrganizationGroup(): void

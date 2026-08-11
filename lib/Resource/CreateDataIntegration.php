@@ -23,12 +23,12 @@ readonly class CreateDataIntegration implements \JsonSerializable
          */
         public ?array $scopes = null,
         /**
-         * How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request).
-         * @var array<\WorkOS\Resource\CreateDataIntegrationAuthMethods>|null
+         * How accounts authenticate with the provider. Defaults to `["oauth"]`. Use `["api_key"]` to declare an API key integration; `credentials` is then not required and keys are supplied per-tenant (optionally via `api_key` on this request). Use `["client_credentials"]` to declare a client-credentials integration; `credentials` is likewise not required and client credentials are supplied per-tenant.
+         * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>|null
          */
         public ?array $authMethods = null,
         /**
-         * Provider-specific config values (e.g. a Snowflake `account_identifier`), keyed by the config field. Only fields the built-in provider declares are accepted.
+         * Provider-specific config values (e.g. a Snowflake `account`), keyed by the config field. Only fields the built-in provider declares are accepted.
          * @var array<string, string>|null
          */
         public ?array $config = null,
@@ -48,7 +48,7 @@ readonly class CreateDataIntegration implements \JsonSerializable
             description: $data['description'] ?? null,
             enabled: $data['enabled'] ?? null,
             scopes: $data['scopes'] ?? null,
-            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => CreateDataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
+            authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
             config: $data['config'] ?? null,
             credentials: isset($data['credentials']) ? DataIntegrationCredentialsInput::fromArray($data['credentials']) : null,
             apiKey: isset($data['api_key']) ? ApiKeyInstallation::fromArray($data['api_key']) : null,

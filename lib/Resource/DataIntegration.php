@@ -37,12 +37,12 @@ readonly class DataIntegration implements \JsonSerializable
          * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>
          */
         public array $authMethods,
-        /** The credentials configured for the Data Integration. */
-        public DataIntegrationCredential $credentials,
+        /** The integration-level OAuth app credentials. `null` for `api_key` integrations, which hold no OAuth credentials (keys are installed per-tenant). */
+        public ?DataIntegrationCredential $credentials,
         /** The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses. */
         public ?DataIntegrationInstallation $installation,
         /**
-         * Provider-specific config values set on the Data Integration (e.g. a Snowflake `account_identifier`), keyed by config field. Only fields the provider declares are accepted.
+         * Provider-specific config values set on the Data Integration (e.g. a Snowflake `account`), keyed by config field. Only fields the provider declares are accepted.
          * @var array<string, string>
          */
         public array $config,
@@ -68,7 +68,7 @@ readonly class DataIntegration implements \JsonSerializable
             scopes: $data['scopes'] ?? null,
             redirectUri: $data['redirect_uri'],
             authMethods: array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']),
-            credentials: DataIntegrationCredential::fromArray($data['credentials']),
+            credentials: isset($data['credentials']) ? DataIntegrationCredential::fromArray($data['credentials']) : null,
             installation: isset($data['installation']) ? DataIntegrationInstallation::fromArray($data['installation']) : null,
             config: $data['config'],
             customProvider: isset($data['custom_provider']) ? DataIntegrationCustomProvider::fromArray($data['custom_provider']) : null,
@@ -90,7 +90,7 @@ readonly class DataIntegration implements \JsonSerializable
             'scopes' => $this->scopes,
             'redirect_uri' => $this->redirectUri,
             'auth_methods' => array_map(fn ($item) => $item->value, $this->authMethods),
-            'credentials' => $this->credentials->toArray(),
+            'credentials' => $this->credentials?->toArray(),
             'installation' => $this->installation?->toArray(),
             'config' => $this->config,
             'custom_provider' => $this->customProvider?->toArray(),
