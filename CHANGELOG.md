@@ -1,5 +1,31 @@
 # Changelog
 
+## [9.3.0](https://github.com/workos/workos-php/compare/v9.2.0...v9.3.0) (2026-09-01)
+
+
+### Features
+
+* **agents:** Add blueprint, instance, and session endpoints ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **audit_logs:** Replace retentionPeriodInDays param with retention union supporting retention periods ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **generated:** Agents (batch 13ebc8c1) ([#437](https://github.com/workos/workos-php/issues/437)) ([d43ede0](https://github.com/workos/workos-php/commit/d43ede0746f4d32961cf9fdc8aff92eb320d96c7))
+* **organizations:** Add IT contacts endpoints ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **platform_teams:** Add Platform Teams service ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **sso:** Add connection management and SAML certificate endpoints ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **sso:** Make code optional on getProfileAndToken ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **user_management:** Add email-completion grant and waitlist endpoints ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+* **webhooks:** Add agent instance and blueprint webhook event types ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+
+
+### Bug Fixes
+
+* **sso:** Remove DiscordOAuth, GrokOAuth, and XOAuth from connection type enums ([#435](https://github.com/workos/workos-php/issues/435)) ([315f12d](https://github.com/workos/workos-php/commit/315f12d479eeffc1ce5cd1573b0598c0e5191561))
+
+
+### Miscellaneous Chores
+
+* **deps:** pin workos/actions action to 5c7450a ([#430](https://github.com/workos/workos-php/issues/430)) ([f0f66fd](https://github.com/workos/workos-php/commit/f0f66fd20611aca47f096b80772de00f63606bc8))
+* **deps:** update github-actions versions ([#431](https://github.com/workos/workos-php/issues/431)) ([a3ac03e](https://github.com/workos/workos-php/commit/a3ac03e52d6304a53d104867fa68a171911359a8))
+
 ## [9.2.0](https://github.com/workos/workos-php/compare/v9.1.0...v9.2.0) (2026-08-11)
 
 * [#428](https://github.com/workos/workos-php/pull/428) feat(generated)!: regenerate from spec (2 changes)
