@@ -12,6 +12,7 @@ use WorkOS\Resource\AgentInstance;
 use WorkOS\Resource\AgentInstanceSession;
 use WorkOS\Resource\AgentRegistration;
 use WorkOS\Resource\AgentToken;
+use WorkOS\Resource\AgentTokenValidation;
 use WorkOS\Resource\ClaimViewResponse;
 
 class Agents
@@ -62,16 +63,16 @@ class Agents
      * @param string|null $description Human-readable description of the agent blueprint.
      * @param array<string>|null $permissions Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
      * @param \WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy|null $invocableBy Who may mint sessions from this blueprint.
-     * @param \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings Token and session lifetimes for sessions minted from this blueprint.
+     * @param \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting|null $sessionSettings Token and session lifetimes for sessions minted from this blueprint.
      * @return \WorkOS\Resource\AgentBlueprint
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createBlueprint(
         string $name,
-        \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings,
         ?string $description = null,
         ?array $permissions = null,
         ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy $invocableBy = null,
+        ?\WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AgentBlueprint {
         $body = array_filter([
@@ -206,6 +207,32 @@ class Agents
             options: $options,
         );
         return AgentToken::fromArray($response);
+    }
+
+    /**
+     * Validate an agent token
+     *
+     * Validates an agent access token: verifies its signature against the environment, that it was minted under this blueprint, and that the backing session is live (not revoked or expired, and — for delegated sessions — that the delegating user session has not ended). Returns the token claims and session metadata when valid; invalid tokens are reported as errors with stable codes.
+     * @param string $agentBlueprintId The unique ID of the agent blueprint.
+     * @param string $agentAccessToken The agent access token (a JWT) to validate.
+     * @return \WorkOS\Resource\AgentTokenValidation
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function validateBlueprintToken(
+        string $agentBlueprintId,
+        string $agentAccessToken,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentTokenValidation {
+        $body = [
+            'agent_access_token' => $agentAccessToken,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'agents/blueprints/' . rawurlencode($agentBlueprintId) . '/tokens/validate',
+            body: $body,
+            options: $options,
+        );
+        return AgentTokenValidation::fromArray($response);
     }
 
     /**

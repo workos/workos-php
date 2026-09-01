@@ -31,6 +31,7 @@
     "lib/Resource/AgentBlueprintsCreateRequestSessionSetting.php",
     "lib/Resource/AgentBlueprintsTokenMintTokenRequest.php",
     "lib/Resource/AgentBlueprintsTokenMintTokenRequestType.php",
+    "lib/Resource/AgentBlueprintsTokenValidateTokenRequest.php",
     "lib/Resource/AgentBlueprintsUpdateRequest.php",
     "lib/Resource/AgentBlueprintsUpdateRequestInvocableBy.php",
     "lib/Resource/AgentBlueprintsUpdateRequestSessionSetting.php",
@@ -75,6 +76,7 @@
     "lib/Resource/AgentRegistrationRevokedData.php",
     "lib/Resource/AgentRegistrationStatus.php",
     "lib/Resource/AgentToken.php",
+    "lib/Resource/AgentTokenValidation.php",
     "lib/Resource/ApiKey.php",
     "lib/Resource/ApiKeyCreated.php",
     "lib/Resource/ApiKeyCreatedData.php",
@@ -748,6 +750,7 @@
     "tests/Fixtures/agent_blueprints_create_request_invocable_by.json",
     "tests/Fixtures/agent_blueprints_create_request_session_setting.json",
     "tests/Fixtures/agent_blueprints_token_mint_token_request.json",
+    "tests/Fixtures/agent_blueprints_token_validate_token_request.json",
     "tests/Fixtures/agent_blueprints_update_request.json",
     "tests/Fixtures/agent_blueprints_update_request_invocable_by.json",
     "tests/Fixtures/agent_blueprints_update_request_session_setting.json",
@@ -788,6 +791,7 @@
     "tests/Fixtures/agent_registration_revoked.json",
     "tests/Fixtures/agent_registration_revoked_data.json",
     "tests/Fixtures/agent_token.json",
+    "tests/Fixtures/agent_token_validation.json",
     "tests/Fixtures/api_key.json",
     "tests/Fixtures/api_key_created.json",
     "tests/Fixtures/api_key_created_data.json",
@@ -2371,6 +2375,10 @@
     "POST /user_management/waitlists/{id}/entries": {
       "sdkMethod": "createWaitlistEntry",
       "service": "userManagement"
+    },
+    "POST /agents/blueprints/{agent_blueprint_id}/tokens/validate": {
+      "sdkMethod": "validateBlueprintToken",
+      "service": "agents"
     }
   }
 }

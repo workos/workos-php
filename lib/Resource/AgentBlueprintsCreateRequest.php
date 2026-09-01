@@ -13,8 +13,6 @@ readonly class AgentBlueprintsCreateRequest implements \JsonSerializable
     public function __construct(
         /** Human-readable name of the agent blueprint. */
         public string $name,
-        /** Token and session lifetimes for sessions minted from this blueprint. */
-        public AgentBlueprintsCreateRequestSessionSetting $sessionSettings,
         /** Human-readable description of the agent blueprint. */
         public ?string $description = null,
         /**
@@ -24,6 +22,8 @@ readonly class AgentBlueprintsCreateRequest implements \JsonSerializable
         public ?array $permissions = null,
         /** Who may mint sessions from this blueprint. */
         public ?AgentBlueprintsCreateRequestInvocableBy $invocableBy = null,
+        /** Token and session lifetimes for sessions minted from this blueprint. */
+        public ?AgentBlueprintsCreateRequestSessionSetting $sessionSettings = null,
     ) {
     }
 
@@ -31,10 +31,10 @@ readonly class AgentBlueprintsCreateRequest implements \JsonSerializable
     {
         return new self(
             name: $data['name'],
-            sessionSettings: AgentBlueprintsCreateRequestSessionSetting::fromArray($data['session_settings']),
             description: $data['description'] ?? null,
             permissions: $data['permissions'] ?? null,
             invocableBy: isset($data['invocable_by']) ? AgentBlueprintsCreateRequestInvocableBy::fromArray($data['invocable_by']) : null,
+            sessionSettings: isset($data['session_settings']) ? AgentBlueprintsCreateRequestSessionSetting::fromArray($data['session_settings']) : null,
         );
     }
 
@@ -42,10 +42,10 @@ readonly class AgentBlueprintsCreateRequest implements \JsonSerializable
     {
         return [
             'name' => $this->name,
-            'session_settings' => $this->sessionSettings->toArray(),
             'description' => $this->description,
             'permissions' => $this->permissions,
             'invocable_by' => $this->invocableBy?->toArray(),
+            'session_settings' => $this->sessionSettings?->toArray(),
         ];
     }
 }
