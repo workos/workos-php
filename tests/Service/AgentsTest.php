@@ -33,7 +33,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_blueprint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->createBlueprint(name: 'test_value', sessionSettings: \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting::fromArray($this->loadFixture('agent_blueprints_create_request_session_setting')));
+        $result = $client->agents()->createBlueprint(name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -93,6 +93,21 @@ class AgentsTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id/tokens', $request->getUri()->getPath());
+    }
+
+    public function testValidateBlueprintToken(): void
+    {
+        $fixture = $this->loadFixture('agent_token_validation');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->validateBlueprintToken('test_agent_blueprint_id', agentAccessToken: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentTokenValidation::class, $result);
+        $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id/tokens/validate', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['agent_access_token']);
     }
 
     public function testUpdateAttempts(): void
