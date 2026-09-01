@@ -9,6 +9,6 @@ namespace WorkOS\Resource;
 enum UserSessionsStatus: string
 {
     case Active = 'active';
-    case Expired = 'expired';
     case Revoked = 'revoked';
+    case Expired = 'expired';
 }

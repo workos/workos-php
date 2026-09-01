@@ -22,6 +22,8 @@ readonly class AuthenticationOAuthSucceededData implements \JsonSerializable
         public ?string $userId,
         /** The email address of the user. */
         public string $email,
+        /** The OAuth provider used for authentication. */
+        public ?string $provider = null,
     ) {
     }
 
@@ -34,6 +36,7 @@ readonly class AuthenticationOAuthSucceededData implements \JsonSerializable
             userAgent: $data['user_agent'] ?? null,
             userId: $data['user_id'] ?? null,
             email: $data['email'],
+            provider: $data['provider'] ?? null,
         );
     }
 
@@ -46,6 +49,7 @@ readonly class AuthenticationOAuthSucceededData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
+            'provider' => $this->provider,
         ];
     }
 }

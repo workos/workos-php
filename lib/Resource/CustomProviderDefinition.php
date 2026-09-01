@@ -13,11 +13,11 @@ readonly class CustomProviderDefinition implements \JsonSerializable
     public function __construct(
         /** A descriptive name for the custom provider. */
         public string $name,
-        /** The provider's OAuth authorization endpoint. Required for OAuth providers; omit for `api_key` providers. */
+        /** The provider's OAuth authorization endpoint. Required for OAuth providers; omit for `api_key` providers. Must be a static URL: `${config.…}` placeholders are resolved against a provider's declared config fields, which custom providers cannot declare. */
         public ?string $authorizationUrl = null,
-        /** The provider's OAuth token endpoint. Required for OAuth providers; omit for `api_key` providers. */
+        /** The provider's OAuth token endpoint. Required for OAuth and `client_credentials` providers; omit for `api_key` providers. Must be a static URL: `${config.…}` placeholders are resolved against a provider's declared config fields, which custom providers cannot declare. */
         public ?string $tokenUrl = null,
-        /** The endpoint used to refresh tokens, if different from the token endpoint. */
+        /** The endpoint used to refresh tokens, if different from the token endpoint. Must be a static URL, like the other endpoints. */
         public ?string $refreshTokenUrl = null,
         /** Whether PKCE is used during the authorization code flow. Defaults to `true`. */
         public ?bool $pkceEnabled = null,

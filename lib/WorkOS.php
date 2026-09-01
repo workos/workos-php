@@ -23,6 +23,7 @@ use WorkOS\Service\OrganizationMembershipService;
 use WorkOS\Service\Organizations;
 use WorkOS\Service\Pipes;
 use WorkOS\Service\PipesProvider;
+use WorkOS\Service\PlatformTeams;
 use WorkOS\Service\Radar;
 use WorkOS\Service\SSO;
 use WorkOS\Service\UserManagement;
@@ -70,6 +71,7 @@ class WorkOS
     private ?Service\ApiKeys $apiKeys = null;
     private ?Service\PipesProvider $pipesProvider = null;
     private ?Service\Groups $groups = null;
+    private ?Service\PlatformTeams $platformTeams = null;
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
     private ?Service\UserManagement $userManagement = null;
@@ -166,6 +168,11 @@ class WorkOS
     public function groups(): Groups
     {
         return $this->groups ??= new Service\Groups($this->httpClient);
+    }
+
+    public function platformTeams(): PlatformTeams
+    {
+        return $this->platformTeams ??= new Service\PlatformTeams($this->httpClient);
     }
 
     public function adminPortal(): AdminPortal

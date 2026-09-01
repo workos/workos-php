@@ -33,6 +33,131 @@ class SSOTest extends TestCase
         $this->assertSame('test_value', $query['search']);
     }
 
+    public function testCreateConnection(): void
+    {
+        $fixture = $this->loadFixture('connection');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->createConnection(organizationId: 'test_value', protocolOptions: new \WorkOS\Service\CreateProtocolOptionsSAML(samlOptions: \WorkOS\Resource\CreateConnectionSAMLOptions::fromArray($this->loadFixture('create_connection_saml_options'))));
+        $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('connections', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['organization_id']);
+    }
+
+    public function testListConnectionSAMLIdpSigningCerts(): void
+    {
+        $fixture = $this->loadFixture('saml_idp_signing_certificate_list');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->listConnectionSAMLIdpSigningCerts('test_connectionId');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLIdpSigningCertificateList::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_idp_signing_certs', $request->getUri()->getPath());
+    }
+
+    public function testCreateConnectionSAMLIdpSigningCert(): void
+    {
+        $fixture = $this->loadFixture('saml_idp_signing_certificate');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->createConnectionSAMLIdpSigningCert('test_connectionId', value: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLIdpSigningCertificate::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['value'], $result->value);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_idp_signing_certs', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['value']);
+    }
+
+    public function testDeleteConnectionSAMLIdpSigningCert(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->sso()->deleteConnectionSAMLIdpSigningCert('test_connectionId', 'test_certificateId');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_idp_signing_certs/test_certificateId', $request->getUri()->getPath());
+    }
+
+    public function testListConnectionSAMLSpEncryptionCerts(): void
+    {
+        $fixture = $this->loadFixture('saml_sp_encryption_certificate_list');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->listConnectionSAMLSpEncryptionCerts('test_connectionId');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLSpEncryptionCertificateList::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_encryption_certs', $request->getUri()->getPath());
+    }
+
+    public function testCreateConnectionSAMLSpEncryptionCert(): void
+    {
+        $fixture = $this->loadFixture('saml_sp_encryption_certificate');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->createConnectionSAMLSpEncryptionCert('test_connectionId');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLSpEncryptionCertificate::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['value'], $result->value);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_encryption_certs', $request->getUri()->getPath());
+    }
+
+    public function testDeleteConnectionSAMLSpEncryptionCert(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->sso()->deleteConnectionSAMLSpEncryptionCert('test_connectionId', 'test_certificateId');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_encryption_certs/test_certificateId', $request->getUri()->getPath());
+    }
+
+    public function testListConnectionSAMLSpSigningCert(): void
+    {
+        $fixture = $this->loadFixture('saml_sp_signing_certificate');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->listConnectionSAMLSpSigningCert('test_connectionId');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLSpSigningCertificate::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['value'], $result->value);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_signing_cert', $request->getUri()->getPath());
+    }
+
+    public function testCreateConnectionSAMLSpSigningCert(): void
+    {
+        $fixture = $this->loadFixture('saml_sp_signing_certificate');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->createConnectionSAMLSpSigningCert('test_connectionId');
+        $this->assertInstanceOf(\WorkOS\Resource\SAMLSpSigningCertificate::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['value'], $result->value);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_signing_cert', $request->getUri()->getPath());
+    }
+
+    public function testDeleteConnectionSAMLSpSigningCert(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->sso()->deleteConnectionSAMLSpSigningCert('test_connectionId', 'test_certificateId');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_connectionId/saml_sp_signing_cert/test_certificateId', $request->getUri()->getPath());
+    }
+
     public function testGetConnection(): void
     {
         $fixture = $this->loadFixture('connection');
@@ -44,6 +169,20 @@ class SSOTest extends TestCase
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('connections/test_id', $request->getUri()->getPath());
+    }
+
+    public function testUpdateConnection(): void
+    {
+        $fixture = $this->loadFixture('connection');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->sso()->updateConnection('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('connections/test_id', $request->getUri()->getPath());
     }
 
@@ -119,15 +258,13 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('sso_token_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->getProfileAndToken(code: 'test_value');
+        $result = $client->sso()->getProfileAndToken();
         $this->assertInstanceOf(\WorkOS\Resource\SSOTokenResponse::class, $result);
         $this->assertSame($fixture['access_token'], $result->accessToken);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('sso/token', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['code']);
     }
 
     public function testPaginationBoundary(): void

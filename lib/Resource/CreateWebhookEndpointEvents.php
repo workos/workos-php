@@ -8,6 +8,13 @@ namespace WorkOS\Resource;
 
 enum CreateWebhookEndpointEvents: string
 {
+    case AgentBlueprintCreated = 'agent.blueprint.created';
+    case AgentBlueprintDeleted = 'agent.blueprint.deleted';
+    case AgentBlueprintUpdated = 'agent.blueprint.updated';
+    case AgentInstanceCreated = 'agent.instance.created';
+    case AgentInstanceDeleted = 'agent.instance.deleted';
+    case AgentInstanceSessionCreated = 'agent.instance.session.created';
+    case AgentInstanceSessionRevoked = 'agent.instance.session.revoked';
     case AgentRegistrationCreated = 'agent.registration.created';
     case AgentRegistrationClaimAttemptCreated = 'agent.registration.claim.attempt.created';
     case AgentRegistrationClaimCompleted = 'agent.registration.claim.completed';
