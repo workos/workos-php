@@ -13,6 +13,88 @@ class AgentsTest extends TestCase
 {
     use TestHelper;
 
+    public function testListBlueprints(): void
+    {
+        $fixture = $this->loadFixture('list_agent_blueprint');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->listBlueprints(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testCreateBlueprint(): void
+    {
+        $fixture = $this->loadFixture('agent_blueprint');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->createBlueprint(name: 'test_value', sessionSettings: \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting::fromArray($this->loadFixture('agent_blueprints_create_request_session_setting')));
+        $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['name']);
+    }
+
+    public function testGetBlueprint(): void
+    {
+        $fixture = $this->loadFixture('agent_blueprint');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->getBlueprint('test_agent_blueprint_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id', $request->getUri()->getPath());
+    }
+
+    public function testUpdateBlueprint(): void
+    {
+        $fixture = $this->loadFixture('agent_blueprint');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->updateBlueprint('test_agent_blueprint_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['name'], $result->name);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PATCH', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id', $request->getUri()->getPath());
+    }
+
+    public function testDeleteBlueprint(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->agents()->deleteBlueprint('test_agent_blueprint_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id', $request->getUri()->getPath());
+    }
+
+    public function testCreateBlueprintToken(): void
+    {
+        $fixture = $this->loadFixture('agent_token');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->createBlueprintToken('test_agent_blueprint_id', type: \WorkOS\Resource\AgentBlueprintsTokenMintTokenRequestType::UserDelegated);
+        $this->assertInstanceOf(\WorkOS\Resource\AgentToken::class, $result);
+        $this->assertSame($fixture['access_token'], $result->accessToken);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id/tokens', $request->getUri()->getPath());
+    }
+
     public function testUpdateAttempts(): void
     {
         $fixture = $this->loadFixture('claim_view_response');
@@ -56,5 +138,111 @@ class AgentsTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('agents/registrations/test_id', $request->getUri()->getPath());
+    }
+
+    public function testListInstances(): void
+    {
+        $fixture = $this->loadFixture('list_agent_instance');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->listInstances(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', agentBlueprintId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/instances', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['organization_id']);
+        $this->assertSame('test_value', $query['agent_blueprint_id']);
+    }
+
+    public function testGetInstance(): void
+    {
+        $fixture = $this->loadFixture('agent_instance');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->getInstance('test_agent_instance_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentInstance::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['agent_blueprint_id'], $result->agentBlueprintId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/instances/test_agent_instance_id', $request->getUri()->getPath());
+    }
+
+    public function testDeleteInstance(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->agents()->deleteInstance('test_agent_instance_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('agents/instances/test_agent_instance_id', $request->getUri()->getPath());
+    }
+
+    public function testListSessions(): void
+    {
+        $fixture = $this->loadFixture('list_agent_instance_session');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->listSessions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, agentBlueprintId: 'test_value', agentInstanceId: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/sessions', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['agent_blueprint_id']);
+        $this->assertSame('test_value', $query['agent_instance_id']);
+    }
+
+    public function testGetSession(): void
+    {
+        $fixture = $this->loadFixture('agent_instance_session');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->getSession('test_agent_instance_session_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentInstanceSession::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('agents/sessions/test_agent_instance_session_id', $request->getUri()->getPath());
+    }
+
+    public function testRevokeSession(): void
+    {
+        $fixture = $this->loadFixture('agent_instance_session');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->revokeSession('test_agent_instance_session_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentInstanceSession::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('agents/sessions/test_agent_instance_session_id/revoke', $request->getUri()->getPath());
+    }
+
+    public function testPaginationBoundary(): void
+    {
+        $fixture = $this->loadFixture('list_agent_blueprint');
+        // Ensure cursors are null (first/last page boundary)
+        $fixture['list_metadata']['before'] = null;
+        $fixture['list_metadata']['after'] = null;
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->listBlueprints();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        // Verify cursors are null on boundary page
+        $this->assertNull($result->listMetadata['before']);
+        $this->assertNull($result->listMetadata['after']);
+        // Iterating should not throw on null cursors
+        foreach ($result as $item) {
+            $this->assertNotNull($item);
+            break;
+        }
     }
 }

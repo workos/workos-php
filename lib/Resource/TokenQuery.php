@@ -15,10 +15,16 @@ readonly class TokenQuery implements \JsonSerializable
         public string $clientId,
         /** The client secret of the WorkOS environment. */
         public string $clientSecret,
-        /** The authorization code received from the authorization callback. */
-        public string $code,
         /** The grant type for the token request. */
-        public string $grantType,
+        public SSOGrantType $grantType,
+        /** The authorization code received from the authorization callback. Required when `grant_type` is `authorization_code`. */
+        public ?string $code = null,
+        /** The OIDC ID token to exchange. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body. */
+        public ?string $subjectToken = null,
+        /** The type of the subject token. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body. */
+        public ?string $subjectTokenType = null,
+        /** The ID of the organization whose connection the subject token is validated against. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body. */
+        public ?string $organizationId = null,
     ) {
     }
 
@@ -27,8 +33,11 @@ readonly class TokenQuery implements \JsonSerializable
         return new self(
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
-            code: $data['code'],
-            grantType: $data['grant_type'] ?? 'authorization_code',
+            grantType: SSOGrantType::from($data['grant_type']),
+            code: $data['code'] ?? null,
+            subjectToken: $data['subject_token'] ?? null,
+            subjectTokenType: $data['subject_token_type'] ?? null,
+            organizationId: $data['organization_id'] ?? null,
         );
     }
 
@@ -37,8 +46,11 @@ readonly class TokenQuery implements \JsonSerializable
         return [
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
+            'grant_type' => $this->grantType->value,
             'code' => $this->code,
-            'grant_type' => $this->grantType,
+            'subject_token' => $this->subjectToken,
+            'subject_token_type' => $this->subjectTokenType,
+            'organization_id' => $this->organizationId,
         ];
     }
 }

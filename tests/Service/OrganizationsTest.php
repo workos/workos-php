@@ -126,6 +126,60 @@ class OrganizationsTest extends TestCase
         $this->assertSame('normal', $query['order']);
     }
 
+    public function testListItContacts(): void
+    {
+        $fixture = $this->loadFixture('it_contact_list');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->organizations()->listItContacts('test_organization_id');
+        $this->assertInstanceOf(\WorkOS\Resource\ItContactList::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/it_contacts', $request->getUri()->getPath());
+    }
+
+    public function testCreateItContact(): void
+    {
+        $fixture = $this->loadFixture('it_contact');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->organizations()->createItContact('test_organization_id', email: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\ItContact::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/it_contacts', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['email']);
+    }
+
+    public function testDeleteItContact(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->organizations()->deleteItContact('test_organization_id', 'test_contact_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id', $request->getUri()->getPath());
+    }
+
+    public function testInviteItContact(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
+        $client->organizations()->inviteItContact('test_organization_id', 'test_contact_id', intents: []);
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id/invite', $request->getUri()->getPath());
+    }
+
+    public function testRevokeItContact(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
+        $client->organizations()->revokeItContact('test_organization_id', 'test_contact_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id/revoke', $request->getUri()->getPath());
+    }
+
     public function testPaginationBoundary(): void
     {
         $fixture = $this->loadFixture('list_organization');

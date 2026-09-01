@@ -30,14 +30,14 @@ readonly class DataIntegration implements \JsonSerializable
          * @var array<string>|null
          */
         public ?array $scopes,
-        /** The OAuth redirect URI to register with the provider when configuring the custom application. */
+        /** The OAuth redirect URI to register with the provider when configuring the custom application. Empty for `api_key` and `client_credentials` integrations, which run no authorization redirect. */
         public string $redirectUri,
         /**
          * How accounts authenticate with the provider for this Data Integration.
          * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>
          */
         public array $authMethods,
-        /** The integration-level OAuth app credentials. `null` for `api_key` integrations, which hold no OAuth credentials (keys are installed per-tenant). */
+        /** The integration-level OAuth app credentials. `null` for `api_key` and `client_credentials` integrations, which hold no integration-level credentials (secrets are installed per-tenant). */
         public ?DataIntegrationCredential $credentials,
         /** The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses. */
         public ?DataIntegrationInstallation $installation,

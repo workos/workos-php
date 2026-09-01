@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
+use WorkOS\Resource\AgentBlueprint;
 use WorkOS\Resource\AgentCredentialValidation;
+use WorkOS\Resource\AgentInstance;
+use WorkOS\Resource\AgentInstanceSession;
 use WorkOS\Resource\AgentRegistration;
+use WorkOS\Resource\AgentToken;
 use WorkOS\Resource\ClaimViewResponse;
 
 class Agents
@@ -15,6 +19,193 @@ class Agents
     public function __construct(
         private readonly \WorkOS\HttpClient $client,
     ) {
+    }
+
+    /**
+     * List agent blueprints
+     *
+     * Lists the agent blueprints in the current environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AgentBlueprint>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listBlueprints(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'agents/blueprints',
+            query: $query,
+            modelClass: AgentBlueprint::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create an agent blueprint
+     *
+     * Creates an agent blueprint: the template describing what an agent may do (its permission ceiling), who may invoke it, and the lifetimes of its sessions.
+     * @param string $name Human-readable name of the agent blueprint.
+     * @param string|null $description Human-readable description of the agent blueprint.
+     * @param array<string>|null $permissions Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
+     * @param \WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy|null $invocableBy Who may mint sessions from this blueprint.
+     * @param \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings Token and session lifetimes for sessions minted from this blueprint.
+     * @return \WorkOS\Resource\AgentBlueprint
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createBlueprint(
+        string $name,
+        \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings,
+        ?string $description = null,
+        ?array $permissions = null,
+        ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy $invocableBy = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentBlueprint {
+        $body = array_filter([
+            'name' => $name,
+            'description' => $description,
+            'permissions' => $permissions,
+            'invocable_by' => $invocableBy,
+            'session_settings' => $sessionSettings,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'agents/blueprints',
+            body: $body,
+            options: $options,
+        );
+        return AgentBlueprint::fromArray($response);
+    }
+
+    /**
+     * Get an agent blueprint
+     *
+     * Retrieves an agent blueprint by ID.
+     * @param string $agentBlueprintId The unique ID of the agent blueprint.
+     * @return \WorkOS\Resource\AgentBlueprint
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getBlueprint(
+        string $agentBlueprintId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentBlueprint {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'agents/blueprints/' . rawurlencode($agentBlueprintId),
+            options: $options,
+        );
+        return AgentBlueprint::fromArray($response);
+    }
+
+    /**
+     * Update an agent blueprint
+     *
+     * Updates an agent blueprint. Omitted fields are left unchanged; provided lists replace the existing configuration.
+     * @param string $agentBlueprintId The unique ID of the agent blueprint.
+     * @param string|null $name Human-readable name of the agent blueprint.
+     * @param string|null $description Human-readable description of the agent blueprint. Pass `null` to clear it.
+     * @param array<string>|null $permissions Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
+     * @param \WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableBy|null $invocableBy Who may mint sessions from this blueprint. Omitted lists are left unchanged.
+     * @param \WorkOS\Resource\AgentBlueprintsUpdateRequestSessionSetting|null $sessionSettings Token and session lifetimes for sessions minted from this blueprint. Omitted fields are left unchanged.
+     * @return \WorkOS\Resource\AgentBlueprint
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateBlueprint(
+        string $agentBlueprintId,
+        ?string $name = null,
+        ?string $description = null,
+        ?array $permissions = null,
+        ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableBy $invocableBy = null,
+        ?\WorkOS\Resource\AgentBlueprintsUpdateRequestSessionSetting $sessionSettings = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentBlueprint {
+        $body = array_filter([
+            'name' => $name,
+            'description' => $description,
+            'permissions' => $permissions,
+            'invocable_by' => $invocableBy,
+            'session_settings' => $sessionSettings,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PATCH',
+            path: 'agents/blueprints/' . rawurlencode($agentBlueprintId),
+            body: $body,
+            options: $options,
+        );
+        return AgentBlueprint::fromArray($response);
+    }
+
+    /**
+     * Delete an agent blueprint
+     *
+     * Deletes an agent blueprint along with its configuration, instances, and sessions.
+     * @param string $agentBlueprintId The unique ID of the agent blueprint.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteBlueprint(
+        string $agentBlueprintId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'agents/blueprints/' . rawurlencode($agentBlueprintId),
+            options: $options,
+        );
+    }
+
+    /**
+     * Mint an agent token
+     *
+     * Mint an agent access token (and backing session) from an agent blueprint. The session can be user-delegated (exchanging a user access token), autonomous (the agent acting as itself in an organization), agent-delegated (the agent exchanging its own access token for a new session on the same instance), or a refresh of a previously issued refresh token.
+     * @param string $agentBlueprintId The unique ID of the agent blueprint.
+     * @param \WorkOS\Resource\AgentBlueprintsTokenMintTokenRequestType $type How the session is minted: `user_delegated`, `autonomous`, `agent_delegated`, or `refresh`.
+     * @param string|null $userAccessToken The access token of the user delegating to the agent. The token identifies the user and organization; effective permissions are resolved server-side.
+     * @param string|null $intent Optional caller-supplied context, echoed as an object with a `text` field in the `intent` claim of the minted access token.
+     * @param string|null $organizationId The organization the agent acts within when operating as itself.
+     * @param string|null $agentAccessToken The agent's own access token to exchange for a new session on the same instance. The token must have been minted from this blueprint; permissions are re-derived from current authority.
+     * @param string|null $refreshToken The refresh token issued with a previous agent access token. Refresh tokens are single-use: each refresh rotates it.
+     * @return \WorkOS\Resource\AgentToken
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createBlueprintToken(
+        string $agentBlueprintId,
+        \WorkOS\Resource\AgentBlueprintsTokenMintTokenRequestType $type,
+        ?string $userAccessToken = null,
+        ?string $intent = null,
+        ?string $organizationId = null,
+        ?string $agentAccessToken = null,
+        ?string $refreshToken = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentToken {
+        $body = array_filter([
+            'type' => $type->value,
+            'user_access_token' => $userAccessToken,
+            'intent' => $intent,
+            'organization_id' => $organizationId,
+            'agent_access_token' => $agentAccessToken,
+            'refresh_token' => $refreshToken,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'agents/blueprints/' . rawurlencode($agentBlueprintId) . '/tokens',
+            body: $body,
+            options: $options,
+        );
+        return AgentToken::fromArray($response);
     }
 
     /**
@@ -98,5 +289,162 @@ class Agents
             options: $options,
         );
         return AgentRegistration::fromArray($response);
+    }
+
+    /**
+     * List agent instances
+     *
+     * Lists the agent instances in the current environment. Instances are created implicitly when tokens are minted.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param string|null $organizationId Only return instances acting within this organization.
+     * @param string|null $agentBlueprintId Only return instances minted from this blueprint.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AgentInstance>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listInstances(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $organizationId = null,
+        ?string $agentBlueprintId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'organization_id' => $organizationId,
+            'agent_blueprint_id' => $agentBlueprintId,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'agents/instances',
+            query: $query,
+            modelClass: AgentInstance::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get an agent instance
+     *
+     * Retrieves an agent instance by ID.
+     * @param string $agentInstanceId The unique ID of the agent instance.
+     * @return \WorkOS\Resource\AgentInstance
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getInstance(
+        string $agentInstanceId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentInstance {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'agents/instances/' . rawurlencode($agentInstanceId),
+            options: $options,
+        );
+        return AgentInstance::fromArray($response);
+    }
+
+    /**
+     * Delete an agent instance
+     *
+     * Deletes an agent instance along with its sessions, invalidating their refresh tokens.
+     * @param string $agentInstanceId The unique ID of the agent instance.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteInstance(
+        string $agentInstanceId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'agents/instances/' . rawurlencode($agentInstanceId),
+            options: $options,
+        );
+    }
+
+    /**
+     * List agent instance sessions
+     *
+     * Lists the agent instance sessions in the current environment. Sessions are created when tokens are minted.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param string|null $agentBlueprintId Only return sessions of instances minted from this blueprint.
+     * @param string|null $agentInstanceId Only return sessions belonging to this agent instance.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AgentInstanceSession>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listSessions(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $agentBlueprintId = null,
+        ?string $agentInstanceId = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'agent_blueprint_id' => $agentBlueprintId,
+            'agent_instance_id' => $agentInstanceId,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'agents/sessions',
+            query: $query,
+            modelClass: AgentInstanceSession::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get an agent instance session
+     *
+     * Retrieves an agent instance session by ID.
+     * @param string $agentInstanceSessionId The unique ID of the agent instance session.
+     * @return \WorkOS\Resource\AgentInstanceSession
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getSession(
+        string $agentInstanceSessionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentInstanceSession {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'agents/sessions/' . rawurlencode($agentInstanceSessionId),
+            options: $options,
+        );
+        return AgentInstanceSession::fromArray($response);
+    }
+
+    /**
+     * Revoke an agent instance session
+     *
+     * Revokes an agent instance session, invalidating its refresh token and every access token minted under it. Revocation is idempotent: revoking an already-revoked session keeps the original `revoked_at`, and revoking an already-expired session returns the session with `status: expired` and a null `revoked_at`.
+     * @param string $agentInstanceSessionId The unique ID of the agent instance session.
+     * @return \WorkOS\Resource\AgentInstanceSession
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function revokeSession(
+        string $agentInstanceSessionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentInstanceSession {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'agents/sessions/' . rawurlencode($agentInstanceSessionId) . '/revoke',
+            options: $options,
+        );
+        return AgentInstanceSession::fromArray($response);
     }
 }

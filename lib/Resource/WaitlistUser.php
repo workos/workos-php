@@ -11,21 +11,26 @@ readonly class WaitlistUser implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** Distinguishes the Waitlist User object. */
-        public string $object,
-        /** The unique ID of the Waitlist User. */
+        /** The unique ID of the waitlist entry. */
         public string $id,
-        /** The email address of the Waitlist User. */
+        /** The email address of the user on the waitlist. */
         public string $email,
-        /** The state of the Waitlist User. */
+        /** The state of the waitlist entry. */
         public WaitlistUserState $state,
-        /** The timestamp when the Waitlist User was approved, or null if not yet approved. */
+        /** The timestamp when the entry was approved, or null if not yet approved. */
         public ?\DateTimeImmutable $approvedAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
-        /** The unique ID of the Waitlist that the Waitlist User joined. */
+        /** Distinguishes the Waitlist User object. */
+        public string $object,
+        /**
+         * Additional fields submitted when the user joined the waitlist. Values are user-provided — treat them as untrusted input when rendering or exporting.
+         * @var array<string, string>|null
+         */
+        public ?array $additionalFields = null,
+        /** The unique ID of the waitlist the entry belongs to. */
         public ?string $waitlistId = null,
     ) {
     }
@@ -33,13 +38,14 @@ readonly class WaitlistUser implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            object: $data['object'] ?? 'waitlist_user',
             id: $data['id'],
             email: $data['email'],
             state: WaitlistUserState::from($data['state']),
             approvedAt: isset($data['approved_at']) ? new \DateTimeImmutable($data['approved_at']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            object: $data['object'] ?? 'waitlist_user',
+            additionalFields: $data['additional_fields'] ?? null,
             waitlistId: $data['waitlist_id'] ?? null,
         );
     }
@@ -47,13 +53,14 @@ readonly class WaitlistUser implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'object' => $this->object,
             'id' => $this->id,
             'email' => $this->email,
             'state' => $this->state->value,
             'approved_at' => $this->approvedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'object' => $this->object,
+            'additional_fields' => $this->additionalFields,
             'waitlist_id' => $this->waitlistId,
         ];
     }

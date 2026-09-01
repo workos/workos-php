@@ -282,7 +282,7 @@ class Authorization
     /**
      * List effective permissions for an organization membership on a resource
      *
-     * Returns all permissions the organization membership effectively has on a resource, including permissions inherited through roles assigned to ancestor resources.
+     * Returns all permissions the organization membership effectively has on a resource, including permissions inherited through roles assigned to ancestor resources. Results are not filtered by the resource type: a permission is returned whenever a check for it on this resource would be authorized, and each permission is labeled with the resource type it is declared on.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $resourceId The ID of the authorization resource.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
@@ -319,7 +319,7 @@ class Authorization
     /**
      * List effective permissions for an organization membership on a resource by external ID
      *
-     * Returns all permissions the organization membership effectively has on a resource identified by its external ID, including permissions inherited through roles assigned to ancestor resources.
+     * Returns all permissions the organization membership effectively has on a resource identified by its external ID, including permissions inherited through roles assigned to ancestor resources. Results are not filtered by the resource type: a permission is returned whenever a check for it on this resource would be authorized, and each permission is labeled with the resource type it is declared on.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $resourceTypeSlug The slug of the resource type.
      * @param string $externalId An identifier you provide to reference the resource in your system.
@@ -748,8 +748,8 @@ class Authorization
         if ($parentResource instanceof ParentResourceById) {
             $body['parent_resource_id'] = $parentResource->id;
         } elseif ($parentResource instanceof ParentResourceByExternalId) {
-            $body['parent_resource_external_id'] = $parentResource->externalId;
             $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+            $body['parent_resource_external_id'] = $parentResource->externalId;
         }
         $response = $this->client->request(
             method: 'PATCH',
@@ -958,8 +958,8 @@ class Authorization
         if ($parentResource instanceof ParentResourceById) {
             $body['parent_resource_id'] = $parentResource->id;
         } elseif ($parentResource instanceof ParentResourceByExternalId) {
-            $body['parent_resource_external_id'] = $parentResource->externalId;
             $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+            $body['parent_resource_external_id'] = $parentResource->externalId;
         }
         $response = $this->client->request(
             method: 'POST',
@@ -1015,8 +1015,8 @@ class Authorization
         if ($parentResource instanceof ParentResourceById) {
             $body['parent_resource_id'] = $parentResource->id;
         } elseif ($parentResource instanceof ParentResourceByExternalId) {
-            $body['parent_resource_external_id'] = $parentResource->externalId;
             $body['parent_resource_type_slug'] = $parentResource->typeSlug;
+            $body['parent_resource_external_id'] = $parentResource->externalId;
         }
         $response = $this->client->request(
             method: 'PATCH',

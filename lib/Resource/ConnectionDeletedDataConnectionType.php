@@ -20,7 +20,6 @@ enum ConnectionDeletedDataConnectionType: string
     case CleverOidc = 'CleverOIDC';
     case CloudflareSAML = 'CloudflareSAML';
     case CyberArkSAML = 'CyberArkSAML';
-    case DiscordOAuth = 'DiscordOAuth';
     case DuoSAML = 'DuoSAML';
     case EntraIdOidc = 'EntraIdOIDC';
     case GenericOidc = 'GenericOIDC';
@@ -30,8 +29,6 @@ enum ConnectionDeletedDataConnectionType: string
     case GoogleOAuth = 'GoogleOAuth';
     case GoogleOidc = 'GoogleOIDC';
     case GoogleSAML = 'GoogleSAML';
-    case GrokOAuth = 'GrokOAuth';
-    case XoAuth = 'XOAuth';
     case IntuitOAuth = 'IntuitOAuth';
     case JumpCloudSAML = 'JumpCloudSAML';
     case KeycloakSAML = 'KeycloakSAML';

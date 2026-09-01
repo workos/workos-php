@@ -19,7 +19,6 @@ enum ConnectionsConnectionType: string
     case ClassLinkSAML = 'ClassLinkSAML';
     case CleverOidc = 'CleverOIDC';
     case CyberArkSAML = 'CyberArkSAML';
-    case DiscordOAuth = 'DiscordOAuth';
     case DuoSAML = 'DuoSAML';
     case EntraIdOidc = 'EntraIdOIDC';
     case GenericOidc = 'GenericOIDC';
@@ -29,8 +28,6 @@ enum ConnectionsConnectionType: string
     case GoogleOAuth = 'GoogleOAuth';
     case GoogleOidc = 'GoogleOIDC';
     case GoogleSAML = 'GoogleSAML';
-    case GrokOAuth = 'GrokOAuth';
-    case XoAuth = 'XOAuth';
     case IntuitOAuth = 'IntuitOAuth';
     case JumpCloudSAML = 'JumpCloudSAML';
     case KeycloakSAML = 'KeycloakSAML';
