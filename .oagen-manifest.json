@@ -224,6 +224,7 @@
     "lib/Resource/CreateUserOrganizationMembership.php",
     "lib/Resource/CreateUserPasswordHashType.php",
     "lib/Resource/CreateUserPasswordSaltPosition.php",
+    "lib/Resource/CreateWaitlistEntry.php",
     "lib/Resource/CreateWebhookEndpoint.php",
     "lib/Resource/CreateWebhookEndpointEvents.php",
     "lib/Resource/CustomProviderDefinition.php",
@@ -299,6 +300,7 @@
     "lib/Resource/EmailChange.php",
     "lib/Resource/EmailChangeConfirmation.php",
     "lib/Resource/EmailChangeConfirmationUser.php",
+    "lib/Resource/EmailCompletionSessionAuthenticateRequest.php",
     "lib/Resource/EmailVerification.php",
     "lib/Resource/EmailVerificationCodeSessionAuthenticateRequest.php",
     "lib/Resource/EmailVerificationCreated.php",
@@ -593,6 +595,8 @@
     "lib/Resource/VerifyEmailAddress.php",
     "lib/Resource/VerifyEmailResponse.php",
     "lib/Resource/VersionListResponse.php",
+    "lib/Resource/Waitlist.php",
+    "lib/Resource/WaitlistEntry.php",
     "lib/Resource/WaitlistUser.php",
     "lib/Resource/WaitlistUserApproved.php",
     "lib/Resource/WaitlistUserCreated.php",
@@ -833,6 +837,7 @@
     "tests/Fixtures/create_user_api_key.json",
     "tests/Fixtures/create_user_invite_options.json",
     "tests/Fixtures/create_user_organization_membership.json",
+    "tests/Fixtures/create_waitlist_entry.json",
     "tests/Fixtures/create_webhook_endpoint.json",
     "tests/Fixtures/custom_provider_definition.json",
     "tests/Fixtures/data_integration.json",
@@ -895,6 +900,7 @@
     "tests/Fixtures/email_change.json",
     "tests/Fixtures/email_change_confirmation.json",
     "tests/Fixtures/email_change_confirmation_user.json",
+    "tests/Fixtures/email_completion_session_authenticate_request.json",
     "tests/Fixtures/email_verification.json",
     "tests/Fixtures/email_verification_code_session_authenticate_request.json",
     "tests/Fixtures/email_verification_created.json",
@@ -996,6 +1002,8 @@
     "tests/Fixtures/list_user_organization_membership_base_list_data.json",
     "tests/Fixtures/list_user_role_assignment.json",
     "tests/Fixtures/list_user_sessions_list_item.json",
+    "tests/Fixtures/list_waitlist.json",
+    "tests/Fixtures/list_waitlist_entry.json",
     "tests/Fixtures/list_webhook_endpoint.json",
     "tests/Fixtures/magic_auth.json",
     "tests/Fixtures/magic_auth_code_session_authenticate_request.json",
@@ -1189,6 +1197,8 @@
     "tests/Fixtures/vault_object.json",
     "tests/Fixtures/verify_email_address.json",
     "tests/Fixtures/verify_email_response.json",
+    "tests/Fixtures/waitlist.json",
+    "tests/Fixtures/waitlist_entry.json",
     "tests/Fixtures/waitlist_user.json",
     "tests/Fixtures/waitlist_user_approved.json",
     "tests/Fixtures/waitlist_user_created.json",
@@ -2068,6 +2078,146 @@
     "PUT /data-integrations/{slug}/client-credentials": {
       "sdkMethod": "updateDataIntegrationClientCredentials",
       "service": "pipes"
+    },
+    "GET /agents/blueprints": {
+      "sdkMethod": "listBlueprints",
+      "service": "agents"
+    },
+    "POST /agents/blueprints": {
+      "sdkMethod": "createBlueprint",
+      "service": "agents"
+    },
+    "GET /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "getBlueprint",
+      "service": "agents"
+    },
+    "PATCH /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "updateBlueprint",
+      "service": "agents"
+    },
+    "DELETE /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "deleteBlueprint",
+      "service": "agents"
+    },
+    "POST /agents/blueprints/{agent_blueprint_id}/tokens": {
+      "sdkMethod": "createBlueprintToken",
+      "service": "agents"
+    },
+    "GET /agents/instances": {
+      "sdkMethod": "listInstances",
+      "service": "agents"
+    },
+    "GET /agents/instances/{agent_instance_id}": {
+      "sdkMethod": "getInstance",
+      "service": "agents"
+    },
+    "DELETE /agents/instances/{agent_instance_id}": {
+      "sdkMethod": "deleteInstance",
+      "service": "agents"
+    },
+    "GET /agents/sessions": {
+      "sdkMethod": "listSessions",
+      "service": "agents"
+    },
+    "GET /agents/sessions/{agent_instance_session_id}": {
+      "sdkMethod": "getSession",
+      "service": "agents"
+    },
+    "POST /agents/sessions/{agent_instance_session_id}/revoke": {
+      "sdkMethod": "revokeSession",
+      "service": "agents"
+    },
+    "POST /connections": {
+      "sdkMethod": "createConnection",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_idp_signing_certs": {
+      "sdkMethod": "listConnectionSAMLIdpSigningCerts",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_idp_signing_certs": {
+      "sdkMethod": "createConnectionSAMLIdpSigningCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_idp_signing_certs/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLIdpSigningCert",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_sp_encryption_certs": {
+      "sdkMethod": "listConnectionSAMLSpEncryptionCerts",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_sp_encryption_certs": {
+      "sdkMethod": "createConnectionSAMLSpEncryptionCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_sp_encryption_certs/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLSpEncryptionCert",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_sp_signing_cert": {
+      "sdkMethod": "listConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_sp_signing_cert": {
+      "sdkMethod": "createConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_sp_signing_cert/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "PATCH /connections/{id}": {
+      "sdkMethod": "updateConnection",
+      "service": "sso"
+    },
+    "GET /organizations/{organization_id}/it_contacts": {
+      "sdkMethod": "listItContacts",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts": {
+      "sdkMethod": "createItContact",
+      "service": "organizations"
+    },
+    "DELETE /organizations/{organization_id}/it_contacts/{contact_id}": {
+      "sdkMethod": "deleteItContact",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts/{contact_id}/invite": {
+      "sdkMethod": "inviteItContact",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts/{contact_id}/revoke": {
+      "sdkMethod": "revokeItContact",
+      "service": "organizations"
+    },
+    "DELETE /user_management/waitlist_entries/{id}": {
+      "sdkMethod": "deleteWaitlistEntry",
+      "service": "userManagement"
+    },
+    "POST /user_management/waitlist_entries/{id}/approve": {
+      "sdkMethod": "createWaitlistEntryApprove",
+      "service": "userManagement"
+    },
+    "POST /user_management/waitlist_entries/{id}/deny": {
+      "sdkMethod": "createWaitlistEntryDeny",
+      "service": "userManagement"
+    },
+    "GET /user_management/waitlists": {
+      "sdkMethod": "listWaitlists",
+      "service": "userManagement"
+    },
+    "GET /user_management/waitlists/{id}": {
+      "sdkMethod": "getWaitlist",
+      "service": "userManagement"
+    },
+    "GET /user_management/waitlists/{id}/entries": {
+      "sdkMethod": "listWaitlistEntries",
+      "service": "userManagement"
+    },
+    "POST /user_management/waitlists/{id}/entries": {
+      "sdkMethod": "createWaitlistEntry",
+      "service": "userManagement"
     }
   }
 }
