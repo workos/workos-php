@@ -8,6 +8,11 @@ namespace WorkOS\Service;
 
 use WorkOS\Resource\Connection;
 use WorkOS\Resource\Profile;
+use WorkOS\Resource\SAMLIdpSigningCertificate;
+use WorkOS\Resource\SAMLIdpSigningCertificateList;
+use WorkOS\Resource\SAMLSpEncryptionCertificate;
+use WorkOS\Resource\SAMLSpEncryptionCertificateList;
+use WorkOS\Resource\SAMLSpSigningCertificate;
 use WorkOS\Resource\SSOLogoutAuthorizeResponse;
 use WorkOS\Resource\SSOTokenResponse;
 
@@ -64,6 +69,238 @@ class SSO
     }
 
     /**
+     * Create a Connection
+     *
+     * Creates a new connection for an organization. Provide `saml_options` or `oidc_options` to configure the identity provider. When `external_id` matches an existing connection in the organization, that connection is returned instead of creating a duplicate.
+     * @param string $organizationId Unique identifier for the Organization in which the Connection resides.
+     * @param string|null $name A human-readable name for the Connection. This will most commonly be the organization's name.
+     * @param string|null $externalId The customer-owned identifier for the Connection.
+     * @param string|null $connectionType The type of the Connection. Only SAML and OIDC connection types may be created. When omitted, the type is inferred from the provided options.
+     * @param \WorkOS\Resource\CreateConnectionAttributeMaps|null $attributeMaps How IdP attributes or claims map onto WorkOS profile fields. Provided fields override the defaults for the connection type.
+     * @param CreateProtocolOptionsSAML|CreateProtocolOptionsOIDC $protocolOptions
+     * @return \WorkOS\Resource\Connection
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createConnection(
+        string $organizationId,
+        CreateProtocolOptionsSAML|CreateProtocolOptionsOIDC $protocolOptions,
+        ?string $name = null,
+        ?string $externalId = null,
+        ?string $connectionType = null,
+        ?\WorkOS\Resource\CreateConnectionAttributeMaps $attributeMaps = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\Connection {
+        $body = array_filter([
+            'organization_id' => $organizationId,
+            'name' => $name,
+            'external_id' => $externalId,
+            'connection_type' => $connectionType,
+            'attribute_maps' => $attributeMaps,
+        ], fn ($v) => $v !== null);
+        if ($protocolOptions instanceof CreateProtocolOptionsSAML) {
+            $body['saml_options'] = $protocolOptions->samlOptions;
+        } elseif ($protocolOptions instanceof CreateProtocolOptionsOIDC) {
+            $body['oidc_options'] = $protocolOptions->oidcOptions;
+        }
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'connections',
+            body: $body,
+            options: $options,
+        );
+        return Connection::fromArray($response);
+    }
+
+    /**
+     * List IdP signing certificates
+     *
+     * Lists every Identity Provider signing certificate on the connection, including expired ones, oldest first.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @return \WorkOS\Resource\SAMLIdpSigningCertificateList
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listConnectionSAMLIdpSigningCerts(
+        string $connectionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLIdpSigningCertificateList {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_idp_signing_certs',
+            options: $options,
+        );
+        return SAMLIdpSigningCertificateList::fromArray($response);
+    }
+
+    /**
+     * Create an IdP signing certificate
+     *
+     * Adds an Identity Provider signing certificate to the connection, so SAML responses signed with its key can be verified. Use this to import a new certificate ahead of an Identity Provider rotation — the existing certificates keep working until they are deleted or expire.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @param string $value The PEM-encoded X.509 certificate.
+     * @return \WorkOS\Resource\SAMLIdpSigningCertificate
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createConnectionSAMLIdpSigningCert(
+        string $connectionId,
+        string $value,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLIdpSigningCertificate {
+        $body = [
+            'value' => $value,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_idp_signing_certs',
+            body: $body,
+            options: $options,
+        );
+        return SAMLIdpSigningCertificate::fromArray($response);
+    }
+
+    /**
+     * Delete an IdP signing certificate
+     *
+     * Removes an Identity Provider signing certificate from the connection. The last remaining certificate cannot be deleted. A certificate still published in the Identity Provider metadata may be restored by a metadata refresh.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @param string $certificateId Unique identifier for the Identity Provider signing certificate.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteConnectionSAMLIdpSigningCert(
+        string $connectionId,
+        string $certificateId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_idp_signing_certs/' . rawurlencode($certificateId),
+            options: $options,
+        );
+    }
+
+    /**
+     * List SP encryption certificates
+     *
+     * Lists the public certificates the Identity Provider can use to encrypt SAML responses sent to WorkOS, including expired ones, oldest first.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @return \WorkOS\Resource\SAMLSpEncryptionCertificateList
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listConnectionSAMLSpEncryptionCerts(
+        string $connectionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLSpEncryptionCertificateList {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_encryption_certs',
+            options: $options,
+        );
+        return SAMLSpEncryptionCertificateList::fromArray($response);
+    }
+
+    /**
+     * Create an SP encryption certificate
+     *
+     * Generates a new encryption key pair for the connection and returns its public certificate. WorkOS holds the private key, so the request takes no body — to bring your own key pairs, provide `saml_options.sp_encryption_key_pairs` when creating the connection instead. Creating a certificate appends rather than replaces: every active private key is tried when decrypting, which lets a rotation overlap the old and new certificates.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @return \WorkOS\Resource\SAMLSpEncryptionCertificate
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createConnectionSAMLSpEncryptionCert(
+        string $connectionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLSpEncryptionCertificate {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_encryption_certs',
+            options: $options,
+        );
+        return SAMLSpEncryptionCertificate::fromArray($response);
+    }
+
+    /**
+     * Delete an SP encryption certificate
+     *
+     * Removes an encryption key pair from the connection. SAML responses encrypted with its certificate can no longer be decrypted, so remove the certificate from the Identity Provider first when rotating.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @param string $certificateId Unique identifier for the Service Provider encryption key pair. WorkOS holds the corresponding private key, which is never exposed.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteConnectionSAMLSpEncryptionCert(
+        string $connectionId,
+        string $certificateId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_encryption_certs/' . rawurlencode($certificateId),
+            options: $options,
+        );
+    }
+
+    /**
+     * Get the SP signing certificate
+     *
+     * Returns the public certificate the Identity Provider can use to verify the signature of SAML requests sent by WorkOS. Responds with `404` when the connection has no request signing key pair.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @return \WorkOS\Resource\SAMLSpSigningCertificate
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listConnectionSAMLSpSigningCert(
+        string $connectionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLSpSigningCertificate {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_signing_cert',
+            options: $options,
+        );
+        return SAMLSpSigningCertificate::fromArray($response);
+    }
+
+    /**
+     * Create an SP signing certificate
+     *
+     * Generates a new request signing key pair for the connection and returns its public certificate. WorkOS holds the private key, so the request takes no body — to bring your own key pair, provide `saml_options.sp_signing_key_pair` when creating the connection instead. A connection signs with one key pair at a time: delete the existing certificate before creating its replacement.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @return \WorkOS\Resource\SAMLSpSigningCertificate
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createConnectionSAMLSpSigningCert(
+        string $connectionId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\SAMLSpSigningCertificate {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_signing_cert',
+            options: $options,
+        );
+        return SAMLSpSigningCertificate::fromArray($response);
+    }
+
+    /**
+     * Delete the SP signing certificate
+     *
+     * Removes the request signing key pair from the connection, after which SAML requests are sent unsigned. Delete the certificate before creating its replacement when rotating.
+     * @param string $connectionId Unique identifier for the Connection.
+     * @param string $certificateId Unique identifier for the Service Provider signing key pair. WorkOS holds the corresponding private key, which is never exposed.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteConnectionSAMLSpSigningCert(
+        string $connectionId,
+        string $certificateId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'connections/' . rawurlencode($connectionId) . '/saml_sp_signing_cert/' . rawurlencode($certificateId),
+            options: $options,
+        );
+    }
+
+    /**
      * Get a Connection
      *
      * Get the details of an existing connection.
@@ -78,6 +315,48 @@ class SSO
         $response = $this->client->request(
             method: 'GET',
             path: 'connections/' . rawurlencode($id),
+            options: $options,
+        );
+        return Connection::fromArray($response);
+    }
+
+    /**
+     * Update a Connection
+     *
+     * Updates an existing connection. Only the provided fields are changed; fields that accept `null` are reset to their default behavior.
+     * @param string $id Unique identifier for the Connection.
+     * @param string|null $name A human-readable name for the Connection.
+     * @param string|null $externalId The customer-owned identifier for the Connection. Set to `null` to stop tracking one.
+     * @param string|null $connectionType The type of the Connection. Immutable after creation — it may be sent, but only with the Connection current type.
+     * @param \WorkOS\Resource\PatchConnectionAttributeMaps|null $attributeMaps How IdP attributes or claims map onto WorkOS profile fields. Only the provided fields are updated.
+     * @param null|PatchProtocolOptionsSAML|PatchProtocolOptionsOIDC $protocolOptions
+     * @return \WorkOS\Resource\Connection
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateConnection(
+        string $id,
+        ?string $name = null,
+        ?string $externalId = null,
+        ?string $connectionType = null,
+        ?\WorkOS\Resource\PatchConnectionAttributeMaps $attributeMaps = null,
+        null|PatchProtocolOptionsSAML|PatchProtocolOptionsOIDC $protocolOptions = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\Connection {
+        $body = array_filter([
+            'name' => $name,
+            'external_id' => $externalId,
+            'connection_type' => $connectionType,
+            'attribute_maps' => $attributeMaps,
+        ], fn ($v) => $v !== null);
+        if ($protocolOptions instanceof PatchProtocolOptionsSAML) {
+            $body['saml_options'] = $protocolOptions->samlOptions;
+        } elseif ($protocolOptions instanceof PatchProtocolOptionsOIDC) {
+            $body['oidc_options'] = $protocolOptions->oidcOptions;
+        }
+        $response = $this->client->request(
+            method: 'PATCH',
+            path: 'connections/' . rawurlencode($id),
+            body: $body,
             options: $options,
         );
         return Connection::fromArray($response);
@@ -224,18 +503,27 @@ class SSO
      * Get a Profile and Token
      *
      * Get an access token along with the user [Profile](https://workos.com/docs/reference/sso/profile) using the code passed to your [Redirect URI](https://workos.com/docs/reference/sso/get-authorization-url/redirect-uri).
-     * @param string $code The authorization code received from the authorization callback.
+     * @param string|null $code The authorization code received from the authorization callback. Required when `grant_type` is `authorization_code`.
+     * @param string|null $subjectToken The OIDC ID token to exchange. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
+     * @param string|null $subjectTokenType The type of the subject token. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
+     * @param string|null $organizationId The ID of the organization whose connection the subject token is validated against. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
      * @return \WorkOS\Resource\SSOTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function getProfileAndToken(
-        string $code,
+        ?string $code = null,
+        ?string $subjectToken = null,
+        ?string $subjectTokenType = null,
+        ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\SSOTokenResponse {
-        $body = [
+        $body = array_filter([
             'code' => $code,
+            'subject_token' => $subjectToken,
+            'subject_token_type' => $subjectTokenType,
+            'organization_id' => $organizationId,
             'grant_type' => 'authorization_code',
-        ];
+        ], fn ($v) => $v !== null);
         $body['client_id'] = $this->client->requireClientId();
         $body['client_secret'] = $this->client->requireApiKey();
         $response = $this->client->request(
