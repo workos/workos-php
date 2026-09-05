@@ -2,10 +2,24 @@
 
 ## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-05)
 
+* [#438](https://github.com/workos/workos-php/pull/438) fix(generated): regenerate from spec
 
-### Features
-
-* **generated:** Pipes (batch 8ad8e447) ([#438](https://github.com/workos/workos-php/issues/438)) ([42d6bb1](https://github.com/workos/workos-php/commit/42d6bb11d0ed8e2b9122316033119533bd382d03))
+  **Features**
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added `connected_account_id` to `DataIntegrationsVendCredentialsRequest`
+    * Added `connected_account_id` to `DataIntegrationsGetUserTokenRequest`
+    * Added parameter `UserManagementDataProviders.getUserDataInstallation.connected_account_id`
+    * Changed errors for endpoint `GET /user_management/users/{user_id}/connected_accounts/{slug}`
+    * Added parameter `UserManagementDataProviders.updateUserDataInstallation.connected_account_id`
+    * Changed errors for endpoint `PUT /user_management/users/{user_id}/connected_accounts/{slug}`
+    * Added parameter `UserManagementDataProviders.deleteUserDataInstallation.connected_account_id`
+    * Changed errors for endpoint `DELETE /user_management/users/{user_id}/connected_accounts/{slug}`
+    * Added `connected_accounts` to `DataIntegrationsListResponseData`
+    * Changed errors for endpoint `PUT /data-integrations/{slug}`
+    * Changed errors for endpoint `PUT /data-integrations/{slug}/api-key`
+    * Changed errors for endpoint `PUT /data-integrations/{slug}/client-credentials`
+    * Changed errors for endpoint `POST /data-integrations/{slug}/credentials`
+    * Changed errors for endpoint `POST /data-integrations/{provider}/token`
 
 ## [9.3.0](https://github.com/workos/workos-php/compare/v9.2.0...v9.3.0) (2026-09-01)
 
