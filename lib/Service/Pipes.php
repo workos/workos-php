@@ -293,6 +293,7 @@ class Pipes
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
      * @return \WorkOS\Resource\DataIntegrationCredentialsResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -300,11 +301,13 @@ class Pipes
         string $slug,
         string $userId,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationCredentialsResponse {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -322,6 +325,7 @@ class Pipes
      * @param string $provider The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
      * @return \WorkOS\Resource\DataIntegrationAccessTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -329,11 +333,13 @@ class Pipes
         string $provider,
         string $userId,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationAccessTokenResponse {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -351,6 +357,7 @@ class Pipes
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -358,10 +365,12 @@ class Pipes
         string $userId,
         string $slug,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $query = array_filter([
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'GET',
@@ -426,6 +435,7 @@ class Pipes
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to update.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -438,6 +448,7 @@ class Pipes
         ?array $scopes = null,
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
@@ -463,6 +474,7 @@ class Pipes
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to delete.
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -470,10 +482,12 @@ class Pipes
         string $userId,
         string $slug,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
         $query = array_filter([
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $this->client->request(
             method: 'DELETE',
