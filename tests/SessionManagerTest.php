@@ -203,6 +203,77 @@ class SessionManagerTest extends TestCase
         $this->assertSame('org_test', $result['organization_id']);
     }
 
+    /**
+     * @param string|array<string>|null $issuer
+     * @return array<string, mixed>
+     */
+    private function authenticateWithIssuer(string|array|null $issuer, ?string $iss): array
+    {
+        $claims = ['sid' => 'session_iss', 'exp' => time() + 3600];
+        if ($iss !== null) {
+            $claims['iss'] = $iss;
+        }
+        [$jwks, $jwt] = $this->buildSignedJwt($claims);
+
+        $sealed = SessionManager::sealSessionFromAuthResponse(
+            accessToken: $jwt,
+            refreshToken: 'ref_test',
+            cookiePassword: $this->cookiePassword,
+        );
+
+        $client = $this->createMockClient([['status' => 200, 'body' => $jwks]]);
+
+        return $client->sessionManager()->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+            issuer: $issuer,
+        );
+    }
+
+    public function testAuthenticateIgnoresIssuerWhenNotConfigured(): void
+    {
+        $result = $this->authenticateWithIssuer(null, 'https://other.example.com');
+        $this->assertTrue($result['authenticated']);
+    }
+
+    public function testAuthenticateAcceptsMatchingIssuer(): void
+    {
+        $result = $this->authenticateWithIssuer('https://api.workos.com', 'https://api.workos.com');
+        $this->assertTrue($result['authenticated']);
+        $this->assertSame('session_iss', $result['session_id']);
+    }
+
+    public function testAuthenticateRejectsMismatchedIssuer(): void
+    {
+        $result = $this->authenticateWithIssuer('https://api.workos.com', 'https://other.example.com');
+        $this->assertFalse($result['authenticated']);
+        $this->assertSame('invalid_jwt', $result['reason']);
+    }
+
+    public function testAuthenticateRejectsMissingIssWhenIssuerConfigured(): void
+    {
+        $result = $this->authenticateWithIssuer('https://api.workos.com', null);
+        $this->assertFalse($result['authenticated']);
+        $this->assertSame('invalid_jwt', $result['reason']);
+    }
+
+    public function testAuthenticateAcceptsAnyListedIssuer(): void
+    {
+        $result = $this->authenticateWithIssuer(
+            ['https://api.workos.com', 'https://auth.example.com'],
+            'https://auth.example.com',
+        );
+        $this->assertTrue($result['authenticated']);
+    }
+
+    public function testAuthenticateRejectsAllTokensWhenIssuerListIsEmpty(): void
+    {
+        $result = $this->authenticateWithIssuer([], 'https://api.workos.com');
+        $this->assertFalse($result['authenticated']);
+        $this->assertSame('invalid_jwt', $result['reason']);
+    }
+
     public function testAuthenticateRejectsTamperedSignature(): void
     {
         [$jwks, $jwt] = $this->buildSignedJwt([

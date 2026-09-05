@@ -132,6 +132,8 @@ class SessionManager
      * @param string $cookiePassword The encryption key.
      * @param string $clientId The WorkOS client ID (for JWKS URL).
      * @param string $baseUrl The WorkOS API base URL. Defaults to 'https://api.workos.com/'.
+     * @param string|array<string>|null $issuer Expected `iss` claim (one issuer or a list of
+     *   accepted issuers). When null, the issuer is not validated.
      * @return array Authentication result.
      */
     public function authenticate(
@@ -139,6 +141,7 @@ class SessionManager
         string $cookiePassword,
         string $clientId,
         string $baseUrl = 'https://api.workos.com/',
+        string|array|null $issuer = null,
     ): array {
         if (empty($sessionData)) {
             return [
@@ -164,7 +167,7 @@ class SessionManager
         }
 
         try {
-            $decoded = $this->decodeAccessToken($session['access_token'], $clientId);
+            $decoded = $this->decodeAccessToken($session['access_token'], $clientId, $issuer);
         } catch (\Exception $e) {
             return [
                 'authenticated' => false,
@@ -263,6 +266,7 @@ class SessionManager
      * @param string $clientId The WorkOS client ID.
      * @param string|null $returnTo Optional URL to redirect to after logout.
      * @param string $baseUrl The WorkOS API base URL.
+     * @param string|array<string>|null $issuer Expected `iss` claim; see {@see authenticate()}.
      * @return string The logout URL.
      * @throws \InvalidArgumentException If the session cannot be authenticated.
      */
@@ -272,8 +276,9 @@ class SessionManager
         string $clientId,
         ?string $returnTo = null,
         string $baseUrl = 'https://api.workos.com/',
+        string|array|null $issuer = null,
     ): string {
-        $authResult = $this->authenticate($sessionData, $cookiePassword, $clientId, $baseUrl);
+        $authResult = $this->authenticate($sessionData, $cookiePassword, $clientId, $baseUrl, $issuer);
 
         if (!$authResult['authenticated']) {
             throw new \InvalidArgumentException(
@@ -361,17 +366,21 @@ class SessionManager
      * Decode and validate an access token JWT.
      *
      * Verifies the JWS signature against the JWKS published for `$clientId`,
-     * enforces an algorithm allow-list, and rejects expired tokens. This is
-     * the only path used by {@see authenticate()}; callers must not bypass it.
+     * enforces an algorithm allow-list, rejects expired tokens, and — when
+     * `$issuer` is given — requires the `iss` claim to match one of the
+     * accepted issuers. This is the only path used by {@see authenticate()};
+     * callers must not bypass it.
      *
      * @param string $accessToken The JWT access token.
      * @param string $clientId The WorkOS client ID (used to fetch JWKS).
+     * @param string|array<string>|null $issuer Accepted `iss` value(s), or null to skip the check.
      * @return array The decoded JWT claims.
      * @throws \InvalidArgumentException If the token cannot be decoded or fails verification.
      */
     private function decodeAccessToken(
         string $accessToken,
         string $clientId,
+        string|array|null $issuer = null,
     ): array {
         $parts = explode('.', $accessToken);
         if (count($parts) !== 3) {
@@ -441,11 +450,20 @@ class SessionManager
             throw new \InvalidArgumentException('JWT has expired');
         }
 
-        // TODO(security-fix-plan.md, finding #60): enforce documented WorkOS
-        // `iss` and `aud` values once empirically confirmed. The other WorkOS
-        // SDKs (Ruby, Python) currently skip `aud` verification, so the
-        // canonical values are not authoritatively documented in this repo.
-        // Track resolution under "Open questions / follow-ups" in the plan.
+        if ($issuer !== null) {
+            $accepted = is_array($issuer) ? $issuer : [$issuer];
+            $iss = $decoded['iss'] ?? null;
+            if (!is_string($iss) || !in_array($iss, $accepted, true)) {
+                throw new \InvalidArgumentException('JWT issuer mismatch');
+            }
+        }
+
+        // TODO(security-fix-plan.md, finding #60): enforce `iss` and `aud` by
+        // default once the canonical WorkOS values are empirically confirmed.
+        // The other WorkOS SDKs (Ruby, Python) currently skip `aud` verification
+        // and only check `iss` when configured, so the canonical values are not
+        // authoritatively documented in this repo. Track resolution under
+        // "Open questions / follow-ups" in the plan.
 
         return $decoded;
     }
