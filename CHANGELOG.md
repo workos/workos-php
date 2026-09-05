@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-05)
+
+
+### Features
+
+* **generated:** Pipes (batch 8ad8e447) ([#438](https://github.com/workos/workos-php/issues/438)) ([42d6bb1](https://github.com/workos/workos-php/commit/42d6bb11d0ed8e2b9122316033119533bd382d03))
+
 ## [9.3.0](https://github.com/workos/workos-php/compare/v9.2.0...v9.3.0) (2026-09-01)
 
 ### Miscellaneous Chores
