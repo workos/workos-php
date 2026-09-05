@@ -15,6 +15,8 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
         public string $userId,
         /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. */
         public ?string $organizationId = null,
+        /** A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider. */
+        public ?string $connectedAccountId = null,
     ) {
     }
 
@@ -23,6 +25,7 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
         return new self(
             userId: $data['user_id'],
             organizationId: $data['organization_id'] ?? null,
+            connectedAccountId: $data['connected_account_id'] ?? null,
         );
     }
 
@@ -31,6 +34,7 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
         return [
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
+            'connected_account_id' => $this->connectedAccountId,
         ];
     }
 }

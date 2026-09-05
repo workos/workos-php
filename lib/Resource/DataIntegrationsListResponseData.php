@@ -39,6 +39,11 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
         /** The user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` if the user has not connected. */
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
         /**
+         * The user's connected accounts for this provider in the requested ownership context.
+         * @var array<\WorkOS\Resource\DataIntegrationsListResponseDataConnectedAccount>
+         */
+        public array $connectedAccounts,
+        /**
          * The authentication methods supported by this provider (`oauth`, `api_key`, `client_credentials`, or a combination). Defaults to `["oauth"]` if absent.
          * @var array<\WorkOS\Resource\DataIntegrationAuthMethods>|null
          */
@@ -61,6 +66,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
             connectedAccount: isset($data['connected_account']) ? DataIntegrationsListResponseDataConnectedAccount::fromArray($data['connected_account']) : null,
+            connectedAccounts: array_map(fn ($item) => DataIntegrationsListResponseDataConnectedAccount::fromArray($item), $data['connected_accounts']),
             authMethods: isset($data['auth_methods']) ? array_map(fn ($item) => DataIntegrationAuthMethods::from($item), $data['auth_methods']) : null,
         );
     }
@@ -80,6 +86,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
             'connected_account' => $this->connectedAccount?->toArray(),
+            'connected_accounts' => array_map(fn ($item) => $item->toArray(), $this->connectedAccounts),
             'auth_methods' => $this->authMethods !== null ? array_map(fn ($item) => $item->value, $this->authMethods) : null,
         ];
     }
