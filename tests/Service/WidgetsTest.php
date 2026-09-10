@@ -17,14 +17,12 @@ class WidgetsTest extends TestCase
     {
         $fixture = $this->loadFixture('widget_session_token_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->widgets()->createToken(organizationId: 'test_value');
+        $result = $client->widgets()->createToken();
         $this->assertInstanceOf(\WorkOS\Resource\WidgetSessionTokenResponse::class, $result);
         $this->assertSame($fixture['token'], $result->token);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('widgets/token', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['organization_id']);
     }
 }

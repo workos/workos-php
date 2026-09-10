@@ -12,6 +12,8 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
 
     public function __construct(
         public ?ApiKey $apiKey,
+        /** The ID of the agent registration this API Key was issued for. Present only when the API Key is assigned to an agent registration. */
+        public ?string $agentRegistrationId = null,
     ) {
     }
 
@@ -19,6 +21,7 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
     {
         return new self(
             apiKey: isset($data['api_key']) ? ApiKey::fromArray($data['api_key']) : null,
+            agentRegistrationId: $data['agent_registration_id'] ?? null,
         );
     }
 
@@ -26,6 +29,7 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
     {
         return [
             'api_key' => $this->apiKey?->toArray(),
+            'agent_registration_id' => $this->agentRegistrationId,
         ];
     }
 }

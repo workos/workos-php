@@ -22,6 +22,11 @@ readonly class ConfigureDataIntegrationBody implements \JsonSerializable
         public ?string $clientId = null,
         /** The OAuth client secret of the organization's own application. Must be provided together with `client_id`. */
         public ?string $clientSecret = null,
+        /**
+         * Provider-specific config values to set for the organization, keyed by config field. Only fields the provider declares are accepted, and each value must match that field's pattern. Accepted only for providers whose credentials are organization-managed; for shared or custom credential providers, config belongs on the integration itself (via the data-integrations API) and supplying it here is rejected.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
     ) {
     }
 
@@ -32,6 +37,7 @@ readonly class ConfigureDataIntegrationBody implements \JsonSerializable
             scopes: $data['scopes'] ?? null,
             clientId: $data['client_id'] ?? null,
             clientSecret: $data['client_secret'] ?? null,
+            config: $data['config'] ?? null,
         );
     }
 
@@ -42,6 +48,7 @@ readonly class ConfigureDataIntegrationBody implements \JsonSerializable
             'scopes' => $this->scopes,
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
+            'config' => $this->config,
         ];
     }
 }

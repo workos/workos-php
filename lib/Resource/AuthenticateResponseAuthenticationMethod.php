@@ -14,7 +14,6 @@ enum AuthenticateResponseAuthenticationMethod: string
     case AppleOAuth = 'AppleOAuth';
     case BitbucketOAuth = 'BitbucketOAuth';
     case CrossAppAuth = 'CrossAppAuth';
-    case DiscordOAuth = 'DiscordOAuth';
     case ExternalAuth = 'ExternalAuth';
     case GitHubOAuth = 'GitHubOAuth';
     case GitLabOAuth = 'GitLabOAuth';

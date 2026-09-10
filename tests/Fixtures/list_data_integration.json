@@ -13,10 +13,17 @@
         "read:org"
       ],
       "redirect_uri": "https://api.workos.com/data-integrations/github/dik_01EHZNVPK3SFK441A1RGBFSHRT/callback",
+      "auth_methods": [
+        "oauth"
+      ],
       "credentials": {
         "type": "custom",
         "client_id": "Iv1.abc123",
         "redacted_client_secret": "6789"
+      },
+      "installation": null,
+      "config": {
+        "account": "myorg-myaccount"
       },
       "custom_provider": {
         "name": "My OAuth App",

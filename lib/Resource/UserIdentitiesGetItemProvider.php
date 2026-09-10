@@ -10,7 +10,6 @@ enum UserIdentitiesGetItemProvider: string
 {
     case AppleOAuth = 'AppleOAuth';
     case BitbucketOAuth = 'BitbucketOAuth';
-    case DiscordOAuth = 'DiscordOAuth';
     case GithubOAuth = 'GithubOAuth';
     case GitLabOAuth = 'GitLabOAuth';
     case GoogleOAuth = 'GoogleOAuth';

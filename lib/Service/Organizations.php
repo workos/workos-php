@@ -7,7 +7,10 @@ declare(strict_types=1);
 namespace WorkOS\Service;
 
 use WorkOS\Resource\AuditLogConfiguration;
+use WorkOS\Resource\ItContact;
+use WorkOS\Resource\ItContactList;
 use WorkOS\Resource\Organization;
+use WorkOS\Resource\OrganizationAuthorizedConnectApplicationListData;
 
 class Organizations
 {
@@ -61,7 +64,7 @@ class Organizations
      * Creates a new organization in the current environment.
      * @param string $name The name of the organization.
      * @param bool|null $allowProfilesOutsideOrganization Whether the organization allows profiles from outside the organization to sign in.
-     * @param array<string>|null $domains The domains associated with the organization. Deprecated in favor of `domain_data`.
+     * @param array<string>|null $domains (deprecated) The domains associated with the organization. Deprecated in favor of `domain_data`.
      * @param array<\WorkOS\Resource\OrganizationDomainData>|null $domainData The domains associated with the organization, including verification state.
      * @param array<string, string>|null $metadata Object containing [metadata](https://workos.com/docs/authkit/metadata) key/value pairs associated with the Organization.
      * @param string|null $externalId An external identifier for the Organization.
@@ -215,5 +218,157 @@ class Organizations
             options: $options,
         );
         return AuditLogConfiguration::fromArray($response);
+    }
+
+    /**
+     * List authorized applications
+     *
+     * Get a list of all Connect applications that users in the organization have authorized.
+     * @param string $organizationId The ID of the organization.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\OrganizationAuthorizedConnectApplicationListData>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listAuthorizedApplications(
+        string $organizationId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'organizations/' . rawurlencode($organizationId) . '/authorized_applications',
+            query: $query,
+            modelClass: OrganizationAuthorizedConnectApplicationListData::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * List IT contacts
+     *
+     * Get the IT contacts for an organization.
+     * @param string $organizationId The ID of the organization.
+     * @return \WorkOS\Resource\ItContactList
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listItContacts(
+        string $organizationId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ItContactList {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'organizations/' . rawurlencode($organizationId) . '/it_contacts',
+            options: $options,
+        );
+        return ItContactList::fromArray($response);
+    }
+
+    /**
+     * Create an IT contact
+     *
+     * Add an IT contact to an organization. No Admin Portal invitation is sent, though the contact is notified if the organization has a connection certificate nearing expiry.
+     * @param string $organizationId The ID of the organization.
+     * @param string $email The email address of the IT contact.
+     * @return \WorkOS\Resource\ItContact
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createItContact(
+        string $organizationId,
+        string $email,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ItContact {
+        $body = [
+            'email' => $email,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'organizations/' . rawurlencode($organizationId) . '/it_contacts',
+            body: $body,
+            options: $options,
+        );
+        return ItContact::fromArray($response);
+    }
+
+    /**
+     * Delete an IT contact
+     *
+     * Remove an IT contact from an organization and revoke the contact's active setup links.
+     * @param string $organizationId The ID of the organization.
+     * @param string $contactId The ID of the IT contact.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteItContact(
+        string $organizationId,
+        string $contactId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'organizations/' . rawurlencode($organizationId) . '/it_contacts/' . rawurlencode($contactId),
+            options: $options,
+        );
+    }
+
+    /**
+     * Invite an IT contact
+     *
+     * Create an Admin Portal setup link and email it to the IT contact. An organization can have at most one active invitation.
+     * @param string $organizationId The ID of the organization.
+     * @param string $contactId The ID of the IT contact.
+     * @param array<\WorkOS\Resource\InviteItContactIntents> $intents The Admin Portal features that the IT contact can configure.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function inviteItContact(
+        string $organizationId,
+        string $contactId,
+        array $intents,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $body = [
+            'intents' => $intents,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'organizations/' . rawurlencode($organizationId) . '/it_contacts/' . rawurlencode($contactId) . '/invite',
+            body: $body,
+            options: $options,
+        );
+        return $response;
+    }
+
+    /**
+     * Revoke an IT contact's invitation
+     *
+     * Revoke the organization's active Admin Portal invitation.
+     * @param string $organizationId The ID of the organization.
+     * @param string $contactId The ID of the IT contact.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function revokeItContact(
+        string $organizationId,
+        string $contactId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'organizations/' . rawurlencode($organizationId) . '/it_contacts/' . rawurlencode($contactId) . '/revoke',
+            options: $options,
+        );
+        return $response;
     }
 }

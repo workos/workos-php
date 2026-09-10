@@ -44,18 +44,22 @@ class AuditLogs
      *
      * Set the event retention period for the given Organization.
      * @param string $id Unique identifier of the Organization.
-     * @param int $retentionPeriodInDays The number of days Audit Log events will be retained. Valid values are `30` and `365`.
+     * @param RetentionPeriod|RetentionPeriodInDays $retention
      * @return \WorkOS\Resource\AuditLogsRetention
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationAuditLogsRetention(
         string $id,
-        int $retentionPeriodInDays,
+        RetentionPeriod|RetentionPeriodInDays $retention,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AuditLogsRetention {
         $body = [
-            'retention_period_in_days' => $retentionPeriodInDays,
         ];
+        if ($retention instanceof RetentionPeriod) {
+            $body['retention_period'] = $retention->period;
+        } elseif ($retention instanceof RetentionPeriodInDays) {
+            $body['retention_period_in_days'] = $retention->periodInDays;
+        }
         $response = $this->client->request(
             method: 'PUT',
             path: 'organizations/' . rawurlencode($id) . '/audit_logs_retention',

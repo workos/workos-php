@@ -32,10 +32,10 @@ class OrganizationDomainsTest extends TestCase
 
     public function testGetOrganizationDomain(): void
     {
-        $fixture = $this->loadFixture('organization_domain_stand_alone');
+        $fixture = $this->loadFixture('organization_domain');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizationDomains()->getOrganizationDomain('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
         $this->assertIsArray($result->toArray());
@@ -55,10 +55,10 @@ class OrganizationDomainsTest extends TestCase
 
     public function testVerifyOrganizationDomain(): void
     {
-        $fixture = $this->loadFixture('organization_domain_stand_alone');
+        $fixture = $this->loadFixture('organization_domain');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->organizationDomains()->verifyOrganizationDomain('test_id');
-        $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomainStandAlone::class, $result);
+        $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
         $this->assertIsArray($result->toArray());

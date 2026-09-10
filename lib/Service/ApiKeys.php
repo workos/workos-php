@@ -74,7 +74,7 @@ class ApiKeys
         $body = array_filter([
             'name' => $name,
             'permissions' => $permissions,
-            'expires_at' => $expiresAt,
+            'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -143,7 +143,7 @@ class ApiKeys
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ApiKey {
         $body = array_filter([
-            'expires_at' => $expiresAt,
+            'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',

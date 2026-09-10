@@ -2,16 +2,86 @@
   "version": 2,
   "language": "php",
   "files": [
+    "lib/Resource/AccessTokenAgentRegistrationCredentialIssuedDataDetail.php",
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
     "lib/Resource/ActionUserRegistrationDenied.php",
     "lib/Resource/ActionUserRegistrationDeniedData.php",
     "lib/Resource/Actor.php",
     "lib/Resource/AddRolePermission.php",
+    "lib/Resource/AgentAdminLinkClaimAttemptToExternalUserRequest.php",
+    "lib/Resource/AgentAdminLinkClaimAttemptToExternalUserRequestUser.php",
+    "lib/Resource/AgentAdminValidateCredentialRequest.php",
+    "lib/Resource/AgentAdminValidateCredentialRequestType.php",
+    "lib/Resource/AgentBlueprint.php",
+    "lib/Resource/AgentBlueprintCreated.php",
+    "lib/Resource/AgentBlueprintCreatedData.php",
+    "lib/Resource/AgentBlueprintCreatedDataInvocableBy.php",
+    "lib/Resource/AgentBlueprintCreatedDataSessionSetting.php",
+    "lib/Resource/AgentBlueprintDeleted.php",
+    "lib/Resource/AgentBlueprintDeletedData.php",
+    "lib/Resource/AgentBlueprintInvocableBy.php",
+    "lib/Resource/AgentBlueprintSessionSetting.php",
+    "lib/Resource/AgentBlueprintUpdated.php",
+    "lib/Resource/AgentBlueprintUpdatedData.php",
+    "lib/Resource/AgentBlueprintUpdatedDataInvocableBy.php",
+    "lib/Resource/AgentBlueprintUpdatedDataSessionSetting.php",
+    "lib/Resource/AgentBlueprintsCreateRequest.php",
+    "lib/Resource/AgentBlueprintsCreateRequestInvocableBy.php",
+    "lib/Resource/AgentBlueprintsCreateRequestSessionSetting.php",
+    "lib/Resource/AgentBlueprintsTokenMintTokenRequest.php",
+    "lib/Resource/AgentBlueprintsTokenMintTokenRequestType.php",
+    "lib/Resource/AgentBlueprintsTokenValidateTokenRequest.php",
+    "lib/Resource/AgentBlueprintsUpdateRequest.php",
+    "lib/Resource/AgentBlueprintsUpdateRequestInvocableBy.php",
+    "lib/Resource/AgentBlueprintsUpdateRequestSessionSetting.php",
+    "lib/Resource/AgentCredentialValidation.php",
+    "lib/Resource/AgentInstance.php",
+    "lib/Resource/AgentInstanceCreated.php",
+    "lib/Resource/AgentInstanceCreatedData.php",
+    "lib/Resource/AgentInstanceDeleted.php",
+    "lib/Resource/AgentInstanceDeletedData.php",
+    "lib/Resource/AgentInstanceSession.php",
+    "lib/Resource/AgentInstanceSessionCreated.php",
+    "lib/Resource/AgentInstanceSessionCreatedData.php",
+    "lib/Resource/AgentInstanceSessionRevoked.php",
+    "lib/Resource/AgentInstanceSessionRevokedData.php",
+    "lib/Resource/AgentInstanceType.php",
+    "lib/Resource/AgentRegistration.php",
+    "lib/Resource/AgentRegistrationAgentIdentity.php",
+    "lib/Resource/AgentRegistrationClaim.php",
+    "lib/Resource/AgentRegistrationClaimAttemptCreated.php",
+    "lib/Resource/AgentRegistrationClaimAttemptCreatedData.php",
+    "lib/Resource/AgentRegistrationClaimClaimCompletion.php",
+    "lib/Resource/AgentRegistrationClaimCompleted.php",
+    "lib/Resource/AgentRegistrationClaimCompletedData.php",
+    "lib/Resource/AgentRegistrationClaimCompletedDataClaimedBy.php",
+    "lib/Resource/AgentRegistrationCreated.php",
+    "lib/Resource/AgentRegistrationCreatedData.php",
+    "lib/Resource/AgentRegistrationCreatedDataAgentIdentity.php",
+    "lib/Resource/AgentRegistrationCreatedDataMethod.php",
+    "lib/Resource/AgentRegistrationCredentialIssued.php",
+    "lib/Resource/AgentRegistrationCredentialIssuedData.php",
+    "lib/Resource/AgentRegistrationCredentialIssuedDataDetail.php",
+    "lib/Resource/AgentRegistrationDeleted.php",
+    "lib/Resource/AgentRegistrationDeletedData.php",
+    "lib/Resource/AgentRegistrationExpired.php",
+    "lib/Resource/AgentRegistrationExpiredData.php",
+    "lib/Resource/AgentRegistrationKind.php",
+    "lib/Resource/AgentRegistrationOrganizationSwitched.php",
+    "lib/Resource/AgentRegistrationOrganizationSwitchedData.php",
+    "lib/Resource/AgentRegistrationRefreshed.php",
+    "lib/Resource/AgentRegistrationRefreshedData.php",
+    "lib/Resource/AgentRegistrationRevoked.php",
+    "lib/Resource/AgentRegistrationRevokedData.php",
+    "lib/Resource/AgentRegistrationStatus.php",
+    "lib/Resource/AgentToken.php",
+    "lib/Resource/AgentTokenValidation.php",
     "lib/Resource/ApiKey.php",
     "lib/Resource/ApiKeyCreated.php",
     "lib/Resource/ApiKeyCreatedData.php",
     "lib/Resource/ApiKeyCreatedDataOwner.php",
+    "lib/Resource/ApiKeyInstallation.php",
     "lib/Resource/ApiKeyOwner.php",
     "lib/Resource/ApiKeyRevoked.php",
     "lib/Resource/ApiKeyRevokedData.php",
@@ -22,6 +92,7 @@
     "lib/Resource/ApiKeyUpdatedDataPreviousAttribute.php",
     "lib/Resource/ApiKeyValidationResponse.php",
     "lib/Resource/ApplicationCredentialsListItem.php",
+    "lib/Resource/ApplicationsRegistrationTypes.php",
     "lib/Resource/AssignRole.php",
     "lib/Resource/AuditLogAction.php",
     "lib/Resource/AuditLogConfiguration.php",
@@ -95,6 +166,8 @@
     "lib/Resource/AuthenticationRadarRiskDetected.php",
     "lib/Resource/AuthenticationRadarRiskDetectedData.php",
     "lib/Resource/AuthenticationRadarRiskDetectedDataAction.php",
+    "lib/Resource/AuthenticationReauthenticationSucceeded.php",
+    "lib/Resource/AuthenticationReauthenticationSucceededData.php",
     "lib/Resource/AuthenticationSSOFailed.php",
     "lib/Resource/AuthenticationSSOFailedData.php",
     "lib/Resource/AuthenticationSSOFailedDataError.php",
@@ -118,6 +191,8 @@
     "lib/Resource/CORSOriginResponse.php",
     "lib/Resource/ChallengeAuthenticationFactor.php",
     "lib/Resource/CheckAuthorization.php",
+    "lib/Resource/ClaimViewResponse.php",
+    "lib/Resource/ClaimViewResponseOrganization.php",
     "lib/Resource/ClientApiToken.php",
     "lib/Resource/ClientApiTokenResponse.php",
     "lib/Resource/ConfigureDataIntegrationBody.php",
@@ -128,8 +203,7 @@
     "lib/Resource/ConnectApplicationOAuthRedirectUris.php",
     "lib/Resource/ConnectApplicationRedirectUri.php",
     "lib/Resource/ConnectedAccount.php",
-    "lib/Resource/ConnectedAccountAuthMethod.php",
-    "lib/Resource/ConnectedAccountDto.php",
+    "lib/Resource/ConnectedAccountInput.php",
     "lib/Resource/ConnectedAccountState.php",
     "lib/Resource/Connection.php",
     "lib/Resource/ConnectionActivated.php",
@@ -143,7 +217,6 @@
     "lib/Resource/ConnectionDeletedDataConnectionType.php",
     "lib/Resource/ConnectionDeletedDataState.php",
     "lib/Resource/ConnectionDomain.php",
-    "lib/Resource/ConnectionOption.php",
     "lib/Resource/ConnectionSAMLCertificateRenewalRequired.php",
     "lib/Resource/ConnectionSAMLCertificateRenewalRequiredData.php",
     "lib/Resource/ConnectionSAMLCertificateRenewalRequiredDataCertificate.php",
@@ -161,12 +234,20 @@
     "lib/Resource/CreateAuthorizationPermission.php",
     "lib/Resource/CreateAuthorizationResource.php",
     "lib/Resource/CreateCORSOrigin.php",
+    "lib/Resource/CreateConnection.php",
+    "lib/Resource/CreateConnectionAttributeMaps.php",
+    "lib/Resource/CreateConnectionKeyPair.php",
+    "lib/Resource/CreateConnectionOIDCOptions.php",
+    "lib/Resource/CreateConnectionSAMLOptions.php",
+    "lib/Resource/CreateConnectionStandardAttributes.php",
     "lib/Resource/CreateDataIntegration.php",
+    "lib/Resource/CreateDataIntegrationAuthMethods.php",
     "lib/Resource/CreateDataKeyRequest.php",
     "lib/Resource/CreateDataKeyResponse.php",
     "lib/Resource/CreateGroup.php",
     "lib/Resource/CreateGroupMembership.php",
     "lib/Resource/CreateGroupRoleAssignment.php",
+    "lib/Resource/CreateItContact.php",
     "lib/Resource/CreateM2MApplication.php",
     "lib/Resource/CreateMagicCodeAndReturn.php",
     "lib/Resource/CreateOAuthApplication.php",
@@ -178,12 +259,16 @@
     "lib/Resource/CreatePasswordResetToken.php",
     "lib/Resource/CreateRedirectUri.php",
     "lib/Resource/CreateRole.php",
+    "lib/Resource/CreateSAMLIdpSigningCertificate.php",
+    "lib/Resource/CreateTeam.php",
     "lib/Resource/CreateUser.php",
     "lib/Resource/CreateUserApiKey.php",
     "lib/Resource/CreateUserInviteOptions.php",
     "lib/Resource/CreateUserInviteOptionsLocale.php",
     "lib/Resource/CreateUserOrganizationMembership.php",
     "lib/Resource/CreateUserPasswordHashType.php",
+    "lib/Resource/CreateUserPasswordSaltPosition.php",
+    "lib/Resource/CreateWaitlistEntry.php",
     "lib/Resource/CreateWebhookEndpoint.php",
     "lib/Resource/CreateWebhookEndpointEvents.php",
     "lib/Resource/CustomProviderDefinition.php",
@@ -192,6 +277,7 @@
     "lib/Resource/DataIntegrationAccessTokenResponse.php",
     "lib/Resource/DataIntegrationAccessTokenResponseAccessToken.php",
     "lib/Resource/DataIntegrationAccessTokenResponseError.php",
+    "lib/Resource/DataIntegrationAuthMethods.php",
     "lib/Resource/DataIntegrationAuthorizeUrlResponse.php",
     "lib/Resource/DataIntegrationConfigurationListResponse.php",
     "lib/Resource/DataIntegrationConfigurationResponse.php",
@@ -199,19 +285,20 @@
     "lib/Resource/DataIntegrationCredentialType.php",
     "lib/Resource/DataIntegrationCredentials.php",
     "lib/Resource/DataIntegrationCredentialsCredentialsType.php",
-    "lib/Resource/DataIntegrationCredentialsDto.php",
+    "lib/Resource/DataIntegrationCredentialsInput.php",
     "lib/Resource/DataIntegrationCredentialsResponse.php",
     "lib/Resource/DataIntegrationCredentialsResponseCredential.php",
     "lib/Resource/DataIntegrationCustomProvider.php",
+    "lib/Resource/DataIntegrationInstallation.php",
     "lib/Resource/DataIntegrationState.php",
     "lib/Resource/DataIntegrationsGetDataIntegrationAuthorizeUrlRequest.php",
     "lib/Resource/DataIntegrationsGetUserTokenRequest.php",
     "lib/Resource/DataIntegrationsListResponse.php",
     "lib/Resource/DataIntegrationsListResponseData.php",
     "lib/Resource/DataIntegrationsListResponseDataConnectedAccount.php",
-    "lib/Resource/DataIntegrationsListResponseDataConnectedAccountState.php",
     "lib/Resource/DataIntegrationsListResponseDataOwnership.php",
     "lib/Resource/DataIntegrationsUpsertApiKeyRequest.php",
+    "lib/Resource/DataIntegrationsUpsertClientCredentialsRequest.php",
     "lib/Resource/DataIntegrationsVendCredentialsRequest.php",
     "lib/Resource/DecryptRequest.php",
     "lib/Resource/DecryptResponse.php",
@@ -230,7 +317,6 @@
     "lib/Resource/DirectoryUserState.php",
     "lib/Resource/DirectoryUserWithGroups.php",
     "lib/Resource/DirectoryUserWithGroupsEmail.php",
-    "lib/Resource/DomainVerificationIntentOptions.php",
     "lib/Resource/DsyncActivated.php",
     "lib/Resource/DsyncActivatedData.php",
     "lib/Resource/DsyncActivatedDataDomain.php",
@@ -258,6 +344,7 @@
     "lib/Resource/EmailChange.php",
     "lib/Resource/EmailChangeConfirmation.php",
     "lib/Resource/EmailChangeConfirmationUser.php",
+    "lib/Resource/EmailCompletionSessionAuthenticateRequest.php",
     "lib/Resource/EmailVerification.php",
     "lib/Resource/EmailVerificationCodeSessionAuthenticateRequest.php",
     "lib/Resource/EmailVerificationCreated.php",
@@ -321,7 +408,6 @@
     "lib/Resource/GroupRoleAssignmentList.php",
     "lib/Resource/GroupRoleAssignmentResource.php",
     "lib/Resource/GroupUpdated.php",
-    "lib/Resource/IntentOptions.php",
     "lib/Resource/Invitation.php",
     "lib/Resource/InvitationAccepted.php",
     "lib/Resource/InvitationAcceptedData.php",
@@ -331,6 +417,11 @@
     "lib/Resource/InvitationResentData.php",
     "lib/Resource/InvitationRevoked.php",
     "lib/Resource/InvitationRevokedData.php",
+    "lib/Resource/InviteItContact.php",
+    "lib/Resource/InviteItContactIntents.php",
+    "lib/Resource/ItContact.php",
+    "lib/Resource/ItContactList.php",
+    "lib/Resource/ItContactListListMetadata.php",
     "lib/Resource/JWTTemplateResponse.php",
     "lib/Resource/JsonSerializableTrait.php",
     "lib/Resource/JwksResponse.php",
@@ -352,6 +443,7 @@
     "lib/Resource/OrganizationApiKeyOwner.php",
     "lib/Resource/OrganizationApiKeyWithValue.php",
     "lib/Resource/OrganizationApiKeyWithValueOwner.php",
+    "lib/Resource/OrganizationAuthorizedConnectApplicationListData.php",
     "lib/Resource/OrganizationCreated.php",
     "lib/Resource/OrganizationCreatedData.php",
     "lib/Resource/OrganizationCreatedDataDomain.php",
@@ -365,7 +457,6 @@
     "lib/Resource/OrganizationDomainDataState.php",
     "lib/Resource/OrganizationDomainDeleted.php",
     "lib/Resource/OrganizationDomainDeletedData.php",
-    "lib/Resource/OrganizationDomainStandAlone.php",
     "lib/Resource/OrganizationDomainState.php",
     "lib/Resource/OrganizationDomainUpdated.php",
     "lib/Resource/OrganizationDomainUpdatedData.php",
@@ -402,6 +493,13 @@
     "lib/Resource/PasswordResetSucceeded.php",
     "lib/Resource/PasswordResetSucceededData.php",
     "lib/Resource/PasswordSessionAuthenticateRequest.php",
+    "lib/Resource/PatchConnection.php",
+    "lib/Resource/PatchConnectionAttributeMaps.php",
+    "lib/Resource/PatchConnectionOIDCOptions.php",
+    "lib/Resource/PatchConnectionOIDCOptionsIdTokenSignatureAlgorithm.php",
+    "lib/Resource/PatchConnectionOIDCOptionsTokenAuthenticationMethod.php",
+    "lib/Resource/PatchConnectionSAMLOptions.php",
+    "lib/Resource/PatchConnectionStandardAttributes.php",
     "lib/Resource/Permission.php",
     "lib/Resource/PermissionCreated.php",
     "lib/Resource/PermissionCreatedData.php",
@@ -412,10 +510,15 @@
     "lib/Resource/PipeConnectedAccount.php",
     "lib/Resource/PipeConnectedAccountState.php",
     "lib/Resource/PipesConnectedAccountConnected.php",
+    "lib/Resource/PipesConnectedAccountConnectionFailed.php",
+    "lib/Resource/PipesConnectedAccountConnectionFailedData.php",
     "lib/Resource/PipesConnectedAccountDisconnected.php",
     "lib/Resource/PipesConnectedAccountReauthorizationNeeded.php",
     "lib/Resource/PortalLinkResponse.php",
     "lib/Resource/Profile.php",
+    "lib/Resource/RadarChallenge.php",
+    "lib/Resource/RadarChallengeCreated.php",
+    "lib/Resource/RadarChallengeCreatedData.php",
     "lib/Resource/RadarEmailChallengeCodeSessionAuthenticateRequest.php",
     "lib/Resource/RadarListAction.php",
     "lib/Resource/RadarListEntryAlreadyPresentResponse.php",
@@ -439,6 +542,15 @@
     "lib/Resource/ReplaceGroupRoleAssignments.php",
     "lib/Resource/ResendUserInviteOptions.php",
     "lib/Resource/ResetPasswordResponse.php",
+    "lib/Resource/ResourceExportCompleted.php",
+    "lib/Resource/ResourceExportCompletedData.php",
+    "lib/Resource/ResourceExportCreated.php",
+    "lib/Resource/ResourceExportCreatedData.php",
+    "lib/Resource/ResourceExportDownloaded.php",
+    "lib/Resource/ResourceExportDownloadedData.php",
+    "lib/Resource/ResourceExportFailed.php",
+    "lib/Resource/ResourceExportFailedData.php",
+    "lib/Resource/ResourceExportFailedDataResourceType.php",
     "lib/Resource/RevokeSession.php",
     "lib/Resource/Role.php",
     "lib/Resource/RoleCreated.php",
@@ -449,9 +561,14 @@
     "lib/Resource/RoleType.php",
     "lib/Resource/RoleUpdated.php",
     "lib/Resource/RoleUpdatedData.php",
+    "lib/Resource/SAMLIdpSigningCertificate.php",
+    "lib/Resource/SAMLIdpSigningCertificateList.php",
+    "lib/Resource/SAMLSpEncryptionCertificate.php",
+    "lib/Resource/SAMLSpEncryptionCertificateList.php",
+    "lib/Resource/SAMLSpSigningCertificate.php",
     "lib/Resource/SSOAuthorizeUrlResponse.php",
     "lib/Resource/SSODeviceAuthorizationRequest.php",
-    "lib/Resource/SSOIntentOptions.php",
+    "lib/Resource/SSOGrantType.php",
     "lib/Resource/SSOLogoutAuthorizeRequest.php",
     "lib/Resource/SSOLogoutAuthorizeResponse.php",
     "lib/Resource/SSOProvider.php",
@@ -469,8 +586,11 @@
     "lib/Resource/SessionRevokedDataImpersonator.php",
     "lib/Resource/SetRolePermissions.php",
     "lib/Resource/SlimRole.php",
+    "lib/Resource/Team.php",
+    "lib/Resource/TeamProductionState.php",
     "lib/Resource/TokenQuery.php",
     "lib/Resource/UpdateAuditLogsRetention.php",
+    "lib/Resource/UpdateAuditLogsRetentionRetentionPeriod.php",
     "lib/Resource/UpdateAuthorizationPermission.php",
     "lib/Resource/UpdateAuthorizationResource.php",
     "lib/Resource/UpdateCustomProviderDefinition.php",
@@ -538,6 +658,8 @@
     "lib/Resource/VaultDekReadDataActorSource.php",
     "lib/Resource/VaultKekCreated.php",
     "lib/Resource/VaultKekCreatedData.php",
+    "lib/Resource/VaultKekDeleted.php",
+    "lib/Resource/VaultKekDeletedData.php",
     "lib/Resource/VaultMetadataRead.php",
     "lib/Resource/VaultMetadataReadData.php",
     "lib/Resource/VaultNamesListed.php",
@@ -547,6 +669,8 @@
     "lib/Resource/VerifyEmailAddress.php",
     "lib/Resource/VerifyEmailResponse.php",
     "lib/Resource/VersionListResponse.php",
+    "lib/Resource/Waitlist.php",
+    "lib/Resource/WaitlistEntry.php",
     "lib/Resource/WaitlistUser.php",
     "lib/Resource/WaitlistUserApproved.php",
     "lib/Resource/WaitlistUserCreated.php",
@@ -558,11 +682,14 @@
     "lib/Resource/WidgetSessionTokenResponse.php",
     "lib/Resource/WidgetSessionTokenScopes.php",
     "lib/Service/AdminPortal.php",
+    "lib/Service/Agents.php",
     "lib/Service/ApiKeys.php",
     "lib/Service/AuditLogs.php",
     "lib/Service/Authorization.php",
     "lib/Service/ClientApi.php",
     "lib/Service/Connect.php",
+    "lib/Service/CreateProtocolOptionsOIDC.php",
+    "lib/Service/CreateProtocolOptionsSAML.php",
     "lib/Service/DirectorySync.php",
     "lib/Service/Events.php",
     "lib/Service/FeatureFlags.php",
@@ -577,11 +704,16 @@
     "lib/Service/ParentResourceById.php",
     "lib/Service/PasswordHashed.php",
     "lib/Service/PasswordPlaintext.php",
+    "lib/Service/PatchProtocolOptionsOIDC.php",
+    "lib/Service/PatchProtocolOptionsSAML.php",
     "lib/Service/Pipes.php",
     "lib/Service/PipesProvider.php",
+    "lib/Service/PlatformTeams.php",
     "lib/Service/Radar.php",
     "lib/Service/ResourceTargetByExternalId.php",
     "lib/Service/ResourceTargetById.php",
+    "lib/Service/RetentionPeriod.php",
+    "lib/Service/RetentionPeriodInDays.php",
     "lib/Service/RoleMultiple.php",
     "lib/Service/RoleSingle.php",
     "lib/Service/SSO.php",
@@ -591,16 +723,80 @@
     "lib/Service/Widgets.php",
     "lib/WorkOS.php",
     "tests/ClientTest.php",
+    "tests/Fixtures/access_token_agent_registration_credential_issued_data_detail.json",
     "tests/Fixtures/action_authentication_denied.json",
     "tests/Fixtures/action_authentication_denied_data.json",
     "tests/Fixtures/action_user_registration_denied.json",
     "tests/Fixtures/action_user_registration_denied_data.json",
     "tests/Fixtures/actor.json",
     "tests/Fixtures/add_role_permission.json",
+    "tests/Fixtures/agent_admin_link_claim_attempt_to_external_user_request.json",
+    "tests/Fixtures/agent_admin_link_claim_attempt_to_external_user_request_user.json",
+    "tests/Fixtures/agent_admin_validate_credential_request.json",
+    "tests/Fixtures/agent_blueprint.json",
+    "tests/Fixtures/agent_blueprint_created.json",
+    "tests/Fixtures/agent_blueprint_created_data.json",
+    "tests/Fixtures/agent_blueprint_created_data_invocable_by.json",
+    "tests/Fixtures/agent_blueprint_created_data_session_setting.json",
+    "tests/Fixtures/agent_blueprint_deleted.json",
+    "tests/Fixtures/agent_blueprint_deleted_data.json",
+    "tests/Fixtures/agent_blueprint_invocable_by.json",
+    "tests/Fixtures/agent_blueprint_session_setting.json",
+    "tests/Fixtures/agent_blueprint_updated.json",
+    "tests/Fixtures/agent_blueprint_updated_data.json",
+    "tests/Fixtures/agent_blueprint_updated_data_invocable_by.json",
+    "tests/Fixtures/agent_blueprint_updated_data_session_setting.json",
+    "tests/Fixtures/agent_blueprints_create_request.json",
+    "tests/Fixtures/agent_blueprints_create_request_invocable_by.json",
+    "tests/Fixtures/agent_blueprints_create_request_session_setting.json",
+    "tests/Fixtures/agent_blueprints_token_mint_token_request.json",
+    "tests/Fixtures/agent_blueprints_token_validate_token_request.json",
+    "tests/Fixtures/agent_blueprints_update_request.json",
+    "tests/Fixtures/agent_blueprints_update_request_invocable_by.json",
+    "tests/Fixtures/agent_blueprints_update_request_session_setting.json",
+    "tests/Fixtures/agent_credential_validation.json",
+    "tests/Fixtures/agent_instance.json",
+    "tests/Fixtures/agent_instance_created.json",
+    "tests/Fixtures/agent_instance_created_data.json",
+    "tests/Fixtures/agent_instance_deleted.json",
+    "tests/Fixtures/agent_instance_deleted_data.json",
+    "tests/Fixtures/agent_instance_session.json",
+    "tests/Fixtures/agent_instance_session_created.json",
+    "tests/Fixtures/agent_instance_session_created_data.json",
+    "tests/Fixtures/agent_instance_session_revoked.json",
+    "tests/Fixtures/agent_instance_session_revoked_data.json",
+    "tests/Fixtures/agent_registration.json",
+    "tests/Fixtures/agent_registration_agent_identity.json",
+    "tests/Fixtures/agent_registration_claim.json",
+    "tests/Fixtures/agent_registration_claim_attempt_created.json",
+    "tests/Fixtures/agent_registration_claim_attempt_created_data.json",
+    "tests/Fixtures/agent_registration_claim_claim_completion.json",
+    "tests/Fixtures/agent_registration_claim_completed.json",
+    "tests/Fixtures/agent_registration_claim_completed_data.json",
+    "tests/Fixtures/agent_registration_claim_completed_data_claimed_by.json",
+    "tests/Fixtures/agent_registration_created.json",
+    "tests/Fixtures/agent_registration_created_data.json",
+    "tests/Fixtures/agent_registration_created_data_agent_identity.json",
+    "tests/Fixtures/agent_registration_credential_issued.json",
+    "tests/Fixtures/agent_registration_credential_issued_data.json",
+    "tests/Fixtures/agent_registration_credential_issued_data_detail.json",
+    "tests/Fixtures/agent_registration_deleted.json",
+    "tests/Fixtures/agent_registration_deleted_data.json",
+    "tests/Fixtures/agent_registration_expired.json",
+    "tests/Fixtures/agent_registration_expired_data.json",
+    "tests/Fixtures/agent_registration_organization_switched.json",
+    "tests/Fixtures/agent_registration_organization_switched_data.json",
+    "tests/Fixtures/agent_registration_refreshed.json",
+    "tests/Fixtures/agent_registration_refreshed_data.json",
+    "tests/Fixtures/agent_registration_revoked.json",
+    "tests/Fixtures/agent_registration_revoked_data.json",
+    "tests/Fixtures/agent_token.json",
+    "tests/Fixtures/agent_token_validation.json",
     "tests/Fixtures/api_key.json",
     "tests/Fixtures/api_key_created.json",
     "tests/Fixtures/api_key_created_data.json",
     "tests/Fixtures/api_key_created_data_owner.json",
+    "tests/Fixtures/api_key_installation.json",
     "tests/Fixtures/api_key_owner.json",
     "tests/Fixtures/api_key_revoked.json",
     "tests/Fixtures/api_key_revoked_data.json",
@@ -676,6 +872,8 @@
     "tests/Fixtures/authentication_password_succeeded_data.json",
     "tests/Fixtures/authentication_radar_risk_detected.json",
     "tests/Fixtures/authentication_radar_risk_detected_data.json",
+    "tests/Fixtures/authentication_reauthentication_succeeded.json",
+    "tests/Fixtures/authentication_reauthentication_succeeded_data.json",
     "tests/Fixtures/authentication_sso_failed.json",
     "tests/Fixtures/authentication_sso_failed_data.json",
     "tests/Fixtures/authentication_sso_failed_data_error.json",
@@ -697,6 +895,8 @@
     "tests/Fixtures/authorized_connect_application_list_data.json",
     "tests/Fixtures/challenge_authentication_factor.json",
     "tests/Fixtures/check_authorization.json",
+    "tests/Fixtures/claim_view_response.json",
+    "tests/Fixtures/claim_view_response_organization.json",
     "tests/Fixtures/client_api_token.json",
     "tests/Fixtures/client_api_token_response.json",
     "tests/Fixtures/configure_data_integration_body.json",
@@ -706,7 +906,7 @@
     "tests/Fixtures/connect_application_oauth.json",
     "tests/Fixtures/connect_application_oauth_redirect_uris.json",
     "tests/Fixtures/connected_account.json",
-    "tests/Fixtures/connected_account_dto.json",
+    "tests/Fixtures/connected_account_input.json",
     "tests/Fixtures/connection.json",
     "tests/Fixtures/connection_activated.json",
     "tests/Fixtures/connection_activated_data.json",
@@ -717,7 +917,6 @@
     "tests/Fixtures/connection_deleted.json",
     "tests/Fixtures/connection_deleted_data.json",
     "tests/Fixtures/connection_domain.json",
-    "tests/Fixtures/connection_option.json",
     "tests/Fixtures/connection_saml_certificate_renewal_required.json",
     "tests/Fixtures/connection_saml_certificate_renewal_required_data.json",
     "tests/Fixtures/connection_saml_certificate_renewal_required_data_certificate.json",
@@ -730,6 +929,12 @@
     "tests/Fixtures/create_application_secret.json",
     "tests/Fixtures/create_authorization_permission.json",
     "tests/Fixtures/create_authorization_resource.json",
+    "tests/Fixtures/create_connection.json",
+    "tests/Fixtures/create_connection_attribute_maps.json",
+    "tests/Fixtures/create_connection_key_pair.json",
+    "tests/Fixtures/create_connection_oidc_options.json",
+    "tests/Fixtures/create_connection_saml_options.json",
+    "tests/Fixtures/create_connection_standard_attributes.json",
     "tests/Fixtures/create_cors_origin.json",
     "tests/Fixtures/create_data_integration.json",
     "tests/Fixtures/create_data_key_request.json",
@@ -737,6 +942,7 @@
     "tests/Fixtures/create_group.json",
     "tests/Fixtures/create_group_membership.json",
     "tests/Fixtures/create_group_role_assignment.json",
+    "tests/Fixtures/create_it_contact.json",
     "tests/Fixtures/create_m2m_application.json",
     "tests/Fixtures/create_magic_code_and_return.json",
     "tests/Fixtures/create_oauth_application.json",
@@ -748,10 +954,13 @@
     "tests/Fixtures/create_password_reset_token.json",
     "tests/Fixtures/create_redirect_uri.json",
     "tests/Fixtures/create_role.json",
+    "tests/Fixtures/create_saml_idp_signing_certificate.json",
+    "tests/Fixtures/create_team.json",
     "tests/Fixtures/create_user.json",
     "tests/Fixtures/create_user_api_key.json",
     "tests/Fixtures/create_user_invite_options.json",
     "tests/Fixtures/create_user_organization_membership.json",
+    "tests/Fixtures/create_waitlist_entry.json",
     "tests/Fixtures/create_webhook_endpoint.json",
     "tests/Fixtures/custom_provider_definition.json",
     "tests/Fixtures/data_integration.json",
@@ -762,16 +971,18 @@
     "tests/Fixtures/data_integration_configuration_response.json",
     "tests/Fixtures/data_integration_credential.json",
     "tests/Fixtures/data_integration_credentials.json",
-    "tests/Fixtures/data_integration_credentials_dto.json",
+    "tests/Fixtures/data_integration_credentials_input.json",
     "tests/Fixtures/data_integration_credentials_response.json",
     "tests/Fixtures/data_integration_credentials_response_credential.json",
     "tests/Fixtures/data_integration_custom_provider.json",
+    "tests/Fixtures/data_integration_installation.json",
     "tests/Fixtures/data_integrations_get_data_integration_authorize_url_request.json",
     "tests/Fixtures/data_integrations_get_user_token_request.json",
     "tests/Fixtures/data_integrations_list_response.json",
     "tests/Fixtures/data_integrations_list_response_data.json",
     "tests/Fixtures/data_integrations_list_response_data_connected_account.json",
     "tests/Fixtures/data_integrations_upsert_api_key_request.json",
+    "tests/Fixtures/data_integrations_upsert_client_credentials_request.json",
     "tests/Fixtures/data_integrations_vend_credentials_request.json",
     "tests/Fixtures/decrypt_request.json",
     "tests/Fixtures/decrypt_response.json",
@@ -787,7 +998,6 @@
     "tests/Fixtures/directory_user_email.json",
     "tests/Fixtures/directory_user_with_groups.json",
     "tests/Fixtures/directory_user_with_groups_email.json",
-    "tests/Fixtures/domain_verification_intent_options.json",
     "tests/Fixtures/dsync_activated.json",
     "tests/Fixtures/dsync_activated_data.json",
     "tests/Fixtures/dsync_activated_data_domain.json",
@@ -813,6 +1023,7 @@
     "tests/Fixtures/email_change.json",
     "tests/Fixtures/email_change_confirmation.json",
     "tests/Fixtures/email_change_confirmation_user.json",
+    "tests/Fixtures/email_completion_session_authenticate_request.json",
     "tests/Fixtures/email_verification.json",
     "tests/Fixtures/email_verification_code_session_authenticate_request.json",
     "tests/Fixtures/email_verification_created.json",
@@ -872,7 +1083,6 @@
     "tests/Fixtures/group_role_assignment.json",
     "tests/Fixtures/group_role_assignment_resource.json",
     "tests/Fixtures/group_updated.json",
-    "tests/Fixtures/intent_options.json",
     "tests/Fixtures/invitation.json",
     "tests/Fixtures/invitation_accepted.json",
     "tests/Fixtures/invitation_accepted_data.json",
@@ -882,9 +1092,15 @@
     "tests/Fixtures/invitation_resent_data.json",
     "tests/Fixtures/invitation_revoked.json",
     "tests/Fixtures/invitation_revoked_data.json",
+    "tests/Fixtures/invite_it_contact.json",
+    "tests/Fixtures/it_contact.json",
+    "tests/Fixtures/it_contact_list_list_metadata.json",
     "tests/Fixtures/jwks_response.json",
     "tests/Fixtures/jwks_response_keys.json",
     "tests/Fixtures/jwt_template_response.json",
+    "tests/Fixtures/list_agent_blueprint.json",
+    "tests/Fixtures/list_agent_instance.json",
+    "tests/Fixtures/list_agent_instance_session.json",
     "tests/Fixtures/list_audit_log_action.json",
     "tests/Fixtures/list_audit_log_schema.json",
     "tests/Fixtures/list_authentication_factor.json",
@@ -906,6 +1122,7 @@
     "tests/Fixtures/list_object_summary.json",
     "tests/Fixtures/list_organization.json",
     "tests/Fixtures/list_organization_api_key.json",
+    "tests/Fixtures/list_organization_authorized_connect_application_list_data.json",
     "tests/Fixtures/list_redirect_uri.json",
     "tests/Fixtures/list_user.json",
     "tests/Fixtures/list_user_api_key.json",
@@ -914,6 +1131,8 @@
     "tests/Fixtures/list_user_organization_membership_base_list_data.json",
     "tests/Fixtures/list_user_role_assignment.json",
     "tests/Fixtures/list_user_sessions_list_item.json",
+    "tests/Fixtures/list_waitlist.json",
+    "tests/Fixtures/list_waitlist_entry.json",
     "tests/Fixtures/list_webhook_endpoint.json",
     "tests/Fixtures/magic_auth.json",
     "tests/Fixtures/magic_auth_code_session_authenticate_request.json",
@@ -931,6 +1150,7 @@
     "tests/Fixtures/organization_api_key_owner.json",
     "tests/Fixtures/organization_api_key_with_value.json",
     "tests/Fixtures/organization_api_key_with_value_owner.json",
+    "tests/Fixtures/organization_authorized_connect_application_list_data.json",
     "tests/Fixtures/organization_created.json",
     "tests/Fixtures/organization_created_data.json",
     "tests/Fixtures/organization_created_data_domain.json",
@@ -943,7 +1163,6 @@
     "tests/Fixtures/organization_domain_data.json",
     "tests/Fixtures/organization_domain_deleted.json",
     "tests/Fixtures/organization_domain_deleted_data.json",
-    "tests/Fixtures/organization_domain_stand_alone.json",
     "tests/Fixtures/organization_domain_updated.json",
     "tests/Fixtures/organization_domain_updated_data.json",
     "tests/Fixtures/organization_domain_verification_failed.json",
@@ -975,6 +1194,11 @@
     "tests/Fixtures/password_reset_succeeded.json",
     "tests/Fixtures/password_reset_succeeded_data.json",
     "tests/Fixtures/password_session_authenticate_request.json",
+    "tests/Fixtures/patch_connection.json",
+    "tests/Fixtures/patch_connection_attribute_maps.json",
+    "tests/Fixtures/patch_connection_oidc_options.json",
+    "tests/Fixtures/patch_connection_saml_options.json",
+    "tests/Fixtures/patch_connection_standard_attributes.json",
     "tests/Fixtures/permission.json",
     "tests/Fixtures/permission_created.json",
     "tests/Fixtures/permission_created_data.json",
@@ -990,6 +1214,9 @@
     "tests/Fixtures/pipes_connected_account_reauthorization_needed.json",
     "tests/Fixtures/portal_link_response.json",
     "tests/Fixtures/profile.json",
+    "tests/Fixtures/radar_challenge.json",
+    "tests/Fixtures/radar_challenge_created.json",
+    "tests/Fixtures/radar_challenge_created_data.json",
     "tests/Fixtures/radar_email_challenge_code_session_authenticate_request.json",
     "tests/Fixtures/radar_list_entry_already_present_response.json",
     "tests/Fixtures/radar_sms_challenge_code_session_authenticate_request.json",
@@ -1007,6 +1234,14 @@
     "tests/Fixtures/replace_group_role_assignments.json",
     "tests/Fixtures/resend_user_invite_options.json",
     "tests/Fixtures/reset_password_response.json",
+    "tests/Fixtures/resource_export_completed.json",
+    "tests/Fixtures/resource_export_completed_data.json",
+    "tests/Fixtures/resource_export_created.json",
+    "tests/Fixtures/resource_export_created_data.json",
+    "tests/Fixtures/resource_export_downloaded.json",
+    "tests/Fixtures/resource_export_downloaded_data.json",
+    "tests/Fixtures/resource_export_failed.json",
+    "tests/Fixtures/resource_export_failed_data.json",
     "tests/Fixtures/revoke_session.json",
     "tests/Fixtures/role.json",
     "tests/Fixtures/role_created.json",
@@ -1016,6 +1251,11 @@
     "tests/Fixtures/role_list.json",
     "tests/Fixtures/role_updated.json",
     "tests/Fixtures/role_updated_data.json",
+    "tests/Fixtures/saml_idp_signing_certificate.json",
+    "tests/Fixtures/saml_idp_signing_certificate_list.json",
+    "tests/Fixtures/saml_sp_encryption_certificate.json",
+    "tests/Fixtures/saml_sp_encryption_certificate_list.json",
+    "tests/Fixtures/saml_sp_signing_certificate.json",
     "tests/Fixtures/send_email_change.json",
     "tests/Fixtures/send_radar_sms_challenge.json",
     "tests/Fixtures/send_radar_sms_challenge_response.json",
@@ -1023,9 +1263,6 @@
     "tests/Fixtures/session_created.json",
     "tests/Fixtures/session_created_data.json",
     "tests/Fixtures/session_created_data_impersonator.json",
-    "tests/Fixtures/session_reauthenticated.json",
-    "tests/Fixtures/session_reauthenticated_data.json",
-    "tests/Fixtures/session_reauthenticated_data_impersonator.json",
     "tests/Fixtures/session_revoked.json",
     "tests/Fixtures/session_revoked_data.json",
     "tests/Fixtures/session_revoked_data_impersonator.json",
@@ -1033,11 +1270,11 @@
     "tests/Fixtures/slim_role.json",
     "tests/Fixtures/sso_authorize_url_response.json",
     "tests/Fixtures/sso_device_authorization_request.json",
-    "tests/Fixtures/sso_intent_options.json",
     "tests/Fixtures/sso_logout_authorize_request.json",
     "tests/Fixtures/sso_logout_authorize_response.json",
     "tests/Fixtures/sso_token_response.json",
     "tests/Fixtures/sso_token_response_oauth_token.json",
+    "tests/Fixtures/team.json",
     "tests/Fixtures/token_query.json",
     "tests/Fixtures/update_audit_logs_retention.json",
     "tests/Fixtures/update_authorization_permission.json",
@@ -1099,6 +1336,8 @@
     "tests/Fixtures/vault_dek_read_data.json",
     "tests/Fixtures/vault_kek_created.json",
     "tests/Fixtures/vault_kek_created_data.json",
+    "tests/Fixtures/vault_kek_deleted.json",
+    "tests/Fixtures/vault_kek_deleted_data.json",
     "tests/Fixtures/vault_metadata_read.json",
     "tests/Fixtures/vault_metadata_read_data.json",
     "tests/Fixtures/vault_names_listed.json",
@@ -1106,6 +1345,8 @@
     "tests/Fixtures/vault_object.json",
     "tests/Fixtures/verify_email_address.json",
     "tests/Fixtures/verify_email_response.json",
+    "tests/Fixtures/waitlist.json",
+    "tests/Fixtures/waitlist_entry.json",
     "tests/Fixtures/waitlist_user.json",
     "tests/Fixtures/waitlist_user_approved.json",
     "tests/Fixtures/waitlist_user_created.json",
@@ -1114,6 +1355,7 @@
     "tests/Fixtures/widget_session_token.json",
     "tests/Fixtures/widget_session_token_response.json",
     "tests/Service/AdminPortalTest.php",
+    "tests/Service/AgentsTest.php",
     "tests/Service/ApiKeysTest.php",
     "tests/Service/AuditLogsTest.php",
     "tests/Service/AuthorizationTest.php",
@@ -1129,6 +1371,7 @@
     "tests/Service/OrganizationsTest.php",
     "tests/Service/PipesProviderTest.php",
     "tests/Service/PipesTest.php",
+    "tests/Service/PlatformTeamsTest.php",
     "tests/Service/RadarTest.php",
     "tests/Service/SSOTest.php",
     "tests/Service/UserManagementTest.php",
@@ -1137,6 +1380,18 @@
     "tests/Service/WidgetsTest.php"
   ],
   "operations": {
+    "PATCH /agents/claims/attempts": {
+      "sdkMethod": "updateAttempts",
+      "service": "agents"
+    },
+    "POST /agents/credentials/validate": {
+      "sdkMethod": "createValidate",
+      "service": "agents"
+    },
+    "GET /agents/registrations/{id}": {
+      "sdkMethod": "getRegistration",
+      "service": "agents"
+    },
     "POST /auth/challenges/{id}/verify": {
       "sdkMethod": "verifyChallenge",
       "service": "multiFactorAuth"
@@ -1389,8 +1644,36 @@
       "sdkMethod": "deleteConnection",
       "service": "sso"
     },
+    "GET /data-integrations": {
+      "sdkMethod": "listDataIntegrations",
+      "service": "pipes"
+    },
+    "POST /data-integrations": {
+      "sdkMethod": "createDataIntegration",
+      "service": "pipes"
+    },
+    "GET /data-integrations/{slug}": {
+      "sdkMethod": "getDataIntegration",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}": {
+      "sdkMethod": "updateDataIntegration",
+      "service": "pipes"
+    },
+    "DELETE /data-integrations/{slug}": {
+      "sdkMethod": "deleteDataIntegration",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}/api-key": {
+      "sdkMethod": "updateDataIntegrationApiKey",
+      "service": "pipes"
+    },
     "POST /data-integrations/{slug}/authorize": {
       "sdkMethod": "authorizeDataIntegration",
+      "service": "pipes"
+    },
+    "POST /data-integrations/{slug}/credentials": {
+      "sdkMethod": "createDataIntegrationCredential",
       "service": "pipes"
     },
     "POST /data-integrations/{provider}/token": {
@@ -1557,6 +1840,10 @@
       "sdkMethod": "deleteGroupOrganizationMembership",
       "service": "groups"
     },
+    "GET /organizations/{organization_id}/authorized_applications": {
+      "sdkMethod": "listAuthorizedApplications",
+      "service": "organizations"
+    },
     "POST /portal/generate_link": {
       "sdkMethod": "generateLink",
       "service": "adminPortal"
@@ -1613,12 +1900,24 @@
       "sdkMethod": "createDevice",
       "service": "userManagement"
     },
+    "POST /user_management/radar_challenges": {
+      "sdkMethod": "createRadarChallenge",
+      "service": "userManagement"
+    },
+    "GET /user_management/radar_challenges/{id}": {
+      "sdkMethod": "getRadarChallenge",
+      "service": "userManagement"
+    },
     "GET /user_management/sessions/logout": {
       "sdkMethod": "getLogoutUrl",
       "service": "userManagement"
     },
     "POST /user_management/sessions/revoke": {
       "sdkMethod": "revokeSession",
+      "service": "userManagement"
+    },
+    "GET /user_management/cors_origins": {
+      "sdkMethod": "listCorsOrigins",
       "service": "userManagement"
     },
     "POST /user_management/cors_origins": {
@@ -1765,8 +2064,16 @@
       "sdkMethod": "listOrganizationMembershipGroups",
       "service": "organizationMembership"
     },
+    "GET /user_management/redirect_uris": {
+      "sdkMethod": "listRedirectUris",
+      "service": "userManagement"
+    },
     "POST /user_management/redirect_uris": {
       "sdkMethod": "createRedirectUri",
+      "service": "userManagement"
+    },
+    "DELETE /user_management/redirect_uris/{id}": {
+      "sdkMethod": "deleteRedirectUris",
       "service": "userManagement"
     },
     "GET /user_management/users/{userId}/feature-flags": {
@@ -1783,6 +2090,14 @@
     },
     "GET /user_management/users/{user_id}/connected_accounts/{slug}": {
       "sdkMethod": "getUserConnectedAccount",
+      "service": "pipes"
+    },
+    "POST /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "createUserConnectedAccount",
+      "service": "pipes"
+    },
+    "PUT /user_management/users/{user_id}/connected_accounts/{slug}": {
+      "sdkMethod": "updateUserConnectedAccount",
       "service": "pipes"
     },
     "DELETE /user_management/users/{user_id}/connected_accounts/{slug}": {
@@ -1909,53 +2224,161 @@
       "sdkMethod": "getExport",
       "service": "auditLogs"
     },
-    "PUT /data-integrations/{slug}/api-key": {
-      "sdkMethod": "updateDataIntegrationApiKey",
+    "PUT /data-integrations/{slug}/client-credentials": {
+      "sdkMethod": "updateDataIntegrationClientCredentials",
       "service": "pipes"
     },
-    "POST /data-integrations/{slug}/credentials": {
-      "sdkMethod": "createDataIntegrationCredential",
-      "service": "pipes"
+    "GET /agents/blueprints": {
+      "sdkMethod": "listBlueprints",
+      "service": "agents"
     },
-    "GET /user_management/cors_origins": {
-      "sdkMethod": "listCorsOrigins",
+    "POST /agents/blueprints": {
+      "sdkMethod": "createBlueprint",
+      "service": "agents"
+    },
+    "GET /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "getBlueprint",
+      "service": "agents"
+    },
+    "PATCH /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "updateBlueprint",
+      "service": "agents"
+    },
+    "DELETE /agents/blueprints/{agent_blueprint_id}": {
+      "sdkMethod": "deleteBlueprint",
+      "service": "agents"
+    },
+    "POST /agents/blueprints/{agent_blueprint_id}/tokens": {
+      "sdkMethod": "createBlueprintToken",
+      "service": "agents"
+    },
+    "GET /agents/instances": {
+      "sdkMethod": "listInstances",
+      "service": "agents"
+    },
+    "GET /agents/instances/{agent_instance_id}": {
+      "sdkMethod": "getInstance",
+      "service": "agents"
+    },
+    "DELETE /agents/instances/{agent_instance_id}": {
+      "sdkMethod": "deleteInstance",
+      "service": "agents"
+    },
+    "GET /agents/sessions": {
+      "sdkMethod": "listSessions",
+      "service": "agents"
+    },
+    "GET /agents/sessions/{agent_instance_session_id}": {
+      "sdkMethod": "getSession",
+      "service": "agents"
+    },
+    "POST /agents/sessions/{agent_instance_session_id}/revoke": {
+      "sdkMethod": "revokeSession",
+      "service": "agents"
+    },
+    "POST /connections": {
+      "sdkMethod": "createConnection",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_idp_signing_certs": {
+      "sdkMethod": "listConnectionSAMLIdpSigningCerts",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_idp_signing_certs": {
+      "sdkMethod": "createConnectionSAMLIdpSigningCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_idp_signing_certs/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLIdpSigningCert",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_sp_encryption_certs": {
+      "sdkMethod": "listConnectionSAMLSpEncryptionCerts",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_sp_encryption_certs": {
+      "sdkMethod": "createConnectionSAMLSpEncryptionCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_sp_encryption_certs/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLSpEncryptionCert",
+      "service": "sso"
+    },
+    "GET /connections/{connectionId}/saml_sp_signing_cert": {
+      "sdkMethod": "listConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "POST /connections/{connectionId}/saml_sp_signing_cert": {
+      "sdkMethod": "createConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "DELETE /connections/{connectionId}/saml_sp_signing_cert/{certificateId}": {
+      "sdkMethod": "deleteConnectionSAMLSpSigningCert",
+      "service": "sso"
+    },
+    "PATCH /connections/{id}": {
+      "sdkMethod": "updateConnection",
+      "service": "sso"
+    },
+    "GET /organizations/{organization_id}/it_contacts": {
+      "sdkMethod": "listItContacts",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts": {
+      "sdkMethod": "createItContact",
+      "service": "organizations"
+    },
+    "DELETE /organizations/{organization_id}/it_contacts/{contact_id}": {
+      "sdkMethod": "deleteItContact",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts/{contact_id}/invite": {
+      "sdkMethod": "inviteItContact",
+      "service": "organizations"
+    },
+    "POST /organizations/{organization_id}/it_contacts/{contact_id}/revoke": {
+      "sdkMethod": "revokeItContact",
+      "service": "organizations"
+    },
+    "POST /platform/teams": {
+      "sdkMethod": "createTeam",
+      "service": "platformTeams"
+    },
+    "GET /platform/teams/{team_id}": {
+      "sdkMethod": "getTeam",
+      "service": "platformTeams"
+    },
+    "DELETE /user_management/waitlist_entries/{id}": {
+      "sdkMethod": "deleteWaitlistEntry",
       "service": "userManagement"
     },
-    "GET /user_management/redirect_uris": {
-      "sdkMethod": "listRedirectUris",
+    "POST /user_management/waitlist_entries/{id}/approve": {
+      "sdkMethod": "createWaitlistEntryApprove",
       "service": "userManagement"
     },
-    "GET /data-integrations": {
-      "sdkMethod": "listDataIntegrations",
-      "service": "pipes"
-    },
-    "POST /data-integrations": {
-      "sdkMethod": "createDataIntegration",
-      "service": "pipes"
-    },
-    "GET /data-integrations/{slug}": {
-      "sdkMethod": "getDataIntegration",
-      "service": "pipes"
-    },
-    "PUT /data-integrations/{slug}": {
-      "sdkMethod": "updateDataIntegration",
-      "service": "pipes"
-    },
-    "DELETE /data-integrations/{slug}": {
-      "sdkMethod": "deleteDataIntegration",
-      "service": "pipes"
-    },
-    "POST /user_management/radar_challenges": {
-      "sdkMethod": "createRadarChallenge",
+    "POST /user_management/waitlist_entries/{id}/deny": {
+      "sdkMethod": "createWaitlistEntryDeny",
       "service": "userManagement"
     },
-    "POST /user_management/users/{user_id}/connected_accounts/{slug}": {
-      "sdkMethod": "createUserConnectedAccount",
-      "service": "pipes"
+    "GET /user_management/waitlists": {
+      "sdkMethod": "listWaitlists",
+      "service": "userManagement"
     },
-    "PUT /user_management/users/{user_id}/connected_accounts/{slug}": {
-      "sdkMethod": "updateUserConnectedAccount",
-      "service": "pipes"
+    "GET /user_management/waitlists/{id}": {
+      "sdkMethod": "getWaitlist",
+      "service": "userManagement"
+    },
+    "GET /user_management/waitlists/{id}/entries": {
+      "sdkMethod": "listWaitlistEntries",
+      "service": "userManagement"
+    },
+    "POST /user_management/waitlists/{id}/entries": {
+      "sdkMethod": "createWaitlistEntry",
+      "service": "userManagement"
+    },
+    "POST /agents/blueprints/{agent_blueprint_id}/tokens/validate": {
+      "sdkMethod": "validateBlueprintToken",
+      "service": "agents"
     }
   }
 }

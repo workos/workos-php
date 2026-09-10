@@ -20,8 +20,10 @@ readonly class UpdateDataIntegration implements \JsonSerializable
          * @var array<string>|null
          */
         public ?array $scopes = null,
-        /** New credentials for the Data Integration. When provided, rotates the stored client secret. */
-        public ?DataIntegrationCredentialsDto $credentials = null,
+        /** New OAuth credentials for the Data Integration. When provided, rotates the stored client secret. Mutually exclusive with `api_key`. */
+        public ?DataIntegrationCredentialsInput $credentials = null,
+        /** An API key to install or rotate for a tenant on an `api_key` integration. Upserts the tenant installation identified by `user_id` (and optional `organization_id`). */
+        public ?ApiKeyInstallation $apiKey = null,
         /** Updates to a custom provider's OAuth definition. Only valid for custom-provider integrations. */
         public ?UpdateCustomProviderDefinition $customProvider = null,
     ) {
@@ -33,7 +35,8 @@ readonly class UpdateDataIntegration implements \JsonSerializable
             description: $data['description'] ?? null,
             enabled: $data['enabled'] ?? null,
             scopes: $data['scopes'] ?? null,
-            credentials: isset($data['credentials']) ? DataIntegrationCredentialsDto::fromArray($data['credentials']) : null,
+            credentials: isset($data['credentials']) ? DataIntegrationCredentialsInput::fromArray($data['credentials']) : null,
+            apiKey: isset($data['api_key']) ? ApiKeyInstallation::fromArray($data['api_key']) : null,
             customProvider: isset($data['custom_provider']) ? UpdateCustomProviderDefinition::fromArray($data['custom_provider']) : null,
         );
     }
@@ -45,6 +48,7 @@ readonly class UpdateDataIntegration implements \JsonSerializable
             'enabled' => $this->enabled,
             'scopes' => $this->scopes,
             'credentials' => $this->credentials?->toArray(),
+            'api_key' => $this->apiKey?->toArray(),
             'custom_provider' => $this->customProvider?->toArray(),
         ];
     }

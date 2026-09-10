@@ -18,6 +18,7 @@ readonly class OrganizationInput implements \JsonSerializable
         /**
          * The domains associated with the organization. Deprecated in favor of `domain_data`.
          * @var array<string>|null
+         * @deprecated
          */
         public ?array $domains = null,
         /**

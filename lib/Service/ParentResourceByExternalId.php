@@ -9,8 +9,8 @@ namespace WorkOS\Service;
 class ParentResourceByExternalId
 {
     public function __construct(
-        public readonly string $externalId,
         public readonly string $typeSlug,
+        public readonly string $externalId,
     ) {
     }
 }

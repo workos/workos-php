@@ -19,7 +19,6 @@ enum ConnectionsConnectionType: string
     case ClassLinkSAML = 'ClassLinkSAML';
     case CleverOidc = 'CleverOIDC';
     case CyberArkSAML = 'CyberArkSAML';
-    case DiscordOAuth = 'DiscordOAuth';
     case DuoSAML = 'DuoSAML';
     case EntraIdOidc = 'EntraIdOIDC';
     case GenericOidc = 'GenericOIDC';

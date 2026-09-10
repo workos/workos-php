@@ -114,6 +114,24 @@ class PipesTest extends TestCase
         $this->assertSame('test_value', $body['user_id']);
     }
 
+    public function testUpdateDataIntegrationClientCredentials(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateDataIntegrationClientCredentials('test_slug', userId: 'test_value', clientId: 'test_value', clientSecret: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/client-credentials', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+        $this->assertSame('test_value', $body['client_id']);
+        $this->assertSame('test_value', $body['client_secret']);
+    }
+
     public function testCreateDataIntegrationCredential(): void
     {
         $fixture = $this->loadFixture('data_integration_credentials_response');

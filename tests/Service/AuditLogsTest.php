@@ -29,14 +29,12 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_logs_retention');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->updateOrganizationAuditLogsRetention('test_id', retentionPeriodInDays: 1);
+        $result = $client->auditLogs()->updateOrganizationAuditLogsRetention('test_id', retention: new \WorkOS\Service\RetentionPeriod(period: \WorkOS\Resource\UpdateAuditLogsRetentionRetentionPeriod::Value1Month));
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetention::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id/audit_logs_retention', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame(1, $body['retention_period_in_days']);
     }
 
     public function testListActions(): void

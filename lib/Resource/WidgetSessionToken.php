@@ -11,8 +11,8 @@ readonly class WidgetSessionToken implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The ID of the organization to scope the widget session to. */
-        public string $organizationId,
+        /** The ID of the organization to scope the widget session to. Required when scopes are provided. Optional when issuing a token for user-only widgets (e.g. `UserProfile`, `UserSecurity`) that do not require organization context. */
+        public ?string $organizationId = null,
         /** The ID of the user to issue the widget session token for. */
         public ?string $userId = null,
         /**
@@ -26,7 +26,7 @@ readonly class WidgetSessionToken implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            organizationId: $data['organization_id'],
+            organizationId: $data['organization_id'] ?? null,
             userId: $data['user_id'] ?? null,
             scopes: isset($data['scopes']) ? array_map(fn ($item) => WidgetSessionTokenScopes::from($item), $data['scopes']) : null,
         );

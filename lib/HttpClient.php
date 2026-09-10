@@ -8,7 +8,9 @@ namespace WorkOS;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ConnectTimeoutException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 use WorkOS\Exception\ApiException;
 use WorkOS\Exception\AuthenticationException;
@@ -120,17 +122,22 @@ class HttpClient
 
                 throw $this->mapTransportException($e);
             } catch (RequestException $e) {
-                if ($e->hasResponse()) {
+                $response = null;
+                if ($e instanceof ResponseException) {
                     $response = $e->getResponse();
-                    if ($response !== null) {
-                        $statusCode = $response->getStatusCode();
-                        if (in_array($statusCode, self::RETRY_STATUS_CODES, true) && $attempt < $maxRetries) {
-                            $this->sleep($attempt, $response->getHeaderLine('Retry-After'));
-                            continue;
-                        }
+                } elseif (method_exists($e, 'getResponse')) {
+                    // BC layer for guzzle 7
+                    $response = $e->getResponse();
+                }
 
-                        throw $this->mapApiException($response, $e);
+                if ($response instanceof ResponseInterface) {
+                    $statusCode = $response->getStatusCode();
+                    if (in_array($statusCode, self::RETRY_STATUS_CODES, true) && $attempt < $maxRetries) {
+                        $this->sleep($attempt, $response->getHeaderLine('Retry-After'));
+                        continue;
                     }
+
+                    throw $this->mapApiException($response, $e);
                 }
 
                 if ($attempt < $maxRetries) {
@@ -417,9 +424,16 @@ class HttpClient
     private function isTimeoutException(\Throwable $exception): bool
     {
         if ($exception instanceof ConnectException || $exception instanceof RequestException) {
-            $errno = $exception->getHandlerContext()['errno'] ?? null;
-            if ($errno === 28) {
+            if ($exception instanceof ConnectTimeoutException) {
                 return true;
+            }
+
+            if (method_exists($exception, 'getHandlerContext')) {
+                // BC layer for guzzle 7
+                $errno = $exception->getHandlerContext()['errno'] ?? null;
+                if ($errno === 28) {
+                    return true;
+                }
             }
         }
 

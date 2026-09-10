@@ -65,6 +65,7 @@ class Connect
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param array<\WorkOS\Resource\ApplicationsRegistrationTypes>|null $registrationTypes Filter Connect Applications by registration type. Specify multiple as a comma-separated list (e.g. `registration_types=dynamic,authenticated`). Defaults to `authenticated` only when not specified.
      * @param string|null $organizationId Filter Connect Applications by organization ID.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\ConnectApplication>
      * @throws \WorkOS\Exception\WorkOSException
@@ -74,6 +75,7 @@ class Connect
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?array $registrationTypes = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
@@ -82,6 +84,7 @@ class Connect
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'registration_types' => $registrationTypes,
             'organization_id' => $organizationId,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(

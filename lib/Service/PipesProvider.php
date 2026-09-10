@@ -46,6 +46,7 @@ class PipesProvider
      * @param array<string>|null $scopes The OAuth scopes to request for the organization. Pass `null` to inherit the provider scopes.
      * @param string|null $clientId The OAuth client ID of the organization's own application. Must be provided together with `client_secret`, and only for providers whose credentials are supplied by the organization.
      * @param string|null $clientSecret The OAuth client secret of the organization's own application. Must be provided together with `client_id`.
+     * @param array<string, string>|null $config Provider-specific config values to set for the organization, keyed by config field. Only fields the provider declares are accepted, and each value must match that field's pattern. Accepted only for providers whose credentials are organization-managed; for shared or custom credential providers, config belongs on the integration itself (via the data-integrations API) and supplying it here is rejected.
      * @return \WorkOS\Resource\DataIntegrationConfigurationResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -56,6 +57,7 @@ class PipesProvider
         ?array $scopes = null,
         ?string $clientId = null,
         ?string $clientSecret = null,
+        ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationConfigurationResponse {
         $body = array_filter([
@@ -63,6 +65,7 @@ class PipesProvider
             'scopes' => $scopes,
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
+            'config' => $config,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',

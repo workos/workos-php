@@ -19,6 +19,7 @@ use WorkOS\Resource\JWTTemplateResponse;
 use WorkOS\Resource\MagicAuth;
 use WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse;
 use WorkOS\Resource\PasswordReset;
+use WorkOS\Resource\RadarChallenge;
 use WorkOS\Resource\RedirectUri;
 use WorkOS\Resource\ResetPasswordResponse;
 use WorkOS\Resource\SendRadarSmsChallengeResponse;
@@ -31,6 +32,8 @@ use WorkOS\Resource\UserIdentitiesGetItem;
 use WorkOS\Resource\UserInvite;
 use WorkOS\Resource\UserSessionsListItem;
 use WorkOS\Resource\VerifyEmailResponse;
+use WorkOS\Resource\Waitlist;
+use WorkOS\Resource\WaitlistEntry;
 
 class UserManagement
 {
@@ -417,8 +420,8 @@ class UserManagement
 
     /**
      * @param string $code
-     * @param string $verificationId
-     * @param string $phoneNumber
+     * @param string|null $verificationId
+     * @param string|null $phoneNumber
      * @param string $pendingAuthenticationToken
      * @param string|null $ipAddress
      * @param string|null $deviceId
@@ -428,9 +431,9 @@ class UserManagement
      */
     public function authenticateWithRadarSmsChallenge(
         string $code,
-        string $verificationId,
-        string $phoneNumber,
         string $pendingAuthenticationToken,
+        ?string $verificationId = null,
+        ?string $phoneNumber = null,
         ?string $ipAddress = null,
         ?string $deviceId = null,
         ?string $userAgent = null,
@@ -581,6 +584,26 @@ class UserManagement
     }
 
     /**
+     * Get Radar Challenge details
+     *
+     * Get the details of an existing Radar Challenge, including the OTP code.
+     * @param string $id The unique ID of the Radar Challenge.
+     * @return \WorkOS\Resource\RadarChallenge
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getRadarChallenge(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\RadarChallenge {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'user_management/radar_challenges/' . rawurlencode($id),
+            options: $options,
+        );
+        return RadarChallenge::fromArray($response);
+    }
+
+    /**
      * Logout
      *
      * Logout a user from the current [session](https://workos.com/docs/reference/authkit/session).
@@ -660,7 +683,7 @@ class UserManagement
     /**
      * Create a CORS origin
      *
-     * Creates a new CORS origin for the current environment. CORS origins allow browser-based applications to make requests to the WorkOS API.
+     * Creates a new CORS origin for the API key's application. CORS origins allow browser-based applications to make requests to the WorkOS API.
      * @param string $origin The origin URL to allow for CORS requests.
      * @return \WorkOS\Resource\CORSOriginResponse
      * @throws \WorkOS\Exception\WorkOSException
@@ -863,6 +886,9 @@ class UserManagement
         } elseif ($password instanceof PasswordHashed) {
             $body['password_hash'] = $password->hash;
             $body['password_hash_type'] = $password->hashType;
+            if ($password->saltPosition !== null) {
+                $body['password_salt_position'] = $password->saltPosition;
+            }
         }
         $response = $this->client->request(
             method: 'POST',
@@ -958,6 +984,9 @@ class UserManagement
         } elseif ($password instanceof PasswordHashed) {
             $body['password_hash'] = $password->hash;
             $body['password_hash_type'] = $password->hashType;
+            if ($password->saltPosition !== null) {
+                $body['password_salt_position'] = $password->saltPosition;
+            }
         }
         $response = $this->client->request(
             method: 'PUT',
@@ -1483,6 +1512,25 @@ class UserManagement
     }
 
     /**
+     * Delete a redirect URI
+     *
+     * Deletes a redirect URI from an application.
+     * @param string $id The ID of the redirect URI to delete.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteRedirectUris(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'user_management/redirect_uris/' . rawurlencode($id),
+            options: $options,
+        );
+    }
+
+    /**
      * List authorized applications
      *
      * Get a list of all Connect applications that the user has authorized.
@@ -1536,6 +1584,180 @@ class UserManagement
             path: 'user_management/users/' . rawurlencode($userId) . '/authorized_applications/' . rawurlencode($applicationId),
             options: $options,
         );
+    }
+
+    /**
+     * Delete a waitlist entry
+     *
+     * Remove the entry from the waitlist. Its email address can join again unless a user with that email now exists in the environment. Deleting the entry does not revoke an invitation created by approving it — [revoke that invitation](https://workos.com/docs/reference/authkit/invitation/revoke) separately to withdraw access.
+     * @param string $id The unique ID of the waitlist entry.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteWaitlistEntry(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'user_management/waitlist_entries/' . rawurlencode($id),
+            options: $options,
+        );
+    }
+
+    /**
+     * Approve a waitlist entry
+     *
+     * Approve a waitlist entry, create an invitation for its email address, and send the invitation email. Approving a denied entry reverses the denial. The approval is saved even when the invitation steps fail, so instead of retrying the approval, recover based on the outcome:
+     *
+     * - `200` — the entry is approved. If invitation creation failed, no invitation exists yet; [send](https://workos.com/docs/reference/authkit/invitation/send) one.
+     * - `422` with code `invitation_email_not_sent` — the entry is approved and an invitation exists, but its email was not sent; [resend](https://workos.com/docs/reference/authkit/invitation/resend) it.
+     * - `422` with code `invalid_state` — the entry was already approved.
+     * @param string $id The unique ID of the waitlist entry.
+     * @return \WorkOS\Resource\WaitlistEntry
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createWaitlistEntryApprove(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\WaitlistEntry {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/waitlist_entries/' . rawurlencode($id) . '/approve',
+            options: $options,
+        );
+        return WaitlistEntry::fromArray($response);
+    }
+
+    /**
+     * Deny a waitlist entry
+     *
+     * Deny a pending waitlist entry. Denying an entry that is not pending fails with the code `invalid_state`. A denial can be reversed by approving the entry.
+     * @param string $id The unique ID of the waitlist entry.
+     * @return \WorkOS\Resource\WaitlistEntry
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createWaitlistEntryDeny(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\WaitlistEntry {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/waitlist_entries/' . rawurlencode($id) . '/deny',
+            options: $options,
+        );
+        return WaitlistEntry::fromArray($response);
+    }
+
+    /**
+     * List waitlists
+     *
+     * Get a list of the waitlists in the environment. All waitlists are returned in a single response — this endpoint is not paginated, so the `list_metadata` cursors are always `null`.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Waitlist>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listWaitlists(
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/waitlists',
+            modelClass: Waitlist::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get a waitlist
+     *
+     * Get the details of an existing waitlist.
+     * @param string $id The unique ID of the waitlist, or the literal `default` for the environment's default waitlist. The default waitlist is created when its first entry is added, so read requests for `default` return a `404` until then.
+     * @return \WorkOS\Resource\Waitlist
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getWaitlist(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\Waitlist {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'user_management/waitlists/' . rawurlencode($id),
+            options: $options,
+        );
+        return Waitlist::fromArray($response);
+    }
+
+    /**
+     * List waitlist entries
+     *
+     * Get a list of entries on a waitlist matching the criteria specified.
+     * @param string $id The unique ID of the waitlist, or the literal `default` for the environment's default waitlist. The default waitlist is created when its first entry is added, so read requests for `default` return a `404` until then.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param \WorkOS\Resource\WaitlistUserState|null $state Filter waitlist entries by their state.
+     * @param string|null $email Filter waitlist entries by their exact email address.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\WaitlistEntry>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listWaitlistEntries(
+        string $id,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\Resource\WaitlistUserState $state = null,
+        ?string $email = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'state' => $state?->value,
+            'email' => $email,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/waitlists/' . rawurlencode($id) . '/entries',
+            query: $query,
+            modelClass: WaitlistEntry::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create a waitlist entry
+     *
+     * Add an email address to the waitlist. Email addresses are normalized and unique per environment: a request for an email address already on the waitlist returns the existing entry unchanged (still with status `201`) and does not send another confirmation email. If a user with the email address already exists in the environment, the request fails with the code `user_already_exists`.
+     * @param string $id The unique ID of the waitlist, or the literal `default` for the environment's default waitlist. Use `default` when adding the first entry — the default waitlist is created automatically.
+     * @param string $email The email address of the user joining the waitlist.
+     * @param array<string, string>|null $additionalFields Object containing additional key/value pairs collected with the waitlist entry. Supports up to 50 string pairs, with keys up to 40 characters and values up to 600 characters. Values are user-provided — treat them as untrusted input when rendering or exporting.
+     * @param bool|null $sendConfirmationEmail Whether to send the waitlist confirmation email to the user. Defaults to `false`. No email is sent when the waitlist confirmation email is disabled in the environment, even if `send_confirmation_email` is `true`.
+     * @return \WorkOS\Resource\WaitlistEntry
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createWaitlistEntry(
+        string $id,
+        string $email,
+        ?array $additionalFields = null,
+        ?bool $sendConfirmationEmail = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\WaitlistEntry {
+        $body = array_filter([
+            'email' => $email,
+            'additional_fields' => $additionalFields,
+            'send_confirmation_email' => $sendConfirmationEmail,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/waitlists/' . rawurlencode($id) . '/entries',
+            body: $body,
+            options: $options,
+        );
+        return WaitlistEntry::fromArray($response);
     }
 
     /**

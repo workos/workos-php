@@ -10,4 +10,5 @@ enum ConnectedAccountState: string
 {
     case Connected = 'connected';
     case NeedsReauthorization = 'needs_reauthorization';
+    case Disconnected = 'disconnected';
 }

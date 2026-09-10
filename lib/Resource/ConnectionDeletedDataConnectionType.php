@@ -20,7 +20,6 @@ enum ConnectionDeletedDataConnectionType: string
     case CleverOidc = 'CleverOIDC';
     case CloudflareSAML = 'CloudflareSAML';
     case CyberArkSAML = 'CyberArkSAML';
-    case DiscordOAuth = 'DiscordOAuth';
     case DuoSAML = 'DuoSAML';
     case EntraIdOidc = 'EntraIdOIDC';
     case GenericOidc = 'GenericOIDC';

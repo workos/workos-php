@@ -24,6 +24,8 @@ readonly class AuthenticationOAuthFailedData implements \JsonSerializable
         public ?string $email,
         /** Details about the authentication error. */
         public AuthenticationOAuthFailedDataError $error,
+        /** The OAuth provider used for authentication. */
+        public ?string $provider = null,
     ) {
     }
 
@@ -37,6 +39,7 @@ readonly class AuthenticationOAuthFailedData implements \JsonSerializable
             userId: $data['user_id'] ?? null,
             email: $data['email'] ?? null,
             error: AuthenticationOAuthFailedDataError::fromArray($data['error']),
+            provider: $data['provider'] ?? null,
         );
     }
 
@@ -50,6 +53,7 @@ readonly class AuthenticationOAuthFailedData implements \JsonSerializable
             'user_id' => $this->userId,
             'email' => $this->email,
             'error' => $this->error->toArray(),
+            'provider' => $this->provider,
         ];
     }
 }

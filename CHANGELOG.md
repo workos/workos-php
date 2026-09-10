@@ -1,5 +1,347 @@
 # Changelog
 
+## [9.3.0](https://github.com/workos/workos-php/compare/v9.2.0...v9.3.0) (2026-09-01)
+
+### Miscellaneous Chores
+
+* **deps:** pin workos/actions action to 5c7450a ([#430](https://github.com/workos/workos-php/issues/430)) ([f0f66fd](https://github.com/workos/workos-php/commit/f0f66fd20611aca47f096b80772de00f63606bc8))
+* **deps:** update github-actions versions ([#431](https://github.com/workos/workos-php/issues/431)) ([a3ac03e](https://github.com/workos/workos-php/commit/a3ac03e52d6304a53d104867fa68a171911359a8))
+
+* [#435](https://github.com/workos/workos-php/pull/435) feat(generated)!: regenerate from spec (4 changes)
+
+  **⚠️ Breaking**
+  * **[agents](https://workos.com/docs/reference/agents)**:
+    * Removed service `Agents`
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Removed model `TokenBody`
+    * Removed enum `TokenBodyGrantType`
+    * Removed model `TokenQuery`
+    * Changed parameter `SSO.token.grant_type`
+
+  **Features**
+  * **[agents](https://workos.com/docs/reference/agents)**:
+    * Added model `AgentBlueprint`
+    * Added model `AgentInstance`
+    * Added model `AgentToken`
+    * Added model `AgentInstanceSession`
+    * Added model `AgentBlueprintInvocableBy`
+    * Added model `AgentBlueprintSessionSetting`
+    * Added model `AgentBlueprintsCreateRequest`
+    * Added model `AgentBlueprintsCreateRequestInvocableBy`
+    * Added model `AgentBlueprintsCreateRequestSessionSetting`
+    * Added model `AgentBlueprintsUpdateRequest`
+    * Added model `AgentBlueprintsUpdateRequestInvocableBy`
+    * Added model `AgentBlueprintsUpdateRequestSessionSetting`
+    * Added model `AgentBlueprintsTokenMintTokenRequest`
+    * Added enum `AgentInstanceType`
+    * Added enum `AgentInstanceSessionStatus`
+    * Added enum `AgentBlueprintsTokenMintTokenRequestType`
+  * **agents_blueprints**:
+    * Added service `AgentsBlueprints`
+  * **agents_blueprints_tokens**:
+    * Added service `AgentsBlueprintsTokens`
+  * **agents_instances**:
+    * Added service `AgentsInstances`
+  * **agents_registrations**:
+    * Added service `AgentsRegistrations`
+  * **agents_sessions**:
+    * Added service `AgentsSessions`
+  * **[organizations](https://workos.com/docs/reference/organization)**:
+    * Added `retention_period` to `UpdateAuditLogsRetention`
+    * Made `UpdateAuditLogsRetention.retention_period_in_days` optional
+    * Added enum `UpdateAuditLogsRetentionRetentionPeriod`
+    * Added model `CreateItContact`
+    * Added model `InviteItContact`
+    * Added model `ItContact`
+    * Added model `ItContactList`
+    * Added model `ItContactListListMetadata`
+    * Added enum `InviteItContactIntents`
+    * Added service `OrganizationsItContacts`
+  * **platform_teams**:
+    * Added model `CreateTeam`
+    * Added model `Team`
+    * Added enum `TeamProductionState`
+    * Added service `PlatformTeams`
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Added model `TokenQuery`
+    * Added enum `TokenQueryGrantType`
+    * Added model `CreateConnectionKeyPair`
+    * Added model `CreateConnectionSAMLOptions`
+    * Added model `CreateConnectionOidcOptions`
+    * Added model `CreateConnectionStandardAttributes`
+    * Added model `CreateConnectionAttributeMaps`
+    * Added model `CreateConnection`
+    * Added model `PatchConnectionSAMLOptions`
+    * Added model `PatchConnectionOidcOptions`
+    * Added model `PatchConnectionStandardAttributes`
+    * Added model `PatchConnectionAttributeMaps`
+    * Added model `PatchConnection`
+    * Added model `CreateSAMLIdpSigningCertificate`
+    * Added model `SAMLIdpSigningCertificate`
+    * Added model `SAMLIdpSigningCertificateList`
+    * Added model `SAMLSpEncryptionCertificate`
+    * Added model `SAMLSpEncryptionCertificateList`
+    * Added model `SAMLSpSigningCertificate`
+    * Added enum `CreateConnectionOidcOptionsIdTokenSignatureAlgorithm`
+    * Added enum `PatchConnectionOidcOptionsIdTokenSignatureAlgorithm`
+    * Added endpoint `POST /connections`
+    * Added endpoint `GET /connections/{connectionId}/saml_idp_signing_certs`
+    * Added endpoint `POST /connections/{connectionId}/saml_idp_signing_certs`
+    * Added endpoint `DELETE /connections/{connectionId}/saml_idp_signing_certs/{certificateId}`
+    * Added endpoint `GET /connections/{connectionId}/saml_sp_encryption_certs`
+    * Added endpoint `POST /connections/{connectionId}/saml_sp_encryption_certs`
+    * Added endpoint `DELETE /connections/{connectionId}/saml_sp_encryption_certs/{certificateId}`
+    * Added endpoint `GET /connections/{connectionId}/saml_sp_signing_cert`
+    * Added endpoint `POST /connections/{connectionId}/saml_sp_signing_cert`
+    * Added endpoint `DELETE /connections/{connectionId}/saml_sp_signing_cert/{certificateId}`
+    * Added endpoint `PATCH /connections/{id}`
+    * Added model `TokenBody`
+    * Added enum `TokenBodyGrantType`
+    * Added enum `SSOGrantType`
+    * Changed required status for parameter `SSO.token.code`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added enum `CreateConnectionOidcOptionsTokenAuthenticationMethod`
+    * Added enum `PatchConnectionOidcOptionsTokenAuthenticationMethod`
+    * Added model `EmailCompletionSessionAuthenticateRequest`
+    * Added model `CreateWaitlistEntry`
+    * Added model `Waitlist`
+    * Added model `WaitlistEntry`
+    * Added enum `WaitlistEntryState`
+    * Added enum `UserManagementWaitlistsState`
+    * Added service `UserManagementWaitlists`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `agent.instance.created` to `CreateWebhookEndpointEvents`
+    * Added `agent.instance.deleted` to `CreateWebhookEndpointEvents`
+    * Added `agent.instance.session.created` to `CreateWebhookEndpointEvents`
+    * Added `agent.instance.session.revoked` to `CreateWebhookEndpointEvents`
+    * Added `agent.instance.created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.instance.deleted` to `UpdateWebhookEndpointEvents`
+    * Added `agent.instance.session.created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.instance.session.revoked` to `UpdateWebhookEndpointEvents`
+    * Added `agent.blueprint.created` to `CreateWebhookEndpointEvents`
+    * Added `agent.blueprint.deleted` to `CreateWebhookEndpointEvents`
+    * Added `agent.blueprint.updated` to `CreateWebhookEndpointEvents`
+    * Added `agent.blueprint.created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.blueprint.deleted` to `UpdateWebhookEndpointEvents`
+    * Added `agent.blueprint.updated` to `UpdateWebhookEndpointEvents`
+
+  **Fixes**
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Changed request body of `SSO.token` from `TokenBody` to `TokenQuery`
+    * Removed `DiscordOAuth` from `ConnectionType`
+    * Removed `GrokOAuth` from `ConnectionType`
+    * Removed `XOAuth` from `ConnectionType`
+    * Removed `DiscordOAuth` from `ProfileConnectionType`
+    * Removed `GrokOAuth` from `ProfileConnectionType`
+    * Removed `XOAuth` from `ProfileConnectionType`
+    * Removed `DiscordOAuth` from `ConnectionsConnectionType`
+    * Removed `GrokOAuth` from `ConnectionsConnectionType`
+    * Removed `XOAuth` from `ConnectionsConnectionType`
+    * Changed request body of `SSO.token` from `TokenQuery` to `TokenBody`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Changed request body for `UserManagementAuthentication.authenticate`
+    * Changed errors for endpoint `POST /user_management/authenticate`
+    * Removed `DiscordOAuth` from `AuthenticateResponseAuthenticationMethod`
+    * Removed `GrokOAuth` from `AuthenticateResponseAuthenticationMethod`
+    * Removed `XOAuth` from `AuthenticateResponseAuthenticationMethod`
+    * Removed `DiscordOAuth` from `UserIdentitiesGetItemProvider`
+    * Removed `GrokOAuth` from `UserIdentitiesGetItemProvider`
+    * Removed `XOAuth` from `UserIdentitiesGetItemProvider`
+    * Changed errors for endpoint `DELETE /user_management/users/{id}`
+
+* [#437](https://github.com/workos/workos-php/pull/437) fix(generated): regenerate from spec
+
+  **Features**
+  * **[agents](https://workos.com/docs/reference/agents)**:
+    * Made `AgentBlueprintsCreateRequest.session_settings` optional
+    * Added model `AgentTokenValidation`
+    * Added model `AgentBlueprintsTokenValidateTokenRequest`
+  * **agents_blueprints_tokens**:
+    * Added endpoint `POST /agents/blueprints/{agent_blueprint_id}/tokens/validate`
+
+## [9.2.0](https://github.com/workos/workos-php/compare/v9.1.0...v9.2.0) (2026-08-11)
+
+* [#428](https://github.com/workos/workos-php/pull/428) feat(generated)!: regenerate from spec (2 changes)
+
+  **⚠️ Breaking**
+  * **[events](https://workos.com/docs/reference/events)**:
+    * Changed required status for parameter `Events.list.events`
+
+  **Features**
+  * **[groups](https://workos.com/docs/reference/groups)**:
+    * Added parameter `Groups.list.search`
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * Added `client_id` to `ConnectedAccount`
+    * Added `client_secret_last_4` to `ConnectedAccount`
+    * Added `config` to `ConnectedAccount`
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added `client_id` to `DataIntegrationsListResponseDataConnectedAccount`
+    * Added `client_secret_last_4` to `DataIntegrationsListResponseDataConnectedAccount`
+    * Added `config` to `DataIntegrationsListResponseDataConnectedAccount`
+    * Changed errors for endpoint `POST /data-integrations/{slug}/credentials`
+    * Made `CustomProviderDefinition.authorization_url` optional
+    * Made `CustomProviderDefinition.token_url` optional
+    * Added model `DataIntegrationsUpsertClientCredentialsRequest`
+    * Added `client_credentials` to `CreateDataIntegrationAuthMethods`
+    * Added endpoint `PUT /data-integrations/{slug}/client-credentials`
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Added `XOAuth` to `ConnectionType`
+    * Added `XOAuth` to `ProfileConnectionType`
+    * Added `XOAuth` to `ConnectionsConnectionType`
+    * Added `GrokOAuth` to `ConnectionType`
+    * Added `GrokOAuth` to `ProfileConnectionType`
+    * Added `GrokOAuth` to `ConnectionsConnectionType`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Changed errors for endpoint `DELETE /user_management/users/{id}`
+    * Added `password_salt_position` to `CreateUser`
+    * Added `password_salt_position` to `UpdateUser`
+    * Made `RadarSmsChallengeCodeSessionAuthenticateRequest.verification_id` optional
+    * Made `RadarSmsChallengeCodeSessionAuthenticateRequest.phone_number` optional
+    * Added enum `CreateUserPasswordSaltPosition`
+    * Added enum `UpdateUserPasswordSaltPosition`
+    * Added `XOAuth` to `AuthenticateResponseAuthenticationMethod`
+    * Added `XOAuth` to `UserIdentitiesGetItemProvider`
+    * Added `GrokOAuth` to `AuthenticateResponseAuthenticationMethod`
+    * Added `GrokOAuth` to `UserIdentitiesGetItemProvider`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `agent.registration.refreshed` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.refreshed` to `UpdateWebhookEndpointEvents`
+
+  **Fixes**
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Changed the type of `DataIntegration.credentials`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Changed errors for endpoint `POST /user_management/authenticate`
+    * Changed errors for endpoint `POST /user_management/users`
+    * Changed errors for endpoint `PUT /user_management/users/{id}`
+
+## [9.1.0](https://github.com/workos/workos-php/compare/v9.0.0...v9.1.0) (2026-07-29)
+
+### Features
+
+* **pkce:** Default clientId to the client's configured client ID ([#423](https://github.com/workos/workos-php/issues/423)) ([f65713b](https://github.com/workos/workos-php/commit/f65713b054f92d096ae3962c1a2e0bebbde64c7d))
+* support for guzzle 8 ([#427](https://github.com/workos/workos-php/issues/427)) ([81c2384](https://github.com/workos/workos-php/commit/81c2384c544e2329ab5fb098dbf43f285488cb1e))
+
+* [#425](https://github.com/workos/workos-php/pull/425) fix(generated): regenerate from spec
+
+  **Features**
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added `config` to `DataIntegrationsGetDataIntegrationAuthorizeUrlRequest`
+    * Added `client_credentials` to `DataIntegrationAuthMethods`
+    * Added `client_credentials` to `DataIntegrationsListResponseDataAuthMethods`
+    * Added `client_credentials` to `DataIntegrationsListResponseDataConnectedAccountAuthMethod`
+    * Added `config` to Pipes models
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * Added `client_credentials` to `ConnectedAccountAuthMethod`
+
+  **Fixes**
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Changed errors for endpoint `POST /user_management/invitations`
+    * Changed errors for endpoint `POST /user_management/invitations/{id}/resend`
+    * Changed errors for endpoint `POST /user_management/magic_auth`
+    * Changed errors for endpoint `POST /user_management/authenticate`
+
+* [#426](https://github.com/workos/workos-php/pull/426) fix(generated): regenerate from spec
+
+  **Fixes**
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Removed `callback_endpoint` from `Connection`
+
+## [9.0.0](https://github.com/workos/workos-php/compare/v8.1.0...v9.0.0) (2026-07-22)
+
+### Miscellaneous Chores
+
+* **deps:** update actions/cache action to v5.1.0 ([#419](https://github.com/workos/workos-php/issues/419)) ([d963179](https://github.com/workos/workos-php/commit/d9631791e928d45d1decf18ea24e250077482dae))
+* prevent oagen generated files from being PR'ed ([26d03a0](https://github.com/workos/workos-php/commit/26d03a018e021962a4ac29c58f816a88a78865ad))
+* scope SDK bot App token permissions ([293b5ef](https://github.com/workos/workos-php/commit/293b5ef84709f4bbe8048072bdaadd3f84abf514))
+
+* [#420](https://github.com/workos/workos-php/pull/420) fix(generated): regenerate from spec
+
+  **Features**
+  * **[audit_logs](https://workos.com/docs/reference/audit-logs)**:
+    * Added `expired` to `AuditLogExportState`
+
+* [#421](https://github.com/workos/workos-php/pull/421) feat(generated)!: regenerate from spec (3 changes)
+
+  **Features**
+  * **agents**:
+    * Added model `ClaimViewResponse`
+    * Added model `ClaimViewResponseOrganization`
+    * Added model `AgentAdminLinkClaimAttemptToExternalUserRequest`
+    * Added model `AgentAdminLinkClaimAttemptToExternalUserRequestUser`
+    * Added enum `ClaimViewResponseStatus`
+    * Added endpoint `PATCH /agents/claims/attempts`
+    * Added model `AgentRegistration`
+    * Added model `AgentCredentialValidation`
+    * Added model `AgentRegistrationAgentIdentity`
+    * Added model `AgentRegistrationClaim`
+    * Added model `AgentAdminValidateCredentialRequest`
+    * Added model `AgentRegistrationClaimClaimCompletion`
+    * Added enum `AgentRegistrationStatus`
+    * Added enum `AgentRegistrationKind`
+    * Added enum `AgentAdminValidateCredentialRequestType`
+    * Added service `Agents`
+  * **[api_keys](https://workos.com/docs/reference/authkit/api-keys)**:
+    * Added `agent_registration_id` to `ApiKeyValidationResponse`
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * Added enum `ApplicationsRegistrationTypes`
+    * Added parameter `Applications.list.registration_types`
+  * **[directory_sync](https://workos.com/docs/reference/directory-sync)**:
+    * Added parameter `DirectoryUsers.list.idp_id`
+    * Added parameter `DirectoryUsers.list.email`
+  * **[organizations](https://workos.com/docs/reference/organization)**:
+    * Added model `OrganizationAuthorizedConnectApplicationList`
+    * Added model `OrganizationAuthorizedConnectApplicationListData`
+    * Added model `OrganizationAuthorizedConnectApplicationListListMetadata`
+    * Added service `OrganizationsAuthorizedApplications`
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * Added model `DataIntegrationInstallation`
+    * Added `auth_methods` to `CreateDataIntegration`
+    * Added `api_key` to `CreateDataIntegration`
+    * Added `api_key` to `UpdateDataIntegration`
+    * Added `auth_methods` to `DataIntegration`
+    * Added `installation` to `DataIntegration`
+    * Added enum `CreateDataIntegrationAuthMethods`
+    * Added enum `DataIntegrationAuthMethods`
+    * Added model `DataIntegrationCredentialsResponse`
+    * Added model `DataIntegrationCredentialsResponseCredential`
+    * Added model `DataIntegrationsUpsertApiKeyRequest`
+    * Added model `DataIntegrationsVendCredentialsRequest`
+    * Added enum `DataIntegrationCredentialsResponseError`
+    * Added endpoint `PUT /data-integrations/{slug}/api-key`
+    * Added endpoint `POST /data-integrations/{slug}/credentials`
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * Added parameter `SSO.authorize.prompt`
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added `ssha256` to `CreateUserPasswordHashType`
+    * Added `ssha256` to `UpdateUserPasswordHashType`
+    * Added endpoint `GET /user_management/radar_challenges/{id}`
+  * **[webhooks](https://workos.com/docs/reference/webhooks)**:
+    * Added `agent.registration.revoked` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.revoked` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.deleted` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.deleted` to `UpdateWebhookEndpointEvents`
+    * Added `radar.challenge_created` to `CreateWebhookEndpointEvents`
+    * Added `radar.challenge_created` to `UpdateWebhookEndpointEvents`
+    * Added `agent.registration.expired` to `CreateWebhookEndpointEvents`
+    * Added `agent.registration.expired` to `UpdateWebhookEndpointEvents`
+  * **[widgets](https://workos.com/docs/reference/widgets)**:
+    * Made `WidgetSessionToken.organization_id` optional
+
+* [#422](https://github.com/workos/workos-php/pull/422) feat(generated)!: regenerate from spec (5 changes)
+
+  **⚠️ Breaking**
+  * **[admin_portal](https://workos.com/docs/reference/admin-portal)**:
+    * SDK surface change: Symbol "IntentOptions" was removed
+  * **[connect](https://workos.com/docs/reference/workos-connect/standalone)**:
+    * SDK surface change: Symbol "ConnectedAccountDto" was removed
+  * **[organization_domains](https://workos.com/docs/reference/domain-verification)**:
+    * SDK surface change: Symbol "DomainVerificationIntentOptions" was removed
+  * **[pipes](https://workos.com/docs/reference/pipes)**:
+    * SDK surface change: Symbol "DataIntegrationCredentialsDto" was removed
+  * **[sso](https://workos.com/docs/reference/sso)**:
+    * SDK surface change: Symbol "SSOIntentOptions" was removed
+
 ## [8.1.0](https://github.com/workos/workos-php/compare/v8.0.0...v8.1.0) (2026-07-06)
 
 * [#416](https://github.com/workos/workos-php/pull/416) fix(generated): regenerate from spec

@@ -11,6 +11,7 @@ class PasswordHashed
     public function __construct(
         public readonly string $hash,
         public readonly \WorkOS\Resource\CreateUserPasswordHashType $hashType,
+        public readonly ?\WorkOS\Resource\CreateUserPasswordSaltPosition $saltPosition = null,
     ) {
     }
 }

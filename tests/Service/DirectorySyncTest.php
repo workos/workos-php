@@ -91,7 +91,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('list_directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, directory: 'test_value', group: 'test_value');
+        $result = $client->directorySync()->listUsers(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, directory: 'test_value', group: 'test_value', idpId: 'test_value', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -103,6 +103,8 @@ class DirectorySyncTest extends TestCase
         $this->assertSame('normal', $query['order']);
         $this->assertSame('test_value', $query['directory']);
         $this->assertSame('test_value', $query['group']);
+        $this->assertSame('test_value', $query['idp_id']);
+        $this->assertSame('test_value', $query['email']);
     }
 
     public function testGetUser(): void

@@ -11,21 +11,28 @@ readonly class UpdateAuditLogsRetention implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The number of days Audit Log events will be retained. Valid values are `30` and `365`. */
-        public int $retentionPeriodInDays,
+        /** The period Audit Log events will be retained. Valid values are `1_MONTH` through `11_MONTHS` in one-month increments and `1_YEAR` through `10_YEARS` in one-year increments. Mutually exclusive with `retention_period_in_days`. */
+        public ?UpdateAuditLogsRetentionRetentionPeriod $retentionPeriod = null,
+        /**
+         * The number of days Audit Log events will be retained. Valid values are `30` through `330` in 30-day increments and `365` through `3650` in 365-day increments. Deprecated: use `retention_period` instead. Mutually exclusive with `retention_period`.
+         * @deprecated
+         */
+        public ?int $retentionPeriodInDays = null,
     ) {
     }
 
     public static function fromArray(array $data): self
     {
         return new self(
-            retentionPeriodInDays: $data['retention_period_in_days'],
+            retentionPeriod: isset($data['retention_period']) ? UpdateAuditLogsRetentionRetentionPeriod::from($data['retention_period']) : null,
+            retentionPeriodInDays: $data['retention_period_in_days'] ?? null,
         );
     }
 
     public function toArray(): array
     {
         return [
+            'retention_period' => $this->retentionPeriod?->value,
             'retention_period_in_days' => $this->retentionPeriodInDays,
         ];
     }

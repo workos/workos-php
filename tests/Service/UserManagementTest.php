@@ -80,6 +80,20 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $body['phone_number']);
     }
 
+    public function testGetRadarChallenge(): void
+    {
+        $fixture = $this->loadFixture('radar_challenge');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->getRadarChallenge('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\RadarChallenge::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['user_id'], $result->userId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/radar_challenges/test_id', $request->getUri()->getPath());
+    }
+
     public function testGetLogoutUrl(): void
     {
         $client = $this->createMockClient([]);
@@ -556,6 +570,15 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $body['uri']);
     }
 
+    public function testDeleteRedirectUris(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->userManagement()->deleteRedirectUris('test_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('user_management/redirect_uris/test_id', $request->getUri()->getPath());
+    }
+
     public function testListUserAuthorizedApplications(): void
     {
         $fixture = $this->loadFixture('list_authorized_connect_application_list_data');
@@ -579,6 +602,101 @@ class UserManagementTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_user_id/authorized_applications/test_application_id', $request->getUri()->getPath());
+    }
+
+    public function testDeleteWaitlistEntry(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->userManagement()->deleteWaitlistEntry('test_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlist_entries/test_id', $request->getUri()->getPath());
+    }
+
+    public function testCreateWaitlistEntryApprove(): void
+    {
+        $fixture = $this->loadFixture('waitlist_entry');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createWaitlistEntryApprove('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\WaitlistEntry::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlist_entries/test_id/approve', $request->getUri()->getPath());
+    }
+
+    public function testCreateWaitlistEntryDeny(): void
+    {
+        $fixture = $this->loadFixture('waitlist_entry');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createWaitlistEntryDeny('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\WaitlistEntry::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlist_entries/test_id/deny', $request->getUri()->getPath());
+    }
+
+    public function testListWaitlists(): void
+    {
+        $fixture = $this->loadFixture('list_waitlist');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listWaitlists();
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlists', $request->getUri()->getPath());
+    }
+
+    public function testGetWaitlist(): void
+    {
+        $fixture = $this->loadFixture('waitlist');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->getWaitlist('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\Waitlist::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlists/test_id', $request->getUri()->getPath());
+    }
+
+    public function testListWaitlistEntries(): void
+    {
+        $fixture = $this->loadFixture('list_waitlist_entry');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listWaitlistEntries('test_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, state: \WorkOS\Resource\WaitlistUserState::Pending, email: 'test_value');
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlists/test_id/entries', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+        $this->assertSame('pending', $query['state']);
+        $this->assertSame('test_value', $query['email']);
+    }
+
+    public function testCreateWaitlistEntry(): void
+    {
+        $fixture = $this->loadFixture('waitlist_entry');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createWaitlistEntry('test_id', email: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\WaitlistEntry::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['email'], $result->email);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/waitlists/test_id/entries', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['email']);
     }
 
     public function testListUserApiKeys(): void
@@ -691,7 +809,7 @@ class UserManagementTest extends TestCase
     {
         $fixture = $this->loadFixture('authenticate_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->authenticateWithRadarSmsChallenge(code: 'test_value', verificationId: 'test_value', phoneNumber: 'test_value', pendingAuthenticationToken: 'test_value');
+        $result = $client->userManagement()->authenticateWithRadarSmsChallenge(code: 'test_value', pendingAuthenticationToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticateResponse::class, $result);
     }
 

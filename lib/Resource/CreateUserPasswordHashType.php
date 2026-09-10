@@ -11,6 +11,7 @@ enum CreateUserPasswordHashType: string
     case Bcrypt = 'bcrypt';
     case FirebaseScrypt = 'firebase-scrypt';
     case Ssha = 'ssha';
+    case Ssha256 = 'ssha256';
     case Scrypt = 'scrypt';
     case Pbkdf2 = 'pbkdf2';
     case Argon2 = 'argon2';
