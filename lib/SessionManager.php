@@ -361,8 +361,9 @@ class SessionManager
      * Decode and validate an access token JWT.
      *
      * Verifies the JWS signature against the JWKS published for `$clientId`,
-     * enforces an algorithm allow-list, and rejects expired tokens. This is
-     * the only path used by {@see authenticate()}; callers must not bypass it.
+     * enforces an algorithm allow-list, and requires a numeric, unexpired exp
+     * claim. This is the only path used by {@see authenticate()}; callers must
+     * not bypass it.
      *
      * @param string $accessToken The JWT access token.
      * @param string $clientId The WorkOS client ID (used to fetch JWKS).
@@ -436,8 +437,12 @@ class SessionManager
             throw new \InvalidArgumentException('JWT signature verification failed');
         }
 
-        // Expiration check (after signature verification).
-        if (isset($decoded['exp']) && is_numeric($decoded['exp']) && (int) $decoded['exp'] < time()) {
+        // Require expiration after signature verification; missing or malformed
+        // claims must not bypass the expiry check.
+        if (!isset($decoded['exp']) || !is_numeric($decoded['exp'])) {
+            throw new \InvalidArgumentException('JWT exp claim is missing or invalid');
+        }
+        if ((int) $decoded['exp'] <= time()) {
             throw new \InvalidArgumentException('JWT has expired');
         }
 
