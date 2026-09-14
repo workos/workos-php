@@ -3,6 +3,7 @@
   "language": "php",
   "files": [
     "lib/Resource/AccessTokenAgentRegistrationCredentialIssuedDataDetail.php",
+    "lib/Resource/AccountSelectionRequiredError.php",
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
     "lib/Resource/ActionUserRegistrationDenied.php",
@@ -182,6 +183,7 @@
     "lib/Resource/AuthenticationSSOTimedOutData.php",
     "lib/Resource/AuthenticationSSOTimedOutDataError.php",
     "lib/Resource/AuthenticationSSOTimedOutDataSSO.php",
+    "lib/Resource/AuthkitOAuthResource.php",
     "lib/Resource/AuthorizationAssignment.php",
     "lib/Resource/AuthorizationCheck.php",
     "lib/Resource/AuthorizationCodeSessionAuthenticateRequest.php",
@@ -231,6 +233,7 @@
     "lib/Resource/ConnectionType.php",
     "lib/Resource/ConnectionsConnectionType.php",
     "lib/Resource/CreateApplicationSecret.php",
+    "lib/Resource/CreateAuthkitOAuthResource.php",
     "lib/Resource/CreateAuthorizationPermission.php",
     "lib/Resource/CreateAuthorizationResource.php",
     "lib/Resource/CreateCORSOrigin.php",
@@ -514,6 +517,7 @@
     "lib/Resource/PipesConnectedAccountConnectionFailedData.php",
     "lib/Resource/PipesConnectedAccountDisconnected.php",
     "lib/Resource/PipesConnectedAccountReauthorizationNeeded.php",
+    "lib/Resource/PipesOwnership.php",
     "lib/Resource/PortalLinkResponse.php",
     "lib/Resource/Profile.php",
     "lib/Resource/RadarChallenge.php",
@@ -724,6 +728,7 @@
     "lib/WorkOS.php",
     "tests/ClientTest.php",
     "tests/Fixtures/access_token_agent_registration_credential_issued_data_detail.json",
+    "tests/Fixtures/account_selection_required_error.json",
     "tests/Fixtures/action_authentication_denied.json",
     "tests/Fixtures/action_authentication_denied_data.json",
     "tests/Fixtures/action_user_registration_denied.json",
@@ -888,6 +893,7 @@
     "tests/Fixtures/authentication_sso_timed_out_data.json",
     "tests/Fixtures/authentication_sso_timed_out_data_error.json",
     "tests/Fixtures/authentication_sso_timed_out_data_sso.json",
+    "tests/Fixtures/authkit_oauth_resource.json",
     "tests/Fixtures/authorization_check.json",
     "tests/Fixtures/authorization_code_session_authenticate_request.json",
     "tests/Fixtures/authorization_permission.json",
@@ -927,6 +933,7 @@
     "tests/Fixtures/connection_saml_certificate_renewed_data_connection.json",
     "tests/Fixtures/cors_origin_response.json",
     "tests/Fixtures/create_application_secret.json",
+    "tests/Fixtures/create_authkit_oauth_resource.json",
     "tests/Fixtures/create_authorization_permission.json",
     "tests/Fixtures/create_authorization_resource.json",
     "tests/Fixtures/create_connection.json",
@@ -1104,6 +1111,7 @@
     "tests/Fixtures/list_audit_log_action.json",
     "tests/Fixtures/list_audit_log_schema.json",
     "tests/Fixtures/list_authentication_factor.json",
+    "tests/Fixtures/list_authkit_oauth_resource.json",
     "tests/Fixtures/list_authorization_permission.json",
     "tests/Fixtures/list_authorization_resource.json",
     "tests/Fixtures/list_authorized_connect_application_list_data.json",
@@ -2379,6 +2387,30 @@
     "POST /agents/blueprints/{agent_blueprint_id}/tokens/validate": {
       "sdkMethod": "validateBlueprintToken",
       "service": "agents"
+    },
+    "GET /data-integrations/{slug}/organization": {
+      "sdkMethod": "listDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}/organization": {
+      "sdkMethod": "updateDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "DELETE /data-integrations/{slug}/organization": {
+      "sdkMethod": "deleteDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "GET /user_management/authkit_oauth_resources": {
+      "sdkMethod": "listAuthkitOAuthResources",
+      "service": "userManagement"
+    },
+    "POST /user_management/authkit_oauth_resources": {
+      "sdkMethod": "createAuthkitOAuthResource",
+      "service": "userManagement"
+    },
+    "DELETE /user_management/authkit_oauth_resources/{id}": {
+      "sdkMethod": "deleteAuthkitOAuthResource",
+      "service": "userManagement"
     }
   }
 }

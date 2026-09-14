@@ -19,8 +19,8 @@ class AdminPortal
      * Generate a Portal Link
      *
      * Generate a Portal Link scoped to an Organization.
-     * @param string|null $returnUrl The URL to go to when an admin clicks on your logo in the Admin Portal. If not specified, the return URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used.
-     * @param string|null $successUrl The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Redirects](https://dashboard.workos.com/redirects) page will be used.
+     * @param string|null $returnUrl The URL to go to when an admin clicks on your logo in the Admin Portal. If not specified, the return URL configured on the [Admin Portal](https://dashboard.workos.com/admin-portal) page will be used.
+     * @param string|null $successUrl The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Admin Portal](https://dashboard.workos.com/admin-portal) page will be used.
      * @param string $organization An [Organization](https://workos.com/docs/reference/organization) identifier.
      * @param \WorkOS\Resource\GenerateLinkIntent|null $intent
      *       The intent of the Admin Portal.
