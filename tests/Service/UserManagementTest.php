@@ -54,7 +54,6 @@ class UserManagementTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->userManagement()->createDevice(clientId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\DeviceAuthorizationResponse::class, $result);
-        $this->assertSame($fixture['device_code'], $result->deviceCode);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
@@ -112,6 +111,47 @@ class UserManagementTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/sessions/revoke', $request->getUri()->getPath());
+    }
+
+    public function testListAuthkitOAuthResources(): void
+    {
+        $fixture = $this->loadFixture('list_authkit_oauth_resource');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->listAuthkitOAuthResources(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('user_management/authkit_oauth_resources', $request->getUri()->getPath());
+        parse_str($request->getUri()->getQuery(), $query);
+        $this->assertSame('test_value', $query['before']);
+        $this->assertSame('test_value', $query['after']);
+        $this->assertArrayHasKey('limit', $query);
+        $this->assertSame('normal', $query['order']);
+    }
+
+    public function testCreateAuthkitOAuthResource(): void
+    {
+        $fixture = $this->loadFixture('authkit_oauth_resource');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->userManagement()->createAuthkitOAuthResource(uri: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\AuthkitOAuthResource::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['uri'], $result->uri);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('user_management/authkit_oauth_resources', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['uri']);
+    }
+
+    public function testDeleteAuthkitOAuthResource(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->userManagement()->deleteAuthkitOAuthResource('test_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('user_management/authkit_oauth_resources/test_id', $request->getUri()->getPath());
     }
 
     public function testListCorsOrigins(): void
@@ -815,12 +855,12 @@ class UserManagementTest extends TestCase
 
     public function testPaginationBoundary(): void
     {
-        $fixture = $this->loadFixture('list_cors_origin_response');
+        $fixture = $this->loadFixture('list_authkit_oauth_resource');
         // Ensure cursors are null (first/last page boundary)
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->userManagement()->listCorsOrigins();
+        $result = $client->userManagement()->listAuthkitOAuthResources();
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);

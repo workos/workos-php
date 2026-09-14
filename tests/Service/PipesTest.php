@@ -17,7 +17,7 @@ class PipesTest extends TestCase
     {
         $fixture = $this->loadFixture('list_data_integration');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->listDataIntegrations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->pipes()->listDataIntegrations(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, ownership: \WorkOS\Resource\PipesOwnership::User);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -27,6 +27,7 @@ class PipesTest extends TestCase
         $this->assertSame('test_value', $query['after']);
         $this->assertArrayHasKey('limit', $query);
         $this->assertSame('normal', $query['order']);
+        $this->assertSame('user', $query['ownership']);
     }
 
     public function testCreateDataIntegration(): void
@@ -144,6 +145,43 @@ class PipesTest extends TestCase
         $this->assertStringEndsWith('data-integrations/test_slug/credentials', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['user_id']);
+    }
+
+    public function testListDataIntegrationOrganization(): void
+    {
+        $fixture = $this->loadFixture('data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->listDataIntegrationOrganization('test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/organization', $request->getUri()->getPath());
+    }
+
+    public function testUpdateDataIntegrationOrganization(): void
+    {
+        $fixture = $this->loadFixture('data_integration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateDataIntegrationOrganization('test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['slug'], $result->slug);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/organization', $request->getUri()->getPath());
+    }
+
+    public function testDeleteDataIntegrationOrganization(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->pipes()->deleteDataIntegrationOrganization('test_slug');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/organization', $request->getUri()->getPath());
     }
 
     public function testGetAccessToken(): void
