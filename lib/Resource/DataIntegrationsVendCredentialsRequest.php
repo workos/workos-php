@@ -11,12 +11,16 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
     use JsonSerializableTrait;
 
     public function __construct(
-        /** A [User](https://workos.com/docs/reference/authkit/user) identifier. */
+        /** A [User](https://workos.com/docs/reference/authkit/user) identifier. When `connection_owner` is `organization`, this is the user the credentials are vended on behalf of; they must be an active member of the organization. */
         public string $userId,
-        /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. */
+        /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
         /** A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider. */
         public ?string $connectedAccountId = null,
+        /** Which connection to vend from. `user` (the default) vends the user's own connection and requires `user_id`. `organization` vends the organization's shared connection and requires `organization_id`. */
+        public ?PipesOwnership $connectionOwner = null,
+        /** Set to `true` to use the plural connection contract. If no `connected_account_id` is supplied and several connections match, the request returns `account_selection_required`. When omitted or `false`, only the compatibility connection is considered. */
+        public ?bool $supportsMultipleConnections = null,
     ) {
     }
 
@@ -26,6 +30,8 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
             userId: $data['user_id'],
             organizationId: $data['organization_id'] ?? null,
             connectedAccountId: $data['connected_account_id'] ?? null,
+            connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
+            supportsMultipleConnections: $data['supports_multiple_connections'] ?? null,
         );
     }
 
@@ -35,6 +41,8 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
             'connected_account_id' => $this->connectedAccountId,
+            'connection_owner' => $this->connectionOwner?->value,
+            'supports_multiple_connections' => $this->supportsMultipleConnections,
         ];
     }
 }

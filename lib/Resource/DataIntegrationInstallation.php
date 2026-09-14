@@ -13,9 +13,9 @@ readonly class DataIntegrationInstallation implements \JsonSerializable
     public function __construct(
         /** Unique identifier of the installation. */
         public string $id,
-        /** The User the API key was installed for. */
-        public string $userId,
-        /** The Organization the installation is scoped to, or null when unscoped. */
+        /** The User the API key was installed for. Null on an `organization`-owned integration, whose installations belong to the organization. */
+        public ?string $userId,
+        /** The Organization the installation is scoped to (or owned by, on an `organization`-owned integration), or null when unscoped. */
         public ?string $organizationId,
         /** The last four characters of the stored API key. The full key is never returned. */
         public ?string $apiKeyLast4,
@@ -26,7 +26,7 @@ readonly class DataIntegrationInstallation implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
-            userId: $data['user_id'],
+            userId: $data['user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             apiKeyLast4: $data['api_key_last_4'] ?? null,
         );

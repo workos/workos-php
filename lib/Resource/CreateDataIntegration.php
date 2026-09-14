@@ -13,6 +13,8 @@ readonly class CreateDataIntegration implements \JsonSerializable
     public function __construct(
         /** The provider to create a Data Integration for. For a built-in provider use its slug (e.g. `github`, `slack`). For a custom provider, this is the new provider slug and `custom_provider` must be supplied. A custom provider slug cannot shadow an existing global provider slug. */
         public string $provider,
+        /** Who owns the Data Integration. `user` (the default) creates the integration users connect their own accounts to; `organization` creates the root organizations connect to. Ownership is fixed at creation, and one integration of each ownership may exist per provider. Independent of `credentials.type`. */
+        public ?PipesOwnership $ownership = null,
         /** An optional description of the Data Integration. */
         public ?string $description = null,
         /** Whether the Data Integration is enabled. Defaults to `false`. */
@@ -45,6 +47,7 @@ readonly class CreateDataIntegration implements \JsonSerializable
     {
         return new self(
             provider: $data['provider'],
+            ownership: isset($data['ownership']) ? PipesOwnership::from($data['ownership']) : null,
             description: $data['description'] ?? null,
             enabled: $data['enabled'] ?? null,
             scopes: $data['scopes'] ?? null,
@@ -60,6 +63,7 @@ readonly class CreateDataIntegration implements \JsonSerializable
     {
         return [
             'provider' => $this->provider,
+            'ownership' => $this->ownership?->value,
             'description' => $this->description,
             'enabled' => $this->enabled,
             'scopes' => $this->scopes,

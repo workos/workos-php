@@ -19,6 +19,8 @@ readonly class DataIntegration implements \JsonSerializable
         public string $slug,
         /** The integration type derived from the provider. */
         public string $integrationType,
+        /** Who owns the Data Integration: `user` when users connect their own accounts, `organization` when organizations connect. Fixed at creation. */
+        public PipesOwnership $ownership,
         /** An optional description of the Data Integration. */
         public ?string $description,
         /** Whether the Data Integration is enabled. */
@@ -62,6 +64,7 @@ readonly class DataIntegration implements \JsonSerializable
             id: $data['id'],
             slug: $data['slug'],
             integrationType: $data['integration_type'],
+            ownership: PipesOwnership::from($data['ownership']),
             description: $data['description'] ?? null,
             enabled: $data['enabled'],
             state: DataIntegrationState::from($data['state']),
@@ -84,6 +87,7 @@ readonly class DataIntegration implements \JsonSerializable
             'id' => $this->id,
             'slug' => $this->slug,
             'integration_type' => $this->integrationType,
+            'ownership' => $this->ownership->value,
             'description' => $this->description,
             'enabled' => $this->enabled,
             'state' => $this->state->value,

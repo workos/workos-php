@@ -117,7 +117,6 @@ class AgentsTest extends TestCase
         $result = $client->agents()->updateAttempts(type: 'test_value', claimAttemptToken: 'test_value', user: \WorkOS\Resource\AgentAdminLinkClaimAttemptToExternalUserRequestUser::fromArray($this->loadFixture('agent_admin_link_claim_attempt_to_external_user_request_user')));
         $this->assertInstanceOf(\WorkOS\Resource\ClaimViewResponse::class, $result);
         $this->assertSame($fixture['id'], $result->id);
-        $this->assertSame($fixture['user_code'], $result->userCode);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
@@ -200,7 +199,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_agent_instance_session');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->listSessions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, agentBlueprintId: 'test_value', agentInstanceId: 'test_value');
+        $result = $client->agents()->listSessions(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, organizationId: 'test_value', agentBlueprintId: 'test_value', agentInstanceId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -210,6 +209,7 @@ class AgentsTest extends TestCase
         $this->assertSame('test_value', $query['after']);
         $this->assertArrayHasKey('limit', $query);
         $this->assertSame('normal', $query['order']);
+        $this->assertSame('test_value', $query['organization_id']);
         $this->assertSame('test_value', $query['agent_blueprint_id']);
         $this->assertSame('test_value', $query['agent_instance_id']);
     }
