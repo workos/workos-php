@@ -55,7 +55,7 @@ class Passwordless
     {
         $this->client->request(
             method: 'POST',
-            path: "passwordless/sessions/{$sessionId}/send",
+            path: 'passwordless/sessions/' . rawurlencode($sessionId) . '/send',
             body: [],
         );
     }
