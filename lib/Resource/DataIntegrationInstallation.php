@@ -13,6 +13,12 @@ readonly class DataIntegrationInstallation implements \JsonSerializable
     public function __construct(
         /** Unique identifier of the installation. */
         public string $id,
+        /** Whether this is the compatibility connection visible to undeclared clients or a standard connection for plural-aware clients. */
+        public ConnectedAccountConnectionRole $connectionRole,
+        /** A best-effort provider account identifier used for correlation, not connection selection. */
+        public ?string $accountIdentifier,
+        /** A mutable, non-unique display name for this connection. */
+        public ?string $accountDisplayName,
         /** The User the API key was installed for. Null on an `organization`-owned integration, whose installations belong to the organization. */
         public ?string $userId,
         /** The Organization the installation is scoped to (or owned by, on an `organization`-owned integration), or null when unscoped. */
@@ -26,6 +32,9 @@ readonly class DataIntegrationInstallation implements \JsonSerializable
     {
         return new self(
             id: $data['id'],
+            connectionRole: ConnectedAccountConnectionRole::from($data['connection_role']),
+            accountIdentifier: $data['account_identifier'] ?? null,
+            accountDisplayName: $data['account_display_name'] ?? null,
             userId: $data['user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             apiKeyLast4: $data['api_key_last_4'] ?? null,
@@ -36,6 +45,9 @@ readonly class DataIntegrationInstallation implements \JsonSerializable
     {
         return [
             'id' => $this->id,
+            'connection_role' => $this->connectionRole->value,
+            'account_identifier' => $this->accountIdentifier,
+            'account_display_name' => $this->accountDisplayName,
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
             'api_key_last_4' => $this->apiKeyLast4,

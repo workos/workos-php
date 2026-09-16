@@ -34,6 +34,16 @@ readonly class PipeConnectedAccount implements \JsonSerializable
         public \DateTimeImmutable $createdAt,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
+        /** Whether this is the compatibility connection visible to undeclared clients or a standard connection for plural-aware clients. Historical events may omit this field. */
+        public ?ConnectedAccountConnectionRole $connectionRole = null,
+        /** A best-effort identifier for the provider account this connection points at. It is not the connection identifier or a selector. Historical events may omit this field. */
+        public ?string $accountIdentifier = null,
+        /** A mutable, non-unique display name for the provider account connection. Historical events may omit this field. */
+        public ?string $accountDisplayName = null,
+        /** How the connection authenticates. Historical events may omit this field. */
+        public ?DataIntegrationAuthMethods $authMethod = null,
+        /** The last four characters of the API key, or null for other authentication methods. Historical events may omit this field. */
+        public ?string $apiKeyLast4 = null,
     ) {
     }
 
@@ -50,6 +60,11 @@ readonly class PipeConnectedAccount implements \JsonSerializable
             state: PipeConnectedAccountState::from($data['state']),
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
+            connectionRole: isset($data['connection_role']) ? ConnectedAccountConnectionRole::from($data['connection_role']) : null,
+            accountIdentifier: $data['account_identifier'] ?? null,
+            accountDisplayName: $data['account_display_name'] ?? null,
+            authMethod: isset($data['auth_method']) ? DataIntegrationAuthMethods::from($data['auth_method']) : null,
+            apiKeyLast4: $data['api_key_last_4'] ?? null,
         );
     }
 
@@ -66,6 +81,11 @@ readonly class PipeConnectedAccount implements \JsonSerializable
             'state' => $this->state->value,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'connection_role' => $this->connectionRole?->value,
+            'account_identifier' => $this->accountIdentifier,
+            'account_display_name' => $this->accountDisplayName,
+            'auth_method' => $this->authMethod?->value,
+            'api_key_last_4' => $this->apiKeyLast4,
         ];
     }
 }
