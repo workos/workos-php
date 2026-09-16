@@ -442,7 +442,9 @@ class SessionManager
         if (!isset($decoded['exp']) || !is_numeric($decoded['exp'])) {
             throw new \InvalidArgumentException('JWT exp claim is missing or invalid');
         }
-        if ((int) $decoded['exp'] <= time()) {
+        // Compare as float so fractional NumericDate values are not truncated
+        // before the boundary check.
+        if ((float) $decoded['exp'] <= time()) {
             throw new \InvalidArgumentException('JWT has expired');
         }
 

@@ -228,6 +228,8 @@ class SessionManagerTest extends TestCase
             'future' => [['exp' => 1700000001], true],
             'future numeric string' => [['exp' => '1700000001'], true],
             'future float' => [['exp' => 1700000001.5], true],
+            'expired float' => [['exp' => 1699999999.5], false],
+            'fractional second after now' => [['exp' => 1700000000.5], true],
         ];
     }
 
