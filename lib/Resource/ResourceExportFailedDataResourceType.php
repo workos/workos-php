@@ -14,4 +14,5 @@ enum ResourceExportFailedDataResourceType: string
     case Sessions = 'sessions';
     case AuditLogEvents = 'auditLogEvents';
     case Connections = 'connections';
+    case DirectoryUsers = 'directoryUsers';
 }

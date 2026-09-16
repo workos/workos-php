@@ -230,8 +230,9 @@ class Pipes
      *
      * Generates an OAuth authorization URL to initiate the connection flow for a user. Redirect the user to the returned URL to begin the OAuth flow with the third-party provider.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
-     * @param string $userId The ID of the user to authorize.
-     * @param string|null $organizationId An organization ID to scope the authorization to a specific organization.
+     * @param string $userId The ID of the user to authorize. When `connection_owner` is `organization`, this is the user authorizing on behalf of the organization; they must be an active member of the organization and do not become the owner of the resulting connected account.
+     * @param string|null $organizationId An organization ID to scope the authorization to a specific organization. Required when `connection_owner` is `organization`.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Who will own the connected account. `user` (the default) connects the user's own account. `organization` connects the organization's shared account and requires `organization_id`.
      * @param string|null $returnTo The URL to redirect the user to after authorization.
      * @param array<string, string>|null $config Connect-time config values for the provider-declared `installation`-scope fields (e.g. a Zendesk `subdomain`), keyed by the config field. Only fields the provider declares may be supplied, and required fields must be provided unless already pinned on the integration.
      * @return \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse
@@ -241,6 +242,7 @@ class Pipes
         string $slug,
         string $userId,
         ?string $organizationId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?string $returnTo = null,
         ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -248,6 +250,7 @@ class Pipes
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connection_owner' => $connectionOwner?->value,
             'return_to' => $returnTo,
             'config' => $config,
         ], fn ($v) => $v !== null);

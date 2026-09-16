@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Resource;
 
 /** The event payload. */
-readonly class PipesConnectedAccountConnectionFailedData implements \JsonSerializable
+readonly class PipesAccountConnectionAddFailedData implements \JsonSerializable
 {
     use JsonSerializableTrait;
 

@@ -99,6 +99,11 @@ enum CreateWebhookEndpointEvents: string
     case PermissionCreated = 'permission.created';
     case PermissionDeleted = 'permission.deleted';
     case PermissionUpdated = 'permission.updated';
+    case PipesAccountConnectionAddFailed = 'pipes.account_connection.add_failed';
+    case PipesAccountConnectionConnected = 'pipes.account_connection.connected';
+    case PipesAccountConnectionConnectionFailed = 'pipes.account_connection.connection_failed';
+    case PipesAccountConnectionDisconnected = 'pipes.account_connection.disconnected';
+    case PipesAccountConnectionReauthorizationNeeded = 'pipes.account_connection.reauthorization_needed';
     case PipesConnectedAccountConnected = 'pipes.connected_account.connected';
     case PipesConnectedAccountConnectionFailed = 'pipes.connected_account.connection_failed';
     case PipesConnectedAccountDisconnected = 'pipes.connected_account.disconnected';

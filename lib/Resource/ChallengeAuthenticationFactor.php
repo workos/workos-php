@@ -11,7 +11,7 @@ readonly class ChallengeAuthenticationFactor implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** A custom template for the SMS message. Use the {{code}} placeholder to include the verification code. */
+        /** A custom template for the SMS message. Use the {{code}} placeholder to include the verification code. Must not contain URLs or domain names. */
         public ?string $smsTemplate = null,
     ) {
     }
