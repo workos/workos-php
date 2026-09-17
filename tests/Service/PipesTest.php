@@ -198,6 +198,69 @@ class PipesTest extends TestCase
         $this->assertSame('test_value', $body['user_id']);
     }
 
+    public function testGetOrganizationConnectedAccount(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->getOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testCreateOrganizationConnectedAccount(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testUpdateOrganizationConnectedAccount(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->updateOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('PUT', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testDeleteOrganizationConnectedAccount(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->pipes()->deleteOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+    }
+
+    public function testListOrganizationDataProviders(): void
+    {
+        $fixture = $this->loadFixture('data_integrations_list_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->listOrganizationDataProviders('test_organization_id');
+        $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationsListResponse::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('organizations/test_organization_id/data_providers', $request->getUri()->getPath());
+    }
+
     public function testGetUserConnectedAccount(): void
     {
         $fixture = $this->loadFixture('connected_account');
