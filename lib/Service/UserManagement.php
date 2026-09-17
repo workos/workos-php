@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace WorkOS\Service;
 
 use WorkOS\Resource\AuthenticateResponse;
+use WorkOS\Resource\AuthkitOAuthResource;
 use WorkOS\Resource\AuthorizedConnectApplicationListData;
 use WorkOS\Resource\CORSOriginResponse;
 use WorkOS\Resource\DeviceAuthorizationResponse;
@@ -645,6 +646,85 @@ class UserManagement
             options: $options,
         );
         return $response;
+    }
+
+    /**
+     * List MCP resource indicators
+     *
+     * Lists the MCP resource indicators configured for an environment.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AuthkitOAuthResource>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listAuthkitOAuthResources(
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'user_management/authkit_oauth_resources',
+            query: $query,
+            modelClass: AuthkitOAuthResource::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Create an MCP resource indicator
+     *
+     * Adds an MCP resource indicator (RFC 8707) to an environment, leaving any others in place.
+     * @param string $uri The resource URI. May be a wildcard pattern with a single `*`, either in the leftmost hostname label or as the final path segment, where enabled for the environment.
+     * @param bool|null $default Whether the resource being created becomes the environment default, clearing any previous default. Applies at creation only — this API has no update endpoint yet, so changing the default on an existing resource is done from the dashboard. A wildcard pattern cannot be the default.
+     * @return \WorkOS\Resource\AuthkitOAuthResource
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createAuthkitOAuthResource(
+        string $uri,
+        ?bool $default = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AuthkitOAuthResource {
+        $body = array_filter([
+            'uri' => $uri,
+            'default' => $default,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'user_management/authkit_oauth_resources',
+            body: $body,
+            options: $options,
+        );
+        return AuthkitOAuthResource::fromArray($response);
+    }
+
+    /**
+     * Delete an MCP resource indicator
+     *
+     * Removes an MCP resource indicator from an environment. Any application consents granted against it are removed too.
+     * @param string $id The ID of the MCP resource indicator to delete.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteAuthkitOAuthResource(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'user_management/authkit_oauth_resources/' . rawurlencode($id),
+            options: $options,
+        );
     }
 
     /**

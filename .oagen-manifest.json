@@ -3,6 +3,7 @@
   "language": "php",
   "files": [
     "lib/Resource/AccessTokenAgentRegistrationCredentialIssuedDataDetail.php",
+    "lib/Resource/AccountSelectionRequiredError.php",
     "lib/Resource/ActionAuthenticationDenied.php",
     "lib/Resource/ActionAuthenticationDeniedData.php",
     "lib/Resource/ActionUserRegistrationDenied.php",
@@ -182,6 +183,7 @@
     "lib/Resource/AuthenticationSSOTimedOutData.php",
     "lib/Resource/AuthenticationSSOTimedOutDataError.php",
     "lib/Resource/AuthenticationSSOTimedOutDataSSO.php",
+    "lib/Resource/AuthkitOAuthResource.php",
     "lib/Resource/AuthorizationAssignment.php",
     "lib/Resource/AuthorizationCheck.php",
     "lib/Resource/AuthorizationCodeSessionAuthenticateRequest.php",
@@ -203,6 +205,7 @@
     "lib/Resource/ConnectApplicationOAuthRedirectUris.php",
     "lib/Resource/ConnectApplicationRedirectUri.php",
     "lib/Resource/ConnectedAccount.php",
+    "lib/Resource/ConnectedAccountConnectionRole.php",
     "lib/Resource/ConnectedAccountInput.php",
     "lib/Resource/ConnectedAccountState.php",
     "lib/Resource/Connection.php",
@@ -231,6 +234,7 @@
     "lib/Resource/ConnectionType.php",
     "lib/Resource/ConnectionsConnectionType.php",
     "lib/Resource/CreateApplicationSecret.php",
+    "lib/Resource/CreateAuthkitOAuthResource.php",
     "lib/Resource/CreateAuthorizationPermission.php",
     "lib/Resource/CreateAuthorizationResource.php",
     "lib/Resource/CreateCORSOrigin.php",
@@ -509,11 +513,19 @@
     "lib/Resource/PermissionUpdatedData.php",
     "lib/Resource/PipeConnectedAccount.php",
     "lib/Resource/PipeConnectedAccountState.php",
+    "lib/Resource/PipesAccountConnectionAddFailed.php",
+    "lib/Resource/PipesAccountConnectionAddFailedData.php",
+    "lib/Resource/PipesAccountConnectionConnected.php",
+    "lib/Resource/PipesAccountConnectionConnectionFailed.php",
+    "lib/Resource/PipesAccountConnectionConnectionFailedData.php",
+    "lib/Resource/PipesAccountConnectionDisconnected.php",
+    "lib/Resource/PipesAccountConnectionReauthorizationNeeded.php",
     "lib/Resource/PipesConnectedAccountConnected.php",
     "lib/Resource/PipesConnectedAccountConnectionFailed.php",
     "lib/Resource/PipesConnectedAccountConnectionFailedData.php",
     "lib/Resource/PipesConnectedAccountDisconnected.php",
     "lib/Resource/PipesConnectedAccountReauthorizationNeeded.php",
+    "lib/Resource/PipesOwnership.php",
     "lib/Resource/PortalLinkResponse.php",
     "lib/Resource/Profile.php",
     "lib/Resource/RadarChallenge.php",
@@ -698,6 +710,7 @@
     "lib/Service/OrganizationDomains.php",
     "lib/Service/OrganizationMembershipService.php",
     "lib/Service/Organizations.php",
+    "lib/Service/OrganizationsDataProviders.php",
     "lib/Service/ParentByExternalId.php",
     "lib/Service/ParentById.php",
     "lib/Service/ParentResourceByExternalId.php",
@@ -724,6 +737,7 @@
     "lib/WorkOS.php",
     "tests/ClientTest.php",
     "tests/Fixtures/access_token_agent_registration_credential_issued_data_detail.json",
+    "tests/Fixtures/account_selection_required_error.json",
     "tests/Fixtures/action_authentication_denied.json",
     "tests/Fixtures/action_authentication_denied_data.json",
     "tests/Fixtures/action_user_registration_denied.json",
@@ -888,6 +902,7 @@
     "tests/Fixtures/authentication_sso_timed_out_data.json",
     "tests/Fixtures/authentication_sso_timed_out_data_error.json",
     "tests/Fixtures/authentication_sso_timed_out_data_sso.json",
+    "tests/Fixtures/authkit_oauth_resource.json",
     "tests/Fixtures/authorization_check.json",
     "tests/Fixtures/authorization_code_session_authenticate_request.json",
     "tests/Fixtures/authorization_permission.json",
@@ -927,6 +942,7 @@
     "tests/Fixtures/connection_saml_certificate_renewed_data_connection.json",
     "tests/Fixtures/cors_origin_response.json",
     "tests/Fixtures/create_application_secret.json",
+    "tests/Fixtures/create_authkit_oauth_resource.json",
     "tests/Fixtures/create_authorization_permission.json",
     "tests/Fixtures/create_authorization_resource.json",
     "tests/Fixtures/create_connection.json",
@@ -1104,6 +1120,7 @@
     "tests/Fixtures/list_audit_log_action.json",
     "tests/Fixtures/list_audit_log_schema.json",
     "tests/Fixtures/list_authentication_factor.json",
+    "tests/Fixtures/list_authkit_oauth_resource.json",
     "tests/Fixtures/list_authorization_permission.json",
     "tests/Fixtures/list_authorization_resource.json",
     "tests/Fixtures/list_authorized_connect_application_list_data.json",
@@ -1207,6 +1224,13 @@
     "tests/Fixtures/permission_updated.json",
     "tests/Fixtures/permission_updated_data.json",
     "tests/Fixtures/pipe_connected_account.json",
+    "tests/Fixtures/pipes_account_connection_add_failed.json",
+    "tests/Fixtures/pipes_account_connection_add_failed_data.json",
+    "tests/Fixtures/pipes_account_connection_connected.json",
+    "tests/Fixtures/pipes_account_connection_connection_failed.json",
+    "tests/Fixtures/pipes_account_connection_connection_failed_data.json",
+    "tests/Fixtures/pipes_account_connection_disconnected.json",
+    "tests/Fixtures/pipes_account_connection_reauthorization_needed.json",
     "tests/Fixtures/pipes_connected_account_connected.json",
     "tests/Fixtures/pipes_connected_account_connection_failed.json",
     "tests/Fixtures/pipes_connected_account_connection_failed_data.json",
@@ -1368,6 +1392,7 @@
     "tests/Service/MultiFactorAuthTest.php",
     "tests/Service/OrganizationDomainsTest.php",
     "tests/Service/OrganizationMembershipTest.php",
+    "tests/Service/OrganizationsDataProvidersTest.php",
     "tests/Service/OrganizationsTest.php",
     "tests/Service/PipesProviderTest.php",
     "tests/Service/PipesTest.php",
@@ -2379,6 +2404,50 @@
     "POST /agents/blueprints/{agent_blueprint_id}/tokens/validate": {
       "sdkMethod": "validateBlueprintToken",
       "service": "agents"
+    },
+    "GET /data-integrations/{slug}/organization": {
+      "sdkMethod": "listDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "PUT /data-integrations/{slug}/organization": {
+      "sdkMethod": "updateDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "DELETE /data-integrations/{slug}/organization": {
+      "sdkMethod": "deleteDataIntegrationOrganization",
+      "service": "pipes"
+    },
+    "GET /user_management/authkit_oauth_resources": {
+      "sdkMethod": "listAuthkitOAuthResources",
+      "service": "userManagement"
+    },
+    "POST /user_management/authkit_oauth_resources": {
+      "sdkMethod": "createAuthkitOAuthResource",
+      "service": "userManagement"
+    },
+    "DELETE /user_management/authkit_oauth_resources/{id}": {
+      "sdkMethod": "deleteAuthkitOAuthResource",
+      "service": "userManagement"
+    },
+    "GET /organizations/{organization_id}/connected_accounts/{slug}": {
+      "sdkMethod": "getOrganizationConnectedAccount",
+      "service": "organizationsDataProviders"
+    },
+    "POST /organizations/{organization_id}/connected_accounts/{slug}": {
+      "sdkMethod": "createOrganizationConnectedAccount",
+      "service": "organizationsDataProviders"
+    },
+    "PUT /organizations/{organization_id}/connected_accounts/{slug}": {
+      "sdkMethod": "updateOrganizationConnectedAccount",
+      "service": "organizationsDataProviders"
+    },
+    "DELETE /organizations/{organization_id}/connected_accounts/{slug}": {
+      "sdkMethod": "deleteOrganizationConnectedAccount",
+      "service": "organizationsDataProviders"
+    },
+    "GET /organizations/{organization_id}/data_providers": {
+      "sdkMethod": "listOrganizationDataProviders",
+      "service": "organizationsDataProviders"
     }
   }
 }

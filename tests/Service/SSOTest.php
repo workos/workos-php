@@ -231,7 +231,7 @@ class SSOTest extends TestCase
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
         $result = $client->sso()->authorizeLogout(profileId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SSOLogoutAuthorizeResponse::class, $result);
-        $this->assertSame($fixture['logout_url'], $result->logoutUrl);
+        $this->assertSame($fixture['logout_token'], $result->logoutToken);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());

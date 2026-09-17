@@ -15,6 +15,12 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
         public string $object,
         /** The unique identifier of the connected account. */
         public string $id,
+        /** Whether this row is the compatibility connection visible to undeclared clients or a standard peer for plural-aware clients. The role does not indicate preference or creation order. */
+        public ConnectedAccountConnectionRole $connectionRole,
+        /** A best-effort identifier for the provider account this connection points at. It is correlation metadata, not the connection identifier or a selector. */
+        public ?string $accountIdentifier,
+        /** A mutable, non-unique display name for the provider account connection. */
+        public ?string $accountDisplayName,
         /** The [User](https://workos.com/docs/reference/authkit/user) identifier associated with this connection. */
         public ?string $userId,
         /** The [Organization](https://workos.com/docs/reference/organization) identifier associated with this connection, or `null` if not scoped to an organization. */
@@ -61,6 +67,9 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
         return new self(
             object: $data['object'] ?? 'connected_account',
             id: $data['id'],
+            connectionRole: ConnectedAccountConnectionRole::from($data['connection_role']),
+            accountIdentifier: $data['account_identifier'] ?? null,
+            accountDisplayName: $data['account_display_name'] ?? null,
             userId: $data['user_id'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             scopes: $data['scopes'],
@@ -81,6 +90,9 @@ readonly class DataIntegrationsListResponseDataConnectedAccount implements \Json
         return [
             'object' => $this->object,
             'id' => $this->id,
+            'connection_role' => $this->connectionRole->value,
+            'account_identifier' => $this->accountIdentifier,
+            'account_display_name' => $this->accountDisplayName,
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
             'scopes' => $this->scopes,

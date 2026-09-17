@@ -404,6 +404,7 @@ class Agents
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param string|null $organizationId Only return sessions of instances acting within this organization.
      * @param string|null $agentBlueprintId Only return sessions of instances minted from this blueprint.
      * @param string|null $agentInstanceId Only return sessions belonging to this agent instance.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\AgentInstanceSession>
@@ -414,6 +415,7 @@ class Agents
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $organizationId = null,
         ?string $agentBlueprintId = null,
         ?string $agentInstanceId = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -423,6 +425,7 @@ class Agents
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'organization_id' => $organizationId,
             'agent_blueprint_id' => $agentBlueprintId,
             'agent_instance_id' => $agentInstanceId,
         ], fn ($v) => $v !== null);

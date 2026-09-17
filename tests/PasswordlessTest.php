@@ -46,6 +46,34 @@ class PasswordlessTest extends TestCase
         );
     }
 
+    public function testSendSessionEncodesSessionIdAsSinglePathSegment(): void
+    {
+        $cases = [
+            'session/other' => 'session%2Fother',
+            '../other' => '..%2Fother',
+            'session/../../other' => 'session%2F..%2F..%2Fother',
+            'session?query=value#fragment' => 'session%3Fquery%3Dvalue%23fragment',
+            'session%2Fother' => 'session%252Fother',
+            'session with spaces' => 'session%20with%20spaces',
+            'session+other' => 'session%2Bother',
+        ];
+
+        foreach ($cases as $sessionId => $encodedSessionId) {
+            $client = $this->createMockClient([['status' => 204]]);
+            $client->passwordless()->sendSession($sessionId);
+            $request = $this->getLastRequest();
+            $this->assertSame('POST', $request->getMethod());
+            $this->assertSame(
+                '/passwordless/sessions/' . $encodedSessionId . '/send',
+                $request->getUri()->getPath(),
+                $sessionId,
+            );
+            $this->assertSame('', $request->getUri()->getQuery());
+            $this->assertSame('', $request->getUri()->getFragment());
+            $this->assertSame('{}', (string) $request->getBody());
+        }
+    }
+
     public function testPasswordlessAccessibleFromClient(): void
     {
         $client = $this->createMockClient([]);

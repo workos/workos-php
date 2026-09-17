@@ -32,6 +32,8 @@ readonly class PipesConnectedAccountConnectionFailedData implements \JsonSeriali
         public ?string $providerErrorDescription,
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $createdAt,
+        /** A best-effort identifier for the provider account involved in the attempt. It is not a connection identifier or selector. Historical events may omit this field. */
+        public ?string $accountIdentifier = null,
     ) {
     }
 
@@ -48,6 +50,7 @@ readonly class PipesConnectedAccountConnectionFailedData implements \JsonSeriali
             providerError: $data['provider_error'] ?? null,
             providerErrorDescription: $data['provider_error_description'] ?? null,
             createdAt: new \DateTimeImmutable($data['created_at']),
+            accountIdentifier: $data['account_identifier'] ?? null,
         );
     }
 
@@ -64,6 +67,7 @@ readonly class PipesConnectedAccountConnectionFailedData implements \JsonSeriali
             'provider_error' => $this->providerError,
             'provider_error_description' => $this->providerErrorDescription,
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'account_identifier' => $this->accountIdentifier,
         ];
     }
 }

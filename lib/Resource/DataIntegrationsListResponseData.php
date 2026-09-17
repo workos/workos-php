@@ -30,16 +30,21 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
          * @var array<string>|null
          */
         public ?array $scopes,
-        /** Whether the provider is owned by a user or organization. */
+        /** Who owns connections made through this provider: `user` for connections owned by individual users, or `organization` for a connection shared by every member of the organization. A provider row can exist before any connected account does. */
+        public PipesOwnership $connectionOwner,
+        /**
+         * Use `connection_owner` instead. Legacy spelling of the same value: `userland_user` corresponds to `connection_owner: "user"` and `organization` to `connection_owner: "organization"`.
+         * @deprecated
+         */
         public DataIntegrationsListResponseDataOwnership $ownership,
         /** The timestamp when the provider was created. */
         public string $createdAt,
         /** The timestamp when the provider was last updated. */
         public string $updatedAt,
-        /** The user's [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` if the user has not connected. */
+        /** The user's compatibility [connected account](https://workos.com/docs/reference/pipes/connected-account) for this provider, or `null` when the compatibility slot is empty. This legacy field never selects a standard connection. */
         public ?DataIntegrationsListResponseDataConnectedAccount $connectedAccount,
         /**
-         * The user's connected accounts for this provider in the requested ownership context.
+         * The user's connected accounts for this provider in the requested ownership context. This contains only the compatibility connection unless `supports_multiple_connections` is `true`.
          * @var array<\WorkOS\Resource\DataIntegrationsListResponseDataConnectedAccount>
          */
         public array $connectedAccounts,
@@ -62,6 +67,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             integrationType: $data['integration_type'],
             credentialsType: $data['credentials_type'],
             scopes: $data['scopes'] ?? null,
+            connectionOwner: PipesOwnership::from($data['connection_owner']),
             ownership: DataIntegrationsListResponseDataOwnership::from($data['ownership']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
@@ -82,6 +88,7 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             'integration_type' => $this->integrationType,
             'credentials_type' => $this->credentialsType,
             'scopes' => $this->scopes,
+            'connection_owner' => $this->connectionOwner->value,
             'ownership' => $this->ownership->value,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,

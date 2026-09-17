@@ -23,11 +23,12 @@ class Pipes
     /**
      * List data integrations
      *
-     * Lists the environment's data integrations configured with `custom` or `organization` credentials, including custom providers and API key integrations.
+     * Lists the environment's data integrations configured with `custom` or `organization` credentials, including custom providers and API key integrations. Both user-owned and organization-owned roots are returned, each as its own row with an `ownership`; filter with `ownership` to return only one kind.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
      * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param \WorkOS\Resource\PipesOwnership|null $ownership Only return Data Integrations with this ownership: `user` for the integrations users connect their own accounts to, or `organization` for the roots organizations connect to. Omit to return both.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DataIntegration>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -36,6 +37,7 @@ class Pipes
         ?string $after = null,
         ?int $limit = null,
         \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?\WorkOS\Resource\PipesOwnership $ownership = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
@@ -43,6 +45,7 @@ class Pipes
             'after' => $after,
             'limit' => $limit,
             'order' => $order->value,
+            'ownership' => $ownership?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
@@ -56,8 +59,9 @@ class Pipes
     /**
      * Create a data integration
      *
-     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials or `organization` to have each organization supply its own. Set `auth_methods` to `["api_key"]` to create an API key integration; you may optionally supply an `api_key` block to install a first tenant in the same call. Set `auth_methods` to `["client_credentials"]` to create a client-credentials integration; client credentials are installed per-tenant afterwards. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition.
+     * Creates a data integration for a provider. Set `credentials.type` to `custom` to use your own OAuth app credentials or `organization` to have each organization supply its own. Set `auth_methods` to `["api_key"]` to create an API key integration; you may optionally supply an `api_key` block to install a first tenant in the same call. Set `auth_methods` to `["client_credentials"]` to create a client-credentials integration; client credentials are installed per-tenant afterwards. Set `ownership` to `organization` to create the integration organizations connect to instead of the default user-owned one; a provider may have one of each. For a built-in provider, pass its slug as `provider`. For a custom provider, pass a new slug plus a `custom_provider` definition, or the slug of an existing custom provider (without `custom_provider`) to add the other ownership.
      * @param string $provider The provider to create a Data Integration for. For a built-in provider use its slug (e.g. `github`, `slack`). For a custom provider, this is the new provider slug and `custom_provider` must be supplied. A custom provider slug cannot shadow an existing global provider slug.
+     * @param \WorkOS\Resource\PipesOwnership|null $ownership Who owns the Data Integration. `user` (the default) creates the integration users connect their own accounts to; `organization` creates the root organizations connect to. Ownership is fixed at creation, and one integration of each ownership may exist per provider. Independent of `credentials.type`.
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled. Defaults to `false`.
      * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Defaults to the provider's configured scopes when omitted.
@@ -71,6 +75,7 @@ class Pipes
      */
     public function createDataIntegration(
         string $provider,
+        ?\WorkOS\Resource\PipesOwnership $ownership = null,
         ?string $description = null,
         ?bool $enabled = null,
         ?array $scopes = null,
@@ -83,6 +88,7 @@ class Pipes
     ): \WorkOS\Resource\DataIntegration {
         $body = array_filter([
             'provider' => $provider,
+            'ownership' => $ownership?->value,
             'description' => $description,
             'enabled' => $enabled,
             'scopes' => $scopes,
@@ -104,7 +110,7 @@ class Pipes
     /**
      * Get a data integration
      *
-     * Retrieves a data integration by its slug.
+     * Retrieves the user-owned data integration by its slug.
      * @param string $slug The slug identifier of the data integration.
      * @return \WorkOS\Resource\DataIntegration
      * @throws \WorkOS\Exception\WorkOSException
@@ -124,7 +130,7 @@ class Pipes
     /**
      * Update a data integration
      *
-     * Updates the description, enabled state, or custom credentials of a data integration. For custom providers, `custom_provider` updates the OAuth definition.
+     * Updates the description, enabled state, or custom credentials of the user-owned data integration. For custom providers, `custom_provider` updates the OAuth definition.
      * @param string $slug The slug identifier of the data integration.
      * @param string|null $description An optional description of the Data Integration.
      * @param bool|null $enabled Whether the Data Integration is enabled.
@@ -165,7 +171,7 @@ class Pipes
     /**
      * Delete a data integration
      *
-     * Deletes a data integration and all of its connected installations. For a custom provider, also deletes the custom provider definition.
+     * Deletes the user-owned data integration and all of its connected installations. For a custom provider, the provider definition is deleted once no organization-owned root references it either.
      * @param string $slug The slug identifier of the data integration.
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
@@ -184,10 +190,12 @@ class Pipes
     /**
      * Upsert an API key for a connected account
      *
-     * Creates or updates an API-key-based installation for the specified integration and user. If an installation already exists, the stored API key is rotated to the new value.
+     * Creates or updates an API-key-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored API key is rotated to the new value.
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
-     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to rotate a specific existing connection.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization.
      * @param string $secret The API key secret to store for this integration.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -197,11 +205,15 @@ class Pipes
         string $userId,
         string $secret,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
+            'connection_owner' => $connectionOwner?->value,
             'secret' => $secret,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -218,8 +230,9 @@ class Pipes
      *
      * Generates an OAuth authorization URL to initiate the connection flow for a user. Redirect the user to the returned URL to begin the OAuth flow with the third-party provider.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
-     * @param string $userId The ID of the user to authorize.
-     * @param string|null $organizationId An organization ID to scope the authorization to a specific organization.
+     * @param string $userId The ID of the user to authorize. When `connection_owner` is `organization`, this is the user authorizing on behalf of the organization; they must be an active member of the organization and do not become the owner of the resulting connected account.
+     * @param string|null $organizationId An organization ID to scope the authorization to a specific organization. Required when `connection_owner` is `organization`.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Who will own the connected account. `user` (the default) connects the user's own account. `organization` connects the organization's shared account and requires `organization_id`.
      * @param string|null $returnTo The URL to redirect the user to after authorization.
      * @param array<string, string>|null $config Connect-time config values for the provider-declared `installation`-scope fields (e.g. a Zendesk `subdomain`), keyed by the config field. Only fields the provider declares may be supplied, and required fields must be provided unless already pinned on the integration.
      * @return \WorkOS\Resource\DataIntegrationAuthorizeUrlResponse
@@ -229,6 +242,7 @@ class Pipes
         string $slug,
         string $userId,
         ?string $organizationId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?string $returnTo = null,
         ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -236,6 +250,7 @@ class Pipes
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connection_owner' => $connectionOwner?->value,
             'return_to' => $returnTo,
             'config' => $config,
         ], fn ($v) => $v !== null);
@@ -251,10 +266,12 @@ class Pipes
     /**
      * Upsert client credentials for a connected account
      *
-     * Creates or updates a client-credentials-based installation for the specified integration and user. If an installation already exists, the stored client credentials are rotated to the new values.
+     * Creates or updates a client-credentials-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored client credentials are rotated to the new values.
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
-     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
+     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to rotate a specific existing connection.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization.
      * @param string $clientId The OAuth client ID to store for this integration.
      * @param string $clientSecret The OAuth client secret to store for this integration.
      * @param array<string, string>|null $config Provider-specific configuration values collected for this installation, keyed by the provider's config field descriptors.
@@ -267,12 +284,16 @@ class Pipes
         string $clientId,
         string $clientSecret,
         ?string $organizationId = null,
+        ?string $connectedAccountId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
+            'connected_account_id' => $connectedAccountId,
+            'connection_owner' => $connectionOwner?->value,
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
             'config' => $config,
@@ -291,9 +312,11 @@ class Pipes
      *
      * Returns credentials for a user's connected account. Branches on the installation's `auth_method`: OAuth installations return an access token (refreshed if needed); API-key installations return the stored secret.
      * @param string $slug The identifier of the integration.
-     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
-     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier. When `connection_owner` is `organization`, this is the user the credentials are vended on behalf of; they must be an active member of the organization.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Which connection to vend from. `user` (the default) vends the user's own connection and requires `user_id`. `organization` vends the organization's shared connection and requires `organization_id`.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. If no `connected_account_id` is supplied and several connections match, the request returns `account_selection_required`. When omitted or `false`, only the compatibility connection is considered.
      * @return \WorkOS\Resource\DataIntegrationCredentialsResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -302,12 +325,16 @@ class Pipes
         string $userId,
         ?string $organizationId = null,
         ?string $connectedAccountId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
+        ?bool $supportsMultipleConnections = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationCredentialsResponse {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
             'connected_account_id' => $connectedAccountId,
+            'connection_owner' => $connectionOwner?->value,
+            'supports_multiple_connections' => $supportsMultipleConnections,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -319,13 +346,95 @@ class Pipes
     }
 
     /**
+     * Get an organization-owned data integration
+     *
+     * Retrieves the organization-owned data integration for a provider by its slug. The `/organization` suffix selects the environment-level organization-owned root for the provider; it does not name a particular organization.
+     * @param string $slug The slug identifier of the data integration.
+     * @return \WorkOS\Resource\DataIntegration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listDataIntegrationOrganization(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegration {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'data-integrations/' . rawurlencode($slug) . '/organization',
+            options: $options,
+        );
+        return DataIntegration::fromArray($response);
+    }
+
+    /**
+     * Update an organization-owned data integration
+     *
+     * Updates the description, enabled state, or custom credentials of the organization-owned data integration for a provider. For custom providers, `custom_provider` updates the OAuth definition, which is shared with the user-owned root. The `/organization` suffix selects the environment-level organization-owned root for the provider; it does not name a particular organization.
+     * @param string $slug The slug identifier of the data integration.
+     * @param string|null $description An optional description of the Data Integration.
+     * @param bool|null $enabled Whether the Data Integration is enabled.
+     * @param array<string>|null $scopes The OAuth scopes to request for the Data Integration. Pass `null` to reset to the provider's configured scopes.
+     * @param \WorkOS\Resource\DataIntegrationCredentialsInput|null $credentials New OAuth credentials for the Data Integration. When provided, rotates the stored client secret. Mutually exclusive with `api_key`.
+     * @param \WorkOS\Resource\ApiKeyInstallation|null $apiKey An API key to install or rotate for a tenant on an `api_key` integration. Upserts the tenant installation identified by `user_id` (and optional `organization_id`).
+     * @param \WorkOS\Resource\UpdateCustomProviderDefinition|null $customProvider Updates to a custom provider's OAuth definition. Only valid for custom-provider integrations.
+     * @return \WorkOS\Resource\DataIntegration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegrationOrganization(
+        string $slug,
+        ?string $description = null,
+        ?bool $enabled = null,
+        ?array $scopes = null,
+        ?\WorkOS\Resource\DataIntegrationCredentialsInput $credentials = null,
+        ?\WorkOS\Resource\ApiKeyInstallation $apiKey = null,
+        ?\WorkOS\Resource\UpdateCustomProviderDefinition $customProvider = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DataIntegration {
+        $body = array_filter([
+            'description' => $description,
+            'enabled' => $enabled,
+            'scopes' => $scopes,
+            'credentials' => $credentials,
+            'api_key' => $apiKey,
+            'custom_provider' => $customProvider,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PUT',
+            path: 'data-integrations/' . rawurlencode($slug) . '/organization',
+            body: $body,
+            options: $options,
+        );
+        return DataIntegration::fromArray($response);
+    }
+
+    /**
+     * Delete an organization-owned data integration
+     *
+     * Deletes the organization-owned data integration for a provider and all of its connected installations. For a custom provider, the provider definition is deleted once no user-owned root references it either. The `/organization` suffix selects the environment-level organization-owned root for the provider; it does not name a particular organization.
+     * @param string $slug The slug identifier of the data integration.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteDataIntegrationOrganization(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'data-integrations/' . rawurlencode($slug) . '/organization',
+            options: $options,
+        );
+    }
+
+    /**
      * Get an access token for a connected account
      *
      * Fetches a valid OAuth access token for a user's connected account. WorkOS automatically handles token refresh, ensuring you always receive a valid, non-expired token.
      * @param string $provider The identifier of the integration.
-     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
-     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization.
+     * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier. When `connection_owner` is `organization`, this is the user the credentials are vended on behalf of; they must be an active member of the organization.
+     * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
+     * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Which connection to vend from. `user` (the default) vends the user's own connection and requires `user_id`. `organization` vends the organization's shared connection and requires `organization_id`.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. If no `connected_account_id` is supplied and several connections match, the request returns `account_selection_required`. When omitted or `false`, only the compatibility connection is considered.
      * @return \WorkOS\Resource\DataIntegrationAccessTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -334,12 +443,16 @@ class Pipes
         string $userId,
         ?string $organizationId = null,
         ?string $connectedAccountId = null,
+        ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
+        ?bool $supportsMultipleConnections = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationAccessTokenResponse {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
             'connected_account_id' => $connectedAccountId,
+            'connection_owner' => $connectionOwner?->value,
+            'supports_multiple_connections' => $supportsMultipleConnections,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -357,6 +470,7 @@ class Pipes
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select a specific connection when the user has several for this provider.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -365,11 +479,13 @@ class Pipes
         string $userId,
         string $slug,
         ?string $organizationId = null,
+        ?bool $supportsMultipleConnections = null,
         ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $query = array_filter([
             'organization_id' => $organizationId,
+            'supports_multiple_connections' => $supportsMultipleConnections,
             'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -435,6 +551,7 @@ class Pipes
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to update.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -448,6 +565,7 @@ class Pipes
         ?array $scopes = null,
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?string $organizationId = null,
+        ?bool $supportsMultipleConnections = null,
         ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
@@ -470,10 +588,11 @@ class Pipes
     /**
      * Delete a connected account
      *
-     * Disconnects WorkOS's account for the user, including removing any stored access and refresh tokens. The user will need to reauthorize if they want to reconnect. This does not revoke access on the provider side.
+     * Disconnects WorkOS's account for the user, including removing any stored access and refresh tokens. The user will need to reauthorize if they want to reconnect. Access is not revoked on the provider side, except for the WorkOS OAuth provider, whose underlying AuthKit grant is revoked.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to delete.
      * @return void
      * @throws \WorkOS\Exception\WorkOSException
@@ -482,11 +601,13 @@ class Pipes
         string $userId,
         string $slug,
         ?string $organizationId = null,
+        ?bool $supportsMultipleConnections = null,
         ?string $connectedAccountId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): void {
         $query = array_filter([
             'organization_id' => $organizationId,
+            'supports_multiple_connections' => $supportsMultipleConnections,
             'connected_account_id' => $connectedAccountId,
         ], fn ($v) => $v !== null);
         $this->client->request(
@@ -503,16 +624,19 @@ class Pipes
      * Retrieves a list of available providers and the user's connection status for each. Returns all providers configured for your environment, along with the user's [connected account](https://workos.com/docs/reference/pipes/connected-account) information where applicable.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier to list providers and connected accounts for.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to filter connections for a specific organization.
+     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
      * @return \WorkOS\Resource\DataIntegrationsListResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listUserDataProviders(
         string $userId,
         ?string $organizationId = null,
+        ?bool $supportsMultipleConnections = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\DataIntegrationsListResponse {
         $query = array_filter([
             'organization_id' => $organizationId,
+            'supports_multiple_connections' => $supportsMultipleConnections,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'GET',

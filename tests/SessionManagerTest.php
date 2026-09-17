@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use WorkOS\SessionManager;
 use WorkOS\TestHelper;
@@ -201,6 +204,64 @@ class SessionManagerTest extends TestCase
         $this->assertTrue($result['authenticated']);
         $this->assertSame('session_test', $result['session_id']);
         $this->assertSame('org_test', $result['organization_id']);
+    }
+
+    /**
+     * @return array<string, array{0: array<string, mixed>, 1: bool}>
+     */
+    public static function expirationClaimsProvider(): array
+    {
+        // The isolated test clock is fixed at 1700000000.
+        return [
+            'missing' => [[], false],
+            'null' => [['exp' => null], false],
+            'non-numeric string' => [['exp' => 'never'], false],
+            'empty string' => [['exp' => ''], false],
+            'true' => [['exp' => true], false],
+            'false' => [['exp' => false], false],
+            'array' => [['exp' => [1700003600]], false],
+            'object' => [['exp' => (object) ['value' => 1700003600]], false],
+            'expired' => [['exp' => 1699999999], false],
+            'expired numeric string' => [['exp' => '1699999999'], false],
+            'exactly now' => [['exp' => 1700000000], false],
+            'exactly now numeric string' => [['exp' => '1700000000'], false],
+            'future' => [['exp' => 1700000001], true],
+            'future numeric string' => [['exp' => '1700000001'], true],
+            'future float' => [['exp' => 1700000001.5], true],
+            'expired float' => [['exp' => 1699999999.5], false],
+            'fractional second after now' => [['exp' => 1700000000.5], true],
+        ];
+    }
+
+    #[DataProvider('expirationClaimsProvider')]
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
+    public function testAuthenticateRequiresUnexpiredNumericExp(array $claims, bool $authenticated): void
+    {
+        // Keep the exact expiry boundary deterministic without changing the
+        // production clock or leaking the clock override into other tests.
+        require __DIR__ . '/Fixtures/session_expiration_clock.php';
+
+        [$jwks, $jwt] = $this->buildSignedJwt(['sid' => 'session_test'] + $claims);
+        $sealed = SessionManager::sealSessionFromAuthResponse(
+            accessToken: $jwt,
+            refreshToken: 'ref_test',
+            cookiePassword: $this->cookiePassword,
+        );
+
+        $client = $this->createMockClient([['status' => 200, 'body' => $jwks]]);
+        $result = $client->sessionManager()->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+
+        $this->assertSame($authenticated, $result['authenticated']);
+        if ($authenticated) {
+            $this->assertSame('session_test', $result['session_id']);
+        } else {
+            $this->assertSame('invalid_jwt', $result['reason']);
+        }
     }
 
     /**
