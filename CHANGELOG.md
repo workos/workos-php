@@ -1,5 +1,32 @@
 # Changelog
 
+## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-18)
+
+
+### Features
+
+* Add optional issuer check to SessionManager authenticate ([#440](https://github.com/workos/workos-php/issues/440)) ([47e8606](https://github.com/workos/workos-php/commit/47e86069d3a6fa66817c0e7d06fd80f85d0670f3))
+* **agents:** Add parameter `AgentsSessions.list.organization_id` ([#443](https://github.com/workos/workos-php/issues/443)) ([526711a](https://github.com/workos/workos-php/commit/526711a52d78c530364235772b7c2ca214992049))
+* **generated:** Pipes (batch 8ad8e447) ([#438](https://github.com/workos/workos-php/issues/438)) ([42d6bb1](https://github.com/workos/workos-php/commit/42d6bb11d0ed8e2b9122316033119533bd382d03))
+* **pipes:** Update Pipes API surface ([#443](https://github.com/workos/workos-php/issues/443)) ([526711a](https://github.com/workos/workos-php/commit/526711a52d78c530364235772b7c2ca214992049))
+* **user_management:** Add user management API surface ([#443](https://github.com/workos/workos-php/issues/443)) ([526711a](https://github.com/workos/workos-php/commit/526711a52d78c530364235772b7c2ca214992049))
+
+
+### Bug Fixes
+
+* **multi_factor_auth:** Change errors for endpoint `POST /auth/factors/{id}/challenge` ([#445](https://github.com/workos/workos-php/issues/445)) ([8a76fa5](https://github.com/workos/workos-php/commit/8a76fa5337c3f244dec6802cba69933aa17ea497))
+* **multi_factor_auth:** Change errors for endpoint `POST /auth/factors/{id}/challenge` ([#446](https://github.com/workos/workos-php/issues/446)) ([02a2fd2](https://github.com/workos/workos-php/commit/02a2fd2238d6ec34cf71dd8442eadd617b04b780))
+* **passwordless:** encode session IDs in send URLs ([#441](https://github.com/workos/workos-php/issues/441)) ([6b83721](https://github.com/workos/workos-php/commit/6b8372196a9dc84b6aab77b52898b201b8f155ec))
+* **pipes:** Move organization connected-account operations onto Pipes ([#446](https://github.com/workos/workos-php/issues/446)) ([02a2fd2](https://github.com/workos/workos-php/commit/02a2fd2238d6ec34cf71dd8442eadd617b04b780))
+* **pipes:** Remove unused types left behind by earlier renames ([#446](https://github.com/workos/workos-php/issues/446)) ([02a2fd2](https://github.com/workos/workos-php/commit/02a2fd2238d6ec34cf71dd8442eadd617b04b780))
+* **pipes:** Update Pipes API surface ([#443](https://github.com/workos/workos-php/issues/443)) ([526711a](https://github.com/workos/workos-php/commit/526711a52d78c530364235772b7c2ca214992049))
+* **session:** require valid JWT expiration ([#442](https://github.com/workos/workos-php/issues/442)) ([717b3cf](https://github.com/workos/workos-php/commit/717b3cf6ce1a8ad6baaf602115005707c11d2e87))
+
+
+### Miscellaneous Chores
+
+* **deps:** update actions/deploy-pages action to v5.0.1 ([#444](https://github.com/workos/workos-php/issues/444)) ([7282b2c](https://github.com/workos/workos-php/commit/7282b2c0b745495f1e5ed48cfb6ab8a17e798468))
+
 ## [9.3.0](https://github.com/workos/workos-php/compare/v9.2.0...v9.3.0) (2026-09-01)
 
 ### Miscellaneous Chores
