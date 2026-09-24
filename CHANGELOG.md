@@ -1,5 +1,14 @@
 # Changelog
 
+## [9.5.0](https://github.com/workos/workos-php/compare/v9.4.0...v9.5.0) (2026-09-24)
+
+* [#447](https://github.com/workos/workos-php/pull/447) feat(generated): regenerate from spec
+
+  **Features**
+  * **[user_management](https://workos.com/docs/reference/authkit/user)**:
+    * Added model `UserRoleAssignmentSourceGroup`
+    * Added `group` to `UserRoleAssignmentSource`
+
 ## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-18)
 
 ### Features
