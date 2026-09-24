@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.5.0](https://github.com/workos/workos-php/compare/v9.4.0...v9.5.0) (2026-09-24)
+
+
+### Features
+
+* **generated:** Authorization (batch c64ce1e7) ([#447](https://github.com/workos/workos-php/issues/447)) ([75c1393](https://github.com/workos/workos-php/commit/75c139313c09d787ba78efea021b06211835ad6b))
+
 ## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-18)
 
 ### Features
