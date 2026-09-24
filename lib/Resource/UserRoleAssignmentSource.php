@@ -16,6 +16,8 @@ readonly class UserRoleAssignmentSource implements \JsonSerializable
         public UserRoleAssignmentSourceType $type,
         /** The ID of the group role assignment the role was derived from, or null if direct. */
         public ?string $groupRoleAssignmentId,
+        /** The group the role was derived from, or null if direct. */
+        public ?UserRoleAssignmentSourceGroup $group,
     ) {
     }
 
@@ -24,6 +26,7 @@ readonly class UserRoleAssignmentSource implements \JsonSerializable
         return new self(
             type: UserRoleAssignmentSourceType::from($data['type']),
             groupRoleAssignmentId: $data['group_role_assignment_id'] ?? null,
+            group: isset($data['group']) ? UserRoleAssignmentSourceGroup::fromArray($data['group']) : null,
         );
     }
 
@@ -32,6 +35,7 @@ readonly class UserRoleAssignmentSource implements \JsonSerializable
         return [
             'type' => $this->type->value,
             'group_role_assignment_id' => $this->groupRoleAssignmentId,
+            'group' => $this->group?->toArray(),
         ];
     }
 }
