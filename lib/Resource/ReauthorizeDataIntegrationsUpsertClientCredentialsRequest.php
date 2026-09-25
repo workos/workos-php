@@ -6,19 +6,30 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
+readonly class ReauthorizeDataIntegrationsUpsertClientCredentialsRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
         /** A [User](https://workos.com/docs/reference/authkit/user) identifier. */
         public string $userId,
-        /** The API key secret to store for this integration. */
-        public string $secret,
+        /** The OAuth client ID to store for this integration. */
+        public string $clientId,
+        /** The OAuth client secret to store for this integration. */
+        public string $clientSecret,
+        /** Reauthorize exactly the connection named by `connected_account_id`. */
+        public string $connectionIntent,
+        /** The exact connected account to reauthorize. Required with `connection_intent: reauthorize`. */
+        public string $connectedAccountId,
         /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
         /** Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization. */
         public ?PipesOwnership $connectionOwner = null,
+        /**
+         * Provider-specific configuration values collected for this installation, keyed by the provider's config field descriptors.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
     ) {
     }
 
@@ -26,9 +37,13 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
     {
         return new self(
             userId: $data['user_id'],
-            secret: $data['secret'],
+            clientId: $data['client_id'],
+            clientSecret: $data['client_secret'],
+            connectionIntent: $data['connection_intent'] ?? 'reauthorize',
+            connectedAccountId: $data['connected_account_id'],
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
+            config: $data['config'] ?? null,
         );
     }
 
@@ -36,9 +51,13 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
     {
         return [
             'user_id' => $this->userId,
-            'secret' => $this->secret,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'connection_intent' => $this->connectionIntent,
+            'connected_account_id' => $this->connectedAccountId,
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
+            'config' => $this->config,
         ];
     }
 }

@@ -19,8 +19,6 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
         public string $clientSecret,
         /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
-        /** A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to rotate a specific existing connection. */
-        public ?string $connectedAccountId = null,
         /** Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization. */
         public ?PipesOwnership $connectionOwner = null,
         /**
@@ -38,7 +36,6 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
             organizationId: $data['organization_id'] ?? null,
-            connectedAccountId: $data['connected_account_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
             config: $data['config'] ?? null,
         );
@@ -51,7 +48,6 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'organization_id' => $this->organizationId,
-            'connected_account_id' => $this->connectedAccountId,
             'connection_owner' => $this->connectionOwner?->value,
             'config' => $this->config,
         ];

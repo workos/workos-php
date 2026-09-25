@@ -188,34 +188,57 @@ class Pipes
     }
 
     /**
-     * Upsert an API key for a connected account
+     * Create another API key connected account
      *
-     * Creates or updates an API-key-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored API key is rotated to the new value.
+     * Creates another API key-based connected account for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. Requires `connection_intent: add` and does not accept `connected_account_id`; use PUT to create or rotate the compatibility connection or to update an exact connection. Creating an additional connection is not yet available: until it is, this endpoint succeeds only when the owner has no connection for this integration, which creates the compatibility connection, and otherwise returns 404 `multiple_connections_unavailable`.
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
-     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to rotate a specific existing connection.
      * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization.
      * @param string $secret The API key secret to store for this integration.
+     * @param string $connectionIntent Must be `add`: this endpoint only creates another connection. The first connection for an owner shape fills the compatibility slot; later connections are standard. Creating an additional connection is not yet available: until it is, `add` succeeds only when the owner has no connection for this integration and otherwise returns 404 `multiple_connections_unavailable`.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function updateDataIntegrationApiKey(
+    public function createDataIntegrationApiKey(
         string $slug,
         string $userId,
         string $secret,
+        string $connectionIntent,
         ?string $organizationId = null,
-        ?string $connectedAccountId = null,
         ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
-            'connected_account_id' => $connectedAccountId,
             'connection_owner' => $connectionOwner?->value,
             'secret' => $secret,
+            'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'data-integrations/' . rawurlencode($slug) . '/api-key',
+            body: $body,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
+    }
+
+    /**
+     * Upsert an API key for a connected account
+     *
+     * Creates or updates an API-key-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored API key is rotated to the new value. To create another connection, use POST.
+     * @param string $slug The identifier of the integration.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegrationApiKey(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = [
+        ];
         $response = $this->client->request(
             method: 'PUT',
             path: 'data-integrations/' . rawurlencode($slug) . '/api-key',
@@ -264,27 +287,27 @@ class Pipes
     }
 
     /**
-     * Upsert client credentials for a connected account
+     * Create another client credentials connected account
      *
-     * Creates or updates a client-credentials-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored client credentials are rotated to the new values.
+     * Creates another client credentials-based connected account for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. Requires `connection_intent: add` and does not accept `connected_account_id`; use PUT to create or rotate the compatibility connection or to update an exact connection. Creating an additional connection is not yet available: until it is, this endpoint succeeds only when the owner has no connection for this integration, which creates the compatibility connection, and otherwise returns 404 `multiple_connections_unavailable`.
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
-     * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to rotate a specific existing connection.
      * @param \WorkOS\Resource\PipesOwnership|null $connectionOwner Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization.
      * @param string $clientId The OAuth client ID to store for this integration.
      * @param string $clientSecret The OAuth client secret to store for this integration.
      * @param array<string, string>|null $config Provider-specific configuration values collected for this installation, keyed by the provider's config field descriptors.
+     * @param string $connectionIntent Must be `add`: this endpoint only creates another connection. The first connection for an owner shape fills the compatibility slot; later connections are standard. Creating an additional connection is not yet available: until it is, `add` succeeds only when the owner has no connection for this integration and otherwise returns 404 `multiple_connections_unavailable`.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function updateDataIntegrationClientCredentials(
+    public function createDataIntegrationClientCredential(
         string $slug,
         string $userId,
         string $clientId,
         string $clientSecret,
+        string $connectionIntent,
         ?string $organizationId = null,
-        ?string $connectedAccountId = null,
         ?\WorkOS\Resource\PipesOwnership $connectionOwner = null,
         ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -292,12 +315,35 @@ class Pipes
         $body = array_filter([
             'user_id' => $userId,
             'organization_id' => $organizationId,
-            'connected_account_id' => $connectedAccountId,
             'connection_owner' => $connectionOwner?->value,
             'client_id' => $clientId,
             'client_secret' => $clientSecret,
             'config' => $config,
+            'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'data-integrations/' . rawurlencode($slug) . '/client-credentials',
+            body: $body,
+            options: $options,
+        );
+        return ConnectedAccount::fromArray($response);
+    }
+
+    /**
+     * Upsert client credentials for a connected account
+     *
+     * Creates or updates a client-credentials-based installation for the specified integration, owned by the user or, when `connection_owner` is `organization`, shared by the organization. If an installation already exists, the stored client credentials are rotated to the new values. To create another connection, use POST.
+     * @param string $slug The identifier of the integration.
+     * @return \WorkOS\Resource\ConnectedAccount
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateDataIntegrationClientCredentials(
+        string $slug,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\ConnectedAccount {
+        $body = [
+        ];
         $response = $this->client->request(
             method: 'PUT',
             path: 'data-integrations/' . rawurlencode($slug) . '/client-credentials',
@@ -310,7 +356,7 @@ class Pipes
     /**
      * Vend credentials for a connected account
      *
-     * Returns credentials for a user's connected account. Branches on the installation's `auth_method`: OAuth installations return an access token (refreshed if needed); API-key installations return the stored secret.
+     * Returns credentials for a user's connected account. Branches on the installation's `auth_method`: OAuth installations return an access token (refreshed if needed); API-key installations return the stored secret. Every active credential includes `config`: provider-declared, non-secret values from the installation snapshot, with current provider defaults for unset fields. Editing integration or organization configuration does not change the snapshot; reconnect or explicitly rebind the connection to adopt those edits. Defaults remain live, so a changed default can appear in `config` before a cached token is refreshed or re-minted. Credentials that never refresh require a reconnect or rebind when a default changes their routing.
      * @param string $slug The identifier of the integration.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier. When `connection_owner` is `organization`, this is the user the credentials are vended on behalf of; they must be an active member of the organization.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`.
@@ -497,7 +543,7 @@ class Pipes
     /**
      * Import an organization connected account
      *
-     * Imports an organization-owned [connected account](https://workos.com/docs/reference/pipes/connected-account) by providing OAuth tokens directly. Use this to migrate existing connections or set up connections without going through the OAuth flow.
+     * Imports an organization-owned [connected account](https://workos.com/docs/reference/pipes/connected-account) by providing OAuth tokens directly. Omit `connection_intent` to create only the compatibility connection, or set it to `add` to explicitly create another connection. This creation-only endpoint does not accept `connected_account_id` or reauthorization intent.
      * @param string $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $accessToken The OAuth access token for the connected account.
@@ -505,17 +551,21 @@ class Pipes
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param string $userId The [User](https://workos.com/docs/reference/authkit/user) identifier of the organization member on whose behalf the connected account is being imported or updated. The user must be an active member of the organization.
+     * @param string|null $connectionIntent Set to `add` to create another connected account. Omit this field for permanent compatibility behavior. Creating an additional connection is not yet available: until it is, `add` succeeds only when the owner has no connection for this integration, which creates the compatibility connection, and otherwise returns 404 `multiple_connections_unavailable`.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function createOrganizationConnectedAccount(
         string $organizationId,
         string $slug,
+        string $userId,
         ?string $accessToken = null,
         ?string $refreshToken = null,
         ?\DateTimeImmutable $expiresAt = null,
         ?array $scopes = null,
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
+        ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
@@ -524,6 +574,8 @@ class Pipes
             'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'scopes' => $scopes,
             'state' => $state?->value,
+            'user_id' => $userId,
+            'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -545,14 +597,17 @@ class Pipes
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
-     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
+     * @param string $userId The [User](https://workos.com/docs/reference/authkit/user) identifier of the organization member on whose behalf the connected account is being imported or updated. The user must be an active member of the organization.
+     * @param bool|null $supportsMultipleConnections Accepted for compatibility; does not change update targeting. Omit intent and selector to update the compatibility connection, or supply `connected_account_id` to update an exact connection.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to update.
+     * @param string|null $connectionIntent Set to `reauthorize` with `connected_account_id` to update one exact connection. The intent may be omitted when supplying an ID. Omit both for permanent compatibility behavior.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function updateOrganizationConnectedAccount(
         string $organizationId,
         string $slug,
+        string $userId,
         ?string $accessToken = null,
         ?string $refreshToken = null,
         ?\DateTimeImmutable $expiresAt = null,
@@ -560,6 +615,7 @@ class Pipes
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?bool $supportsMultipleConnections = null,
         ?string $connectedAccountId = null,
+        ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
@@ -568,6 +624,7 @@ class Pipes
             'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'scopes' => $scopes,
             'state' => $state?->value,
+            'user_id' => $userId,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',
@@ -679,6 +736,7 @@ class Pipes
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param string|null $connectionIntent Set to `add` to create another connected account. Omit this field for permanent compatibility behavior. Creating an additional connection is not yet available: until it is, `add` succeeds only when the owner has no connection for this integration, which creates the compatibility connection, and otherwise returns 404 `multiple_connections_unavailable`.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -691,6 +749,7 @@ class Pipes
         ?\DateTimeImmutable $expiresAt = null,
         ?array $scopes = null,
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
+        ?string $connectionIntent = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
@@ -700,6 +759,7 @@ class Pipes
             'expires_at' => $expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'scopes' => $scopes,
             'state' => $state?->value,
+            'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -722,8 +782,9 @@ class Pipes
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
-     * @param bool|null $supportsMultipleConnections Set to `true` to use the plural connection contract. When omitted or `false`, only the compatibility connection is considered.
+     * @param bool|null $supportsMultipleConnections Accepted for compatibility; does not change update targeting. Omit intent and selector to update the compatibility connection, or supply `connected_account_id` to update an exact connection.
      * @param string|null $connectedAccountId A [connected account](https://workos.com/docs/reference/pipes/connected-account) identifier. Use this to select the connection to update.
+     * @param string|null $connectionIntent Set to `reauthorize` with `connected_account_id` to update one exact connection. The intent may be omitted when supplying an ID. Omit both for permanent compatibility behavior.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -738,6 +799,7 @@ class Pipes
         ?string $organizationId = null,
         ?bool $supportsMultipleConnections = null,
         ?string $connectedAccountId = null,
+        ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([

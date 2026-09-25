@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
+readonly class DataIntegrationsUpsertApiKeyRequest2 implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -15,6 +15,8 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
         public string $userId,
         /** The API key secret to store for this integration. */
         public string $secret,
+        /** The exact connected account to reauthorize. The reauthorize intent may be omitted for compatibility. */
+        public string $connectedAccountId,
         /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
         /** Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization. */
@@ -27,6 +29,7 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
         return new self(
             userId: $data['user_id'],
             secret: $data['secret'],
+            connectedAccountId: $data['connected_account_id'],
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
         );
@@ -37,6 +40,7 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
         return [
             'user_id' => $this->userId,
             'secret' => $this->secret,
+            'connected_account_id' => $this->connectedAccountId,
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
         ];
