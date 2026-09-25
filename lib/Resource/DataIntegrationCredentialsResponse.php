@@ -14,7 +14,7 @@ readonly class DataIntegrationCredentialsResponse implements \JsonSerializable
         /** Indicates credentials are available. */
         public ?bool $active = null,
         /** The credential object containing the vended secret. */
-        public ?DataIntegrationCredentialsResponseCredential $credential = null,
+        public ?DataIntegrationVendedCredential $credential = null,
         /**
          * The reason credentials are unavailable. Additional values may be added in the future; handle unknown values gracefully.
          * - `"not_installed"`: The user does not have the integration installed.
@@ -28,7 +28,7 @@ readonly class DataIntegrationCredentialsResponse implements \JsonSerializable
     {
         return new self(
             active: $data['active'] ?? null,
-            credential: isset($data['credential']) ? DataIntegrationCredentialsResponseCredential::fromArray($data['credential']) : null,
+            credential: isset($data['credential']) ? DataIntegrationVendedCredential::fromArray($data['credential']) : null,
             error: isset($data['error']) ? DataIntegrationAccessTokenResponseError::from($data['error']) : null,
         );
     }

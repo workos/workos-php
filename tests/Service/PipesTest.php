@@ -83,11 +83,29 @@ class PipesTest extends TestCase
         $this->assertStringEndsWith('data-integrations/test_slug', $request->getUri()->getPath());
     }
 
+    public function testCreateDataIntegrationApiKey(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createDataIntegrationApiKey('test_slug', userId: 'test_value', secret: 'test_value', connectionIntent: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/api-key', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+        $this->assertSame('test_value', $body['secret']);
+        $this->assertArrayHasKey('connection_intent', $body);
+    }
+
     public function testUpdateDataIntegrationApiKey(): void
     {
         $fixture = $this->loadFixture('connected_account');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->updateDataIntegrationApiKey('test_slug', userId: 'test_value', secret: 'test_value');
+        $result = $client->pipes()->updateDataIntegrationApiKey('test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['created_at'], $result->createdAt);
@@ -95,9 +113,6 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('data-integrations/test_slug/api-key', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['user_id']);
-        $this->assertSame('test_value', $body['secret']);
     }
 
     public function testAuthorizeDataIntegration(): void
@@ -115,11 +130,30 @@ class PipesTest extends TestCase
         $this->assertSame('test_value', $body['user_id']);
     }
 
+    public function testCreateDataIntegrationClientCredential(): void
+    {
+        $fixture = $this->loadFixture('connected_account');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->pipes()->createDataIntegrationClientCredential('test_slug', userId: 'test_value', clientId: 'test_value', clientSecret: 'test_value', connectionIntent: 'test_value');
+        $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['created_at'], $result->createdAt);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('data-integrations/test_slug/client-credentials', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
+        $this->assertSame('test_value', $body['client_id']);
+        $this->assertSame('test_value', $body['client_secret']);
+        $this->assertArrayHasKey('connection_intent', $body);
+    }
+
     public function testUpdateDataIntegrationClientCredentials(): void
     {
         $fixture = $this->loadFixture('connected_account');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->updateDataIntegrationClientCredentials('test_slug', userId: 'test_value', clientId: 'test_value', clientSecret: 'test_value');
+        $result = $client->pipes()->updateDataIntegrationClientCredentials('test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['created_at'], $result->createdAt);
@@ -127,10 +161,6 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('data-integrations/test_slug/client-credentials', $request->getUri()->getPath());
-        $body = json_decode((string) $request->getBody(), true);
-        $this->assertSame('test_value', $body['user_id']);
-        $this->assertSame('test_value', $body['client_id']);
-        $this->assertSame('test_value', $body['client_secret']);
     }
 
     public function testCreateDataIntegrationCredential(): void
@@ -216,7 +246,7 @@ class PipesTest extends TestCase
     {
         $fixture = $this->loadFixture('connected_account');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->createOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $result = $client->pipes()->createOrganizationConnectedAccount('test_organization_id', 'test_slug', userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['created_at'], $result->createdAt);
@@ -224,13 +254,15 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
     }
 
     public function testUpdateOrganizationConnectedAccount(): void
     {
         $fixture = $this->loadFixture('connected_account');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipes()->updateOrganizationConnectedAccount('test_organization_id', 'test_slug');
+        $result = $client->pipes()->updateOrganizationConnectedAccount('test_organization_id', 'test_slug', userId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectedAccount::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['created_at'], $result->createdAt);
@@ -238,6 +270,8 @@ class PipesTest extends TestCase
         $request = $this->getLastRequest();
         $this->assertSame('PUT', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organization_id/connected_accounts/test_slug', $request->getUri()->getPath());
+        $body = json_decode((string) $request->getBody(), true);
+        $this->assertSame('test_value', $body['user_id']);
     }
 
     public function testDeleteOrganizationConnectedAccount(): void

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSerializable
+readonly class ReauthorizeDataIntegrationsUpsertClientCredentialsRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -17,6 +17,10 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
         public string $clientId,
         /** The OAuth client secret to store for this integration. */
         public string $clientSecret,
+        /** Reauthorize exactly the connection named by `connected_account_id`. */
+        public string $connectionIntent,
+        /** The exact connected account to reauthorize. Required with `connection_intent: reauthorize`. */
+        public string $connectedAccountId,
         /** An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter to scope the connection to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
         /** Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization. */
@@ -35,6 +39,8 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             userId: $data['user_id'],
             clientId: $data['client_id'],
             clientSecret: $data['client_secret'],
+            connectionIntent: $data['connection_intent'] ?? 'reauthorize',
+            connectedAccountId: $data['connected_account_id'],
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
             config: $data['config'] ?? null,
@@ -47,6 +53,8 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             'user_id' => $this->userId,
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
+            'connection_intent' => $this->connectionIntent,
+            'connected_account_id' => $this->connectedAccountId,
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'config' => $this->config,
