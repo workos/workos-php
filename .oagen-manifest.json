@@ -314,6 +314,8 @@
     "lib/Resource/DirectoryMetadata.php",
     "lib/Resource/DirectoryMetadataUser.php",
     "lib/Resource/DirectoryState.php",
+    "lib/Resource/DirectorySyncRateLimitError.php",
+    "lib/Resource/DirectorySyncResponse.php",
     "lib/Resource/DirectoryType.php",
     "lib/Resource/DirectoryUser.php",
     "lib/Resource/DirectoryUserEmail.php",
@@ -1009,6 +1011,8 @@
     "tests/Fixtures/directory_group.json",
     "tests/Fixtures/directory_metadata.json",
     "tests/Fixtures/directory_metadata_user.json",
+    "tests/Fixtures/directory_sync_rate_limit_error.json",
+    "tests/Fixtures/directory_sync_response.json",
     "tests/Fixtures/directory_user.json",
     "tests/Fixtures/directory_user_email.json",
     "tests/Fixtures/directory_user_with_groups.json",
@@ -2447,6 +2451,10 @@
     "GET /audit_logs/exports/{auditLogExportId}": {
       "sdkMethod": "getExport",
       "service": "auditLogs"
+    },
+    "POST /directories/{id}/sync": {
+      "sdkMethod": "syncDirectory",
+      "service": "directorySync"
     }
   }
 }
