@@ -55,6 +55,18 @@ class DirectorySyncTest extends TestCase
         $this->assertStringEndsWith('directories/test_id', $request->getUri()->getPath());
     }
 
+    public function testSyncDirectory(): void
+    {
+        $fixture = $this->loadFixture('directory_sync_response');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->directorySync()->syncDirectory('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\DirectorySyncResponse::class, $result);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('directories/test_id/sync', $request->getUri()->getPath());
+    }
+
     public function testListGroups(): void
     {
         $fixture = $this->loadFixture('list_directory_group');

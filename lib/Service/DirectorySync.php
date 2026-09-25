@@ -8,6 +8,7 @@ namespace WorkOS\Service;
 
 use WorkOS\Resource\Directory;
 use WorkOS\Resource\DirectoryGroup;
+use WorkOS\Resource\DirectorySyncResponse;
 use WorkOS\Resource\DirectoryUserWithGroups;
 
 class DirectorySync
@@ -96,6 +97,26 @@ class DirectorySync
             path: 'directories/' . rawurlencode($id),
             options: $options,
         );
+    }
+
+    /**
+     * Sync a Directory
+     *
+     * Request an asynchronous sync from the directory provider. Currently supports Google Workspace directories in linked or validating state. Manual requests share a five-minute per-directory cooldown across the API, Dashboard, Admin Portal, and MCP. Acceptance means the request was queued, not that the sync has started or completed. A running sync prevents another request from being queued.
+     * @param string $id Unique identifier for the Directory.
+     * @return \WorkOS\Resource\DirectorySyncResponse
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function syncDirectory(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DirectorySyncResponse {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'directories/' . rawurlencode($id) . '/sync',
+            options: $options,
+        );
+        return DirectorySyncResponse::fromArray($response);
     }
 
     /**
