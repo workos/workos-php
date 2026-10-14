@@ -13,6 +13,8 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
     public function __construct(
         /** The ID of the user to authorize. When `connection_owner` is `organization`, this is the user authorizing on behalf of the organization; they must be an active member of the organization and do not become the owner of the resulting connected account. */
         public string $userId,
+        /** A mutable, non-unique label. Omit to preserve an existing label; null clears it. Labels are never account identifiers. */
+        public ?string $accountDisplayName = null,
         /** An organization ID to scope the authorization to a specific organization. Required when `connection_owner` is `organization`. */
         public ?string $organizationId = null,
         /** Who will own the connected account. `user` (the default) connects the user's own account. `organization` connects the organization's shared account and requires `organization_id`. */
@@ -31,6 +33,7 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
     {
         return new self(
             userId: $data['user_id'],
+            accountDisplayName: $data['account_display_name'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
             returnTo: $data['return_to'] ?? null,
@@ -42,6 +45,7 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
     {
         return [
             'user_id' => $this->userId,
+            'account_display_name' => $this->accountDisplayName,
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'return_to' => $this->returnTo,
