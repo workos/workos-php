@@ -44,6 +44,10 @@ readonly class PipeConnectedAccount implements \JsonSerializable
         public ?DataIntegrationAuthMethods $authMethod = null,
         /** The last four characters of the API key, or null for other authentication methods. Historical events may omit this field. */
         public ?string $apiKeyLast4 = null,
+        /** The ID of the User whose authorization established the connected account, or null when it is developer-managed, its establisher is unknown, or the establishing member left the organization. Historical events may omit this field. */
+        public ?string $establishedByUserId = null,
+        /** Why WorkOS put the connected account in its current state, or null when there is no WorkOS-recorded reason. `establishing_member_membership_ended` means the member who established an organization-owned connection is no longer an active member. Additional values may be added. Historical events may omit this field. */
+        public ?string $stateReason = null,
     ) {
     }
 
@@ -65,6 +69,8 @@ readonly class PipeConnectedAccount implements \JsonSerializable
             accountDisplayName: $data['account_display_name'] ?? null,
             authMethod: isset($data['auth_method']) ? DataIntegrationAuthMethods::from($data['auth_method']) : null,
             apiKeyLast4: $data['api_key_last_4'] ?? null,
+            establishedByUserId: $data['established_by_user_id'] ?? null,
+            stateReason: $data['state_reason'] ?? null,
         );
     }
 
@@ -86,6 +92,8 @@ readonly class PipeConnectedAccount implements \JsonSerializable
             'account_display_name' => $this->accountDisplayName,
             'auth_method' => $this->authMethod?->value,
             'api_key_last_4' => $this->apiKeyLast4,
+            'established_by_user_id' => $this->establishedByUserId,
+            'state_reason' => $this->stateReason,
         ];
     }
 }

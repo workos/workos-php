@@ -33,7 +33,7 @@ readonly class ConnectedAccount implements \JsonSerializable
         /**
          * The state of the connected account:
          * - `connected`: The connection is active and tokens are valid.
-         * - `needs_reauthorization`: The user needs to reauthorize the connection, typically because required scopes have changed.
+         * - `needs_reauthorization`: The user needs to reauthorize the connection, typically because required scopes have changed. `state_reason` explains why when WorkOS invalidated the connection itself.
          * - `disconnected`: The connection has been disconnected.
          */
         public ConnectedAccountState $state,
@@ -50,10 +50,19 @@ readonly class ConnectedAccount implements \JsonSerializable
         /** The last four characters of the client secret supplied for this connection, or `null` when it can't be read. Only present when `auth_method` is `client_credentials`. */
         public ?string $clientSecretLast4 = null,
         /**
-         * The connection-level configuration values stored for this connection — the fields the provider declares at `installation` scope, excluding any it declares as secret. Only present when `auth_method` is `client_credentials`.
+         * The connection-level configuration values stored for this connection — the fields the provider declares at `installation` scope, excluding secret and undeclared fields. Returned for every authentication method; empty when no stored values can be disclosed.
          * @var array<string, string>|null
          */
         public ?array $config = null,
+        /** The [User](https://workos.com/docs/reference/authkit/user) whose authorization established this connection. `null` when the connection is developer-managed or its establisher is unknown, and when the establishing member lost access to the organization — in which case `state_reason` is `establishing_member_membership_ended`. */
+        public ?string $establishedByUserId = null,
+        /**
+         * Why WorkOS put the connection in its current `state`, or `null` when there is no WorkOS-recorded reason:
+         * - `establishing_member_membership_ended`: The member who established this organization-owned connection is no longer an active member of the organization, so its credentials were cleared. An organization admin must provide new credentials.
+         *
+         * Additional values may be added; treat an unrecognized value as an unknown reason.
+         */
+        public ?string $stateReason = null,
     ) {
     }
 
@@ -76,6 +85,8 @@ readonly class ConnectedAccount implements \JsonSerializable
             clientId: $data['client_id'] ?? null,
             clientSecretLast4: $data['client_secret_last_4'] ?? null,
             config: $data['config'] ?? null,
+            establishedByUserId: $data['established_by_user_id'] ?? null,
+            stateReason: $data['state_reason'] ?? null,
         );
     }
 
@@ -98,6 +109,8 @@ readonly class ConnectedAccount implements \JsonSerializable
             'client_id' => $this->clientId,
             'client_secret_last_4' => $this->clientSecretLast4,
             'config' => $this->config,
+            'established_by_user_id' => $this->establishedByUserId,
+            'state_reason' => $this->stateReason,
         ];
     }
 }

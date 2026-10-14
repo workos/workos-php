@@ -11,6 +11,10 @@ readonly class ConnectedAccountInput implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
+        /** A mutable, non-unique connection label; null clears it. Not an account identifier. */
+        public ?string $accountDisplayName = null,
+        /** A developer-attested account identifier; null clears it. */
+        public ?string $accountIdentifier = null,
         /** The OAuth access token for the connected account. */
         public ?string $accessToken = null,
         /** The OAuth refresh token for the connected account. */
@@ -30,6 +34,8 @@ readonly class ConnectedAccountInput implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
+            accountDisplayName: $data['account_display_name'] ?? null,
+            accountIdentifier: $data['account_identifier'] ?? null,
             accessToken: $data['access_token'] ?? null,
             refreshToken: $data['refresh_token'] ?? null,
             expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
@@ -41,6 +47,8 @@ readonly class ConnectedAccountInput implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'account_display_name' => $this->accountDisplayName,
+            'account_identifier' => $this->accountIdentifier,
             'access_token' => $this->accessToken,
             'refresh_token' => $this->refreshToken,
             'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
