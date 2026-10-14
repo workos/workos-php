@@ -17,6 +17,8 @@ readonly class GenerateLink implements \JsonSerializable
         public ?string $returnUrl = null,
         /** The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Admin Portal](https://dashboard.workos.com/admin-portal) page will be used. */
         public ?string $successUrl = null,
+        /** The ID of the user in your application the link is generated for. The link and any Admin Portal sessions started from it can later be revoked by this ID, for example when that user is deprovisioned from your application. */
+        public ?string $externalUserId = null,
         /**
          *
          *       The intent of the Admin Portal.
@@ -43,6 +45,7 @@ readonly class GenerateLink implements \JsonSerializable
             organization: $data['organization'],
             returnUrl: $data['return_url'] ?? null,
             successUrl: $data['success_url'] ?? null,
+            externalUserId: $data['external_user_id'] ?? null,
             intent: isset($data['intent']) ? GenerateLinkIntent::from($data['intent']) : null,
             itContactEmails: $data['it_contact_emails'] ?? null,
         );
@@ -54,6 +57,7 @@ readonly class GenerateLink implements \JsonSerializable
             'organization' => $this->organization,
             'return_url' => $this->returnUrl,
             'success_url' => $this->successUrl,
+            'external_user_id' => $this->externalUserId,
             'intent' => $this->intent?->value,
             'it_contact_emails' => $this->itContactEmails,
         ];

@@ -26,4 +26,13 @@ class AdminPortalTest extends TestCase
         $body = json_decode((string) $request->getBody(), true);
         $this->assertSame('test_value', $body['organization']);
     }
+
+    public function testCreateRevokeLink(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
+        $client->adminPortal()->createRevokeLink(organization: 'test_value', externalUserId: 'test_value');
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('portal/revoke_link', $request->getUri()->getPath());
+    }
 }
