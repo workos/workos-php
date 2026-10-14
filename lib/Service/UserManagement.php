@@ -921,7 +921,7 @@ class UserManagement
      * Create a user
      *
      * Create a new user in the current environment.
-     * @param string $email The email address of the user.
+     * @param string $email The email address of the user. WorkOS trims whitespace and converts the address to lowercase before storing it.
      * @param string|null $firstName The first name of the user.
      * @param string|null $lastName The last name of the user.
      * @param string|null $name The user's full name.
