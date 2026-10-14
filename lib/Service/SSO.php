@@ -504,6 +504,7 @@ class SSO
      *
      * Get an access token along with the user [Profile](https://workos.com/docs/reference/sso/profile) using the code passed to your [Redirect URI](https://workos.com/docs/reference/sso/get-authorization-url/redirect-uri).
      * @param string|null $code The authorization code received from the authorization callback. Required when `grant_type` is `authorization_code`.
+     * @param string|null $codeVerifier The PKCE code verifier matching the `code_challenge` sent with the authorization request. Required when the authorization request included a `code_challenge`. Must be sent in the request body.
      * @param string|null $subjectToken The OIDC ID token to exchange. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
      * @param string|null $subjectTokenType The type of the subject token. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
      * @param string|null $organizationId The ID of the organization whose connection the subject token is validated against. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body.
@@ -512,6 +513,7 @@ class SSO
      */
     public function getProfileAndToken(
         ?string $code = null,
+        ?string $codeVerifier = null,
         ?string $subjectToken = null,
         ?string $subjectTokenType = null,
         ?string $organizationId = null,
@@ -519,6 +521,7 @@ class SSO
     ): \WorkOS\Resource\SSOTokenResponse {
         $body = array_filter([
             'code' => $code,
+            'code_verifier' => $codeVerifier,
             'subject_token' => $subjectToken,
             'subject_token_type' => $subjectTokenType,
             'organization_id' => $organizationId,

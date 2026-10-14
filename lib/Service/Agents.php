@@ -63,6 +63,7 @@ class Agents
      * @param string|null $description Human-readable description of the agent blueprint.
      * @param array<string>|null $permissions Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
      * @param \WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy|null $invocableBy Who may mint sessions from this blueprint.
+     * @param \WorkOS\Resource\AgentBlueprintsCreateRequestInvocableAs|null $invocableAs How sessions may be minted from this blueprint.
      * @param \WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting|null $sessionSettings Token and session lifetimes for sessions minted from this blueprint.
      * @return \WorkOS\Resource\AgentBlueprint
      * @throws \WorkOS\Exception\WorkOSException
@@ -72,6 +73,7 @@ class Agents
         ?string $description = null,
         ?array $permissions = null,
         ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy $invocableBy = null,
+        ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableAs $invocableAs = null,
         ?\WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AgentBlueprint {
@@ -80,6 +82,7 @@ class Agents
             'description' => $description,
             'permissions' => $permissions,
             'invocable_by' => $invocableBy,
+            'invocable_as' => $invocableAs,
             'session_settings' => $sessionSettings,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -120,6 +123,7 @@ class Agents
      * @param string|null $description Human-readable description of the agent blueprint. Pass `null` to clear it.
      * @param array<string>|null $permissions Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
      * @param \WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableBy|null $invocableBy Who may mint sessions from this blueprint. Omitted lists are left unchanged.
+     * @param \WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableAs|null $invocableAs How sessions may be minted from this blueprint. Omitted lists are left unchanged.
      * @param \WorkOS\Resource\AgentBlueprintsUpdateRequestSessionSetting|null $sessionSettings Token and session lifetimes for sessions minted from this blueprint. Omitted fields are left unchanged.
      * @return \WorkOS\Resource\AgentBlueprint
      * @throws \WorkOS\Exception\WorkOSException
@@ -130,6 +134,7 @@ class Agents
         ?string $description = null,
         ?array $permissions = null,
         ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableBy $invocableBy = null,
+        ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableAs $invocableAs = null,
         ?\WorkOS\Resource\AgentBlueprintsUpdateRequestSessionSetting $sessionSettings = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\AgentBlueprint {
@@ -138,6 +143,7 @@ class Agents
             'description' => $description,
             'permissions' => $permissions,
             'invocable_by' => $invocableBy,
+            'invocable_as' => $invocableAs,
             'session_settings' => $sessionSettings,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
