@@ -71,7 +71,7 @@ class AdminPortal
      * @return mixed
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function createRevokeLink(
+    public function revokeLink(
         string $organization,
         string $externalUserId,
         ?\WorkOS\RequestOptions $options = null,
