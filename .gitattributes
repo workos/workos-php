@@ -4,4 +4,5 @@
 /devbox.json export-ignore
 /devbox.lock export-ignore
 /phpunit.xml export-ignore
+/AGENTS.md export-ignore
 /.* export-ignore
