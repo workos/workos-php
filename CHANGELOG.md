@@ -1,5 +1,33 @@
 # Changelog
 
+## [9.5.0](https://github.com/workos/workos-php/compare/v9.4.0...v9.5.0) (2026-10-15)
+
+
+### Features
+
+* **admin_portal:** SDK surface change: `AdminPortal.createRevokeLink` was renamed to `AdminPortal.revokeLink` ([#454](https://github.com/workos/workos-php/issues/454)) ([67a1067](https://github.com/workos/workos-php/commit/67a10676f11a1f3bbd735139d91e20388a792cb8))
+* **admin_portal:** Update admin portal API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **audit_logs:** Update audit log API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **authorization:** Update authorization API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **feature_flags:** Update feature flag API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **generated:** Authorization (batch c64ce1e7) ([#447](https://github.com/workos/workos-php/issues/447)) ([75c1393](https://github.com/workos/workos-php/commit/75c139313c09d787ba78efea021b06211835ad6b))
+* **organizations:** Update organization API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **pipes:** Change Pipes API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **pipes:** Update Pipes API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **radar:** Update radar API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **user_management:** Update user management API surface ([#452](https://github.com/workos/workos-php/issues/452)) ([d873585](https://github.com/workos/workos-php/commit/d8735850145ab0adf5d7b5a47614e659dd7437b0))
+* **user_management:** Update user management API surface ([#454](https://github.com/workos/workos-php/issues/454)) ([67a1067](https://github.com/workos/workos-php/commit/67a10676f11a1f3bbd735139d91e20388a792cb8))
+
+
+### Bug Fixes
+
+* **user_management:** Change errors for endpoint `POST /user_management/authenticate` ([#454](https://github.com/workos/workos-php/issues/454)) ([67a1067](https://github.com/workos/workos-php/commit/67a10676f11a1f3bbd735139d91e20388a792cb8))
+
+
+### Miscellaneous Chores
+
+* **deps:** update github-actions versions ([#453](https://github.com/workos/workos-php/issues/453)) ([35c9dd2](https://github.com/workos/workos-php/commit/35c9dd2f4acd6cfb2d23d7531b84015689815ad1))
+
 ## [9.4.0](https://github.com/workos/workos-php/compare/v9.3.0...v9.4.0) (2026-09-18)
 
 ### Features
