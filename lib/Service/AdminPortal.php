@@ -22,6 +22,7 @@ class AdminPortal
      * @param string|null $returnUrl The URL to go to when an admin clicks on your logo in the Admin Portal. If not specified, the return URL configured on the [Admin Portal](https://dashboard.workos.com/admin-portal) page will be used.
      * @param string|null $successUrl The URL to redirect the admin to when they finish setup. If not specified, the success URL configured on the [Admin Portal](https://dashboard.workos.com/admin-portal) page will be used.
      * @param string $organization An [Organization](https://workos.com/docs/reference/organization) identifier.
+     * @param string|null $externalUserId The ID of the user in your application the link is generated for. The link and any Admin Portal sessions started from it can later be revoked by this ID, for example when that user is deprovisioned from your application.
      * @param \WorkOS\Resource\GenerateLinkIntent|null $intent
      *       The intent of the Admin Portal.
      *         - `sso` - Launch Admin Portal for creating SSO connections
@@ -39,6 +40,7 @@ class AdminPortal
         string $organization,
         ?string $returnUrl = null,
         ?string $successUrl = null,
+        ?string $externalUserId = null,
         ?\WorkOS\Resource\GenerateLinkIntent $intent = null,
         ?array $itContactEmails = null,
         ?\WorkOS\RequestOptions $options = null,
@@ -47,6 +49,7 @@ class AdminPortal
             'return_url' => $returnUrl,
             'success_url' => $successUrl,
             'organization' => $organization,
+            'external_user_id' => $externalUserId,
             'intent' => $intent?->value,
             'it_contact_emails' => $itContactEmails,
         ], fn ($v) => $v !== null);
@@ -57,5 +60,32 @@ class AdminPortal
             options: $options,
         );
         return PortalLinkResponse::fromArray($response);
+    }
+
+    /**
+     * Revoke Portal Links
+     *
+     * Revokes every Portal Link generated for the given organization with the given `external_user_id`, and immediately ends any Admin Portal sessions that were started from those links. Use this when an admin is deprovisioned from your application: unopened links stop working, and their already-open portal sessions are ended. Only links that were generated with an `external_user_id` can be revoked, so pass one to `generate_link` for every admin you may later need to deprovision.
+     * @param string $organization An [Organization](https://workos.com/docs/reference/organization) identifier.
+     * @param string $externalUserId The `external_user_id` the Portal Links were generated with for this organization. Every matching link is revoked, along with any Admin Portal sessions started from those links.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function createRevokeLink(
+        string $organization,
+        string $externalUserId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $body = [
+            'organization' => $organization,
+            'external_user_id' => $externalUserId,
+        ];
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'portal/revoke_link',
+            body: $body,
+            options: $options,
+        );
+        return $response;
     }
 }

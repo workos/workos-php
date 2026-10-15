@@ -19,6 +19,8 @@ readonly class TokenQuery implements \JsonSerializable
         public SSOGrantType $grantType,
         /** The authorization code received from the authorization callback. Required when `grant_type` is `authorization_code`. */
         public ?string $code = null,
+        /** The PKCE code verifier matching the `code_challenge` sent with the authorization request. Required when the authorization request included a `code_challenge`. Must be sent in the request body. */
+        public ?string $codeVerifier = null,
         /** The OIDC ID token to exchange. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body. */
         public ?string $subjectToken = null,
         /** The type of the subject token. Required when `grant_type` is `urn:ietf:params:oauth:grant-type:token-exchange`. Must be sent in the request body. */
@@ -35,6 +37,7 @@ readonly class TokenQuery implements \JsonSerializable
             clientSecret: $data['client_secret'],
             grantType: SSOGrantType::from($data['grant_type']),
             code: $data['code'] ?? null,
+            codeVerifier: $data['code_verifier'] ?? null,
             subjectToken: $data['subject_token'] ?? null,
             subjectTokenType: $data['subject_token_type'] ?? null,
             organizationId: $data['organization_id'] ?? null,
@@ -48,6 +51,7 @@ readonly class TokenQuery implements \JsonSerializable
             'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType->value,
             'code' => $this->code,
+            'code_verifier' => $this->codeVerifier,
             'subject_token' => $this->subjectToken,
             'subject_token_type' => $this->subjectTokenType,
             'organization_id' => $this->organizationId,

@@ -27,6 +27,8 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
         public array $permissions,
         /** Who may mint sessions from this blueprint. */
         public AgentBlueprintUpdatedDataInvocableBy $invocableBy,
+        /** How sessions may be minted from this blueprint. */
+        public AgentBlueprintUpdatedDataInvocableAs $invocableAs,
         /** Token and session lifetimes for sessions minted from this blueprint. */
         public AgentBlueprintUpdatedDataSessionSetting $sessionSettings,
         /** The timestamp when the agent blueprint was created. */
@@ -45,6 +47,7 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
             description: $data['description'] ?? null,
             permissions: $data['permissions'],
             invocableBy: AgentBlueprintUpdatedDataInvocableBy::fromArray($data['invocable_by']),
+            invocableAs: AgentBlueprintUpdatedDataInvocableAs::fromArray($data['invocable_as']),
             sessionSettings: AgentBlueprintUpdatedDataSessionSetting::fromArray($data['session_settings']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
@@ -60,6 +63,7 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
             'description' => $this->description,
             'permissions' => $this->permissions,
             'invocable_by' => $this->invocableBy->toArray(),
+            'invocable_as' => $this->invocableAs->toArray(),
             'session_settings' => $this->sessionSettings->toArray(),
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,

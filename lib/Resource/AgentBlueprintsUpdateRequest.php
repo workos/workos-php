@@ -22,6 +22,8 @@ readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
         public ?array $permissions = null,
         /** Who may mint sessions from this blueprint. Omitted lists are left unchanged. */
         public ?AgentBlueprintsUpdateRequestInvocableBy $invocableBy = null,
+        /** How sessions may be minted from this blueprint. Omitted lists are left unchanged. */
+        public ?AgentBlueprintsUpdateRequestInvocableAs $invocableAs = null,
         /** Token and session lifetimes for sessions minted from this blueprint. Omitted fields are left unchanged. */
         public ?AgentBlueprintsUpdateRequestSessionSetting $sessionSettings = null,
     ) {
@@ -34,6 +36,7 @@ readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
             description: $data['description'] ?? null,
             permissions: $data['permissions'] ?? null,
             invocableBy: isset($data['invocable_by']) ? AgentBlueprintsUpdateRequestInvocableBy::fromArray($data['invocable_by']) : null,
+            invocableAs: isset($data['invocable_as']) ? AgentBlueprintsUpdateRequestInvocableAs::fromArray($data['invocable_as']) : null,
             sessionSettings: isset($data['session_settings']) ? AgentBlueprintsUpdateRequestSessionSetting::fromArray($data['session_settings']) : null,
         );
     }
@@ -45,6 +48,7 @@ readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
             'description' => $this->description,
             'permissions' => $this->permissions,
             'invocable_by' => $this->invocableBy?->toArray(),
+            'invocable_as' => $this->invocableAs?->toArray(),
             'session_settings' => $this->sessionSettings?->toArray(),
         ];
     }
