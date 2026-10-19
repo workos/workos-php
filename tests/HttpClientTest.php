@@ -309,7 +309,7 @@ class HttpClientTest extends TestCase
 
         // And confirm the documented caveat: a raw `/` in an unencoded ID is
         // NOT contained — it splits into a new segment. This pins the current
-        // behaviour so a future refactor that silently changes it is caught.
+        // behavior so a future refactor that silently changes it is caught.
         $client3 = new HttpClient(
             apiKey: 'test_key',
             clientId: null,
