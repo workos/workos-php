@@ -325,6 +325,26 @@ class Agents
     }
 
     /**
+     * Revoke an agent registration
+     *
+     * Revoke an agent registration by ID. Revocation is permanent: the registration, its identity assertions, and every access token or API key issued from it stop working, and the agent must register again. Revoking an already revoked registration succeeds and returns the original `revoked_at`. The registration is scoped to the environment of the API key used to authenticate the request.
+     * @param string $id The unique ID of the agent registration.
+     * @return \WorkOS\Resource\AgentRegistration
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function revokeRegistration(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\AgentRegistration {
+        $response = $this->client->request(
+            method: 'POST',
+            path: 'agents/registrations/' . rawurlencode($id) . '/revoke',
+            options: $options,
+        );
+        return AgentRegistration::fromArray($response);
+    }
+
+    /**
      * List agent instances
      *
      * Lists the agent instances in the current environment. Instances are created implicitly when tokens are minted.

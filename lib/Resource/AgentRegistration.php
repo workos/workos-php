@@ -19,6 +19,8 @@ readonly class AgentRegistration implements \JsonSerializable
         public string $organizationId,
         /** The current verification status of the registration. */
         public AgentRegistrationStatus $status,
+        /** The timestamp when the registration was revoked, or `null` if it has not been revoked. */
+        public ?\DateTimeImmutable $revokedAt,
         /** The kind of agent registration. */
         public AgentRegistrationKind $kind,
         /** The claim associated with this registration, or `null` if the registration has no claim. */
@@ -37,6 +39,7 @@ readonly class AgentRegistration implements \JsonSerializable
             agentIdentity: AgentRegistrationAgentIdentity::fromArray($data['agent_identity']),
             organizationId: $data['organization_id'],
             status: AgentRegistrationStatus::from($data['status']),
+            revokedAt: isset($data['revoked_at']) ? new \DateTimeImmutable($data['revoked_at']) : null,
             kind: AgentRegistrationKind::from($data['kind']),
             claim: isset($data['claim']) ? AgentRegistrationClaim::fromArray($data['claim']) : null,
             createdAt: new \DateTimeImmutable($data['created_at']),
@@ -51,6 +54,7 @@ readonly class AgentRegistration implements \JsonSerializable
             'agent_identity' => $this->agentIdentity->toArray(),
             'organization_id' => $this->organizationId,
             'status' => $this->status->value,
+            'revoked_at' => $this->revokedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
             'kind' => $this->kind->value,
             'claim' => $this->claim?->toArray(),
             'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),

@@ -154,6 +154,20 @@ class AgentsTest extends TestCase
         $this->assertStringEndsWith('agents/registrations/test_id', $request->getUri()->getPath());
     }
 
+    public function testRevokeRegistration(): void
+    {
+        $fixture = $this->loadFixture('agent_registration');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->agents()->revokeRegistration('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\AgentRegistration::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['organization_id'], $result->organizationId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('POST', $request->getMethod());
+        $this->assertStringEndsWith('agents/registrations/test_id/revoke', $request->getUri()->getPath());
+    }
+
     public function testListInstances(): void
     {
         $fixture = $this->loadFixture('list_agent_instance');
