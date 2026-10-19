@@ -407,10 +407,11 @@ class HttpClientTest extends TestCase
         }
     }
 
-    public function testPostRetriesReuseOneGeneratedIdempotencyKey(): void
+    public function testEachPostGetsOneGeneratedIdempotencyKeyReusedOnItsRetries(): void
     {
         $mock = new MockHandler([
             new Response(500, ['Content-Type' => 'application/json', 'Retry-After' => '0'], '{"message":"retry"}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
             new Response(200, ['Content-Type' => 'application/json'], '{}'),
         ]);
         $history = [];
@@ -427,14 +428,16 @@ class HttpClientTest extends TestCase
         );
 
         $client->request('POST', 'widgets', body: ['name' => 'widget']);
+        $client->request('POST', 'widgets', body: ['name' => 'another widget']);
 
         $keys = array_map(
             fn (array $entry): string => $entry['request']->getHeaderLine('Idempotency-Key'),
             $history,
         );
-        $this->assertCount(2, $keys);
+        $this->assertCount(3, $keys);
         $this->assertNotSame('', $keys[0]);
-        $this->assertSame($keys[0], $keys[1]);
+        $this->assertSame($keys[0], $keys[1], 'A retry reuses its request\'s key.');
+        $this->assertNotSame($keys[0], $keys[2], 'A separate POST gets its own key.');
     }
 
     public function testPostKeepsCallerIdempotencyKeyFromExtraHeaders(): void

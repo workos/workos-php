@@ -657,7 +657,7 @@ $organization = $workos->organizations()->createOrganizations(
 
 The same pattern applies anywhere the new runtime uses `RequestOptions`.
 
-If you rely on retries for write requests, set an explicit idempotency key yourself. The new runtime retries retryable responses, but it does not auto-generate idempotency keys for POST requests.
+The new runtime retries retryable responses, and every POST carries an idempotency key: the one you set in `RequestOptions`, or one the SDK generates before the first attempt and reuses on its own retries. Set an explicit key when your application retries a write itself, so every attempt shares it.
 
 ### Audit Logs
 
