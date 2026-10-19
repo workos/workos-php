@@ -406,4 +406,63 @@ class HttpClientTest extends TestCase
             $this->assertNull($e->error);
         }
     }
+
+    public function testPostRetriesReuseOneGeneratedIdempotencyKey(): void
+    {
+        $mock = new MockHandler([
+            new Response(500, ['Content-Type' => 'application/json', 'Retry-After' => '0'], '{"message":"retry"}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+        $history = [];
+        $handler = HandlerStack::create($mock);
+        $handler->push(\GuzzleHttp\Middleware::history($history));
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 1,
+            handler: $handler,
+        );
+
+        $client->request('POST', 'widgets', body: ['name' => 'widget']);
+
+        $keys = array_map(
+            fn (array $entry): string => $entry['request']->getHeaderLine('Idempotency-Key'),
+            $history,
+        );
+        $this->assertCount(2, $keys);
+        $this->assertNotSame('', $keys[0]);
+        $this->assertSame($keys[0], $keys[1]);
+    }
+
+    public function testPostKeepsCallerIdempotencyKeyFromExtraHeaders(): void
+    {
+        $mock = new MockHandler([
+            new Response(200, ['Content-Type' => 'application/json'], '{}'),
+        ]);
+        $history = [];
+        $handler = HandlerStack::create($mock);
+        $handler->push(\GuzzleHttp\Middleware::history($history));
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: $handler,
+        );
+
+        $client->request(
+            'POST',
+            'widgets',
+            body: ['name' => 'widget'],
+            options: new \WorkOS\RequestOptions(extraHeaders: ['idempotency-key' => 'caller-key']),
+        );
+
+        $request = $history[array_key_last($history)]['request'];
+        $this->assertSame('caller-key', $request->getHeaderLine('Idempotency-Key'));
+    }
 }
