@@ -412,6 +412,7 @@
     "lib/Resource/FlagUpdatedContextActor.php",
     "lib/Resource/FlagUpdatedContextPreviousAttribute.php",
     "lib/Resource/FlagUpdatedContextPreviousAttributeData.php",
+    "lib/Resource/FlagUpdatedContextPreviousAttributeDataOwner.php",
     "lib/Resource/FlagUpdatedData.php",
     "lib/Resource/FlagUpdatedDataOwner.php",
     "lib/Resource/GenerateLink.php",
@@ -1124,6 +1125,7 @@
     "tests/Fixtures/flag_updated_context_actor.json",
     "tests/Fixtures/flag_updated_context_previous_attribute.json",
     "tests/Fixtures/flag_updated_context_previous_attribute_data.json",
+    "tests/Fixtures/flag_updated_context_previous_attribute_data_owner.json",
     "tests/Fixtures/flag_updated_data.json",
     "tests/Fixtures/flag_updated_data_owner.json",
     "tests/Fixtures/generate_link.json",
@@ -1488,6 +1490,10 @@
     },
     "GET /agents/registrations/{id}": {
       "sdkMethod": "getRegistration",
+      "service": "agents"
+    },
+    "POST /agents/registrations/{id}/revoke": {
+      "sdkMethod": "revokeRegistration",
       "service": "agents"
     },
     "GET /agents/instances": {

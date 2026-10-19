@@ -21,6 +21,8 @@ readonly class FlagUpdatedContextPreviousAttributeData implements \JsonSerializa
          * @var array<string>|null
          */
         public ?array $tags = null,
+        /** The previous owner of the flag, or `null` if it had none. */
+        public ?FlagUpdatedContextPreviousAttributeDataOwner $owner = null,
         /** Whether the flag was previously enabled. */
         public ?bool $enabled = null,
         /** The previous default value of the flag. */
@@ -34,6 +36,7 @@ readonly class FlagUpdatedContextPreviousAttributeData implements \JsonSerializa
             name: $data['name'] ?? null,
             description: $data['description'] ?? null,
             tags: $data['tags'] ?? null,
+            owner: isset($data['owner']) ? FlagUpdatedContextPreviousAttributeDataOwner::fromArray($data['owner']) : null,
             enabled: $data['enabled'] ?? null,
             defaultValue: $data['default_value'] ?? null,
         );
@@ -45,6 +48,7 @@ readonly class FlagUpdatedContextPreviousAttributeData implements \JsonSerializa
             'name' => $this->name,
             'description' => $this->description,
             'tags' => $this->tags,
+            'owner' => $this->owner?->toArray(),
             'enabled' => $this->enabled,
             'default_value' => $this->defaultValue,
         ];
