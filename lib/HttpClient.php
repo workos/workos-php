@@ -9,8 +9,11 @@ namespace WorkOS;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ConnectTimeoutException;
+use GuzzleHttp\Exception\NetworkTimeoutException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ResponseException;
+use GuzzleHttp\Exception\ResponseTimeoutException;
+use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use WorkOS\Exception\ApiException;
 use WorkOS\Exception\AuthenticationException;
@@ -114,7 +117,10 @@ class HttpClient
                     $this->resolveUrl($path, $options),
                     $this->buildRequestOptions($method, $query, $body, $options),
                 );
-            } catch (ConnectException $e) {
+            } catch (NetworkExceptionInterface|ResponseTimeoutException $e) {
+                // Covers ConnectException on Guzzle 7 and 8, plus what Guzzle 8 split out of it:
+                // NetworkException (e.g. a timeout before response headers, cURL 52/56) and
+                // ResponseTimeoutException (a timeout after response headers).
                 if ($attempt < $maxRetries) {
                     $this->sleep($attempt);
                     continue;
@@ -423,6 +429,10 @@ class HttpClient
 
     private function isTimeoutException(\Throwable $exception): bool
     {
+        if ($exception instanceof NetworkTimeoutException || $exception instanceof ResponseTimeoutException) {
+            return true;
+        }
+
         if ($exception instanceof ConnectException || $exception instanceof RequestException) {
             if ($exception instanceof ConnectTimeoutException) {
                 return true;
