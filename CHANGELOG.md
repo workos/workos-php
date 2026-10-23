@@ -1,5 +1,13 @@
 # Changelog
 
+## [9.5.1](https://github.com/workos/workos-php/compare/v9.5.0...v9.5.1) (2026-10-23)
+
+
+### Bug Fixes
+
+* handle Guzzle 8 network and response timeout exceptions ([#458](https://github.com/workos/workos-php/issues/458)) ([ca02b5c](https://github.com/workos/workos-php/commit/ca02b5cc1e4ece0d67ee6f9199e51aafdf8820d2))
+* Send one Idempotency-Key on every POST and its retries ([#457](https://github.com/workos/workos-php/issues/457)) ([8e82d9d](https://github.com/workos/workos-php/commit/8e82d9dbf1a968eabdc367f2d344e857968b9a30))
+
 ## [9.5.0](https://github.com/workos/workos-php/compare/v9.4.0...v9.5.0) (2026-10-19)
 
 ### Miscellaneous Chores
