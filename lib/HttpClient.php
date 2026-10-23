@@ -109,13 +109,16 @@ class HttpClient
         ?RequestOptions $options = null,
     ): ?array {
         $maxRetries = $this->resolveMaxRetries($options);
+        // Keyed once, before the first attempt, so every retry of a POST
+        // carries the key the server may already have seen.
+        $idempotencyKey = $this->resolveIdempotencyKey($method, $options);
 
         for ($attempt = 0; $attempt <= $maxRetries; $attempt++) {
             try {
                 $response = $this->client->request(
                     $method,
                     $this->resolveUrl($path, $options),
-                    $this->buildRequestOptions($method, $query, $body, $options),
+                    $this->buildRequestOptions($method, $query, $body, $options, $idempotencyKey),
                 );
             } catch (NetworkExceptionInterface|ResponseTimeoutException $e) {
                 // Covers ConnectException on Guzzle 7 and 8, plus what Guzzle 8 split out of it:
@@ -206,6 +209,7 @@ class HttpClient
         ?array $query,
         ?array $body,
         ?RequestOptions $options,
+        ?string $idempotencyKey,
     ): array {
         $headers = [
             'Content-Type' => 'application/json',
@@ -219,8 +223,8 @@ class HttpClient
             $headers = array_merge($headers, $options->extraHeaders);
         }
 
-        if ($options?->idempotencyKey !== null) {
-            $headers['Idempotency-Key'] = $options->idempotencyKey;
+        if ($idempotencyKey !== null) {
+            $headers['Idempotency-Key'] = $idempotencyKey;
         }
 
         // Always set User-Agent last so callers cannot override it via extraHeaders.
@@ -466,6 +470,33 @@ class HttpClient
         }
 
         return max(0, $timestamp - time());
+    }
+
+    /**
+     * The caller's key when supplied, through `idempotencyKey` or an
+     * `Idempotency-Key` extra header; otherwise a new key for POST requests.
+     */
+    private function resolveIdempotencyKey(string $method, ?RequestOptions $options): ?string
+    {
+        if ($options?->idempotencyKey !== null) {
+            return $options->idempotencyKey;
+        }
+
+        foreach (array_keys($options->extraHeaders ?? []) as $name) {
+            if (strcasecmp((string) $name, 'Idempotency-Key') === 0) {
+                return null;
+            }
+        }
+
+        if (strtoupper($method) !== 'POST') {
+            return null;
+        }
+
+        $bytes = random_bytes(16);
+        $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x40);
+        $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
+
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($bytes), 4));
     }
 
     private function sleep(int $attempt, ?string $retryAfter = null): void

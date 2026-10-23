@@ -21,6 +21,23 @@ composer require workos/workos-php
 
 The package will need to be configured with your [API Key](https://dashboard.workos.com/api-keys) and [Client ID](https://dashboard.workos.com/configuration). By default, the packages looks for a `WORKOS_API_KEY` and `WORKOS_CLIENT_ID` environment variable.
 
+## Retries and idempotency
+
+The SDK retries requests that fail with a connection error or a `429`, `500`, `502`, `503`, or `504` response. Every `POST` carries an `Idempotency-Key`: the one you provide, or one the SDK generates before the first attempt and reuses on every retry. Provide your own key through `RequestOptions`:
+
+```php
+$workos->pipes()->createDataIntegrationApiKey(
+    slug: 'github',
+    userId: 'user_01EHZNVPK3SFK441A1RGBFSHRT',
+    secret: 'sk-1234567890abcdef',
+    connectionIntent: 'add',
+    options: new \WorkOS\RequestOptions(idempotencyKey: '0b6c3f0e-7a51-4c3a-9d8e-2f1b5a6c7d80'),
+);
+```
+
+> [!NOTE]
+> The WorkOS API currently honors `Idempotency-Key` only on [Create Audit Log Event](https://workos.com/docs/reference/audit-logs/event) and on Pipes explicit adds (`createDataIntegrationApiKey`, `createDataIntegrationClientCredential`, and `createUserConnectedAccount` / `createOrganizationConnectedAccount` with `connectionIntent: 'add'`). Other endpoints accept the header but do not deduplicate requests, so a retried mutation elsewhere can still create a duplicate.
+
 ## SDK Versioning
 
 For our SDKs WorkOS follows a Semantic Versioning ([SemVer](https://semver.org/)) process where all releases will have a version X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any breaking changes to only be released in major versions and strongly recommend reading changelogs before making any major version upgrades.
