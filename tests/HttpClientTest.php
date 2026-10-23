@@ -386,8 +386,9 @@ class HttpClientTest extends TestCase
     {
         $this->requireGuzzle8();
 
+        // The message avoids "timed out" so the test pins the type check, not the message fallback.
         $timeout = new NetworkTimeoutException(
-            'cURL error 28: Operation timed out after 10001 milliseconds with 0 bytes received',
+            'Transfer stalled before response headers',
             new Request('GET', 'https://api.workos.com/test'),
         );
         $client = $this->clientRejectingWith($timeout);
@@ -404,8 +405,9 @@ class HttpClientTest extends TestCase
     {
         $this->requireGuzzle8();
 
+        // The message avoids "timed out" so the test pins the type check, not the message fallback.
         $timeout = new ResponseTimeoutException(
-            'cURL error 28: Operation timed out after 10001 milliseconds with 512 bytes received',
+            'Transfer stalled after response headers',
             new Request('GET', 'https://api.workos.com/test'),
             new Response(200, ['Content-Type' => 'application/json'], '{"data":['),
         );
