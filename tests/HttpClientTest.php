@@ -5,13 +5,19 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use GuzzleHttp\Exception\NetworkException;
+use GuzzleHttp\Exception\NetworkTimeoutException;
+use GuzzleHttp\Exception\ResponseTimeoutException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use WorkOS\Exception\ApiException;
 use WorkOS\Exception\BadRequestException;
+use WorkOS\Exception\ConnectionException;
 use WorkOS\Exception\RateLimitExceededException;
+use WorkOS\Exception\TimeoutException;
 use WorkOS\HttpClient;
 
 class HttpClientTest extends TestCase
@@ -376,6 +382,85 @@ class HttpClientTest extends TestCase
         $this->assertSame('{"sms_template":"Your code is {{code}}"}', (string) $request->getBody());
     }
 
+    public function testNetworkTimeoutBeforeResponseHeadersThrowsTimeoutException(): void
+    {
+        $this->requireGuzzle8();
+
+        $timeout = new NetworkTimeoutException(
+            'cURL error 28: Operation timed out after 10001 milliseconds with 0 bytes received',
+            new Request('GET', 'https://api.workos.com/test'),
+        );
+        $client = $this->clientRejectingWith($timeout);
+
+        try {
+            $client->request('GET', '/test');
+            $this->fail('Expected TimeoutException');
+        } catch (TimeoutException $e) {
+            $this->assertSame($timeout, $e->getPrevious());
+        }
+    }
+
+    public function testResponseTimeoutAfterHeadersThrowsTimeoutException(): void
+    {
+        $this->requireGuzzle8();
+
+        $timeout = new ResponseTimeoutException(
+            'cURL error 28: Operation timed out after 10001 milliseconds with 512 bytes received',
+            new Request('GET', 'https://api.workos.com/test'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"data":['),
+        );
+        $client = $this->clientRejectingWith($timeout);
+
+        try {
+            $client->request('GET', '/test');
+            $this->fail('Expected TimeoutException');
+        } catch (TimeoutException $e) {
+            $this->assertSame($timeout, $e->getPrevious());
+        }
+    }
+
+    public function testNetworkFailureThrowsConnectionException(): void
+    {
+        $this->requireGuzzle8();
+
+        $failure = new NetworkException(
+            'cURL error 56: Recv failure: Connection reset by peer',
+            new Request('GET', 'https://api.workos.com/test'),
+        );
+        $client = $this->clientRejectingWith($failure);
+
+        try {
+            $client->request('GET', '/test');
+            $this->fail('Expected ConnectionException');
+        } catch (ConnectionException $e) {
+            $this->assertSame($failure, $e->getPrevious());
+        }
+    }
+
+    public function testNetworkFailureIsRetried(): void
+    {
+        $this->requireGuzzle8();
+
+        $mock = new MockHandler([
+            new NetworkException(
+                'cURL error 52: Empty reply from server',
+                new Request('GET', 'https://api.workos.com/test'),
+            ),
+            new Response(200, ['Content-Type' => 'application/json'], '{"id":"org_01"}'),
+        ]);
+
+        $client = new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 1,
+            handler: HandlerStack::create($mock),
+        );
+
+        $this->assertSame(['id' => 'org_01'], $client->request('GET', '/test'));
+    }
+
     public function testNonStringCodeFieldIsIgnored(): void
     {
         $body = json_encode([
@@ -405,5 +490,24 @@ class HttpClientTest extends TestCase
             $this->assertNull($e->errorCode);
             $this->assertNull($e->error);
         }
+    }
+
+    private function requireGuzzle8(): void
+    {
+        if (!class_exists(NetworkException::class)) {
+            $this->markTestSkipped('NetworkException and its timeout subclasses exist only in Guzzle 8.');
+        }
+    }
+
+    private function clientRejectingWith(\Throwable $reason): HttpClient
+    {
+        return new HttpClient(
+            apiKey: 'test_key',
+            clientId: null,
+            baseUrl: 'https://api.workos.com',
+            timeout: 10,
+            maxRetries: 0,
+            handler: HandlerStack::create(new MockHandler([$reason])),
+        );
     }
 }
