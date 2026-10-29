@@ -35,6 +35,7 @@ use WorkOS\Resource\UserSessionsListItem;
 use WorkOS\Resource\VerifyEmailResponse;
 use WorkOS\Resource\Waitlist;
 use WorkOS\Resource\WaitlistEntry;
+use WorkOS\Resource\WaitlistListResponse;
 
 class UserManagement
 {
@@ -809,16 +810,19 @@ class UserManagement
      *
      * Creates a one-time token that can be used to reset a user's password.
      * @param string $email The email address of the user requesting a password reset.
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the password reset email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\PasswordReset
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function resetPassword(
         string $email,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
     ): \WorkOS\Resource\PasswordReset {
-        $body = [
+        $body = array_filter([
             'email' => $email,
-        ];
+            'locale' => $locale?->value,
+        ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/password_reset',
@@ -1128,6 +1132,7 @@ class UserManagement
      * Sends an email that contains a one-time code used to change a user's email address.
      * @param string $id The unique ID of the user.
      * @param string $newEmail The new email address to change to.
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the email change email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\EmailChange
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1135,10 +1140,12 @@ class UserManagement
         string $id,
         string $newEmail,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
     ): \WorkOS\Resource\EmailChange {
-        $body = [
+        $body = array_filter([
             'new_email' => $newEmail,
-        ];
+            'locale' => $locale?->value,
+        ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/users/' . rawurlencode($id) . '/email_change/send',
@@ -1179,16 +1186,22 @@ class UserManagement
      *
      * Sends an email that contains a one-time code used to verify a user's email address.
      * @param string $id The ID of the user.
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the verification email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\SendVerificationEmailResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function sendVerificationEmail(
         string $id,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
     ): \WorkOS\Resource\SendVerificationEmailResponse {
+        $body = array_filter([
+            'locale' => $locale?->value,
+        ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
             path: 'user_management/users/' . rawurlencode($id) . '/email_verification/send',
+            body: $body,
             options: $options,
         );
         return SendVerificationEmailResponse::fromArray($response);
@@ -1297,7 +1310,7 @@ class UserManagement
      * @param string|null $roleSlug The [role](https://workos.com/docs/authkit/roles) that the recipient will receive when they join the organization in the invitation.
      * @param int|null $expiresInDays How many days the invitations will be valid for. Must be between 1 and 30 days. Defaults to 7 days if not specified.
      * @param string|null $inviterUserId The ID of the [user](https://workos.com/docs/reference/authkit/user) who invites the recipient. The invitation email will mention the name of this user.
-     * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the invitation email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\UserInvite
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1307,7 +1320,7 @@ class UserManagement
         ?string $roleSlug = null,
         ?int $expiresInDays = null,
         ?string $inviterUserId = null,
-        ?\WorkOS\Resource\CreateUserInviteOptionsLocale $locale = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserInvite {
         $body = array_filter([
@@ -1392,13 +1405,13 @@ class UserManagement
      *
      * Resends an invitation email to the recipient. The invitation must be in a pending state.
      * @param string $id The unique ID of the invitation.
-     * @param \WorkOS\Resource\CreateUserInviteOptionsLocale|null $locale The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization).
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the invitation email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\UserInvite
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function resendInvitation(
         string $id,
-        ?\WorkOS\Resource\CreateUserInviteOptionsLocale $locale = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
         ?\WorkOS\RequestOptions $options = null,
     ): \WorkOS\Resource\UserInvite {
         $body = array_filter([
@@ -1485,6 +1498,7 @@ class UserManagement
      * @param string|null $userAgent The user agent string from the user's request.
      * @param string|null $radarAuthAttemptId The ID of an existing Radar authentication attempt to associate with this request.
      * @param string|null $signalsId An optional Radar signals ID to correlate client-side signals with this request.
+     * @param \WorkOS\Resource\SendEmailChangeLocale|null $locale The locale to use when rendering the Magic Auth email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization).
      * @return \WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -1496,6 +1510,7 @@ class UserManagement
         ?string $radarAuthAttemptId = null,
         ?string $signalsId = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\SendEmailChangeLocale $locale = null,
     ): \WorkOS\Resource\MagicAuthSendMagicAuthCodeAndReturnResponse {
         $body = array_filter([
             'email' => $email,
@@ -1504,6 +1519,7 @@ class UserManagement
             'user_agent' => $userAgent,
             'radar_auth_attempt_id' => $radarAuthAttemptId,
             'signals_id' => $signalsId,
+            'locale' => $locale?->value,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'POST',
@@ -1733,18 +1749,18 @@ class UserManagement
      * List waitlists
      *
      * Get a list of the waitlists in the environment. All waitlists are returned in a single response — this endpoint is not paginated, so the `list_metadata` cursors are always `null`.
-     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Waitlist>
+     * @return \WorkOS\Resource\WaitlistListResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listWaitlists(
         ?\WorkOS\RequestOptions $options = null,
-    ): \WorkOS\PaginatedResponse {
-        return $this->client->requestPage(
+    ): \WorkOS\Resource\WaitlistListResponse {
+        $response = $this->client->request(
             method: 'GET',
             path: 'user_management/waitlists',
-            modelClass: Waitlist::class,
             options: $options,
         );
+        return WaitlistListResponse::fromArray($response);
     }
 
     /**
