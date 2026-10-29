@@ -13,6 +13,8 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     public function __construct(
         /** The OAuth authorization URL to redirect the user to. */
         public string $url,
+        /** `finish_required` when the request included `code_challenge`: the connection will be held until your app finishes it. Omitted otherwise. If you sent `code_challenge` and this is missing, don't redirect the user. */
+        public ?string $completion = null,
     ) {
     }
 
@@ -20,6 +22,7 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     {
         return new self(
             url: $data['url'],
+            completion: $data['completion'] ?? null,
         );
     }
 
@@ -27,6 +30,7 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     {
         return [
             'url' => $this->url,
+            'completion' => $this->completion,
         ];
     }
 }

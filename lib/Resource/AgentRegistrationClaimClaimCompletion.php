@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The completion record for the claim, or `null` if the claim has not been completed. */
 readonly class AgentRegistrationClaimClaimCompletion implements \JsonSerializable
 {
     use JsonSerializableTrait;

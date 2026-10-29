@@ -17,7 +17,7 @@ class PipesProviderTest extends TestCase
     {
         $fixture = $this->loadFixture('data_integration_configuration_list_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipesProvider()->listOrganizationDataIntegrationConfigurations('test_organizationId');
+        $result = $client->pipesProvider()->listOrganizationDataIntegrationConfigurations(organizationId: 'test_organizationId');
         $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationConfigurationListResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -29,7 +29,7 @@ class PipesProviderTest extends TestCase
     {
         $fixture = $this->loadFixture('data_integration_configuration_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->pipesProvider()->updateOrganizationDataIntegrationConfiguration('test_organizationId', 'test_slug');
+        $result = $client->pipesProvider()->updateOrganizationDataIntegrationConfiguration(organizationId: 'test_organizationId', slug: 'test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\DataIntegrationConfigurationResponse::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
