@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Configuration for the new agent blueprint. */
 readonly class AgentBlueprintsCreateRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;

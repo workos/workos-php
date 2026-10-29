@@ -49,7 +49,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_blueprint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->getBlueprint('test_agent_blueprint_id');
+        $result = $client->agents()->getBlueprint(agentBlueprintId: 'test_agent_blueprint_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -63,7 +63,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_blueprint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->updateBlueprint('test_agent_blueprint_id');
+        $result = $client->agents()->updateBlueprint(agentBlueprintId: 'test_agent_blueprint_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentBlueprint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -76,7 +76,7 @@ class AgentsTest extends TestCase
     public function testDeleteBlueprint(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->agents()->deleteBlueprint('test_agent_blueprint_id');
+        $client->agents()->deleteBlueprint(agentBlueprintId: 'test_agent_blueprint_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('agents/blueprints/test_agent_blueprint_id', $request->getUri()->getPath());
@@ -86,7 +86,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_token');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->createBlueprintToken('test_agent_blueprint_id', type: \WorkOS\Resource\AgentBlueprintsTokenMintTokenRequestType::UserDelegated);
+        $result = $client->agents()->createBlueprintToken(agentBlueprintId: 'test_agent_blueprint_id', type: \WorkOS\Resource\AgentBlueprintsTokenMintTokenRequestType::UserDelegated);
         $this->assertInstanceOf(\WorkOS\Resource\AgentToken::class, $result);
         $this->assertSame($fixture['access_token'], $result->accessToken);
         $this->assertIsArray($result->toArray());
@@ -99,7 +99,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_token_validation');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->validateBlueprintToken('test_agent_blueprint_id', agentAccessToken: 'test_value');
+        $result = $client->agents()->validateBlueprintToken(agentBlueprintId: 'test_agent_blueprint_id', agentAccessToken: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AgentTokenValidation::class, $result);
         $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);
         $this->assertIsArray($result->toArray());
@@ -114,7 +114,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('claim_view_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->updateAttempts(type: 'test_value', claimAttemptToken: 'test_value', user: \WorkOS\Resource\AgentAdminLinkClaimAttemptToExternalUserRequestUser::fromArray($this->loadFixture('agent_admin_link_claim_attempt_to_external_user_request_user')));
+        $result = $client->agents()->updateAttempts(type: 'link_external_user', claimAttemptToken: 'test_value', user: \WorkOS\Resource\AgentAdminLinkClaimAttemptToExternalUserRequestUser::fromArray($this->loadFixture('agent_admin_link_claim_attempt_to_external_user_request_user')));
         $this->assertInstanceOf(\WorkOS\Resource\ClaimViewResponse::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
@@ -122,7 +122,7 @@ class AgentsTest extends TestCase
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('agents/claims/attempts', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
-        $this->assertArrayHasKey('type', $body);
+        $this->assertSame('link_external_user', $body['type']);
         $this->assertSame('test_value', $body['claim_attempt_token']);
     }
 
@@ -144,7 +144,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_registration');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->getRegistration('test_id');
+        $result = $client->agents()->getRegistration(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentRegistration::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -190,7 +190,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_instance');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->getInstance('test_agent_instance_id');
+        $result = $client->agents()->getInstance(agentInstanceId: 'test_agent_instance_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentInstance::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['agent_blueprint_id'], $result->agentBlueprintId);
@@ -203,7 +203,7 @@ class AgentsTest extends TestCase
     public function testDeleteInstance(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->agents()->deleteInstance('test_agent_instance_id');
+        $client->agents()->deleteInstance(agentInstanceId: 'test_agent_instance_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('agents/instances/test_agent_instance_id', $request->getUri()->getPath());
@@ -232,7 +232,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_instance_session');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->getSession('test_agent_instance_session_id');
+        $result = $client->agents()->getSession(agentInstanceSessionId: 'test_agent_instance_session_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentInstanceSession::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);
@@ -246,7 +246,7 @@ class AgentsTest extends TestCase
     {
         $fixture = $this->loadFixture('agent_instance_session');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->agents()->revokeSession('test_agent_instance_session_id');
+        $result = $client->agents()->revokeSession(agentInstanceSessionId: 'test_agent_instance_session_id');
         $this->assertInstanceOf(\WorkOS\Resource\AgentInstanceSession::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['agent_instance_id'], $result->agentInstanceId);

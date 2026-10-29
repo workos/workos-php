@@ -13,6 +13,8 @@ readonly class SendEmailChange implements \JsonSerializable
     public function __construct(
         /** The new email address to change to. */
         public string $newEmail,
+        /** The locale to use when rendering the email change email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization). */
+        public ?SendEmailChangeLocale $locale = null,
     ) {
     }
 
@@ -20,6 +22,7 @@ readonly class SendEmailChange implements \JsonSerializable
     {
         return new self(
             newEmail: $data['new_email'],
+            locale: isset($data['locale']) ? SendEmailChangeLocale::from($data['locale']) : null,
         );
     }
 
@@ -27,6 +30,7 @@ readonly class SendEmailChange implements \JsonSerializable
     {
         return [
             'new_email' => $this->newEmail,
+            'locale' => $this->locale?->value,
         ];
     }
 }

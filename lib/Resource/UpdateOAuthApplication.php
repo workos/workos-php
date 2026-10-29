@@ -25,6 +25,11 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
          * @var array<\WorkOS\Resource\RedirectUriInput>|null
          */
         public ?array $redirectUris = null,
+        /**
+         * Updated origins allowed to call the OAuth token endpoint for this application from a browser. Replaces the existing list. OAuth applications only.
+         * @var array<string>|null
+         */
+        public ?array $corsOrigins = null,
     ) {
     }
 
@@ -35,6 +40,7 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,
             redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => RedirectUriInput::fromArray($item), $data['redirect_uris']) : null,
+            corsOrigins: $data['cors_origins'] ?? null,
         );
     }
 
@@ -45,6 +51,7 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
             'description' => $this->description,
             'scopes' => $this->scopes,
             'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'cors_origins' => $this->corsOrigins,
         ];
     }
 }

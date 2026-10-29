@@ -34,7 +34,7 @@ class OrganizationDomainsTest extends TestCase
     {
         $fixture = $this->loadFixture('organization_domain');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationDomains()->getOrganizationDomain('test_id');
+        $result = $client->organizationDomains()->getOrganizationDomain(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -47,7 +47,7 @@ class OrganizationDomainsTest extends TestCase
     public function testDeleteOrganizationDomain(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->organizationDomains()->deleteOrganizationDomain('test_id');
+        $client->organizationDomains()->deleteOrganizationDomain(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('organization_domains/test_id', $request->getUri()->getPath());
@@ -57,7 +57,7 @@ class OrganizationDomainsTest extends TestCase
     {
         $fixture = $this->loadFixture('organization_domain');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationDomains()->verifyOrganizationDomain('test_id');
+        $result = $client->organizationDomains()->verifyOrganizationDomain(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationDomain::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);

@@ -73,9 +73,9 @@ class Agents
         ?string $description = null,
         ?array $permissions = null,
         ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableBy $invocableBy = null,
-        ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableAs $invocableAs = null,
         ?\WorkOS\Resource\AgentBlueprintsCreateRequestSessionSetting $sessionSettings = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\AgentBlueprintsCreateRequestInvocableAs $invocableAs = null,
     ): \WorkOS\Resource\AgentBlueprint {
         $body = array_filter([
             'name' => $name,
@@ -134,9 +134,9 @@ class Agents
         ?string $description = null,
         ?array $permissions = null,
         ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableBy $invocableBy = null,
-        ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableAs $invocableAs = null,
         ?\WorkOS\Resource\AgentBlueprintsUpdateRequestSessionSetting $sessionSettings = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\AgentBlueprintsUpdateRequestInvocableAs $invocableAs = null,
     ): \WorkOS\Resource\AgentBlueprint {
         $body = array_filter([
             'name' => $name,

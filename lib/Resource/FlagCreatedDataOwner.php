@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The owner of the Feature Flag. */
 readonly class FlagCreatedDataOwner implements \JsonSerializable
 {
     use JsonSerializableTrait;

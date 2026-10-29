@@ -15,7 +15,7 @@ readonly class DataIntegrationsCreateApiKeyConnectionRequest implements \JsonSer
         public string $userId,
         /** The API key secret to store for this integration. */
         public string $secret,
-        /** Must be `add`: this endpoint only creates another connection. The first connection for an owner shape fills the compatibility slot; later connections are standard. Creating an additional connection is not yet available: until it is, `add` succeeds only when the owner has no connection for this integration and otherwise returns 404 `multiple_connections_unavailable`. */
+        /** Must be `add`: this endpoint only creates another connection. The first connection for an owner shape fills the compatibility slot; later connections are standard. */
         public string $connectionIntent,
         /** A mutable, non-unique label. Omit to preserve an existing label; null clears it. Labels are never account identifiers. */
         public ?string $accountDisplayName = null,

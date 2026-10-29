@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** Fields to update on the agent blueprint. Omitted fields are left unchanged; provided lists replace the existing configuration. */
 readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;

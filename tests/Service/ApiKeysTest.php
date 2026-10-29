@@ -17,7 +17,7 @@ class ApiKeysTest extends TestCase
     {
         $fixture = $this->loadFixture('list_organization_api_key');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->apiKeys()->listOrganizationApiKeys(organizationId: 'test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -33,7 +33,7 @@ class ApiKeysTest extends TestCase
     {
         $fixture = $this->loadFixture('organization_api_key_with_value');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->createOrganizationApiKey('test_organizationId', name: 'test_value');
+        $result = $client->apiKeys()->createOrganizationApiKey(organizationId: 'test_organizationId', name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationApiKeyWithValue::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -62,7 +62,7 @@ class ApiKeysTest extends TestCase
     public function testDeleteApiKey(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->apiKeys()->deleteApiKey('test_id');
+        $client->apiKeys()->deleteApiKey(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('api_keys/test_id', $request->getUri()->getPath());
@@ -72,7 +72,7 @@ class ApiKeysTest extends TestCase
     {
         $fixture = $this->loadFixture('api_key');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->createApiKeyExpire('test_id');
+        $result = $client->apiKeys()->createApiKeyExpire(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\ApiKey::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -89,7 +89,7 @@ class ApiKeysTest extends TestCase
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->apiKeys()->listOrganizationApiKeys('test_organizationId');
+        $result = $client->apiKeys()->listOrganizationApiKeys(organizationId: 'test_organizationId');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);

@@ -513,11 +513,11 @@ class SSO
      */
     public function getProfileAndToken(
         ?string $code = null,
-        ?string $codeVerifier = null,
         ?string $subjectToken = null,
         ?string $subjectTokenType = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?string $codeVerifier = null,
     ): \WorkOS\Resource\SSOTokenResponse {
         $body = array_filter([
             'code' => $code,

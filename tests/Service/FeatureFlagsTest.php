@@ -33,7 +33,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->getFeatureFlag('test_slug');
+        $result = $client->featureFlags()->getFeatureFlag(slug: 'test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\Flag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
@@ -47,7 +47,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('feature_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->disableFeatureFlag('test_slug');
+        $result = $client->featureFlags()->disableFeatureFlag(slug: 'test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
@@ -61,7 +61,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('feature_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->enableFeatureFlag('test_slug');
+        $result = $client->featureFlags()->enableFeatureFlag(slug: 'test_slug');
         $this->assertInstanceOf(\WorkOS\Resource\FeatureFlag::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['slug'], $result->slug);
@@ -74,7 +74,7 @@ class FeatureFlagsTest extends TestCase
     public function testAddFlagTarget(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->featureFlags()->addFlagTarget('test_resourceId', 'test_slug');
+        $client->featureFlags()->addFlagTarget(resourceId: 'test_resourceId', slug: 'test_slug');
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/targets/test_resourceId', $request->getUri()->getPath());
@@ -83,7 +83,7 @@ class FeatureFlagsTest extends TestCase
     public function testRemoveFlagTarget(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->featureFlags()->removeFlagTarget('test_resourceId', 'test_slug');
+        $client->featureFlags()->removeFlagTarget(resourceId: 'test_resourceId', slug: 'test_slug');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('feature-flags/test_slug/targets/test_resourceId', $request->getUri()->getPath());
@@ -93,7 +93,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listOrganizationFeatureFlags('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->featureFlags()->listOrganizationFeatureFlags(organizationId: 'test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -109,7 +109,7 @@ class FeatureFlagsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_flag');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->featureFlags()->listUserFeatureFlags('test_userId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->featureFlags()->listUserFeatureFlags(userId: 'test_userId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

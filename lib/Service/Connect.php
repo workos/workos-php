@@ -198,6 +198,7 @@ class Connect
      * @param string|null $description A description for the application.
      * @param array<string>|null $scopes The OAuth scopes granted to the application.
      * @param array<\WorkOS\Resource\RedirectUriInput>|null $redirectUris Updated redirect URIs for the application. OAuth applications only.
+     * @param array<string>|null $corsOrigins Updated origins allowed to call the OAuth token endpoint for this application from a browser. Replaces the existing list. OAuth applications only.
      * @return \WorkOS\Resource\ConnectApplication
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -208,12 +209,14 @@ class Connect
         ?array $scopes = null,
         ?array $redirectUris = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?array $corsOrigins = null,
     ): \WorkOS\Resource\ConnectApplication {
         $body = array_filter([
             'name' => $name,
             'description' => $description,
             'scopes' => $scopes,
             'redirect_uris' => $redirectUris,
+            'cors_origins' => $corsOrigins,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
             method: 'PUT',

@@ -53,7 +53,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_idp_signing_certificate_list');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->listConnectionSAMLIdpSigningCerts('test_connectionId');
+        $result = $client->sso()->listConnectionSAMLIdpSigningCerts(connectionId: 'test_connectionId');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLIdpSigningCertificateList::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -65,7 +65,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_idp_signing_certificate');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->createConnectionSAMLIdpSigningCert('test_connectionId', value: 'test_value');
+        $result = $client->sso()->createConnectionSAMLIdpSigningCert(connectionId: 'test_connectionId', value: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLIdpSigningCertificate::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['value'], $result->value);
@@ -80,7 +80,7 @@ class SSOTest extends TestCase
     public function testDeleteConnectionSAMLIdpSigningCert(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->sso()->deleteConnectionSAMLIdpSigningCert('test_connectionId', 'test_certificateId');
+        $client->sso()->deleteConnectionSAMLIdpSigningCert(connectionId: 'test_connectionId', certificateId: 'test_certificateId');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connections/test_connectionId/saml_idp_signing_certs/test_certificateId', $request->getUri()->getPath());
@@ -90,7 +90,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_sp_encryption_certificate_list');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->listConnectionSAMLSpEncryptionCerts('test_connectionId');
+        $result = $client->sso()->listConnectionSAMLSpEncryptionCerts(connectionId: 'test_connectionId');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLSpEncryptionCertificateList::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -102,7 +102,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_sp_encryption_certificate');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->createConnectionSAMLSpEncryptionCert('test_connectionId');
+        $result = $client->sso()->createConnectionSAMLSpEncryptionCert(connectionId: 'test_connectionId');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLSpEncryptionCertificate::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['value'], $result->value);
@@ -115,7 +115,7 @@ class SSOTest extends TestCase
     public function testDeleteConnectionSAMLSpEncryptionCert(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->sso()->deleteConnectionSAMLSpEncryptionCert('test_connectionId', 'test_certificateId');
+        $client->sso()->deleteConnectionSAMLSpEncryptionCert(connectionId: 'test_connectionId', certificateId: 'test_certificateId');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connections/test_connectionId/saml_sp_encryption_certs/test_certificateId', $request->getUri()->getPath());
@@ -125,7 +125,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_sp_signing_certificate');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->listConnectionSAMLSpSigningCert('test_connectionId');
+        $result = $client->sso()->listConnectionSAMLSpSigningCert(connectionId: 'test_connectionId');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLSpSigningCertificate::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['value'], $result->value);
@@ -139,7 +139,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('saml_sp_signing_certificate');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->createConnectionSAMLSpSigningCert('test_connectionId');
+        $result = $client->sso()->createConnectionSAMLSpSigningCert(connectionId: 'test_connectionId');
         $this->assertInstanceOf(\WorkOS\Resource\SAMLSpSigningCertificate::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['value'], $result->value);
@@ -152,7 +152,7 @@ class SSOTest extends TestCase
     public function testDeleteConnectionSAMLSpSigningCert(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->sso()->deleteConnectionSAMLSpSigningCert('test_connectionId', 'test_certificateId');
+        $client->sso()->deleteConnectionSAMLSpSigningCert(connectionId: 'test_connectionId', certificateId: 'test_certificateId');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connections/test_connectionId/saml_sp_signing_cert/test_certificateId', $request->getUri()->getPath());
@@ -162,7 +162,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('connection');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->getConnection('test_id');
+        $result = $client->sso()->getConnection(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -176,7 +176,7 @@ class SSOTest extends TestCase
     {
         $fixture = $this->loadFixture('connection');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->sso()->updateConnection('test_id');
+        $result = $client->sso()->updateConnection(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Connection::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -189,7 +189,7 @@ class SSOTest extends TestCase
     public function testDeleteConnection(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->sso()->deleteConnection('test_id');
+        $client->sso()->deleteConnection(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connections/test_id', $request->getUri()->getPath());
@@ -198,7 +198,7 @@ class SSOTest extends TestCase
     public function testGetAuthorizationUrl(): void
     {
         $client = $this->createMockClient([]);
-        $result = $client->sso()->getAuthorizationUrl(providerScopes: [], providerQueryParams: [], domain: 'test_value', provider: \WorkOS\Resource\SSOProvider::AppleOAuth, redirectUri: 'test_value', state: 'test_value', connection: 'test_value', organization: 'test_value', domainHint: 'test_value', loginHint: 'test_value', nonce: 'test_value', prompt: 'test_value');
+        $result = $client->sso()->getAuthorizationUrl(providerScopes: [], providerQueryParams: [], domain: 'test_value', provider: \WorkOS\Resource\SSOProvider::AppleOAuth, redirectUri: 'test_value', state: 'test_value', connection: 'test_value', organization: 'test_value', domainHint: 'test_value', loginHint: 'test_value', nonce: 'test_value', prompt: 'login');
         $this->assertIsString($result);
         $this->assertStringContainsString('sso/authorize', $result);
         parse_str(parse_url($result, PHP_URL_QUERY) ?? '', $query);

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The agent credential to validate. Either an `api_key` or an `access_token`, discriminated by `type`. */
 readonly class AgentAdminValidateCredentialRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;

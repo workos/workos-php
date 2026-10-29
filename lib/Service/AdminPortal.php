@@ -40,10 +40,10 @@ class AdminPortal
         string $organization,
         ?string $returnUrl = null,
         ?string $successUrl = null,
-        ?string $externalUserId = null,
         ?\WorkOS\Resource\GenerateLinkIntent $intent = null,
         ?array $itContactEmails = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?string $externalUserId = null,
     ): \WorkOS\Resource\PortalLinkResponse {
         $body = array_filter([
             'return_url' => $returnUrl,

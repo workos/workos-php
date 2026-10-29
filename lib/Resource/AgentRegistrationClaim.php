@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The claim associated with this registration, or `null` if the registration has no claim. */
 readonly class AgentRegistrationClaim implements \JsonSerializable
 {
     use JsonSerializableTrait;

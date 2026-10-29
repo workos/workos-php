@@ -37,6 +37,11 @@ readonly class ConnectApplication implements \JsonSerializable
          * @var array<\WorkOS\Resource\ConnectApplicationRedirectUri>|null
          */
         public ?array $redirectUris = null,
+        /**
+         * The CORS origins allowed to call the OAuth token endpoint for this application from a browser.
+         * @var array<string>|null
+         */
+        public ?array $corsOrigins = null,
         /** Whether the application uses PKCE for authorization. */
         public ?bool $usesPkce = null,
         /** Whether the application is a first-party application. */
@@ -61,6 +66,7 @@ readonly class ConnectApplication implements \JsonSerializable
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             applicationType: $data['application_type'] ?? null,
             redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => ConnectApplicationRedirectUri::fromArray($item), $data['redirect_uris']) : null,
+            corsOrigins: $data['cors_origins'] ?? null,
             usesPkce: $data['uses_pkce'] ?? null,
             isFirstParty: $data['is_first_party'] ?? null,
             wasDynamicallyRegistered: $data['was_dynamically_registered'] ?? null,
@@ -81,6 +87,7 @@ readonly class ConnectApplication implements \JsonSerializable
             'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
             'application_type' => $this->applicationType,
             'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'cors_origins' => $this->corsOrigins,
             'uses_pkce' => $this->usesPkce,
             'is_first_party' => $this->isFirstParty,
             'was_dynamically_registered' => $this->wasDynamicallyRegistered,

@@ -140,7 +140,7 @@ class AuditLogs
     /**
      * Create Schema
      *
-     * Creates a new Audit Log schema used to validate the payload of incoming Audit Log Events. If the `action` does not exist, it will also be created.
+     * Creates an Audit Log schema used to validate incoming Audit Log events, or returns the latest version if the submitted schema matches it. If the schema differs from the latest version, creates and returns a new version. If the action does not exist, creates the action and its first schema version.
      * @param string $actionName The name of the Audit Log action.
      * @param \WorkOS\Resource\AuditLogSchemaActorInput|null $actor The metadata schema for the actor.
      * @param array<\WorkOS\Resource\AuditLogSchemaTargetInput> $targets The list of targets for the schema.

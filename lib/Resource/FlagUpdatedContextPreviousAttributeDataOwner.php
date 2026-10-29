@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The previous owner of the flag, or `null` if it had none. */
 readonly class FlagUpdatedContextPreviousAttributeDataOwner implements \JsonSerializable
 {
     use JsonSerializableTrait;

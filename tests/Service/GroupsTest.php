@@ -17,7 +17,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listOrganizationGroups('test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, search: 'test_value');
+        $result = $client->groups()->listOrganizationGroups(organizationId: 'test_organizationId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, search: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -34,7 +34,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->createOrganizationGroup('test_organizationId', name: 'test_value');
+        $result = $client->groups()->createOrganizationGroup(organizationId: 'test_organizationId', name: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Group::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -50,7 +50,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->getOrganizationGroup('test_organizationId', 'test_groupId');
+        $result = $client->groups()->getOrganizationGroup(organizationId: 'test_organizationId', groupId: 'test_groupId');
         $this->assertInstanceOf(\WorkOS\Resource\Group::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -64,7 +64,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->updateOrganizationGroup('test_organizationId', 'test_groupId');
+        $result = $client->groups()->updateOrganizationGroup(organizationId: 'test_organizationId', groupId: 'test_groupId');
         $this->assertInstanceOf(\WorkOS\Resource\Group::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -77,7 +77,7 @@ class GroupsTest extends TestCase
     public function testDeleteOrganizationGroup(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->groups()->deleteOrganizationGroup('test_organizationId', 'test_groupId');
+        $client->groups()->deleteOrganizationGroup(organizationId: 'test_organizationId', groupId: 'test_groupId');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/groups/test_groupId', $request->getUri()->getPath());
@@ -87,7 +87,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_user_organization_membership_base_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listGroupOrganizationMemberships('test_organizationId', 'test_groupId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->groups()->listGroupOrganizationMemberships(organizationId: 'test_organizationId', groupId: 'test_groupId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -103,7 +103,7 @@ class GroupsTest extends TestCase
     {
         $fixture = $this->loadFixture('group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->createGroupOrganizationMembership('test_organizationId', 'test_groupId', organizationMembershipId: 'test_value');
+        $result = $client->groups()->createGroupOrganizationMembership(organizationId: 'test_organizationId', groupId: 'test_groupId', organizationMembershipId: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\Group::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -118,7 +118,7 @@ class GroupsTest extends TestCase
     public function testDeleteGroupOrganizationMembership(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->groups()->deleteGroupOrganizationMembership('test_organizationId', 'test_groupId', 'test_omId');
+        $client->groups()->deleteGroupOrganizationMembership(organizationId: 'test_organizationId', groupId: 'test_groupId', omId: 'test_omId');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/groups/test_groupId/organization-memberships/test_omId', $request->getUri()->getPath());
@@ -131,7 +131,7 @@ class GroupsTest extends TestCase
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->groups()->listOrganizationGroups('test_organizationId');
+        $result = $client->groups()->listOrganizationGroups(organizationId: 'test_organizationId');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);

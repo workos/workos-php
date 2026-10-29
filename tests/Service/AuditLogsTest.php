@@ -17,7 +17,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_logs_retention');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->getOrganizationAuditLogsRetention('test_id');
+        $result = $client->auditLogs()->getOrganizationAuditLogsRetention(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetention::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -29,7 +29,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_logs_retention');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->updateOrganizationAuditLogsRetention('test_id', retention: new \WorkOS\Service\RetentionPeriod(period: \WorkOS\Resource\UpdateAuditLogsRetentionRetentionPeriod::Value1Month));
+        $result = $client->auditLogs()->updateOrganizationAuditLogsRetention(id: 'test_id', retention: new \WorkOS\Service\RetentionPeriod(period: \WorkOS\Resource\UpdateAuditLogsRetentionRetentionPeriod::Value1Month));
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogsRetention::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -57,7 +57,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_audit_log_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->listActionSchemas('test_actionName', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->auditLogs()->listActionSchemas(actionName: 'test_actionName', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -73,7 +73,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_log_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->createSchema('test_actionName', targets: []);
+        $result = $client->auditLogs()->createSchema(actionName: 'test_actionName', targets: []);
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogSchema::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -116,7 +116,7 @@ class AuditLogsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_log_export');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->auditLogs()->getExport('test_auditLogExportId');
+        $result = $client->auditLogs()->getExport(auditLogExportId: 'test_auditLogExportId');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogExport::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());

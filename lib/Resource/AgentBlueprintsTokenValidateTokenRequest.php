@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The agent access token to validate. */
 readonly class AgentBlueprintsTokenValidateTokenRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;

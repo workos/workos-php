@@ -29,6 +29,11 @@ readonly class CreateOAuthApplication implements \JsonSerializable
          * @var array<\WorkOS\Resource\RedirectUriInput>|null
          */
         public ?array $redirectUris = null,
+        /**
+         * Origins allowed to call the OAuth token endpoint for this application from a browser.
+         * @var array<string>|null
+         */
+        public ?array $corsOrigins = null,
         /** Whether the application uses PKCE (Proof Key for Code Exchange). */
         public ?bool $usesPkce = null,
         /** The organization ID this application belongs to. Required when is_first_party is false. */
@@ -45,6 +50,7 @@ readonly class CreateOAuthApplication implements \JsonSerializable
             description: $data['description'] ?? null,
             scopes: $data['scopes'] ?? null,
             redirectUris: isset($data['redirect_uris']) ? array_map(fn ($item) => RedirectUriInput::fromArray($item), $data['redirect_uris']) : null,
+            corsOrigins: $data['cors_origins'] ?? null,
             usesPkce: $data['uses_pkce'] ?? null,
             organizationId: $data['organization_id'] ?? null,
         );
@@ -59,6 +65,7 @@ readonly class CreateOAuthApplication implements \JsonSerializable
             'description' => $this->description,
             'scopes' => $this->scopes,
             'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'cors_origins' => $this->corsOrigins,
             'uses_pkce' => $this->usesPkce,
             'organization_id' => $this->organizationId,
         ];

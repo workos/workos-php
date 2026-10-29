@@ -36,7 +36,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('directory');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->getDirectory('test_id');
+        $result = $client->directorySync()->getDirectory(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Directory::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
@@ -49,7 +49,7 @@ class DirectorySyncTest extends TestCase
     public function testDeleteDirectory(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->directorySync()->deleteDirectory('test_id');
+        $client->directorySync()->deleteDirectory(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('directories/test_id', $request->getUri()->getPath());
@@ -89,7 +89,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('directory_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->getGroup('test_id');
+        $result = $client->directorySync()->getGroup(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryGroup::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['idp_id'], $result->idpId);
@@ -123,7 +123,7 @@ class DirectorySyncTest extends TestCase
     {
         $fixture = $this->loadFixture('directory_user_with_groups');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->directorySync()->getUser('test_id');
+        $result = $client->directorySync()->getUser(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\DirectoryUserWithGroups::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['directory_id'], $result->directoryId);

@@ -52,7 +52,7 @@ class OrganizationMembershipTest extends TestCase
     {
         $fixture = $this->loadFixture('user_organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationMembership()->getOrganizationMembership('test_id');
+        $result = $client->organizationMembership()->getOrganizationMembership(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
@@ -66,7 +66,7 @@ class OrganizationMembershipTest extends TestCase
     {
         $fixture = $this->loadFixture('user_organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationMembership()->updateOrganizationMembership('test_id');
+        $result = $client->organizationMembership()->updateOrganizationMembership(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
@@ -79,7 +79,7 @@ class OrganizationMembershipTest extends TestCase
     public function testDeleteOrganizationMembership(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->organizationMembership()->deleteOrganizationMembership('test_id');
+        $client->organizationMembership()->deleteOrganizationMembership(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('user_management/organization_memberships/test_id', $request->getUri()->getPath());
@@ -89,7 +89,7 @@ class OrganizationMembershipTest extends TestCase
     {
         $fixture = $this->loadFixture('organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationMembership()->deactivateOrganizationMembership('test_id');
+        $result = $client->organizationMembership()->deactivateOrganizationMembership(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\OrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
@@ -103,7 +103,7 @@ class OrganizationMembershipTest extends TestCase
     {
         $fixture = $this->loadFixture('user_organization_membership');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationMembership()->reactivateOrganizationMembership('test_id');
+        $result = $client->organizationMembership()->reactivateOrganizationMembership(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\UserOrganizationMembership::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['user_id'], $result->userId);
@@ -117,7 +117,7 @@ class OrganizationMembershipTest extends TestCase
     {
         $fixture = $this->loadFixture('list_group');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizationMembership()->listOrganizationMembershipGroups('test_omId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->organizationMembership()->listOrganizationMembershipGroups(omId: 'test_omId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());

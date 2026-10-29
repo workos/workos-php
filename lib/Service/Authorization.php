@@ -121,6 +121,35 @@ class Authorization
     }
 
     /**
+     * Update role assignments for a group
+     *
+     * Add and remove role assignments for a group in a single atomic operation. Additions that already exist and removals that match no assignment are skipped. An assignment in both lists is rejected. `add` and `remove` must contain between 1 and 100 entries combined.
+     * @param string $groupId The ID of the group.
+     * @param array<\WorkOS\Resource\ReplaceGroupRoleAssignmentEntry>|null $add Role assignments to add to the group. Assignments that already exist are skipped.
+     * @param array<\WorkOS\Resource\ReplaceGroupRoleAssignmentEntry>|null $remove Role assignments to remove from the group. Entries that match no assignment are skipped.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function patchGroupRoleAssignments(
+        string $groupId,
+        ?array $add = null,
+        ?array $remove = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $body = array_filter([
+            'add' => $add,
+            'remove' => $remove,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PATCH',
+            path: 'authorization/groups/' . rawurlencode($groupId) . '/role_assignments',
+            body: $body,
+            options: $options,
+        );
+        return $response;
+    }
+
+    /**
      * Remove group role assignments by criteria
      *
      * Remove role assignments from a group that match the provided criteria. Returns 404 when no matching active assignment is found.

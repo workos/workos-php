@@ -16,4 +16,5 @@ enum ResourceExportFailedDataResourceType: string
     case Connections = 'connections';
     case DirectoryUsers = 'directoryUsers';
     case SCIMLogs = 'scimLogs';
+    case RadarDetections = 'radarDetections';
 }
