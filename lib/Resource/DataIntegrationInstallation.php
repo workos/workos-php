@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The tenant installation created when an API key was supplied at creation time; `null` otherwise. Not populated on list/get responses. */
 readonly class DataIntegrationInstallation implements \JsonSerializable
 {
     use JsonSerializableTrait;

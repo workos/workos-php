@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The OAuth definition when this is a custom provider; `null` for built-in providers. */
 readonly class DataIntegrationCustomProvider implements \JsonSerializable
 {
     use JsonSerializableTrait;
