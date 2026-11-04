@@ -35,7 +35,7 @@ readonly class ConnectionSAMLCertificateRenewedData implements \JsonSerializable
         return [
             'connection' => $this->connection->toArray(),
             'certificate' => $this->certificate->toArray(),
-            'renewed_at' => $this->renewedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'renewed_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->renewedAt),
         ];
     }
 }

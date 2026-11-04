@@ -55,7 +55,7 @@ readonly class OrganizationConnectedAccount implements \JsonSerializable
             'account_identifier' => $this->accountIdentifier,
             'access_token' => $this->accessToken,
             'refresh_token' => $this->refreshToken,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'scopes' => $this->scopes,
             'state' => $this->state?->value,
         ];

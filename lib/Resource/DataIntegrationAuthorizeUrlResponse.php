@@ -13,6 +13,10 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     public function __construct(
         /** The OAuth authorization URL to redirect the user to. */
         public string $url,
+        /** Identifies this authorization. WorkOS adds it to `return_to` alongside `connect_code` or `error`. Store it in the user's session with the `code_verifier` and compare it when the user returns. */
+        public string $state,
+        /** `finish_required` when the request included `code_challenge`: the connection will be held until your app finishes it. Omitted otherwise. If you sent `code_challenge` and this is missing, don't redirect the user. */
+        public ?string $completion = null,
     ) {
     }
 
@@ -20,6 +24,8 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     {
         return new self(
             url: $data['url'],
+            state: $data['state'],
+            completion: $data['completion'] ?? null,
         );
     }
 
@@ -27,6 +33,8 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
     {
         return [
             'url' => $this->url,
+            'state' => $this->state,
+            'completion' => $this->completion,
         ];
     }
 }

@@ -51,7 +51,7 @@ readonly class ObjectMetadata implements \JsonSerializable
             'environment_id' => $this->environmentId,
             'id' => $this->id,
             'key_id' => $this->keyId,
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'updated_by' => $this->updatedBy->toArray(),
             'version_id' => $this->versionId,
         ];

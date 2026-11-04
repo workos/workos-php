@@ -35,7 +35,7 @@ readonly class ObjectSummary implements \JsonSerializable
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'updated_at' => $this->updatedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

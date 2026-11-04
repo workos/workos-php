@@ -124,7 +124,7 @@ class Vault
             'after' => $after,
             'order' => $order?->value,
             'search' => $search,
-            'updatedAfter' => $updatedAfter?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'updatedAfter' => \WorkOS\Internal\DateTimeFormat::iso8601($updatedAfter),
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',

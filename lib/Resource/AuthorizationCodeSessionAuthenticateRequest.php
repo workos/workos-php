@@ -22,7 +22,7 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
         public ?string $codeVerifier = null,
         /** An invitation token to accept during authentication. */
         public ?string $invitationToken = null,
-        /** The IP address of the user's request. */
+        /** The IP address of the user's request. Required when Radar is in Decision mode. */
         public ?string $ipAddress = null,
         /** A unique identifier for the device. */
         public ?string $deviceId = null,

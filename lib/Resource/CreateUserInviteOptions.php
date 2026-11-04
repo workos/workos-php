@@ -21,8 +21,8 @@ readonly class CreateUserInviteOptions implements \JsonSerializable
         public ?int $expiresInDays = null,
         /** The ID of the [user](https://workos.com/docs/reference/authkit/user) who invites the recipient. The invitation email will mention the name of this user. */
         public ?string $inviterUserId = null,
-        /** The locale to use when rendering the invitation email. See [supported locales](https://workos.com/docs/authkit/hosted-ui/localization). */
-        public ?CreateUserInviteOptionsLocale $locale = null,
+        /** The locale to use when rendering the invitation email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization). */
+        public ?SendEmailChangeLocale $locale = null,
     ) {
     }
 
@@ -34,7 +34,7 @@ readonly class CreateUserInviteOptions implements \JsonSerializable
             roleSlug: $data['role_slug'] ?? null,
             expiresInDays: $data['expires_in_days'] ?? null,
             inviterUserId: $data['inviter_user_id'] ?? null,
-            locale: isset($data['locale']) ? CreateUserInviteOptionsLocale::from($data['locale']) : null,
+            locale: isset($data['locale']) ? SendEmailChangeLocale::from($data['locale']) : null,
         );
     }
 

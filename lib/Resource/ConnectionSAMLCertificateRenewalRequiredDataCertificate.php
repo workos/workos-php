@@ -34,7 +34,7 @@ readonly class ConnectionSAMLCertificateRenewalRequiredDataCertificate implement
     {
         return [
             'certificate_type' => $this->certificateType->value,
-            'expiry_date' => $this->expiryDate->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expiry_date' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiryDate),
             'is_expired' => $this->isExpired,
         ];
     }

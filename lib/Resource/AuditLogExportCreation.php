@@ -64,8 +64,8 @@ readonly class AuditLogExportCreation implements \JsonSerializable
     {
         return [
             'organization_id' => $this->organizationId,
-            'range_start' => $this->rangeStart->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'range_end' => $this->rangeEnd->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'range_start' => \WorkOS\Internal\DateTimeFormat::iso8601($this->rangeStart),
+            'range_end' => \WorkOS\Internal\DateTimeFormat::iso8601($this->rangeEnd),
             'actions' => $this->actions,
             'actors' => $this->actors,
             'actor_names' => $this->actorNames,

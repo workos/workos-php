@@ -68,8 +68,8 @@ readonly class Organization implements \JsonSerializable
             'domains' => array_map(fn ($item) => $item->toArray(), $this->domains),
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'stripe_customer_id' => $this->stripeCustomerId,
             'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
         ];

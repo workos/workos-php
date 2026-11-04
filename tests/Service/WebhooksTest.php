@@ -49,7 +49,7 @@ class WebhooksTest extends TestCase
     {
         $fixture = $this->loadFixture('webhook_endpoint');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->webhooks()->updateWebhookEndpoint('test_id');
+        $result = $client->webhooks()->updateWebhookEndpoint(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpoint::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
@@ -62,7 +62,7 @@ class WebhooksTest extends TestCase
     public function testDeleteWebhookEndpoint(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->webhooks()->deleteWebhookEndpoint('test_id');
+        $client->webhooks()->deleteWebhookEndpoint(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('webhook_endpoints/test_id', $request->getUri()->getPath());

@@ -17,18 +17,16 @@ class EventsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_event_schema');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->events()->listEvents(before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal, events: [], rangeStart: 'test_value', rangeEnd: 'test_value', organizationId: 'test_value');
+        $result = $client->events()->listEvents(after: 'test_value', limit: 1, events: [], rangeStart: new \DateTimeImmutable('2023-01-01T00:00:00Z'), rangeEnd: new \DateTimeImmutable('2023-01-01T00:00:00Z'), organizationId: 'test_value');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
         $this->assertStringEndsWith('events', $request->getUri()->getPath());
         parse_str($request->getUri()->getQuery(), $query);
-        $this->assertSame('test_value', $query['before']);
         $this->assertSame('test_value', $query['after']);
         $this->assertArrayHasKey('limit', $query);
-        $this->assertSame('normal', $query['order']);
-        $this->assertSame('test_value', $query['range_start']);
-        $this->assertSame('test_value', $query['range_end']);
+        $this->assertArrayHasKey('range_start', $query);
+        $this->assertArrayHasKey('range_end', $query);
         $this->assertSame('test_value', $query['organization_id']);
     }
 

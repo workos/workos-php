@@ -30,15 +30,15 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
          */
         public ?array $missingScopes = null,
         /**
+         * Non-sensitive fields captured from the provider token response (e.g. Salesforce `instance_url`), as configured for the provider. Captured on OAuth code exchange and refresh, and on each `client_credentials` mint. A field a later OAuth refresh omits keeps its stored value. Present for `oauth` and `client_credentials` credentials; absent for `api_key`.
+         * @var array<string, mixed>|null
+         */
+        public ?array $metadata = null,
+        /**
          * Provider-declared, non-secret config from the installation snapshot, with current defaults for unset fields. Includes both integration- and installation-scope fields; omits undeclared fields and fields marked secret. Use these values to address a per-tenant host, such as Snowflake's `account` or Zendesk's `subdomain`. Empty when no values are disclosable. Changes to integration or organization pins require reconnecting or explicitly rebinding the connection. Defaults are live and can differ from a cached token's audience until refresh or re-mint.
          * @var array<string, string>|null
          */
         public ?array $config = null,
-        /**
-         * Non-sensitive fields captured from the provider token response (e.g. Salesforce `instance_url`), as configured for the provider. Only present for `client_credentials` credentials.
-         * @var array<string, mixed>|null
-         */
-        public ?array $metadata = null,
     ) {
     }
 
@@ -51,8 +51,8 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
             expiresAt: $data['expires_at'] ?? null,
             scopes: $data['scopes'] ?? null,
             missingScopes: $data['missing_scopes'] ?? null,
-            config: $data['config'] ?? null,
             metadata: $data['metadata'] ?? null,
+            config: $data['config'] ?? null,
         );
     }
 
@@ -65,8 +65,8 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
             'expires_at' => $this->expiresAt,
             'scopes' => $this->scopes,
             'missing_scopes' => $this->missingScopes,
-            'config' => $this->config,
             'metadata' => $this->metadata,
+            'config' => $this->config,
         ];
     }
 }

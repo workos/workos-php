@@ -49,8 +49,8 @@ readonly class GroupRoleAssignment implements \JsonSerializable
             'group_id' => $this->groupId,
             'role' => $this->role->toArray(),
             'resource' => $this->resource->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

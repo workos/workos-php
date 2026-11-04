@@ -15,7 +15,7 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
         public string $email,
         /** The invitation token to associate with this magic code. */
         public ?string $invitationToken = null,
-        /** The IP address of the user's request. */
+        /** The IP address of the user's request. Required when Radar is in Decision mode. */
         public ?string $ipAddress = null,
         /** The user agent string from the user's request. */
         public ?string $userAgent = null,
@@ -23,6 +23,8 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
         public ?string $radarAuthAttemptId = null,
         /** An optional Radar signals ID to correlate client-side signals with this request. */
         public ?string $signalsId = null,
+        /** The locale to use when rendering the Magic Auth email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization). */
+        public ?SendEmailChangeLocale $locale = null,
     ) {
     }
 
@@ -35,6 +37,7 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
             userAgent: $data['user_agent'] ?? null,
             radarAuthAttemptId: $data['radar_auth_attempt_id'] ?? null,
             signalsId: $data['signals_id'] ?? null,
+            locale: isset($data['locale']) ? SendEmailChangeLocale::from($data['locale']) : null,
         );
     }
 
@@ -47,6 +50,7 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
             'signals_id' => $this->signalsId,
+            'locale' => $this->locale?->value,
         ];
     }
 }

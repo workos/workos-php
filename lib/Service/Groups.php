@@ -223,6 +223,37 @@ class Groups
     }
 
     /**
+     * Update Group members
+     *
+     * Adds and removes organization memberships for a group in a single atomic operation. Organization memberships not listed in `add` or `remove` are left unchanged. Adding a member that is already in the group or removing a member that isn't in the group has no effect. A membership listed in both `add` and `remove` is rejected. `add` and `remove` must contain between 1 and 100 entries combined.
+     * @param string $organizationId Unique identifier of the Organization.
+     * @param string $groupId Unique identifier of the Group.
+     * @param array<string>|null $add The IDs of the organization memberships to add to the group. Adding a membership that's already in the group has no effect.
+     * @param array<string>|null $remove The IDs of the organization memberships to remove from the group. Removing a membership that isn't in the group has no effect.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateGroupOrganizationMemberships(
+        string $organizationId,
+        string $groupId,
+        ?array $add = null,
+        ?array $remove = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $body = array_filter([
+            'add' => $add,
+            'remove' => $remove,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PATCH',
+            path: 'organizations/' . rawurlencode($organizationId) . '/groups/' . rawurlencode($groupId) . '/organization-memberships',
+            body: $body,
+            options: $options,
+        );
+        return $response;
+    }
+
+    /**
      * Remove a member from a Group
      *
      * Remove an organization membership from a group.

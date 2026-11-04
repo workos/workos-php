@@ -61,11 +61,11 @@ readonly class OrganizationApiKey implements \JsonSerializable
             'owner' => $this->owner->toArray(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
-            'last_used_at' => $this->lastUsedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'last_used_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->lastUsedAt),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'permissions' => $this->permissions,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

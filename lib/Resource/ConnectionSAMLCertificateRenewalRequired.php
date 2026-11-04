@@ -43,7 +43,7 @@ readonly class ConnectionSAMLCertificateRenewalRequired implements \JsonSerializ
             'id' => $this->id,
             'event' => $this->event,
             'data' => $this->data->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'context' => $this->context?->toArray(),
         ];
     }

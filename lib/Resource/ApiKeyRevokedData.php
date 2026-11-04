@@ -65,7 +65,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,

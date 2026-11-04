@@ -66,7 +66,7 @@ readonly class PipesAccountConnectionAddFailedData implements \JsonSerializable
             'error_reason' => $this->errorReason,
             'provider_error' => $this->providerError,
             'provider_error_description' => $this->providerErrorDescription,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'account_identifier' => $this->accountIdentifier,
         ];
     }

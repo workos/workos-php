@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The group the role was derived from, or null if direct. */
 readonly class UserRoleAssignmentSourceGroup implements \JsonSerializable
 {
     use JsonSerializableTrait;

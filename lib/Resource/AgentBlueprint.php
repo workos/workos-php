@@ -64,8 +64,8 @@ readonly class AgentBlueprint implements \JsonSerializable
             'invocable_by' => $this->invocableBy->toArray(),
             'invocable_as' => $this->invocableAs->toArray(),
             'session_settings' => $this->sessionSettings->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

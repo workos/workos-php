@@ -46,8 +46,8 @@ readonly class PasswordResetCreatedData implements \JsonSerializable
             'id' => $this->id,
             'user_id' => $this->userId,
             'email' => $this->email,
-            'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
         ];
     }
 }

@@ -20,7 +20,7 @@ readonly class EmailCompletionSessionAuthenticateRequest implements \JsonSeriali
         public string $emailCompletionToken,
         /** The email address the user supplied for a profile the identity provider left without one. */
         public string $email,
-        /** The IP address of the user's request. */
+        /** The IP address of the user's request. Required when Radar is in Decision mode. */
         public ?string $ipAddress = null,
         /** A unique identifier for the device. */
         public ?string $deviceId = null,

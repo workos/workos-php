@@ -26,7 +26,7 @@ readonly class ExpireApiKey implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
         ];
     }
 }

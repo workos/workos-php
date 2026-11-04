@@ -51,7 +51,7 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return [
             'action' => $this->action,
-            'occurred_at' => $this->occurredAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'occurred_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->occurredAt),
             'actor' => $this->actor->toArray(),
             'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
             'context' => $this->context->toArray(),

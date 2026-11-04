@@ -19,13 +19,21 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
         public ?string $organizationId = null,
         /** Who will own the connected account. `user` (the default) connects the user's own account. `organization` connects the organization's shared account and requires `organization_id`. */
         public ?PipesOwnership $connectionOwner = null,
-        /** The URL to redirect the user to after authorization. */
+        /** The URL to redirect the user to after authorization. Required with `code_challenge`, and must then exactly match a redirect URI registered on one of the environment's applications. Loopback URLs match on any port; wildcard redirect URIs are not honored, and a `return_to` with a query string or fragment never matches. */
         public ?string $returnTo = null,
+        /** A PKCE-style code challenge: the base64url-encoded SHA-256 of a `code_verifier` your app keeps. When set, the connection isn't saved when the user finishes authorizing. Instead, the user is redirected to `return_to` with a `connect_code` and `state`, and your app must call [Finish connection](https://workos.com/docs/reference/pipes/connected-account/finish-connection) with the `connect_code` and `code_verifier` within 90 seconds to save it. */
+        public ?string $codeChallenge = null,
+        /** The method used to derive `code_challenge`. Only `S256` is supported, and it is the default. Requires `code_challenge`. */
+        public ?string $codeChallengeMethod = null,
         /**
          * Connect-time config values for the provider-declared `installation`-scope fields (e.g. a Zendesk `subdomain`), keyed by the config field. Only fields the provider declares may be supplied, and required fields must be provided unless already pinned on the integration.
          * @var array<string, string>|null
          */
         public ?array $config = null,
+        /** Which connection the request targets. Omit it to use the compatibility connection. Send `add` to create another connection: the first connection for an owner shape fills the compatibility slot, and later connections are standard. Send `reauthorize` with `connected_account_id` to reauthorize one exact connection. */
+        public ?DataIntegrationsGetDataIntegrationAuthorizeUrlRequestConnectionIntent $connectionIntent = null,
+        /** The exact connected account to reauthorize. Required with `connection_intent: reauthorize` and not accepted otherwise. */
+        public ?string $connectedAccountId = null,
     ) {
     }
 
@@ -37,7 +45,11 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
             returnTo: $data['return_to'] ?? null,
+            codeChallenge: $data['code_challenge'] ?? null,
+            codeChallengeMethod: $data['code_challenge_method'] ?? null,
             config: $data['config'] ?? null,
+            connectionIntent: isset($data['connection_intent']) ? DataIntegrationsGetDataIntegrationAuthorizeUrlRequestConnectionIntent::from($data['connection_intent']) : null,
+            connectedAccountId: $data['connected_account_id'] ?? null,
         );
     }
 
@@ -49,7 +61,11 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'return_to' => $this->returnTo,
+            'code_challenge' => $this->codeChallenge,
+            'code_challenge_method' => $this->codeChallengeMethod,
             'config' => $this->config,
+            'connection_intent' => $this->connectionIntent?->value,
+            'connected_account_id' => $this->connectedAccountId,
         ];
     }
 }

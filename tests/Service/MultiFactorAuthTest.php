@@ -17,7 +17,7 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('authentication_challenge_verify_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->verifyChallenge('test_id', code: 'test_value');
+        $result = $client->multiFactorAuth()->verifyChallenge(id: 'test_id', code: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationChallengeVerifyResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -44,7 +44,7 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('authentication_factor');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->getFactor('test_id');
+        $result = $client->multiFactorAuth()->getFactor(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationFactor::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
@@ -56,7 +56,7 @@ class MultiFactorAuthTest extends TestCase
     public function testDeleteFactor(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->multiFactorAuth()->deleteFactor('test_id');
+        $client->multiFactorAuth()->deleteFactor(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('auth/factors/test_id', $request->getUri()->getPath());
@@ -66,7 +66,7 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('authentication_challenge');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->challengeFactor('test_id');
+        $result = $client->multiFactorAuth()->challengeFactor(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuthenticationChallenge::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['authentication_factor_id'], $result->authenticationFactorId);
@@ -80,7 +80,7 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('list_authentication_factor');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->multiFactorAuth()->listUserAuthFactors(userlandUserId: 'test_userlandUserId', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -96,14 +96,14 @@ class MultiFactorAuthTest extends TestCase
     {
         $fixture = $this->loadFixture('user_authentication_factor_enroll_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->createUserAuthFactor('test_userlandUserId', type: 'test_value');
+        $result = $client->multiFactorAuth()->createUserAuthFactor(userlandUserId: 'test_userlandUserId', type: 'totp');
         $this->assertInstanceOf(\WorkOS\Resource\UserAuthenticationFactorEnrollResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('user_management/users/test_userlandUserId/auth_factors', $request->getUri()->getPath());
         $body = json_decode((string) $request->getBody(), true);
-        $this->assertArrayHasKey('type', $body);
+        $this->assertSame('totp', $body['type']);
     }
 
     public function testPaginationBoundary(): void
@@ -113,7 +113,7 @@ class MultiFactorAuthTest extends TestCase
         $fixture['list_metadata']['before'] = null;
         $fixture['list_metadata']['after'] = null;
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->multiFactorAuth()->listUserAuthFactors('test_userlandUserId');
+        $result = $client->multiFactorAuth()->listUserAuthFactors(userlandUserId: 'test_userlandUserId');
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         // Verify cursors are null on boundary page
         $this->assertNull($result->listMetadata['before']);

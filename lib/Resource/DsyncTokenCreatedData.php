@@ -46,7 +46,7 @@ readonly class DsyncTokenCreatedData implements \JsonSerializable
             'id' => $this->id,
             'directory_id' => $this->directoryId,
             'token_suffix' => $this->tokenSuffix,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'organization_id' => $this->organizationId,
         ];
     }
