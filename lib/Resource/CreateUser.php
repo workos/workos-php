@@ -28,7 +28,7 @@ readonly class CreateUser implements \JsonSerializable
         public ?array $metadata = null,
         /** The external ID of the user. */
         public ?string $externalId = null,
-        /** The IP address of the user's request. */
+        /** The IP address of the user's request. Required when Radar is in Decision mode. */
         public ?string $ipAddress = null,
         /** The user agent string from the user's request. */
         public ?string $userAgent = null,
