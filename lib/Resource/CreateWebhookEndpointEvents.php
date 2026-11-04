@@ -69,6 +69,14 @@ enum CreateWebhookEndpointEvents: string
     case FlagDeleted = 'flag.deleted';
     case FlagUpdated = 'flag.updated';
     case FlagRuleUpdated = 'flag.rule_updated';
+    case FeatureFlagsFlagCreated = 'feature_flags.flag.created';
+    case FeatureFlagsFlagUpdated = 'feature_flags.flag.updated';
+    case FeatureFlagsFlagDeleted = 'feature_flags.flag.deleted';
+    case FeatureFlagsFlagRuleCreated = 'feature_flags.flag_rule.created';
+    case FeatureFlagsFlagRuleUpdated = 'feature_flags.flag_rule.updated';
+    case FeatureFlagsFlagTargetCreated = 'feature_flags.flag_target.created';
+    case FeatureFlagsFlagRuleDeleted = 'feature_flags.flag_rule.deleted';
+    case FeatureFlagsFlagTargetDeleted = 'feature_flags.flag_target.deleted';
     case InvitationAccepted = 'invitation.accepted';
     case InvitationCreated = 'invitation.created';
     case InvitationResent = 'invitation.resent';
