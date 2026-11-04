@@ -175,6 +175,13 @@ class SessionManager
             ];
         }
 
+        if (!self::isUserAccessToken($decoded)) {
+            return [
+                'authenticated' => false,
+                'reason' => 'invalid_jwt',
+            ];
+        }
+
         return [
             'authenticated' => true,
             'session_id' => $decoded['sid'],
@@ -479,6 +486,23 @@ class SessionManager
      *
      * @return string|false The decoded bytes, or false on malformed input.
      */
+    /**
+     * Whether verified claims belong to a user session access token. Other
+     * token types signed by the same environment key (agent and widget
+     * tokens) must not authenticate a session cookie.
+     *
+     * @param array<string, mixed> $claims
+     */
+    private static function isUserAccessToken(array $claims): bool
+    {
+        $subProfile = $claims['sub_profile'] ?? null;
+
+        return is_string($claims['sid'] ?? null)
+            && (is_int($claims['auth_time'] ?? null) || is_float($claims['auth_time'] ?? null))
+            && ($subProfile === null || $subProfile === 'user')
+            && !isset($claims['sub_type']);
+    }
+
     private static function base64UrlDecode(string $segment): string|false
     {
         $remainder = strlen($segment) % 4;

@@ -161,7 +161,7 @@ class SessionManagerTest extends TestCase
         $b64u = static fn (string $bytes): string => rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
 
         $header = $b64u(json_encode(['alg' => $alg, 'typ' => 'JWT', 'kid' => $kid]));
-        $payload = $b64u(json_encode($claims));
+        $payload = $b64u(json_encode($claims + ['auth_time' => time()]));
         $signingInput = $header . '.' . $payload;
 
         openssl_sign($signingInput, $signature, $key, OPENSSL_ALGO_SHA256);
@@ -204,6 +204,60 @@ class SessionManagerTest extends TestCase
         $this->assertTrue($result['authenticated']);
         $this->assertSame('session_test', $result['session_id']);
         $this->assertSame('org_test', $result['organization_id']);
+    }
+
+    /**
+     * @return array<string, array{0: array<string, mixed>}>
+     */
+    public static function nonUserAccessTokenClaimsProvider(): array
+    {
+        return [
+            'agent sub_profile' => [['sub_profile' => 'ai_agent']],
+            'widget sub_type' => [['sub_type' => 'authkit']],
+            'missing auth_time' => [['auth_time' => null]],
+            'string auth_time' => [['auth_time' => '1700000000']],
+            'missing sid' => [['sid' => null]],
+            'numeric sid' => [['sid' => 123]],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $claims
+     */
+    #[DataProvider('nonUserAccessTokenClaimsProvider')]
+    public function testAuthenticateRejectsNonUserAccessToken(array $claims): void
+    {
+        [$jwks, $jwt] = $this->buildSignedJwt($claims + ['sid' => 'session_test', 'exp' => time() + 3600]);
+        $sealed = SessionManager::sealData(['access_token' => $jwt], $this->cookiePassword);
+
+        $client = $this->createMockClient([['status' => 200, 'body' => $jwks]]);
+        $result = $client->sessionManager()->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+
+        $this->assertFalse($result['authenticated']);
+        $this->assertSame('invalid_jwt', $result['reason']);
+    }
+
+    public function testAuthenticateAcceptsUserSubProfile(): void
+    {
+        [$jwks, $jwt] = $this->buildSignedJwt([
+            'sid' => 'session_test',
+            'sub_profile' => 'user',
+            'exp' => time() + 3600,
+        ]);
+        $sealed = SessionManager::sealData(['access_token' => $jwt], $this->cookiePassword);
+
+        $client = $this->createMockClient([['status' => 200, 'body' => $jwks]]);
+        $result = $client->sessionManager()->authenticate(
+            sessionData: $sealed,
+            cookiePassword: $this->cookiePassword,
+            clientId: 'client_123',
+        );
+
+        $this->assertTrue($result['authenticated']);
     }
 
     /**
