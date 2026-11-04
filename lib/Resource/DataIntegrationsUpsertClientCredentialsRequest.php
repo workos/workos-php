@@ -30,6 +30,10 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
          * @var array<string, string>|null
          */
         public ?array $config = null,
+        /** Send `reauthorize` with `connected_account_id` to reauthorize one exact connection. Omit it to use the compatibility connection; creating another connection lives on the POST route. */
+        public ?string $connectionIntent = null,
+        /** The exact connected account to reauthorize. Required with `connection_intent: reauthorize`; it may also be sent on its own to reauthorize that connection. */
+        public ?string $connectedAccountId = null,
     ) {
     }
 
@@ -44,6 +48,8 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
             config: $data['config'] ?? null,
+            connectionIntent: $data['connection_intent'] ?? null,
+            connectedAccountId: $data['connected_account_id'] ?? null,
         );
     }
 
@@ -58,6 +64,8 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'config' => $this->config,
+            'connection_intent' => $this->connectionIntent,
+            'connected_account_id' => $this->connectedAccountId,
         ];
     }
 }

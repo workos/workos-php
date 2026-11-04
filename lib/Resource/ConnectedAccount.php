@@ -63,6 +63,11 @@ readonly class ConnectedAccount implements \JsonSerializable
          * Additional values may be added; treat an unrecognized value as an unknown reason.
          */
         public ?string $stateReason = null,
+        /**
+         * Non-blocking warnings about an explicitly supplied label. Only writes return it, and only when another connection already uses the label; reads omit it.
+         * @var array<\WorkOS\Resource\ConnectedAccountWarning>|null
+         */
+        public ?array $warnings = null,
     ) {
     }
 
@@ -87,6 +92,7 @@ readonly class ConnectedAccount implements \JsonSerializable
             config: $data['config'] ?? null,
             establishedByUserId: $data['established_by_user_id'] ?? null,
             stateReason: $data['state_reason'] ?? null,
+            warnings: isset($data['warnings']) ? array_map(fn ($item) => ConnectedAccountWarning::fromArray($item), $data['warnings']) : null,
         );
     }
 
@@ -111,6 +117,7 @@ readonly class ConnectedAccount implements \JsonSerializable
             'config' => $this->config,
             'established_by_user_id' => $this->establishedByUserId,
             'state_reason' => $this->stateReason,
+            'warnings' => $this->warnings !== null ? array_map(fn ($item) => $item->toArray(), $this->warnings) : null,
         ];
     }
 }

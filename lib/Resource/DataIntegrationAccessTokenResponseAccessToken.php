@@ -47,7 +47,7 @@ readonly class DataIntegrationAccessTokenResponseAccessToken implements \JsonSer
         return [
             'object' => $this->object,
             'access_token' => $this->accessToken,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'scopes' => $this->scopes,
             'missing_scopes' => $this->missingScopes,
         ];

@@ -98,8 +98,8 @@ readonly class DataIntegration implements \JsonSerializable
             'installation' => $this->installation?->toArray(),
             'config' => $this->config,
             'custom_provider' => $this->customProvider?->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }
