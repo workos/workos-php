@@ -1,5 +1,23 @@
 # Changelog
 
+## [9.6.0](https://github.com/workos/workos-php/compare/v9.5.0...v9.6.0) (2026-11-04)
+
+
+### Features
+
+* **events:** Change events API surface ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+* **feature_flags:** Add feature flag API surface ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+* **pipes:** Change Pipes API surface ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+* **user_management:** Change user management API surface ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+* **webhooks:** Add webhook API surface ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+
+
+### Bug Fixes
+
+* **events:** Updated model `EventSchema` ([#462](https://github.com/workos/workos-php/issues/462)) ([a97bd19](https://github.com/workos/workos-php/commit/a97bd1935f3c4227423af7498e4c36046e8f3690))
+* handle Guzzle 8 network and response timeout exceptions ([#458](https://github.com/workos/workos-php/issues/458)) ([ca02b5c](https://github.com/workos/workos-php/commit/ca02b5cc1e4ece0d67ee6f9199e51aafdf8820d2))
+* Send one Idempotency-Key on every POST and its retries ([#457](https://github.com/workos/workos-php/issues/457)) ([8e82d9d](https://github.com/workos/workos-php/commit/8e82d9dbf1a968eabdc367f2d344e857968b9a30))
+
 ## [9.5.0](https://github.com/workos/workos-php/compare/v9.4.0...v9.5.0) (2026-10-19)
 
 ### Miscellaneous Chores
