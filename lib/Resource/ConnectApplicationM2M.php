@@ -62,8 +62,8 @@ readonly class ConnectApplicationM2M implements \JsonSerializable
             'description' => $this->description,
             'name' => $this->name,
             'scopes' => $this->scopes,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'application_type' => $this->applicationType,
             'organization_id' => $this->organizationId,
         ];

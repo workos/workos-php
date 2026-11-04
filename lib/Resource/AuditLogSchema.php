@@ -50,7 +50,7 @@ readonly class AuditLogSchema implements \JsonSerializable
             'object' => $this->object,
             'version' => $this->version,
             'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'actor' => $this->actor?->toArray(),
             'metadata' => $this->metadata,
         ];

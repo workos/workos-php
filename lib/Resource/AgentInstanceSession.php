@@ -51,10 +51,10 @@ readonly class AgentInstanceSession implements \JsonSerializable
             'id' => $this->id,
             'agent_instance_id' => $this->agentInstanceId,
             'status' => $this->status->value,
-            'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'revoked_at' => $this->revokedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
+            'revoked_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->revokedAt),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

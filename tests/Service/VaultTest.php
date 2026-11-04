@@ -98,7 +98,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('vault_object');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->getName('test_name');
+        $result = $client->vault()->getName(name: 'test_name');
         $this->assertInstanceOf(\WorkOS\Resource\VaultObject::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -112,7 +112,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('vault_object');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->getKv('test_id');
+        $result = $client->vault()->getKv(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\VaultObject::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -126,7 +126,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('object_without_value');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->updateKv('test_id', value: 'test_value');
+        $result = $client->vault()->updateKv(id: 'test_id', value: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ObjectWithoutValue::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -141,7 +141,7 @@ class VaultTest extends TestCase
     public function testDeleteKv(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->vault()->deleteKv('test_id');
+        $client->vault()->deleteKv(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('vault/v1/kv/test_id', $request->getUri()->getPath());
@@ -151,7 +151,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('object_without_value');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->listKvMetadata('test_id');
+        $result = $client->vault()->listKvMetadata(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\ObjectWithoutValue::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -165,7 +165,7 @@ class VaultTest extends TestCase
     {
         $fixture = $this->loadFixture('version_list_response');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->vault()->listKvVersions('test_id');
+        $result = $client->vault()->listKvVersions(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\VersionListResponse::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();

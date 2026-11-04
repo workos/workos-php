@@ -39,7 +39,7 @@ readonly class ObjectVersion implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'current_version' => $this->currentVersion,
             'etag' => $this->etag,
             'id' => $this->id,

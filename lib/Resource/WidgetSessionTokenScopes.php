@@ -9,6 +9,8 @@ namespace WorkOS\Resource;
 enum WidgetSessionTokenScopes: string
 {
     case WidgetsUsersTableManage = 'widgets:users-table:manage';
+    case WidgetsUserApiKeysManageSelf = 'widgets:user-api-keys:manage-self';
+    case WidgetsUserApiKeysManageAll = 'widgets:user-api-keys:manage-all';
     case WidgetsDomainVerificationManage = 'widgets:domain-verification:manage';
     case WidgetsSSOManage = 'widgets:sso:manage';
     case WidgetsApiKeysManage = 'widgets:api-keys:manage';

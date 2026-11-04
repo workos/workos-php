@@ -67,15 +67,15 @@ readonly class InvitationAcceptedData implements \JsonSerializable
             'id' => $this->id,
             'email' => $this->email,
             'state' => $this->state->value,
-            'accepted_at' => $this->acceptedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'revoked_at' => $this->revokedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'accepted_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->acceptedAt),
+            'revoked_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->revokedAt),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'organization_id' => $this->organizationId,
             'inviter_user_id' => $this->inviterUserId,
             'accepted_user_id' => $this->acceptedUserId,
             'role_slug' => $this->roleSlug,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

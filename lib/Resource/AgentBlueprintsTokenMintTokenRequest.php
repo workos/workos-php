@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** How to mint the agent session, discriminated by `type`. `intent` is optional on every variant. */
 readonly class AgentBlueprintsTokenMintTokenRequest implements \JsonSerializable
 {
     use JsonSerializableTrait;

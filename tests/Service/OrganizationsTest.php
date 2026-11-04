@@ -50,7 +50,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->getOrganizationByExternalId('test_external_id');
+        $result = $client->organizations()->getOrganizationByExternalId(externalId: 'test_external_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -64,7 +64,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->getOrganization('test_id');
+        $result = $client->organizations()->getOrganization(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -78,7 +78,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('organization');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->updateOrganization('test_id');
+        $result = $client->organizations()->updateOrganization(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\Organization::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);
@@ -91,7 +91,7 @@ class OrganizationsTest extends TestCase
     public function testDeleteOrganization(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->organizations()->deleteOrganization('test_id');
+        $client->organizations()->deleteOrganization(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_id', $request->getUri()->getPath());
@@ -101,7 +101,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('audit_log_configuration');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->getAuditLogConfiguration('test_id');
+        $result = $client->organizations()->getAuditLogConfiguration(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\AuditLogConfiguration::class, $result);
         $this->assertSame($fixture['organization_id'], $result->organizationId);
         $this->assertIsArray($result->toArray());
@@ -114,7 +114,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('list_organization_authorized_connect_application_list_data');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->listAuthorizedApplications('test_organization_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
+        $result = $client->organizations()->listAuthorizedApplications(organizationId: 'test_organization_id', before: 'test_value', after: 'test_value', limit: 1, order: \WorkOS\Resource\PaginationOrder::Normal);
         $this->assertInstanceOf(\WorkOS\PaginatedResponse::class, $result);
         $request = $this->getLastRequest();
         $this->assertSame('GET', $request->getMethod());
@@ -130,7 +130,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('it_contact_list');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->listItContacts('test_organization_id');
+        $result = $client->organizations()->listItContacts(organizationId: 'test_organization_id');
         $this->assertInstanceOf(\WorkOS\Resource\ItContactList::class, $result);
         $this->assertIsArray($result->toArray());
         $request = $this->getLastRequest();
@@ -142,7 +142,7 @@ class OrganizationsTest extends TestCase
     {
         $fixture = $this->loadFixture('it_contact');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->organizations()->createItContact('test_organization_id', email: 'test_value');
+        $result = $client->organizations()->createItContact(organizationId: 'test_organization_id', email: 'test_value');
         $this->assertInstanceOf(\WorkOS\Resource\ItContact::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertIsArray($result->toArray());
@@ -156,7 +156,7 @@ class OrganizationsTest extends TestCase
     public function testDeleteItContact(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->organizations()->deleteItContact('test_organization_id', 'test_contact_id');
+        $client->organizations()->deleteItContact(organizationId: 'test_organization_id', contactId: 'test_contact_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id', $request->getUri()->getPath());
@@ -165,7 +165,7 @@ class OrganizationsTest extends TestCase
     public function testInviteItContact(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->organizations()->inviteItContact('test_organization_id', 'test_contact_id', intents: []);
+        $client->organizations()->inviteItContact(organizationId: 'test_organization_id', contactId: 'test_contact_id', intents: []);
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id/invite', $request->getUri()->getPath());
@@ -174,7 +174,7 @@ class OrganizationsTest extends TestCase
     public function testRevokeItContact(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->organizations()->revokeItContact('test_organization_id', 'test_contact_id');
+        $client->organizations()->revokeItContact(organizationId: 'test_organization_id', contactId: 'test_contact_id');
         $request = $this->getLastRequest();
         $this->assertSame('POST', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organization_id/it_contacts/test_contact_id/revoke', $request->getUri()->getPath());

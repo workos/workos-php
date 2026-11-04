@@ -23,6 +23,10 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
         public ?string $organizationId = null,
         /** Whose connection to create or rotate. `user` (the default) addresses the connection owned by `user_id`. `organization` addresses the connection shared by every member of `organization_id`; `user_id` then identifies the member performing the request and must be an active member of the organization. */
         public ?PipesOwnership $connectionOwner = null,
+        /** Send `reauthorize` with `connected_account_id` to reauthorize one exact connection. Omit it to use the compatibility connection; creating another connection lives on the POST route. */
+        public ?string $connectionIntent = null,
+        /** The exact connected account to reauthorize. Required with `connection_intent: reauthorize`; it may also be sent on its own to reauthorize that connection. */
+        public ?string $connectedAccountId = null,
     ) {
     }
 
@@ -35,6 +39,8 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
             accountIdentifier: $data['account_identifier'] ?? null,
             organizationId: $data['organization_id'] ?? null,
             connectionOwner: isset($data['connection_owner']) ? PipesOwnership::from($data['connection_owner']) : null,
+            connectionIntent: $data['connection_intent'] ?? null,
+            connectedAccountId: $data['connected_account_id'] ?? null,
         );
     }
 
@@ -47,6 +53,8 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
             'account_identifier' => $this->accountIdentifier,
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
+            'connection_intent' => $this->connectionIntent,
+            'connected_account_id' => $this->connectedAccountId,
         ];
     }
 }

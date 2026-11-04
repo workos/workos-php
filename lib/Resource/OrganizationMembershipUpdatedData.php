@@ -71,8 +71,8 @@ readonly class OrganizationMembershipUpdatedData implements \JsonSerializable
             'role' => $this->role->toArray(),
             'custom_attributes' => $this->customAttributes,
             'directory_managed' => $this->directoryManaged,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
         ];
     }

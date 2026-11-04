@@ -34,7 +34,7 @@ readonly class AgentCredentialValidation implements \JsonSerializable
         return [
             'valid' => $this->valid,
             'registration_id' => $this->registrationId,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
         ];
     }
 }

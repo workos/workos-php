@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
+/** The claim associated with this registration, or `null` if the registration has no claim. */
 readonly class AgentRegistrationClaim implements \JsonSerializable
 {
     use JsonSerializableTrait;
@@ -40,9 +41,9 @@ readonly class AgentRegistrationClaim implements \JsonSerializable
         return [
             'id' => $this->id,
             'claim_completion' => $this->claimCompletion?->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'expires_at' => $this->expiresAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
         ];
     }
 }

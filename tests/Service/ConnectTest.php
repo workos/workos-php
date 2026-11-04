@@ -49,7 +49,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('connect_application');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->getApplication('test_id');
+        $result = $client->connect()->getApplication(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['client_id'], $result->clientId);
@@ -63,7 +63,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('connect_application');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->updateApplication('test_id');
+        $result = $client->connect()->updateApplication(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\ConnectApplication::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['client_id'], $result->clientId);
@@ -76,7 +76,7 @@ class ConnectTest extends TestCase
     public function testDeleteApplication(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->connect()->deleteApplication('test_id');
+        $client->connect()->deleteApplication(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connect/applications/test_id', $request->getUri()->getPath());
@@ -86,7 +86,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('application_credentials_list_item');
         $client = $this->createMockClient([['status' => 200, 'body' => [$fixture]]]);
-        $result = $client->connect()->listApplicationClientSecrets('test_id');
+        $result = $client->connect()->listApplicationClientSecrets(id: 'test_id');
         $this->assertIsArray($result);
         $this->assertInstanceOf(\WorkOS\Resource\ApplicationCredentialsListItem::class, $result[0]);
         $this->assertSame($fixture['id'], $result[0]->id);
@@ -101,7 +101,7 @@ class ConnectTest extends TestCase
     {
         $fixture = $this->loadFixture('new_connect_application_secret');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->connect()->createApplicationClientSecret('test_id');
+        $result = $client->connect()->createApplicationClientSecret(id: 'test_id');
         $this->assertInstanceOf(\WorkOS\Resource\NewConnectApplicationSecret::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['secret_hint'], $result->secretHint);
@@ -114,7 +114,7 @@ class ConnectTest extends TestCase
     public function testDeleteClientSecret(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
-        $client->connect()->deleteClientSecret('test_id');
+        $client->connect()->deleteClientSecret(id: 'test_id');
         $request = $this->getLastRequest();
         $this->assertSame('DELETE', $request->getMethod());
         $this->assertStringEndsWith('connect/client_secrets/test_id', $request->getUri()->getPath());

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum CreateUserInviteOptionsLocale: string
+enum SendEmailChangeLocale: string
 {
     case Af = 'af';
     case Am = 'am';

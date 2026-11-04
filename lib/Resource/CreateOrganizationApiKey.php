@@ -37,7 +37,7 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
         return [
             'name' => $this->name,
             'permissions' => $this->permissions,
-            'expires_at' => $this->expiresAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
         ];
     }
 }

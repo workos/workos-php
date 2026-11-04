@@ -63,8 +63,8 @@ readonly class Directory implements \JsonSerializable
             'type' => $this->type->value,
             'state' => $this->state->value,
             'name' => $this->name,
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'domain' => $this->domain,
             'metadata' => $this->metadata?->toArray(),
         ];

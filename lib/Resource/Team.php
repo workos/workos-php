@@ -48,9 +48,9 @@ readonly class Team implements \JsonSerializable
             'id' => $this->id,
             'name' => $this->name,
             'production_state' => $this->productionState->value,
-            'production_enabled_at' => $this->productionEnabledAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'production_enabled_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->productionEnabledAt),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }

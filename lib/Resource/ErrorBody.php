@@ -6,13 +6,12 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class ConnectedAccountWriteResponseWarning implements \JsonSerializable
+readonly class ErrorBody implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
     public function __construct(
-        public string $code,
-        /** A human-readable explanation of the non-blocking warning. */
+        /** A human-readable description of the error. */
         public string $message,
     ) {
     }
@@ -20,7 +19,6 @@ readonly class ConnectedAccountWriteResponseWarning implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            code: $data['code'] ?? 'duplicate_account_display_name',
             message: $data['message'],
         );
     }
@@ -28,7 +26,6 @@ readonly class ConnectedAccountWriteResponseWarning implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'code' => $this->code,
             'message' => $this->message,
         ];
     }

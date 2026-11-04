@@ -34,7 +34,7 @@ class PlatformTeamsTest extends TestCase
     {
         $fixture = $this->loadFixture('team');
         $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
-        $result = $client->platformTeams()->getTeam('test_team_id');
+        $result = $client->platformTeams()->getTeam(teamId: 'test_team_id');
         $this->assertInstanceOf(\WorkOS\Resource\Team::class, $result);
         $this->assertSame($fixture['id'], $result->id);
         $this->assertSame($fixture['name'], $result->name);

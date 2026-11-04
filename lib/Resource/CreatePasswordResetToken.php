@@ -13,6 +13,8 @@ readonly class CreatePasswordResetToken implements \JsonSerializable
     public function __construct(
         /** The email address of the user requesting a password reset. */
         public string $email,
+        /** The locale to use when rendering the password reset email. Defaults to the environment's default locale. See [supported locales](https://workos.com/docs/authkit/hosted-ui#localization). */
+        public ?SendEmailChangeLocale $locale = null,
     ) {
     }
 
@@ -20,6 +22,7 @@ readonly class CreatePasswordResetToken implements \JsonSerializable
     {
         return new self(
             email: $data['email'],
+            locale: isset($data['locale']) ? SendEmailChangeLocale::from($data['locale']) : null,
         );
     }
 
@@ -27,6 +30,7 @@ readonly class CreatePasswordResetToken implements \JsonSerializable
     {
         return [
             'email' => $this->email,
+            'locale' => $this->locale?->value,
         ];
     }
 }

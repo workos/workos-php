@@ -44,9 +44,9 @@ readonly class SAMLSpSigningCertificate implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'value' => $this->value,
-            'not_before' => $this->notBefore?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'not_after' => $this->notAfter?->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'not_before' => \WorkOS\Internal\DateTimeFormat::iso8601($this->notBefore),
+            'not_after' => \WorkOS\Internal\DateTimeFormat::iso8601($this->notAfter),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
         ];
     }
 }

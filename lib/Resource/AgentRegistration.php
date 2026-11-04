@@ -54,11 +54,11 @@ readonly class AgentRegistration implements \JsonSerializable
             'agent_identity' => $this->agentIdentity->toArray(),
             'organization_id' => $this->organizationId,
             'status' => $this->status->value,
-            'revoked_at' => $this->revokedAt?->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'revoked_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->revokedAt),
             'kind' => $this->kind->value,
             'claim' => $this->claim?->toArray(),
-            'created_at' => $this->createdAt->format(\DateTimeInterface::RFC3339_EXTENDED),
-            'updated_at' => $this->updatedAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+            'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];
     }
 }
