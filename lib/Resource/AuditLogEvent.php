@@ -13,8 +13,8 @@ readonly class AuditLogEvent implements \JsonSerializable
     public function __construct(
         /** Identifier of what happened. */
         public string $action,
-        /** ISO-8601 value of when the action occurred. */
-        public \DateTimeImmutable $occurredAt,
+        /** ISO-8601 value of when the action occurred. When omitted, defaults to the time WorkOS accepts the event. */
+        public ?\DateTimeImmutable $occurredAt,
         /** The entity that performed the action. */
         public AuditLogEventActor $actor,
         /**
@@ -38,7 +38,7 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return new self(
             action: $data['action'],
-            occurredAt: new \DateTimeImmutable($data['occurred_at']),
+            occurredAt: isset($data['occurred_at']) ? new \DateTimeImmutable($data['occurred_at']) : null,
             actor: AuditLogEventActor::fromArray($data['actor']),
             targets: array_map(fn ($item) => AuditLogEventTarget::fromArray($item), $data['targets']),
             context: AuditLogEventContext::fromArray($data['context']),
@@ -51,7 +51,7 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return [
             'action' => $this->action,
-            'occurred_at' => $this->occurredAt->format(\DateTimeInterface::RFC3339_EXTENDED),
+            ...($this->occurredAt !== null ? ['occurred_at' => $this->occurredAt->format(\DateTimeInterface::RFC3339_EXTENDED)] : []),
             'actor' => $this->actor->toArray(),
             'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
             'context' => $this->context->toArray(),
