@@ -482,11 +482,6 @@ class SessionManager
     }
 
     /**
-     * Decode a base64url-encoded segment, tolerating missing padding.
-     *
-     * @return string|false The decoded bytes, or false on malformed input.
-     */
-    /**
      * Whether verified claims belong to a user session access token. Other
      * token types signed by the same environment key (agent and widget
      * tokens) must not authenticate a session cookie.
@@ -503,6 +498,11 @@ class SessionManager
             && !isset($claims['sub_type']);
     }
 
+    /**
+     * Decode a base64url-encoded segment, tolerating missing padding.
+     *
+     * @return string|false The decoded bytes, or false on malformed input.
+     */
     private static function base64UrlDecode(string $segment): string|false
     {
         $remainder = strlen($segment) % 4;
