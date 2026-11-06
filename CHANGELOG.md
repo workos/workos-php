@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.6.1](https://github.com/workos/workos-php/compare/v9.6.0...v9.6.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **session:** Reject non-user access tokens in session cookies ([#463](https://github.com/workos/workos-php/issues/463)) ([07a6a12](https://github.com/workos/workos-php/commit/07a6a125bdd5002f9c04b4512a853a7715facdce))
+
 ## [9.6.0](https://github.com/workos/workos-php/compare/v9.5.0...v9.6.0) (2026-11-04)
 
 ### Bug Fixes
