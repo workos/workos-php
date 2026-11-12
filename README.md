@@ -38,6 +38,95 @@ $workos->pipes()->createDataIntegrationApiKey(
 > [!NOTE]
 > The WorkOS API currently honors `Idempotency-Key` only on [Create Audit Log Event](https://workos.com/docs/reference/audit-logs/event) and on Pipes explicit adds (`createDataIntegrationApiKey`, `createDataIntegrationClientCredential`, and `createUserConnectedAccount` / `createOrganizationConnectedAccount` with `connectionIntent: 'add'`). Other endpoints accept the header but do not deduplicate requests, so a retried mutation elsewhere can still create a duplicate.
 
+## Workload identity
+
+A workload that runs on GitHub Actions, GCP or AWS can authenticate to WorkOS with the identity token its platform issues, so it needs no stored API key. The SDK exchanges that token for a short-lived WorkOS access token, caches it in memory, and replaces it before it expires.
+
+Build credentials from an identity token provider, then build the client from the credentials:
+
+```php
+use WorkOS\WorkloadIdentity\Client;
+use WorkOS\WorkloadIdentity\Credentials;
+use WorkOS\WorkloadIdentity\GitHubActions\GitHubActions;
+
+$credentials = new Credentials(
+    identityTokenProvider: GitHubActions::create('https://api.workos.com'),
+    clientId: 'client_01EHZNVPK3SFK441A1RGBFSHRT',
+    tokenUrl: 'https://auth.example.com/oauth2/token',
+    environmentId: 'environment_01EHZNVPK3SFK441A1RGBFSHRT',
+);
+
+$workos = Client::create($credentials);
+$organizations = $workos->organizations()->listOrganizations();
+```
+
+| Argument | Meaning | Default |
+| --- | --- | --- |
+| `identityTokenProvider` | Returns the workload's identity token | Required |
+| `clientId` | The M2M application's client ID | `WORKOS_CLIENT_ID` |
+| `tokenUrl` | The token exchange endpoint | `WORKOS_WIF_TOKEN_URL` |
+| `environmentId` | The environment the requests are for | `WORKOS_ENVIRONMENT_ID` |
+| `resource` | The API the access token is for | `https://api.workos.com` |
+| `scope` | The scopes to request | `WORKOS_WIF_SCOPE`, otherwise none |
+
+`clientId`, `tokenUrl` and `environmentId` are required: constructing the credentials throws when one is missing from both the arguments and the environment.
+
+### Providers
+
+Each platform's provider is a separate package. The argument is the audience the token is requested for, which must match the application's trust rule.
+
+```
+composer require workos/workos-php-workload-identity-github-actions
+composer require workos/workos-php-workload-identity-gcp
+composer require workos/workos-php-workload-identity-aws
+```
+
+```php
+// GitHub Actions. The workflow or job needs `permissions: id-token: write`.
+use WorkOS\WorkloadIdentity\GitHubActions\GitHubActions;
+
+$provider = GitHubActions::create('https://api.workos.com');
+```
+
+```php
+// GCP, wherever the metadata server is reachable: Compute Engine, GKE, Cloud Run.
+use WorkOS\WorkloadIdentity\Gcp\GcpMetadata;
+
+$provider = GcpMetadata::create('https://api.workos.com');
+```
+
+```php
+// AWS. The IAM principal needs `sts:GetWebIdentityToken`. The region is
+// optional when the AWS SDK can resolve one.
+use WorkOS\WorkloadIdentity\Aws\AwsSts;
+
+$provider = AwsSts::create('https://api.workos.com', 'us-east-1');
+```
+
+For any other source, use a file, an environment variable or your own callable. All three are read again on every exchange, so a rotated token is picked up:
+
+```php
+use WorkOS\WorkloadIdentity\TokenEnv;
+use WorkOS\WorkloadIdentity\TokenFile;
+
+// A file, such as a projected Kubernetes service account token.
+$provider = TokenFile::create('/var/run/secrets/tokens/workos');
+
+// An environment variable.
+$provider = TokenEnv::create('WORKLOAD_IDENTITY_TOKEN');
+
+// Any callable that returns the token.
+$provider = fn (): string => $vault->read('workos/identity-token');
+```
+
+### Behavior
+
+- Workload identity is used only when you build credentials. No environment variable switches it on, and a client built from credentials never sends `WORKOS_API_KEY`.
+- The access token is cached on the `Credentials` object, for as long as that object lives. A long-running worker reuses it across requests. Under PHP-FPM the object lives for one web request, so each web request that calls WorkOS makes one exchange.
+- When the API answers `401`, the SDK exchanges for a new access token and retries the request once.
+- A failure to get an access token throws `WorkOS\Exception\WorkloadIdentityException`. Its `errorCode` is the OAuth error code from the token endpoint (such as `invalid_grant`), `hint` says what to check, and `description` is the server's own text. A failing exchange never falls back to an API key.
+- Operations that send the API key itself, such as `userManagement()->authenticateWithCode()`, are not available on a client built from credentials. They throw `WorkOS\Exception\ConfigurationException`.
+
 ## SDK Versioning
 
 For our SDKs WorkOS follows a Semantic Versioning ([SemVer](https://semver.org/)) process where all releases will have a version X.Y.Z (like 1.0.0) pattern wherein Z would be a bug fix (e.g., 1.0.1), Y would be a minor release (1.1.0) and X would be a major release (2.0.0). We permit any breaking changes to only be released in major versions and strongly recommend reading changelogs before making any major version upgrades.

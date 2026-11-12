@@ -28,12 +28,29 @@ use WorkOS\Exception\RateLimitExceededException;
 use WorkOS\Exception\ServerException;
 use WorkOS\Exception\TimeoutException;
 use WorkOS\Exception\UnprocessableEntityException;
+use WorkOS\WorkloadIdentity\RecoveryState;
 
 class HttpClient
 {
+    /**
+     * The retry count a client gets when none is passed: the default of
+     * `maxRetries` on {@see WorkOS::__construct()}, which is generated and so
+     * cannot be referenced. The workload identity token exchange uses it too.
+     *
+     * @internal
+     */
+    public const DEFAULT_MAX_RETRIES = 3;
+
     private const RETRY_STATUS_CODES = [429, 500, 502, 503, 504];
 
     private Client $client;
+
+    /**
+     * The API key as credentials. Empty for a client built by
+     * {@see WorkloadIdentity\Client::create()}, whose handler stack
+     * authenticates each attempt instead.
+     */
+    private readonly Credentials $credentials;
 
     public function __construct(
         private readonly string $apiKey,
@@ -47,6 +64,7 @@ class HttpClient
         $this->client = new Client([
             'handler' => $handler,
         ]);
+        $this->credentials = new StaticKeyCredentials($apiKey);
     }
 
     public function getApiKey(): ?string
@@ -112,13 +130,16 @@ class HttpClient
         // Keyed once, before the first attempt, so every retry of a POST
         // carries the key the server may already have seen.
         $idempotencyKey = $this->resolveIdempotencyKey($method, $options);
+        // One per logical request, shared by every attempt, so a transport
+        // retry does not grant the credentials middleware a second 401 recovery.
+        $recovery = new RecoveryState();
 
         for ($attempt = 0; $attempt <= $maxRetries; $attempt++) {
             try {
                 $response = $this->client->request(
                     $method,
                     $this->resolveUrl($path, $options),
-                    $this->buildRequestOptions($method, $query, $body, $options, $idempotencyKey),
+                    $this->buildRequestOptions($method, $query, $body, $options, $idempotencyKey, $recovery),
                 );
             } catch (NetworkExceptionInterface|ResponseTimeoutException $e) {
                 // Covers ConnectException on Guzzle 7 and 8, plus what Guzzle 8 split out of it:
@@ -210,14 +231,15 @@ class HttpClient
         ?array $body,
         ?RequestOptions $options,
         ?string $idempotencyKey,
+        RecoveryState $recovery,
     ): array {
         $headers = [
             'Content-Type' => 'application/json',
         ];
 
-        if ($this->getApiKey() !== null) {
-            $headers['Authorization'] = sprintf('Bearer %s', $this->requireApiKey());
-        }
+        // Resolved on every attempt. A static key resolves to the same header
+        // each time; an empty key resolves to none.
+        $headers = array_merge($headers, $this->credentials->resolve()->headers);
 
         if ($options?->extraHeaders !== null) {
             $headers = array_merge($headers, $options->extraHeaders);
@@ -234,6 +256,7 @@ class HttpClient
             'headers' => $headers,
             'http_errors' => false,
             'timeout' => $this->resolveTimeout($options),
+            RecoveryState::REQUEST_OPTION => $recovery,
         ];
 
         if ($query !== null) {
@@ -378,7 +401,7 @@ class HttpClient
                 $body['code'],
                 $body['error'],
                 $rawBody,
-                $this->parseRetryAfter($response->getHeaderLine('Retry-After')),
+                self::parseRetryAfter($response->getHeaderLine('Retry-After')),
             ),
             500, 502, 503, 504 => new ServerException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
             default => new BaseRequestException($body['message'], $statusCode, $requestId, $previous, $body['code'], $body['error'], $rawBody),
@@ -454,7 +477,7 @@ class HttpClient
         return str_contains(strtolower($exception->getMessage()), 'timed out');
     }
 
-    private function parseRetryAfter(?string $retryAfter): ?int
+    private static function parseRetryAfter(?string $retryAfter): ?int
     {
         if ($retryAfter === null || trim($retryAfter) === '') {
             return null;
@@ -501,14 +524,26 @@ class HttpClient
 
     private function sleep(int $attempt, ?string $retryAfter = null): void
     {
-        $retryAfterSeconds = $this->parseRetryAfter($retryAfter);
+        usleep(self::retryDelayMicroseconds($attempt, $retryAfter));
+    }
+
+    /**
+     * How long to wait after failed attempt `$attempt` (zero-based): the
+     * server's `Retry-After` when it sent one, otherwise exponential backoff
+     * with jitter.
+     *
+     * @internal Shared with the workload identity token exchange.
+     */
+    public static function retryDelayMicroseconds(int $attempt, ?string $retryAfter = null): int
+    {
+        $retryAfterSeconds = self::parseRetryAfter($retryAfter);
         if ($retryAfterSeconds !== null) {
-            usleep($retryAfterSeconds * 1000000);
-            return;
+            return $retryAfterSeconds * 1000000;
         }
 
         $delay = min((2 ** $attempt) * 1000, 30000);
         $jitter = random_int(0, (int) ($delay * 0.1));
-        usleep(($delay + $jitter) * 1000);
+
+        return ($delay + $jitter) * 1000;
     }
 }
