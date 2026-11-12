@@ -64,7 +64,7 @@ $organizations = $workos->organizations()->listOrganizations();
 | --- | --- | --- |
 | `identityTokenProvider` | Returns the workload's identity token | Required |
 | `clientId` | The M2M application's client ID | `WORKOS_CLIENT_ID` |
-| `tokenUrl` | The token exchange endpoint | `WORKOS_WIF_TOKEN_URL` |
+| `tokenUrl` | The token exchange endpoint. It must be an `https` URL | `WORKOS_WIF_TOKEN_URL` |
 | `environmentId` | The environment the requests are for | `WORKOS_ENVIRONMENT_ID` |
 | `resource` | The API the access token is for | `https://api.workos.com` |
 | `scope` | The scopes to request | `WORKOS_WIF_SCOPE`, otherwise none |
@@ -124,6 +124,7 @@ $provider = fn (): string => $vault->read('workos/identity-token');
 - Workload identity is used only when you build credentials. No environment variable switches it on, and a client built from credentials never sends `WORKOS_API_KEY`.
 - The access token is cached on the `Credentials` object, for as long as that object lives. A long-running worker reuses it across requests. Under PHP-FPM the object lives for one web request, so each web request that calls WorkOS makes one exchange.
 - When the API answers `401`, the SDK exchanges for a new access token and retries the request once.
+- The access token and the environment ID go only to the origin the request is addressed to. When a redirect leads to another origin, the SDK follows it without them.
 - A failure to get an access token throws `WorkOS\Exception\WorkloadIdentityException`. Its `errorCode` is the OAuth error code from the token endpoint (such as `invalid_grant`), `hint` says what to check, and `description` is the server's own text. A failing exchange never falls back to an API key.
 - Operations that send the API key itself, such as `userManagement()->authenticateWithCode()`, are not available on a client built from credentials. They throw `WorkOS\Exception\ConfigurationException`.
 

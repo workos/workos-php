@@ -82,14 +82,14 @@ final class Credentials implements CredentialsContract
     /**
      * @param IdentityTokenProvider|callable(): string $identityTokenProvider Returns the workload's JWT. Called for every exchange attempt.
      * @param string|null                              $clientId              The M2M application's client ID. Defaults to `WORKOS_CLIENT_ID`.
-     * @param string|null                              $tokenUrl              The token exchange endpoint. Defaults to `WORKOS_WIF_TOKEN_URL`; there is no built-in default.
+     * @param string|null                              $tokenUrl              The token exchange endpoint, an `https` URL. Defaults to `WORKOS_WIF_TOKEN_URL`; there is no built-in default.
      * @param string|null                              $environmentId         Sent as a header on every API request. Defaults to `WORKOS_ENVIRONMENT_ID`.
      * @param string|null                              $resource              The `resource` form field. Defaults to `https://api.workos.com`.
      * @param string|null                              $scope                 The `scope` form field. Defaults to `WORKOS_WIF_SCOPE`; left out of the form when empty.
      * @param (callable(): float)|null                 $clock                 Seconds on a monotonic clock. Leave unset outside tests.
      * @param (callable(int): void)|null               $sleeper               Waits the given number of microseconds between exchange attempts. Leave unset outside tests.
      *
-     * @throws WorkloadIdentityException with `invalid_configuration` when a required setting is missing after the environment is consulted, or when the token URL is not an absolute `http` or `https` URL.
+     * @throws WorkloadIdentityException with `invalid_configuration` when a required setting is missing after the environment is consulted, or when the token URL is not an absolute `https` URL.
      */
     public function __construct(
         IdentityTokenProvider|callable $identityTokenProvider,
@@ -107,7 +107,7 @@ final class Credentials implements CredentialsContract
             : static fn (): string => $identityTokenProvider();
 
         $this->clientId = self::required($clientId, 'clientId', 'WORKOS_CLIENT_ID');
-        $this->tokenUrl = self::absoluteUrl(self::required($tokenUrl, 'tokenUrl', 'WORKOS_WIF_TOKEN_URL'));
+        $this->tokenUrl = self::httpsUrl(self::required($tokenUrl, 'tokenUrl', 'WORKOS_WIF_TOKEN_URL'));
         $this->environmentId = self::required($environmentId, 'environmentId', 'WORKOS_ENVIRONMENT_ID');
         $this->resource = $resource !== null && $resource !== '' ? $resource : self::DEFAULT_RESOURCE;
 
@@ -365,14 +365,16 @@ final class Credentials implements CredentialsContract
      * A token URL without a scheme or a host would fail on first use with an
      * error that says nothing about the setting, so it is rejected here.
      */
-    private static function absoluteUrl(string $tokenUrl): string
+    private static function httpsUrl(string $tokenUrl): string
     {
         $parts = parse_url($tokenUrl);
         $scheme = is_array($parts) ? strtolower($parts['scheme'] ?? '') : '';
-        if (!in_array($scheme, ['http', 'https'], true) || ($parts['host'] ?? '') === '') {
+        // https only: the POST carries the workload's identity token and the
+        // response carries the access token.
+        if ($scheme !== 'https' || ($parts['host'] ?? '') === '') {
             throw new WorkloadIdentityException(
                 WorkloadIdentityException::INVALID_CONFIGURATION,
-                'tokenUrl must be an absolute http or https URL (check WORKOS_WIF_TOKEN_URL)',
+                'tokenUrl must be an absolute https URL (check WORKOS_WIF_TOKEN_URL)',
             );
         }
 

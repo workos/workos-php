@@ -28,11 +28,13 @@ final class Client
 {
     private const MIDDLEWARE_NAME = 'workos_credentials';
 
+    private const REDIRECT_GUARD_NAME = 'workos_credentials_redirect_guard';
+
     /**
      * The arguments after `$credentials` mean what they mean on
      * {@see WorkOS::__construct()} and have the same defaults.
      *
-     * @param HandlerStack|null $handler A Guzzle handler stack to build on. It is copied, not modified.
+     * @param HandlerStack|null $handler A Guzzle handler stack to build on. It is copied, not modified. Credentials are sent only to the origin of the URL the SDK builds from `$baseUrl`: a middleware in this stack that sends the request to another origin sends it without them. To target another host, set `$baseUrl`.
      */
     public static function create(
         CredentialsContract $credentials,
@@ -48,6 +50,10 @@ final class Client
         // Outermost, so it sees the response after Guzzle's own middleware and
         // so Guzzle still strips `Authorization` from a cross-origin redirect.
         $stack->unshift(new CredentialsMiddleware($credentials), self::MIDDLEWARE_NAME);
+
+        // Innermost, so no header the credentials add reaches another origin
+        // when a redirect is followed. Guzzle leaves all but `Authorization`.
+        $stack->push(CredentialsMiddleware::redirectGuard(), self::REDIRECT_GUARD_NAME);
 
         return new WorkOS(
             // The empty string, not null: null falls back to WORKOS_API_KEY.

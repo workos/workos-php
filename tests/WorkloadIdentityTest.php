@@ -9,10 +9,10 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\NoSeekStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -56,7 +56,7 @@ class WorkloadIdentityTest extends TestCase
     /** @var list<float|int|null> The timeout each exchange POST was sent with. */
     private array $tokenTimeouts = [];
 
-    /** @var array<int, array<string, mixed>> Every attempt the mock API received. */
+    /** @var list<RequestInterface> Every request the mock API received, as the handler got it. */
     private array $apiHistory = [];
 
     private ?MockHandler $apiMock = null;
@@ -783,8 +783,7 @@ class WorkloadIdentityTest extends TestCase
             // Would succeed, but a static key never retries a 401.
             self::organization(),
         ]);
-        $stack = HandlerStack::create($mock);
-        $stack->push(Middleware::history($this->apiHistory));
+        $stack = HandlerStack::create($this->recording($mock));
         $workos = new WorkOS(apiKey: 'sk_test_static', clientId: 'client_test', handler: $stack);
 
         $workos->organizations()->getOrganization('org_01');
@@ -851,21 +850,127 @@ class WorkloadIdentityTest extends TestCase
         $this->assertCount(1, $this->tokenRequests);
     }
 
-    public function testACrossOriginRedirectDoesNotCarryTheAccessToken(): void
+    #[DataProvider('crossOriginLocations')]
+    public function testACrossOriginRedirectCarriesNoCredentialHeader(string $location): void
     {
         $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
         $workos = $this->client($credentials, [
-            new Response(302, ['Location' => 'https://elsewhere.test/organizations/org_01']),
+            new Response(302, ['Location' => $location]),
+            self::organization(),
+        ]);
+
+        $workos->organizations()->getOrganization('org_01');
+
+        // The first hop, to the API, carries both headers.
+        $this->assertCount(2, $this->apiHistory);
+        $this->assertSame('api.workos.com', $this->apiRequest(0)->getUri()->getHost());
+        $this->assertSame('Bearer access-1', $this->apiRequest(0)->getHeaderLine('Authorization'));
+        $this->assertSame('environment_wif_test', $this->apiRequest(0)->getHeaderLine('x-url-environment-id'));
+
+        // The second hop carries neither.
+        $this->assertSame($location, (string) $this->apiRequest(1)->getUri());
+        $this->assertFalse($this->apiRequest(1)->hasHeader('Authorization'));
+        $this->assertFalse($this->apiRequest(1)->hasHeader('x-url-environment-id'));
+        // Headers the credentials did not add are left alone.
+        $this->assertTrue($this->apiRequest(1)->hasHeader('User-Agent'));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function crossOriginLocations(): array
+    {
+        return [
+            'another host' => ['https://elsewhere.test/organizations/org_01'],
+            'a subdomain' => ['https://eu.api.workos.com/organizations/org_01'],
+            'another scheme' => ['http://api.workos.com/organizations/org_01'],
+            'another port' => ['https://api.workos.com:8443/organizations/org_01'],
+        ];
+    }
+
+    #[DataProvider('sameOriginLocations')]
+    public function testASameOriginRedirectKeepsTheCredentialHeaders(string $location): void
+    {
+        $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
+        $workos = $this->client($credentials, [
+            new Response(302, ['Location' => $location]),
             self::organization(),
         ]);
 
         $workos->organizations()->getOrganization('org_01');
 
         $this->assertCount(2, $this->apiHistory);
-        $this->assertSame('api.workos.com', $this->apiRequest(0)->getUri()->getHost());
+        $this->assertSame('/organizations/org_02', $this->apiRequest(1)->getUri()->getPath());
+        $this->assertSame('Bearer access-1', $this->apiRequest(1)->getHeaderLine('Authorization'));
+        $this->assertSame('environment_wif_test', $this->apiRequest(1)->getHeaderLine('x-url-environment-id'));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function sameOriginLocations(): array
+    {
+        return [
+            'a relative path' => ['/organizations/org_02'],
+            'the same origin' => ['https://api.workos.com/organizations/org_02'],
+            'the default port and another case' => ['https://API.WorkOS.com:443/organizations/org_02'],
+        ];
+    }
+
+    public function testCredentialHeadersStayOffEveryHopAfterACrossOriginRedirect(): void
+    {
+        // Guzzle compares each hop with the one before it, so the second
+        // redirect, within the other host, looks same-origin to Guzzle. The
+        // guard compares with the URL the headers were added for.
+        $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
+        $workos = $this->client($credentials, [
+            new Response(302, ['Location' => 'https://elsewhere.test/organizations/org_01']),
+            new Response(302, ['Location' => '/organizations/org_02']),
+            self::organization(),
+        ]);
+
+        $workos->organizations()->getOrganization('org_01');
+
+        $this->assertCount(3, $this->apiHistory);
         $this->assertSame('Bearer access-1', $this->apiRequest(0)->getHeaderLine('Authorization'));
-        $this->assertSame('elsewhere.test', $this->apiRequest(1)->getUri()->getHost());
-        $this->assertFalse($this->apiRequest(1)->hasHeader('Authorization'));
+        foreach ([1, 2] as $hop) {
+            $this->assertSame('elsewhere.test', $this->apiRequest($hop)->getUri()->getHost());
+            $this->assertFalse($this->apiRequest($hop)->hasHeader('Authorization'));
+            $this->assertFalse($this->apiRequest($hop)->hasHeader('x-url-environment-id'));
+        }
+    }
+
+    public function testTheRedirectGuardHoldsWithoutGuzzlesRedirectHandling(): void
+    {
+        // A request for another origin than the one the headers were added
+        // for, reaching the guard with every credential header still on it.
+        $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
+        $mock = new MockHandler([new Response(200), new Response(200)]);
+        $forward = static fn (callable $handler): callable => static fn (RequestInterface $request, array $options) => $handler(
+            $request->withUri(new Uri('https://elsewhere.test/organizations/org_01')),
+            $options,
+        );
+        $stack = new HandlerStack($mock);
+        $stack->push(new CredentialsMiddleware($credentials));
+        $stack->push($forward);
+        $stack->push(CredentialsMiddleware::redirectGuard());
+
+        (new GuzzleClient(['handler' => $stack]))->get('https://api.workos.com/organizations/org_01');
+
+        $sent = $mock->getLastRequest();
+        $this->assertNotNull($sent);
+        $this->assertSame('elsewhere.test', $sent->getUri()->getHost());
+        $this->assertFalse($sent->hasHeader('Authorization'));
+        $this->assertFalse($sent->hasHeader('x-url-environment-id'));
+
+        // A request that never passed the credentials middleware is left alone.
+        $bare = new HandlerStack($mock);
+        $bare->push(CredentialsMiddleware::redirectGuard());
+        (new GuzzleClient(['handler' => $bare]))->get('https://elsewhere.test/', [
+            'headers' => ['x-url-environment-id' => 'environment_other'],
+        ]);
+
+        $this->assertSame('environment_other', $mock->getLastRequest()?->getHeaderLine('x-url-environment-id'));
     }
 
     public function testTheExchangeStopsRetryingAtItsDeadline(): void
@@ -936,9 +1041,18 @@ class WorkloadIdentityTest extends TestCase
         $this->assertCount(0, $this->tokenRequests);
     }
 
-    public function testATokenUrlThatIsNotAnAbsoluteHttpUrlIsRejectedAtConstruction(): void
+    public function testATokenUrlThatIsNotAnAbsoluteHttpsUrlIsRejectedAtConstruction(): void
     {
-        foreach (['auth.workos.test/oauth2/token', '/oauth2/token', 'ftp://auth.workos.test/oauth2/token', 'https://'] as $tokenUrl) {
+        $rejected = [
+            'auth.workos.test/oauth2/token',
+            '/oauth2/token',
+            'ftp://auth.workos.test/oauth2/token',
+            'https://',
+            // Plain http is refused everywhere, the loopback interface included.
+            'http://auth.workos.test/oauth2/token',
+            'http://127.0.0.1:8080/oauth2/token',
+        ];
+        foreach ($rejected as $tokenUrl) {
             try {
                 new Credentials(
                     $this->provider('assertion-1'),
@@ -949,18 +1063,34 @@ class WorkloadIdentityTest extends TestCase
                 $this->fail(sprintf('Expected WorkloadIdentityException for %s', $tokenUrl));
             } catch (WorkloadIdentityException $e) {
                 $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
-                $this->assertStringContainsString('absolute http or https URL', $e->description);
+                $this->assertSame('tokenUrl must be an absolute https URL (check WORKOS_WIF_TOKEN_URL)', $e->description);
             }
         }
 
-        // http is accepted, so a local mock endpoint can be used.
+        // The scheme is not case-sensitive.
         $credentials = new Credentials(
             $this->provider('assertion-1'),
             clientId: 'client_wif_test',
-            tokenUrl: 'http://127.0.0.1:8080/oauth2/token',
+            tokenUrl: 'HTTPS://auth.workos.test:8443/oauth2/token',
             environmentId: 'environment_wif_test',
         );
-        $this->assertSame('http://127.0.0.1:8080/oauth2/token', $credentials->tokenUrl);
+        $this->assertSame('HTTPS://auth.workos.test:8443/oauth2/token', $credentials->tokenUrl);
+    }
+
+    public function testAnHttpTokenUrlFromTheEnvironmentIsRejected(): void
+    {
+        putenv('WORKOS_WIF_TOKEN_URL=http://auth.workos.test/oauth2/token');
+
+        try {
+            new Credentials(
+                $this->provider('assertion-1'),
+                clientId: 'client_wif_test',
+                environmentId: 'environment_wif_test',
+            );
+            $this->fail('Expected WorkloadIdentityException');
+        } catch (WorkloadIdentityException $e) {
+            $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
+        }
     }
 
     public function testExhaustedRetriesReportTheLastFailure(): void
@@ -1221,15 +1351,28 @@ class WorkloadIdentityTest extends TestCase
     private function client(CredentialsContract $credentials, array $apiQueue): WorkOS
     {
         $this->apiMock = new MockHandler($apiQueue);
-        $stack = HandlerStack::create($this->apiMock);
-        $stack->push(Middleware::history($this->apiHistory));
+        $stack = HandlerStack::create($this->recording($this->apiMock));
 
         return Client::create($credentials, clientId: 'client_test', handler: $stack);
     }
 
+    /**
+     * The mock API as a handler that records each request it receives. It
+     * records in the handler, below every middleware, so a test sees what
+     * would go on the wire and not what a middleware was handed.
+     */
+    private function recording(MockHandler $mock): callable
+    {
+        return function (RequestInterface $request, array $options) use ($mock) {
+            $this->apiHistory[] = $request;
+
+            return $mock($request, $options);
+        };
+    }
+
     private function apiRequest(int $index): RequestInterface
     {
-        return $this->apiHistory[$index]['request'];
+        return $this->apiHistory[$index];
     }
 
     /**
@@ -1238,8 +1381,8 @@ class WorkloadIdentityTest extends TestCase
     private function apiAuthorizations(): array
     {
         return array_map(
-            static fn (array $entry): string => $entry['request']->getHeaderLine('Authorization'),
-            array_values($this->apiHistory),
+            static fn (RequestInterface $request): string => $request->getHeaderLine('Authorization'),
+            $this->apiHistory,
         );
     }
 
