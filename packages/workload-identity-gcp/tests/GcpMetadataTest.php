@@ -11,7 +11,7 @@ use WorkOS\WorkloadIdentity\Gcp\GcpMetadata;
 use WorkOS\WorkloadIdentity\IdentityTokenProvider;
 
 /**
- * The GCP provider cases, WIF-GCP-01 and WIF-GCP-02, and the failure paths.
+ * The GCP provider cases, WIF-GCP-01 to WIF-GCP-03, and the failure paths.
  * The metadata server is a mock server on the loopback interface; no test
  * reaches GCP.
  */
@@ -82,7 +82,7 @@ final class GcpMetadataTest extends TestCase
         $this->assertStringContainsString('could not be reached', $error->getMessage());
     }
 
-    public function testProxyEnvironmentVariablesAreIgnored(): void
+    public function testWIF_GCP_03_ProxyEnvironmentVariablesAreIgnored(): void
     {
         $names = ['http_proxy', 'all_proxy', 'ALL_PROXY', 'no_proxy', 'NO_PROXY'];
         $saved = [];
