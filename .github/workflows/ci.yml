@@ -40,3 +40,48 @@ jobs:
       - name: Test
         run: |
           composer run-script test
+
+  # Each provider package in packages/ is released by itself, so each is
+  # installed and tested by itself. Its composer.json resolves the SDK to this
+  # checkout.
+  test-providers:
+    name: Test ${{ matrix.package }} on PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.2", "8.3", "8.4", "8.5"]
+        package:
+          - workload-identity-github-actions
+          - workload-identity-gcp
+          - workload-identity-aws
+    defaults:
+      run:
+        shell: bash
+        working-directory: packages/${{ matrix.package }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          tools: "composer"
+
+      # The package resolves the SDK to this checkout under a pinned version.
+      # This fails when the pin is on neither the SDK's major nor the next
+      # one. Before an SDK major, move the pins on main first; see the script.
+      - name: Check the SDK version pin
+        working-directory: ${{ github.workspace }}
+        run: |
+          php script/check-provider-pins
+
+      - name: Install dependencies
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Typecheck
+        run: |
+          composer run-script typecheck
+
+      - name: Test
+        run: |
+          composer run-script test

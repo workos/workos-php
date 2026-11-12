@@ -1,0 +1,48 @@
+{
+  "name": "workos/workos-php-workload-identity-gcp",
+  "description": "GCP metadata server identity token provider for WorkOS workload identity federation",
+  "homepage": "https://workos.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "WorkOS",
+      "email": "sdk@workos.com"
+    }
+  ],
+  "repositories": [
+    {
+      "_comment": "Used only inside the workos-php repository, where it resolves the SDK to the checkout two directories up. Composer reads repositories from the root package only, so this has no effect once the package is installed.",
+      "type": "path",
+      "url": "../..",
+      "options": {
+        "versions": {
+          "workos/workos-php": "9.999.0"
+        }
+      }
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "ext-curl": "*",
+    "workos/workos-php": "^9.7"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^11.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "WorkOS\\WorkloadIdentity\\Gcp\\": "lib/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf composer.lock vendor/",
+    "test": "php vendor/bin/phpunit",
+    "typecheck": "php vendor/bin/phpstan analyse --no-progress --memory-limit=512M"
+  }
+}

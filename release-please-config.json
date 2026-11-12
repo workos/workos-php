@@ -1,5 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "19ea5871b0948df3978ffb3c4c59536bd344aa38",
+  "separate-pull-requests": true,
+  "always-update": true,
   "packages": {
     ".": {
       "release-type": "php",
@@ -7,6 +10,57 @@
       "include-component-in-tag": false,
       "include-v-in-tag": true,
       "changelog-path": "CHANGELOG.md",
+      "exclude-paths": [
+        "packages"
+      ],
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "lib/Version.php"
+        }
+      ]
+    },
+    "packages/workload-identity-github-actions": {
+      "release-type": "php",
+      "component": "workos-php-workload-identity-github-actions",
+      "package-name": "workos/workos-php-workload-identity-github-actions",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "pull-request-title-pattern": "build${scope}: release${component} ${version}",
+      "changelog-path": "CHANGELOG.md",
+      "initial-version": "0.1.0",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "lib/Version.php"
+        }
+      ]
+    },
+    "packages/workload-identity-gcp": {
+      "release-type": "php",
+      "component": "workos-php-workload-identity-gcp",
+      "package-name": "workos/workos-php-workload-identity-gcp",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "pull-request-title-pattern": "build${scope}: release${component} ${version}",
+      "changelog-path": "CHANGELOG.md",
+      "initial-version": "0.1.0",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "lib/Version.php"
+        }
+      ]
+    },
+    "packages/workload-identity-aws": {
+      "release-type": "php",
+      "component": "workos-php-workload-identity-aws",
+      "package-name": "workos/workos-php-workload-identity-aws",
+      "include-component-in-tag": true,
+      "include-v-in-tag": true,
+      "pull-request-title-pattern": "build${scope}: release${component} ${version}",
+      "changelog-path": "CHANGELOG.md",
+      "initial-version": "0.1.0",
       "extra-files": [
         {
           "type": "generic",

@@ -73,7 +73,7 @@ $organizations = $workos->organizations()->listOrganizations();
 
 ### Providers
 
-Each platform's provider is a separate package. The argument is the audience the token is requested for, which must match the application's trust rule.
+Each platform's provider is a separate package, developed in this repository under [`packages/`](packages). The argument is the audience the token is requested for, which must match the application's trust rule.
 
 ```
 composer require workos/workos-php-workload-identity-github-actions

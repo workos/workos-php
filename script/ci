@@ -22,5 +22,25 @@ echo ""
 echo "==> Running tests (PHPUnit)..."
 php vendor/bin/phpunit
 
+# The provider packages. The formatting check above already covers their
+# files; each has its own dependencies, so it is analyzed and tested from its
+# own directory.
+echo ""
+echo "==> Checking the provider packages' SDK version pins..."
+php script/check-provider-pins
+
+for package in packages/*/; do
+  echo ""
+  echo "==> Checking ${package%/} (PHPStan, PHPUnit)..."
+  (
+    cd "$package"
+    if [ ! -d vendor ]; then
+      composer install --prefer-dist --no-progress --no-interaction
+    fi
+    php vendor/bin/phpstan analyse --no-progress --memory-limit=512M
+    php vendor/bin/phpunit
+  )
+done
+
 echo ""
 echo "All checks passed."

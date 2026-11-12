@@ -1,0 +1,102 @@
+name: Split Package
+
+# Publishes one provider package from packages/. Packagist reads one package
+# per repository, so each provider has a read-only repository of its own. This
+# workflow copies the history of the package's directory to that repository
+# and tags it there; Packagist picks the tag up through its webhook.
+#
+# Called by release-please.yml, once per provider that was released.
+
+on:
+  workflow_call:
+    inputs:
+      package-path:
+        description: "The package's directory in this repository, such as packages/workload-identity-gcp"
+        required: true
+        type: string
+      repository:
+        description: "The name of the package's read-only repository, in the same organization as this one"
+        required: true
+        type: string
+      version:
+        description: "The version that was released, without a leading v"
+        required: true
+        type: string
+      ref:
+        description: "The commit to split: the tag release-please gave the package's release in this repository"
+        required: true
+        type: string
+    secrets:
+      SDK_BOT_PRIVATE_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  split:
+    name: Split ${{ inputs.package-path }}
+    runs-on: ubuntu-latest
+    steps:
+      # A token for the package's repository only. The SDK bot app must be
+      # installed on it.
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.SDK_BOT_APP_ID }}
+          private-key: ${{ secrets.SDK_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ inputs.repository }}
+          permission-contents: write
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          # The released commit, not the commit that started this run: a later
+          # push can take this run's place, and the package's tag here and the
+          # tag in its own repository must hold the same files.
+          ref: ${{ inputs.ref }}
+          # The split walks every commit that touched the directory; a
+          # shallow clone gives a different, broken history.
+          fetch-depth: 0
+          # Otherwise this repository's own token is sent to github.com for
+          # the push below, in place of the app token.
+          persist-credentials: false
+
+      - name: Split the package directory and push it
+        env:
+          TOKEN: ${{ steps.app-token.outputs.token }}
+          PACKAGE_PATH: ${{ inputs.package-path }}
+          MIRROR: ${{ github.repository_owner }}/${{ inputs.repository }}
+          VERSION: ${{ inputs.version }}
+          REF: ${{ inputs.ref }}
+        run: |
+          set -euo pipefail
+
+          # With an empty ref the checkout above falls back to the commit that
+          # started the run, without failing.
+          if [ -z "$REF" ] || [ "$(git rev-parse HEAD)" != "$(git rev-parse "refs/tags/${REF}^{commit}")" ]; then
+            echo "The checkout is not at the release tag '$REF'" >&2
+            exit 1
+          fi
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "Not a version: '$VERSION'" >&2
+            exit 1
+          fi
+          if [ ! -f "$PACKAGE_PATH/composer.json" ]; then
+            echo "No composer.json in '$PACKAGE_PATH'" >&2
+            exit 1
+          fi
+
+          # A commit whose tree is the package directory and whose history is
+          # the commits that touched it. The same input always gives the same
+          # commit, so each release adds to the history the last one pushed.
+          sha="$(git subtree split --prefix="$PACKAGE_PATH")"
+          # An empty value would turn the first push below into a branch delete.
+          git cat-file -e "${sha}^{commit}"
+          remote="https://x-access-token:${TOKEN}@github.com/${MIRROR}.git"
+
+          # Forced: the repository is a copy, and this repository is the
+          # source of truth for its main branch.
+          git push --force "$remote" "$sha:refs/heads/main"
+          # Not forced: a version that is already tagged is never moved.
+          git push "$remote" "$sha:refs/tags/v${VERSION}"

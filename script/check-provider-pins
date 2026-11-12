@@ -1,0 +1,66 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// @oagen-ignore-file
+
+// Each provider package in packages/ resolves the SDK to this checkout through
+// a path repository that gives the checkout a pinned version, such as 9.999.0.
+// The pin satisfies any constraint on its own major, so a package's tests stay
+// green on an SDK major that its published constraint does not allow.
+//
+// This fails when a pin is on neither the SDK's current major nor the next
+// one. Before an SDK major is released, widen each package's constraint on
+// workos/workos-php (`^9.7 || ^10.0`) and move its pin (`10.999.0`) on main;
+// release-please then rebuilds the SDK's release PR on top of that change.
+// The next major is accepted so that change can land before the release PR
+// does. A pin left on the old major fails on the release PR, which is the
+// reminder.
+
+$root = dirname(__DIR__);
+$sdk = 'workos/workos-php';
+
+$versionFile = (string) file_get_contents($root . '/lib/Version.php');
+if (preg_match("/SDK_VERSION = '(\\d+)\\.\\d+\\.\\d+/", $versionFile, $match) !== 1) {
+    fwrite(STDERR, "Could not read SDK_VERSION from lib/Version.php.\n");
+    exit(1);
+}
+$sdkMajor = (int) $match[1];
+
+$manifests = glob($root . '/packages/*/composer.json') ?: [];
+if ($manifests === []) {
+    fwrite(STDERR, "No packages found in packages/.\n");
+    exit(1);
+}
+
+$failures = 0;
+foreach ($manifests as $manifest) {
+    $name = basename(dirname($manifest));
+    $composer = json_decode((string) file_get_contents($manifest), true);
+    $pin = null;
+    foreach ($composer['repositories'] ?? [] as $repository) {
+        $pin ??= $repository['options']['versions'][$sdk] ?? null;
+    }
+
+    if (!is_string($pin)) {
+        fwrite(STDERR, sprintf("%s: no path repository pins a version for %s.\n", $name, $sdk));
+        $failures++;
+    } elseif (!in_array((int) explode('.', $pin)[0], [$sdkMajor, $sdkMajor + 1], true)) {
+        fwrite(STDERR, sprintf(
+            "%s: %s is pinned to %s, but the SDK is on major %d. Update the pin and the package's constraint on %s.\n",
+            $name,
+            $sdk,
+            $pin,
+            $sdkMajor,
+            $sdk,
+        ));
+        $failures++;
+    }
+}
+
+if ($failures > 0) {
+    exit(1);
+}
+
+printf("Provider pins match SDK major %d (%d packages).\n", $sdkMajor, count($manifests));
