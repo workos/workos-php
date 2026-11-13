@@ -35,6 +35,7 @@ class SSO
      * @param string|null $domain Filter Connections by their associated domain.
      * @param string|null $organizationId Filter Connections by their associated organization.
      * @param string|null $search Searchable text to match against Connection names.
+     * @param \WorkOS\Resource\ConnectionsState|null $state Filter Connections by their state.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\Connection>
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -48,6 +49,7 @@ class SSO
         ?string $organizationId = null,
         ?string $search = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?\WorkOS\Resource\ConnectionsState $state = null,
     ): \WorkOS\PaginatedResponse {
         $query = array_filter([
             'before' => $before,
@@ -58,6 +60,7 @@ class SSO
             'domain' => $domain,
             'organization_id' => $organizationId,
             'search' => $search,
+            'state' => $state?->value,
         ], fn ($v) => $v !== null);
         return $this->client->requestPage(
             method: 'GET',
