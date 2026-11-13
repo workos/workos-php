@@ -38,7 +38,7 @@ readonly class EmailChange implements \JsonSerializable
     {
         return [
             'object' => $this->object,
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
             'new_email' => $this->newEmail,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),

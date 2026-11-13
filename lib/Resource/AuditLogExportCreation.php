@@ -13,9 +13,9 @@ readonly class AuditLogExportCreation implements \JsonSerializable
     public function __construct(
         /** The unique ID of the Organization. */
         public string $organizationId,
-        /** ISO-8601 value for start of the export range. */
+        /** ISO-8601 value for start of the export range. The range must span no more than 31 days. */
         public \DateTimeImmutable $rangeStart,
-        /** ISO-8601 value for end of the export range. */
+        /** ISO-8601 value for end of the export range. Must be no more than 31 days after the start. */
         public \DateTimeImmutable $rangeEnd,
         /**
          * List of actions to filter against.
@@ -66,11 +66,12 @@ readonly class AuditLogExportCreation implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'range_start' => \WorkOS\Internal\DateTimeFormat::iso8601($this->rangeStart),
             'range_end' => \WorkOS\Internal\DateTimeFormat::iso8601($this->rangeEnd),
+        ] + array_filter([
             'actions' => $this->actions,
             'actors' => $this->actors,
             'actor_names' => $this->actorNames,
             'actor_ids' => $this->actorIds,
             'targets' => $this->targets,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

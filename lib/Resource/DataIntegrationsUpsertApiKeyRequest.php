@@ -51,10 +51,11 @@ readonly class DataIntegrationsUpsertApiKeyRequest implements \JsonSerializable
             'secret' => $this->secret,
             'account_display_name' => $this->accountDisplayName,
             'account_identifier' => $this->accountIdentifier,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'connection_intent' => $this->connectionIntent,
             'connected_account_id' => $this->connectedAccountId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

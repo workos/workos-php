@@ -35,7 +35,7 @@ readonly class UserRoleAssignmentSource implements \JsonSerializable
         return [
             'type' => $this->type->value,
             'group_role_assignment_id' => $this->groupRoleAssignmentId,
-            'group' => $this->group?->toArray(),
+            'group' => $this->group?->jsonSerialize(),
         ];
     }
 }

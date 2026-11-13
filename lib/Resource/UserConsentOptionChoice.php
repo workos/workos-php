@@ -28,9 +28,9 @@ readonly class UserConsentOptionChoice implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'value' => $this->value,
             'label' => $this->label,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

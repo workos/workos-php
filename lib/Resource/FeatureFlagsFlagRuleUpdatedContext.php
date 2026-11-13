@@ -34,8 +34,9 @@ readonly class FeatureFlagsFlagRuleUpdatedContext implements \JsonSerializable
     {
         return [
             'client_id' => $this->clientId,
-            'actor' => $this->actor?->toArray(),
-            'previous_attributes' => $this->previousAttributes?->toArray(),
-        ];
+        ] + array_filter([
+            'actor' => $this->actor?->jsonSerialize(),
+            'previous_attributes' => $this->previousAttributes?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

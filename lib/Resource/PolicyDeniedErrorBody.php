@@ -15,6 +15,8 @@ readonly class PolicyDeniedErrorBody implements \JsonSerializable
         public string $code,
         /** A human-readable description of the error. */
         public string $message,
+        /** The ID of the Radar detection that blocked the request. Only set when Radar blocked it. */
+        public ?string $radarDetectionId = null,
     ) {
     }
 
@@ -23,6 +25,7 @@ readonly class PolicyDeniedErrorBody implements \JsonSerializable
         return new self(
             code: $data['code'] ?? 'policy_denied',
             message: $data['message'],
+            radarDetectionId: $data['radar_detection_id'] ?? null,
         );
     }
 
@@ -31,6 +34,8 @@ readonly class PolicyDeniedErrorBody implements \JsonSerializable
         return [
             'code' => $this->code,
             'message' => $this->message,
-        ];
+        ] + array_filter([
+            'radar_detection_id' => $this->radarDetectionId,
+        ], fn ($v) => $v !== null);
     }
 }

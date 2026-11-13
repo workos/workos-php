@@ -49,11 +49,12 @@ readonly class RefreshTokenSessionAuthenticateRequest implements \JsonSerializab
             'client_id' => $this->clientId,
             'grant_type' => $this->grantType,
             'refresh_token' => $this->refreshToken,
+        ] + array_filter([
             'client_secret' => $this->clientSecret,
             'organization_id' => $this->organizationId,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

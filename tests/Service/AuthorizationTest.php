@@ -60,7 +60,7 @@ class AuthorizationTest extends TestCase
     public function testPatchGroupRoleAssignments(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->authorization()->patchGroupRoleAssignments('test_group_id');
+        $client->authorization()->patchGroupRoleAssignments(groupId: 'test_group_id');
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('authorization/groups/test_group_id/role_assignments', $request->getUri()->getPath());

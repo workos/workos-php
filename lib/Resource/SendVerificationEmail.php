@@ -25,8 +25,8 @@ readonly class SendVerificationEmail implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'locale' => $this->locale?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

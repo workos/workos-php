@@ -31,10 +31,10 @@ readonly class ErrorBodyWithCodeStatusCode implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'message' => $this->message,
             'code' => $this->code,
             'statusCode' => $this->statusCode,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

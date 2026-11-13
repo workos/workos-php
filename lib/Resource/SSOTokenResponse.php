@@ -41,8 +41,9 @@ readonly class SSOTokenResponse implements \JsonSerializable
             'token_type' => $this->tokenType,
             'access_token' => $this->accessToken,
             'expires_in' => $this->expiresIn,
-            'profile' => $this->profile->toArray(),
-            'oauth_tokens' => $this->oauthTokens?->toArray(),
-        ];
+            'profile' => $this->profile->jsonSerialize(),
+        ] + array_filter([
+            'oauth_tokens' => $this->oauthTokens?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

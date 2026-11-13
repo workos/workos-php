@@ -50,7 +50,8 @@ readonly class RoleUpdatedData implements \JsonSerializable
             'resource_type_slug' => $this->resourceTypeSlug,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'permissions' => $this->permissions,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

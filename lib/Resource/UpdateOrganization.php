@@ -54,13 +54,14 @@ readonly class UpdateOrganization implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'metadata' => $this->metadata,
+            'external_id' => $this->externalId,
+        ] + array_filter([
             'name' => $this->name,
             'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
             'domains' => $this->domains,
-            'domain_data' => $this->domainData !== null ? array_map(fn ($item) => $item->toArray(), $this->domainData) : null,
+            'domain_data' => $this->domainData !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->domainData) : null,
             'stripe_customer_id' => $this->stripeCustomerId,
-            'metadata' => $this->metadata,
-            'external_id' => $this->externalId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

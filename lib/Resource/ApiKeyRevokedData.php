@@ -61,7 +61,7 @@ readonly class ApiKeyRevokedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner->jsonSerialize(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,

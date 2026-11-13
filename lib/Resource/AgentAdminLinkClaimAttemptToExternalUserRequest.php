@@ -37,8 +37,9 @@ readonly class AgentAdminLinkClaimAttemptToExternalUserRequest implements \JsonS
         return [
             'type' => $this->type,
             'claim_attempt_token' => $this->claimAttemptToken,
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

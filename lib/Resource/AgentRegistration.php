@@ -51,12 +51,12 @@ readonly class AgentRegistration implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'agent_identity' => $this->agentIdentity->toArray(),
+            'agent_identity' => $this->agentIdentity->jsonSerialize(),
             'organization_id' => $this->organizationId,
             'status' => $this->status->value,
             'revoked_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->revokedAt),
             'kind' => $this->kind->value,
-            'claim' => $this->claim?->toArray(),
+            'claim' => $this->claim?->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];

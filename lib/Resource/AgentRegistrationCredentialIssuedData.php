@@ -47,7 +47,7 @@ readonly class AgentRegistrationCredentialIssuedData implements \JsonSerializabl
             'object' => $this->object,
             'id' => $this->id,
             'agent_registration_id' => $this->agentRegistrationId,
-            'detail' => $this->detail->toArray(),
+            'detail' => $this->detail->jsonSerialize(),
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
         ];

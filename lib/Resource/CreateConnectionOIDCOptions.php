@@ -52,13 +52,14 @@ readonly class CreateConnectionOIDCOptions implements \JsonSerializable
         return [
             'discovery_endpoint' => $this->discoveryEndpoint,
             'client_id' => $this->clientId,
+        ] + array_filter([
             'client_secret' => $this->clientSecret,
             'redirect_uri' => $this->redirectUri,
             'pkce' => $this->pkce,
             'token_authentication_method' => $this->tokenAuthenticationMethod?->value,
-            'jwt_signing_key_pair' => $this->jwtSigningKeyPair?->toArray(),
+            'jwt_signing_key_pair' => $this->jwtSigningKeyPair?->jsonSerialize(),
             'id_token_signature_algorithm' => $this->idTokenSignatureAlgorithm?->value,
             'fetch_user_info' => $this->fetchUserInfo,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

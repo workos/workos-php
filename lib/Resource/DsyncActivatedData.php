@@ -65,8 +65,9 @@ readonly class DsyncActivatedData implements \JsonSerializable
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'external_key' => $this->externalKey,
-            'domains' => array_map(fn ($item) => $item->toArray(), $this->domains),
+            'domains' => array_map(fn ($item) => $item->jsonSerialize(), $this->domains),
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -29,8 +29,8 @@ readonly class UserAuthenticationFactorEnrollResponse implements \JsonSerializab
     public function toArray(): array
     {
         return [
-            'authentication_factor' => $this->authenticationFactor->toArray(),
-            'authentication_challenge' => $this->authenticationChallenge->toArray(),
+            'authentication_factor' => $this->authenticationFactor->jsonSerialize(),
+            'authentication_challenge' => $this->authenticationChallenge->jsonSerialize(),
         ];
     }
 }

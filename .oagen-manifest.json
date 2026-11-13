@@ -754,7 +754,7 @@
     "lib/Resource/SSOLogoutAuthorizeRequest.php",
     "lib/Resource/SSOLogoutAuthorizeResponse.php",
     "lib/Resource/SSOProvider.php",
-    "lib/Resource/SSORequiredOAuthErrorBodyWithConnectionIdsListEmailPendingAuthenticationToken.php",
+    "lib/Resource/SSORequiredOAuthErrorBodyWithConnectionIdsListEmail.php",
     "lib/Resource/SSOTokenResponse.php",
     "lib/Resource/SSOTokenResponseOAuthToken.php",
     "lib/Resource/SendEmailChange.php",
@@ -1459,6 +1459,7 @@
     "tests/Fixtures/list_data_integration.json",
     "tests/Fixtures/list_directory.json",
     "tests/Fixtures/list_directory_group.json",
+    "tests/Fixtures/list_directory_user.json",
     "tests/Fixtures/list_directory_user_with_groups.json",
     "tests/Fixtures/list_event_schema.json",
     "tests/Fixtures/list_flag.json",
@@ -1662,7 +1663,7 @@
     "tests/Fixtures/sso_device_authorization_request.json",
     "tests/Fixtures/sso_logout_authorize_request.json",
     "tests/Fixtures/sso_logout_authorize_response.json",
-    "tests/Fixtures/sso_required_oauth_error_body_with_connection_ids_list_email_pending_authentication_token.json",
+    "tests/Fixtures/sso_required_oauth_error_body_with_connection_ids_list_email.json",
     "tests/Fixtures/sso_token_response.json",
     "tests/Fixtures/sso_token_response_oauth_token.json",
     "tests/Fixtures/sub_resource_scoped_role_not_allowed_error_body_with_role_slug.json",
@@ -2240,20 +2241,20 @@
       "sdkMethod": "createDirectorySync",
       "service": "directorySync"
     },
-    "GET /directory_groups": {
-      "sdkMethod": "listGroups",
+    "GET /directories/{directoryId}/groups": {
+      "sdkMethod": "listDirectoryGroups",
       "service": "directorySync"
     },
-    "GET /directory_groups/{id}": {
-      "sdkMethod": "getGroup",
+    "GET /directories/{directoryId}/groups/{groupId}": {
+      "sdkMethod": "getDirectoryGroup",
       "service": "directorySync"
     },
-    "GET /directory_users": {
-      "sdkMethod": "listUsers",
+    "GET /directories/{directoryId}/users": {
+      "sdkMethod": "listDirectoryUsers",
       "service": "directorySync"
     },
-    "GET /directory_users/{id}": {
-      "sdkMethod": "getUser",
+    "GET /directories/{directoryId}/users/{userId}": {
+      "sdkMethod": "getDirectoryUser",
       "service": "directorySync"
     },
     "GET /events": {
@@ -2867,6 +2868,22 @@
     "GET /audit_logs/exports/{auditLogExportId}": {
       "sdkMethod": "getExport",
       "service": "auditLogs"
+    },
+    "GET /directory_groups": {
+      "sdkMethod": "listGroups",
+      "service": "directorySync"
+    },
+    "GET /directory_groups/{id}": {
+      "sdkMethod": "getGroup",
+      "service": "directorySync"
+    },
+    "GET /directory_users": {
+      "sdkMethod": "listUsers",
+      "service": "directorySync"
+    },
+    "GET /directory_users/{id}": {
+      "sdkMethod": "getUser",
+      "service": "directorySync"
     }
   }
 }

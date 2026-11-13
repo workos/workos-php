@@ -27,6 +27,8 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
         public string $userId,
         /** The email address of the user. */
         public string $email,
+        /** The ID of the Radar detection that challenged the authentication. */
+        public ?string $radarDetectionId = null,
     ) {
     }
 
@@ -41,6 +43,7 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
             userAgent: $data['user_agent'] ?? null,
             userId: $data['user_id'],
             email: $data['email'],
+            radarDetectionId: $data['radar_detection_id'] ?? null,
         );
     }
 
@@ -55,6 +58,8 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
-        ];
+        ] + array_filter([
+            'radar_detection_id' => $this->radarDetectionId,
+        ], fn ($v) => $v !== null);
     }
 }

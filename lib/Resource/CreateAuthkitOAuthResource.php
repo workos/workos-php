@@ -30,7 +30,8 @@ readonly class CreateAuthkitOAuthResource implements \JsonSerializable
     {
         return [
             'uri' => $this->uri,
+        ] + array_filter([
             'default' => $this->default,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

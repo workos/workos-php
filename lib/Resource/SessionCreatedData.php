@@ -74,8 +74,9 @@ readonly class SessionCreatedData implements \JsonSerializable
             'ended_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->endedAt),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
-            'impersonator' => $this->impersonator?->toArray(),
+        ] + array_filter([
+            'impersonator' => $this->impersonator?->jsonSerialize(),
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

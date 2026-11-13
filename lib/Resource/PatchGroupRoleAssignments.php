@@ -34,9 +34,9 @@ readonly class PatchGroupRoleAssignments implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
-            'add' => $this->add !== null ? array_map(fn ($item) => $item->toArray(), $this->add) : null,
-            'remove' => $this->remove !== null ? array_map(fn ($item) => $item->toArray(), $this->remove) : null,
-        ];
+        return array_filter([
+            'add' => $this->add !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->add) : null,
+            'remove' => $this->remove !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->remove) : null,
+        ], fn ($v) => $v !== null);
     }
 }

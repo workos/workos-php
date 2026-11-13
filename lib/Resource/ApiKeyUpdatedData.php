@@ -64,7 +64,7 @@ readonly class ApiKeyUpdatedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner->jsonSerialize(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => $this->lastUsedAt,
@@ -72,7 +72,7 @@ readonly class ApiKeyUpdatedData implements \JsonSerializable
             'permissions' => $this->permissions,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-            'previous_attributes' => $this->previousAttributes->toArray(),
+            'previous_attributes' => $this->previousAttributes->jsonSerialize(),
         ];
     }
 }

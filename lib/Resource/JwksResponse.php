@@ -29,7 +29,7 @@ readonly class JwksResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'keys' => array_map(fn ($item) => $item->toArray(), $this->keys),
+            'keys' => array_map(fn ($item) => $item->jsonSerialize(), $this->keys),
         ];
     }
 }

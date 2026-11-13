@@ -36,9 +36,10 @@ readonly class CreateOrganizationRole implements \JsonSerializable
     {
         return [
             'name' => $this->name,
-            'slug' => $this->slug,
             'description' => $this->description,
+        ] + array_filter([
+            'slug' => $this->slug,
             'resource_type_slug' => $this->resourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

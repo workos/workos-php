@@ -33,8 +33,9 @@ readonly class EventContextGoogleAnalyticsSession implements \JsonSerializable
     {
         return [
             'containerId' => $this->containerId,
+        ] + array_filter([
             'sessionId' => $this->sessionId,
             'sessionNumber' => $this->sessionNumber,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

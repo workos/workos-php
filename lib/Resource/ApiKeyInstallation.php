@@ -34,7 +34,8 @@ readonly class ApiKeyInstallation implements \JsonSerializable
         return [
             'secret' => $this->secret,
             'user_id' => $this->userId,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

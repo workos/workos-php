@@ -36,7 +36,7 @@ readonly class ErrorBodyWithCodeErrors implements \JsonSerializable
         return [
             'code' => $this->code->value,
             'message' => $this->message,
-            'errors' => array_map(fn ($item) => $item->toArray(), $this->errors),
+            'errors' => array_map(fn ($item) => $item->jsonSerialize(), $this->errors),
         ];
     }
 }

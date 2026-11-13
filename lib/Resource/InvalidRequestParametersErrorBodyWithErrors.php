@@ -37,7 +37,7 @@ readonly class InvalidRequestParametersErrorBodyWithErrors implements \JsonSeria
         return [
             'code' => $this->code,
             'message' => $this->message,
-            'errors' => array_map(fn ($item) => $item->toArray(), $this->errors),
+            'errors' => array_map(fn ($item) => $item->jsonSerialize(), $this->errors),
         ];
     }
 }

@@ -26,8 +26,8 @@ readonly class FeatureFlagsFlagRuleUpdatedContextPreviousAttributeData implement
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'value' => $this->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -69,8 +69,9 @@ readonly class ConnectionDeactivatedData implements \JsonSerializable
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'external_key' => $this->externalKey,
             'status' => $this->status->value,
-            'domains' => array_map(fn ($item) => $item->toArray(), $this->domains),
+            'domains' => array_map(fn ($item) => $item->jsonSerialize(), $this->domains),
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

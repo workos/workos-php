@@ -30,7 +30,7 @@ readonly class DirectoryMetadata implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'users' => $this->users->toArray(),
+            'users' => $this->users->jsonSerialize(),
             'groups' => $this->groups,
         ];
     }

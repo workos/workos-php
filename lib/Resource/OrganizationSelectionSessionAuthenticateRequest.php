@@ -51,9 +51,10 @@ readonly class OrganizationSelectionSessionAuthenticateRequest implements \JsonS
             'grant_type' => $this->grantType,
             'pending_authentication_token' => $this->pendingAuthenticationToken,
             'organization_id' => $this->organizationId,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

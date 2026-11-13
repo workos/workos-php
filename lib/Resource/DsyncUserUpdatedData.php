@@ -117,12 +117,13 @@ readonly class DsyncUserUpdatedData implements \JsonSerializable
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'name' => $this->name,
-            'emails' => $this->emails !== null ? array_map(fn ($item) => $item->toArray(), $this->emails) : null,
             'job_title' => $this->jobTitle,
             'username' => $this->username,
-            'role' => $this->role?->toArray(),
-            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
+        ] + array_filter([
+            'emails' => $this->emails !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->emails) : null,
+            'role' => $this->role?->jsonSerialize(),
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->roles) : null,
             'previous_attributes' => $this->previousAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

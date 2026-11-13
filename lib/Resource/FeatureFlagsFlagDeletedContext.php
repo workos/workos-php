@@ -31,7 +31,7 @@ readonly class FeatureFlagsFlagDeletedContext implements \JsonSerializable
     {
         return [
             'client_id' => $this->clientId,
-            'actor' => $this->actor->toArray(),
+            'actor' => $this->actor->jsonSerialize(),
         ];
     }
 }

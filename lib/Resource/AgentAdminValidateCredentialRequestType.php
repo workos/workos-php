@@ -8,6 +8,8 @@ namespace WorkOS\Resource;
 
 enum AgentAdminValidateCredentialRequestType: string
 {
+    /** The kind of credential being validated — an agent API key or an agent access token. */
     case ApiKey = 'api_key';
+    /** The kind of credential being validated — an agent API key or an agent access token. */
     case AccessToken = 'access_token';
 }

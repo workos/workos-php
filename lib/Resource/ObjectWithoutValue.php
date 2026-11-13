@@ -33,7 +33,7 @@ readonly class ObjectWithoutValue implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'metadata' => $this->metadata->toArray(),
+            'metadata' => $this->metadata->jsonSerialize(),
             'name' => $this->name,
         ];
     }

@@ -67,9 +67,10 @@ readonly class UserOrganizationMembershipBaseListData implements \JsonSerializab
             'directory_managed' => $this->directoryManaged,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
+        ] + array_filter([
             'organization_name' => $this->organizationName,
             'custom_attributes' => $this->customAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

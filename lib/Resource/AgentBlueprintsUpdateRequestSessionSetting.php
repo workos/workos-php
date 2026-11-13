@@ -32,10 +32,10 @@ readonly class AgentBlueprintsUpdateRequestSessionSetting implements \JsonSerial
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'max_age_seconds' => $this->maxAgeSeconds,
             'access_token_ttl_seconds' => $this->accessTokenTtlSeconds,
             'refresh_token_ttl_seconds' => $this->refreshTokenTtlSeconds,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

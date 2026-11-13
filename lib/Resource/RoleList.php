@@ -32,7 +32,7 @@ readonly class RoleList implements \JsonSerializable
     {
         return [
             'object' => $this->object,
-            'data' => array_map(fn ($item) => $item->toArray(), $this->data),
+            'data' => array_map(fn ($item) => $item->jsonSerialize(), $this->data),
         ];
     }
 }

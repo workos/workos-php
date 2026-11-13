@@ -41,8 +41,9 @@ readonly class PatchConnectionSAMLOptions implements \JsonSerializable
             'idp_metadata_url' => $this->idpMetadataUrl,
             'acs_url' => $this->acsUrl,
             'sp_entity_id' => $this->spEntityId,
+        ] + array_filter([
             'idp_entity_id' => $this->idpEntityId,
             'idp_sso_url' => $this->idpSSOUrl,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

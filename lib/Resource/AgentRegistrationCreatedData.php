@@ -53,7 +53,7 @@ readonly class AgentRegistrationCreatedData implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'agent_identity' => $this->agentIdentity->toArray(),
+            'agent_identity' => $this->agentIdentity->jsonSerialize(),
             'organization_id' => $this->organizationId,
             'status' => $this->status->value,
             'kind' => $this->kind->value,

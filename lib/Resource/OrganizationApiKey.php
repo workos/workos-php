@@ -58,7 +58,7 @@ readonly class OrganizationApiKey implements \JsonSerializable
         return [
             'object' => $this->object,
             'id' => $this->id,
-            'owner' => $this->owner->toArray(),
+            'owner' => $this->owner->jsonSerialize(),
             'name' => $this->name,
             'obfuscated_value' => $this->obfuscatedValue,
             'last_used_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->lastUsedAt),

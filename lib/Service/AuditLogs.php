@@ -205,8 +205,8 @@ class AuditLogs
      *
      * Create an Audit Log Export. Exports are scoped to a single organization within a specified date range.
      * @param string $organizationId The unique ID of the Organization.
-     * @param \DateTimeImmutable $rangeStart ISO-8601 value for start of the export range.
-     * @param \DateTimeImmutable $rangeEnd ISO-8601 value for end of the export range.
+     * @param \DateTimeImmutable $rangeStart ISO-8601 value for start of the export range. The range must span no more than 31 days.
+     * @param \DateTimeImmutable $rangeEnd ISO-8601 value for end of the export range. Must be no more than 31 days after the start.
      * @param array<string>|null $actions List of actions to filter against.
      * @param array<string>|null $actors (deprecated) Deprecated. Use `actor_names` instead.
      * @param array<string>|null $actorNames List of actor names to filter against.
