@@ -30,7 +30,7 @@ use WorkOS\Version;
  */
 final class Credentials implements CredentialsContract
 {
-    /** Sent with the access token on every API request. */
+    /** Sent with the access token on every API request, when an environment ID is set. */
     public const ENVIRONMENT_HEADER = 'x-url-environment-id';
 
     public const GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
@@ -51,7 +51,8 @@ final class Credentials implements CredentialsContract
 
     public readonly string $tokenUrl;
 
-    public readonly string $environmentId;
+    /** Null when no environment ID is set; the environment header is then not sent. */
+    public readonly ?string $environmentId;
 
     public readonly string $resource;
 
@@ -83,7 +84,7 @@ final class Credentials implements CredentialsContract
      * @param IdentityTokenProvider|callable(): string $identityTokenProvider Returns the workload's JWT. Called for every exchange attempt.
      * @param string|null                              $clientId              The M2M application's client ID. Defaults to `WORKOS_CLIENT_ID`.
      * @param string|null                              $tokenUrl              The token exchange endpoint, an `https` URL. Defaults to `WORKOS_WIF_TOKEN_URL`; there is no built-in default.
-     * @param string|null                              $environmentId         Sent as a header on every API request. Defaults to `WORKOS_ENVIRONMENT_ID`.
+     * @param string|null                              $environmentId         Optional. Defaults to `WORKOS_ENVIRONMENT_ID`. When set, it is sent as the `x-url-environment-id` header on every API request; when not set, or empty, the header is not sent. The server binds a workload identity client to exactly one environment, so the header selects nothing: it is a safety check, and a value that names a different environment gets `403 environment_mismatch`.
      * @param string|null                              $resource              The `resource` form field. Defaults to `https://api.workos.com`.
      * @param string|null                              $scope                 The `scope` form field. Defaults to `WORKOS_WIF_SCOPE`; left out of the form when empty.
      * @param (callable(): float)|null                 $clock                 Seconds on a monotonic clock. Leave unset outside tests.
@@ -108,7 +109,8 @@ final class Credentials implements CredentialsContract
 
         $this->clientId = self::required($clientId, 'clientId', 'WORKOS_CLIENT_ID');
         $this->tokenUrl = self::httpsUrl(self::required($tokenUrl, 'tokenUrl', 'WORKOS_WIF_TOKEN_URL'));
-        $this->environmentId = self::required($environmentId, 'environmentId', 'WORKOS_ENVIRONMENT_ID');
+        $environmentId ??= self::env('WORKOS_ENVIRONMENT_ID');
+        $this->environmentId = $environmentId !== '' ? $environmentId : null;
         $this->resource = $resource !== null && $resource !== '' ? $resource : self::DEFAULT_RESOURCE;
 
         $scope ??= self::env('WORKOS_WIF_SCOPE');
@@ -127,14 +129,12 @@ final class Credentials implements CredentialsContract
             $this->refresh();
         }
 
-        return new CredentialSnapshot(
-            [
-                'Authorization' => sprintf('Bearer %s', (string) $this->token),
-                self::ENVIRONMENT_HEADER => $this->environmentId,
-            ],
-            $this->generation,
-            true,
-        );
+        $headers = ['Authorization' => sprintf('Bearer %s', (string) $this->token)];
+        if ($this->environmentId !== null) {
+            $headers[self::ENVIRONMENT_HEADER] = $this->environmentId;
+        }
+
+        return new CredentialSnapshot($headers, $this->generation, true);
     }
 
     public function invalidate(int $generation): void

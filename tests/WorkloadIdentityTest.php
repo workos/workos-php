@@ -121,24 +121,63 @@ class WorkloadIdentityTest extends TestCase
         $this->tokenRequests = [];
         $scoped = $this->credentials(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
-            scope: 'organizations:write',
+            scope: 'orgs:write',
         );
         $this->client($scoped, [self::organization()])->organizations()->getOrganization('org_01');
 
         $this->assertCount(1, $this->tokenRequests);
         $form = self::form($this->tokenRequests[0]);
-        $this->assertSame('organizations:write', $form['scope']);
+        $this->assertSame('orgs:write', $form['scope']);
         $this->assertArrayNotHasKey('client_secret', $form);
         $this->assertFalse($this->tokenRequests[0]->hasHeader('Authorization'));
     }
 
-    public function testWIF_02_ApiRequestCarriesTheAccessTokenAndTheEnvironmentHeader(): void
+    public function testWIF_02_a_ApiRequestCarriesTheAccessTokenAndTheEnvironmentHeader(): void
     {
         $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
         $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
 
         $this->assertSame(['Bearer access-1'], $this->apiAuthorizations());
         $this->assertSame('environment_wif_test', $this->apiRequest(0)->getHeaderLine('x-url-environment-id'));
+    }
+
+    public function testWIF_02_b_WithNoEnvironmentIdTheEnvironmentHeaderIsNotSent(): void
+    {
+        // Unset here as well as in setUp(), which also saves the value that tearDown() restores.
+        putenv('WORKOS_ENVIRONMENT_ID');
+
+        // Constructing the credentials with no environment ID is not an error.
+        $credentials = $this->credentials(
+            $this->tokenEndpoint([self::tokenResponse('access-1')]),
+            environmentId: null,
+        );
+        $this->assertNull($credentials->environmentId);
+
+        $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
+
+        $this->assertSame(['Bearer access-1'], $this->apiAuthorizations());
+        $this->assertFalse($this->apiRequest(0)->hasHeader('x-url-environment-id'));
+    }
+
+    public function testAnEmptyEnvironmentIdCountsAsNotSet(): void
+    {
+        // An empty variable, then an empty argument.
+        putenv('WORKOS_ENVIRONMENT_ID=');
+        $fromEnvironment = $this->credentials(
+            $this->tokenEndpoint([self::tokenResponse('access-1')]),
+            environmentId: null,
+        );
+        $explicit = $this->credentials(
+            $this->tokenEndpoint([self::tokenResponse('access-2')]),
+            environmentId: '',
+        );
+
+        foreach ([$fromEnvironment, $explicit] as $index => $credentials) {
+            $this->assertNull($credentials->environmentId);
+            $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
+            $this->assertFalse($this->apiRequest($index)->hasHeader('x-url-environment-id'));
+        }
+        $this->assertSame(['Bearer access-1', 'Bearer access-2'], $this->apiAuthorizations());
     }
 
     public function testWIF_03_SecondRequestWithinTheLifetimeReusesTheCachedToken(): void
@@ -1240,7 +1279,6 @@ class WorkloadIdentityTest extends TestCase
     {
         $cases = [
             'clientId is required (or set WORKOS_CLIENT_ID)' => ['tokenUrl' => self::TOKEN_URL, 'environmentId' => 'environment_wif_test'],
-            'environmentId is required (or set WORKOS_ENVIRONMENT_ID)' => ['clientId' => 'client_wif_test', 'tokenUrl' => self::TOKEN_URL],
         ];
 
         foreach ($cases as $description => $arguments) {

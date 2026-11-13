@@ -37,10 +37,10 @@ class WorkloadIdentityException extends \Exception implements WorkOSException
      * team's final error codes; change it here and nowhere else.
      */
     private const HINTS = [
-        'invalid_grant' => 'The identity token did not match a trust rule for this application, or the token has expired. Check the issuer, audience and subject claims against the trust rule.',
-        'invalid_target' => 'The resource or audience is wrong. The trust rule\'s audience must match the audience the identity token was requested with, and the resource must be registered for the environment.',
-        'invalid_client' => 'Check that the client ID is the M2M application that has the trust rule.',
-        'unauthorized_client' => 'This application is not allowed to use workload identity federation. Check that the feature is enabled for the environment and that the application has a trust rule.',
+        'invalid_grant' => 'The identity token was not accepted. Check its issuer, audience and subject claims against the trust rule, and that it has not expired. A token that was already exchanged is also refused: each exchange needs a new identity token.',
+        'invalid_target' => 'The resource is not one the token endpoint accepts. Leave the resource unset to use the default, https://api.workos.com.',
+        'invalid_client' => 'The client ID is unknown, or the application has no enabled trust rule. Check that the client ID is the M2M application that has the trust rule.',
+        'unauthorized_client' => 'This application cannot use workload identity federation. Check that the feature is enabled for your team and that the application is bound to a non-production environment.',
         'invalid_scope' => 'The requested scope is not allowed for this application. Fix the scope or leave it unset.',
         'invalid_request' => 'The token request was malformed. Check that the token URL points at the `/oauth2/token` endpoint.',
         self::EXCHANGE_FAILED => 'The token endpoint could not be reached or kept failing. Check the token URL and try again.',

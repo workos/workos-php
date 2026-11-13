@@ -65,11 +65,13 @@ $organizations = $workos->organizations()->listOrganizations();
 | `identityTokenProvider` | Returns the workload's identity token | Required |
 | `clientId` | The M2M application's client ID | `WORKOS_CLIENT_ID` |
 | `tokenUrl` | The token exchange endpoint. It must be an `https` URL | `WORKOS_WIF_TOKEN_URL` |
-| `environmentId` | The environment the requests are for | `WORKOS_ENVIRONMENT_ID` |
+| `environmentId` | Optional. The environment the application is bound to, sent as a safety check | `WORKOS_ENVIRONMENT_ID`, otherwise not sent |
 | `resource` | The API the access token is for | `https://api.workos.com` |
 | `scope` | The scopes to request | `WORKOS_WIF_SCOPE`, otherwise none |
 
-`clientId`, `tokenUrl` and `environmentId` are required: constructing the credentials throws when one is missing from both the arguments and the environment.
+`clientId` and `tokenUrl` are required: constructing the credentials throws when one is missing from both the arguments and the environment.
+
+`environmentId` is optional. WorkOS binds a workload identity client to exactly one environment and takes the environment from that binding, so the ID selects nothing. When it is set, the SDK sends it as the `x-url-environment-id` header on every API request, as a safety check: a value that names a different environment gets `403 environment_mismatch`. When it is not set, or is empty, the header is not sent.
 
 ### Providers
 
@@ -118,6 +120,8 @@ $provider = TokenEnv::create('WORKLOAD_IDENTITY_TOKEN');
 // Any callable that returns the token.
 $provider = fn (): string => $vault->read('workos/identity-token');
 ```
+
+WorkOS accepts an identity token for one exchange. A long-running process exchanges again about every four minutes, and under PHP-FPM every web request that calls WorkOS makes its own exchange. If the file or the variable still holds the same token at the next exchange, that exchange fails with `invalid_grant`. So use `TokenFile` and `TokenEnv` for a source that something rewrites before each exchange, or for a job shorter than five minutes. The platform providers (GitHub Actions, GCP and AWS) fetch a new token every time.
 
 ### Behavior
 
