@@ -41,8 +41,9 @@ readonly class RadarStandaloneResponse implements \JsonSerializable
             'verdict' => $this->verdict->value,
             'reason' => $this->reason,
             'attempt_id' => $this->attemptId,
+        ] + array_filter([
             'control' => $this->control?->value,
             'blocklist_type' => $this->blocklistType?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

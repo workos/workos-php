@@ -34,10 +34,10 @@ readonly class DataIntegrationAccessTokenResponse implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'active' => $this->active,
-            'access_token' => $this->accessToken?->toArray(),
+            'access_token' => $this->accessToken?->jsonSerialize(),
             'error' => $this->error?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

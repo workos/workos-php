@@ -92,9 +92,10 @@ readonly class DataIntegrationsListResponseData implements \JsonSerializable
             'ownership' => $this->ownership->value,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-            'connected_account' => $this->connectedAccount?->toArray(),
-            'connected_accounts' => array_map(fn ($item) => $item->toArray(), $this->connectedAccounts),
+            'connected_account' => $this->connectedAccount?->jsonSerialize(),
+            'connected_accounts' => array_map(fn ($item) => $item->jsonSerialize(), $this->connectedAccounts),
+        ] + array_filter([
             'auth_methods' => $this->authMethods !== null ? array_map(fn ($item) => $item->value, $this->authMethods) : null,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

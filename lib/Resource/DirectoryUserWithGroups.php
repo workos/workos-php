@@ -41,7 +41,7 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
         /** An ISO 8601 timestamp. */
         public \DateTimeImmutable $updatedAt,
         /**
-         * The directory groups the user belongs to. Deprecated: starting May 1, 2026, this field returns an empty array by default for newly created teams. Existing teams currently depending on this field should migrate to the new access pattern for better throughput performance — the field is unbounded by user, so users with many group memberships produce large, slow response payloads. Use the List Directory Groups endpoint with a `user` filter to fetch a user's group memberships.
+         * The directory groups the user belongs to. Deprecated: use `GET /directories/{directoryId}/groups?user={userId}` instead.
          * @var array<\WorkOS\Resource\DirectoryGroup>
          * @deprecated
          */
@@ -117,15 +117,16 @@ readonly class DirectoryUserWithGroups implements \JsonSerializable
             'custom_attributes' => $this->customAttributes,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
-            'groups' => array_map(fn ($item) => $item->toArray(), $this->groups),
+            'groups' => array_map(fn ($item) => $item->jsonSerialize(), $this->groups),
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'name' => $this->name,
-            'emails' => $this->emails !== null ? array_map(fn ($item) => $item->toArray(), $this->emails) : null,
             'job_title' => $this->jobTitle,
             'username' => $this->username,
-            'role' => $this->role?->toArray(),
-            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
-        ];
+        ] + array_filter([
+            'emails' => $this->emails !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->emails) : null,
+            'role' => $this->role?->jsonSerialize(),
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->roles) : null,
+        ], fn ($v) => $v !== null);
     }
 }

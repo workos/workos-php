@@ -39,10 +39,11 @@ readonly class DataIntegrationsVendCredentialsRequest implements \JsonSerializab
     {
         return [
             'user_id' => $this->userId,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'connected_account_id' => $this->connectedAccountId,
             'connection_owner' => $this->connectionOwner?->value,
             'supports_multiple_connections' => $this->supportsMultipleConnections,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

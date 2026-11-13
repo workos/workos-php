@@ -9,6 +9,7 @@ namespace WorkOS\Service;
 use WorkOS\Resource\Directory;
 use WorkOS\Resource\DirectoryGroup;
 use WorkOS\Resource\DirectorySyncResponse;
+use WorkOS\Resource\DirectoryUser;
 use WorkOS\Resource\DirectoryUserWithGroups;
 
 class DirectorySync
@@ -120,9 +121,135 @@ class DirectorySync
     }
 
     /**
+     * List Groups for a Directory
+     *
+     * Get a list of the Directory Groups in a Directory, optionally filtered to the groups a Directory User belongs to.
+     * @param string $directoryId Unique identifier of the Directory.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param string|null $user Filter Directory Groups to those this Directory User belongs to.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listDirectoryGroups(
+        string $directoryId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $user = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'user' => $user,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'directories/' . rawurlencode($directoryId) . '/groups',
+            query: $query,
+            modelClass: DirectoryGroup::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get a Group for a Directory
+     *
+     * Get the details of a Directory Group in a Directory.
+     * @param string $directoryId Unique identifier of the Directory.
+     * @param string $groupId Unique identifier for the Directory Group.
+     * @return \WorkOS\Resource\DirectoryGroup
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getDirectoryGroup(
+        string $directoryId,
+        string $groupId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DirectoryGroup {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'directories/' . rawurlencode($directoryId) . '/groups/' . rawurlencode($groupId),
+            options: $options,
+        );
+        return DirectoryGroup::fromArray($response);
+    }
+
+    /**
+     * List Users for a Directory
+     *
+     * Get a list of the Directory Users in a Directory, optionally filtered to the members of a Directory Group.
+     * @param string $directoryId Unique identifier of the Directory.
+     * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
+     * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
+     * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
+     * @param \WorkOS\Resource\PaginationOrder $order Order the results by the creation time. Supported values are `"asc"` (ascending), `"desc"` (descending), and `"normal"` (descending with reversed cursor semantics where `before` fetches older records and `after` fetches newer records). Defaults to "desc".
+     * @param string|null $group Filter Directory Users to the members of this Directory Group.
+     * @param string|null $idpId Filter Directory Users by the identity provider's unique identifier (`idp_id`).
+     * @param string|null $email Filter Directory Users by their primary email address.
+     * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUser>
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function listDirectoryUsers(
+        string $directoryId,
+        ?string $before = null,
+        ?string $after = null,
+        ?int $limit = null,
+        \WorkOS\Resource\PaginationOrder $order = \WorkOS\Resource\PaginationOrder::Desc,
+        ?string $group = null,
+        ?string $idpId = null,
+        ?string $email = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\PaginatedResponse {
+        $query = array_filter([
+            'before' => $before,
+            'after' => $after,
+            'limit' => $limit,
+            'order' => $order->value,
+            'group' => $group,
+            'idp_id' => $idpId,
+            'email' => $email,
+        ], fn ($v) => $v !== null);
+        return $this->client->requestPage(
+            method: 'GET',
+            path: 'directories/' . rawurlencode($directoryId) . '/users',
+            query: $query,
+            modelClass: DirectoryUser::class,
+            options: $options,
+        );
+    }
+
+    /**
+     * Get a User for a Directory
+     *
+     * Get the details of a Directory User in a Directory.
+     * @param string $directoryId Unique identifier of the Directory.
+     * @param string $userId Unique identifier for the Directory User.
+     * @return \WorkOS\Resource\DirectoryUser
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getDirectoryUser(
+        string $directoryId,
+        string $userId,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\DirectoryUser {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'directories/' . rawurlencode($directoryId) . '/users/' . rawurlencode($userId),
+            options: $options,
+        );
+        return DirectoryUser::fromArray($response);
+    }
+
+    /**
      * List Directory Groups
      *
-     * Get a list of all of existing directory groups matching the criteria specified.
+     * Get a list of all of existing directory groups matching the criteria specified. Deprecated: use `GET /directories/{directoryId}/groups` instead.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
@@ -131,6 +258,7 @@ class DirectorySync
      * @param string|null $user Unique identifier of the WorkOS Directory User. This value can be obtained from the WorkOS API.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
      * @throws \WorkOS\Exception\WorkOSException
+     * @deprecated
      */
     public function listGroups(
         ?string $before = null,
@@ -161,10 +289,11 @@ class DirectorySync
     /**
      * Get a Directory Group
      *
-     * Get the details of an existing Directory Group.
+     * Get the details of an existing Directory Group. Deprecated: use `GET /directories/{directoryId}/groups/{groupId}` instead.
      * @param string $id Unique identifier for the Directory Group.
      * @return \WorkOS\Resource\DirectoryGroup
      * @throws \WorkOS\Exception\WorkOSException
+     * @deprecated
      */
     public function getGroup(
         string $id,
@@ -181,7 +310,7 @@ class DirectorySync
     /**
      * List Directory Users
      *
-     * Get a list of all of existing Directory Users matching the criteria specified.
+     * Get a list of all of existing Directory Users matching the criteria specified. Deprecated: use `GET /directories/{directoryId}/users` instead.
      * @param string|null $before An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `before="obj_123"` to fetch a new batch of objects before `"obj_123"`.
      * @param string|null $after An object ID that defines your place in the list. When the ID is not present, you are at the end of the list. For example, if you make a list request and receive 100 objects, ending with `"obj_123"`, your subsequent call can include `after="obj_123"` to fetch a new batch of objects after `"obj_123"`.
      * @param int|null $limit Upper limit on the number of objects to return, between `1` and `100`. Defaults to 10.
@@ -192,6 +321,7 @@ class DirectorySync
      * @param string|null $email Filter Directory Users by their primary email address. Requires the `directory` parameter to also be provided.
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUserWithGroups>
      * @throws \WorkOS\Exception\WorkOSException
+     * @deprecated
      */
     public function listUsers(
         ?string $before = null,
@@ -226,10 +356,11 @@ class DirectorySync
     /**
      * Get a Directory User
      *
-     * Get the details of an existing Directory User.
+     * Get the details of an existing Directory User. Deprecated: use `GET /directories/{directoryId}/users/{userId}` instead.
      * @param string $id Unique identifier for the Directory User.
      * @return \WorkOS\Resource\DirectoryUserWithGroups
      * @throws \WorkOS\Exception\WorkOSException
+     * @deprecated
      */
     public function getUser(
         string $id,

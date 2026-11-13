@@ -29,9 +29,9 @@ readonly class FlagRuleUpdatedContextPreviousAttribute implements \JsonSerializa
 
     public function toArray(): array
     {
-        return [
-            'data' => $this->data?->toArray(),
-            'context' => $this->context?->toArray(),
-        ];
+        return array_filter([
+            'data' => $this->data?->jsonSerialize(),
+            'context' => $this->context?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

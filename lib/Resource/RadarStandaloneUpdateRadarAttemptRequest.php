@@ -28,9 +28,9 @@ readonly class RadarStandaloneUpdateRadarAttemptRequest implements \JsonSerializ
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'challenge_status' => $this->challengeStatus,
             'attempt_status' => $this->attemptStatus,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

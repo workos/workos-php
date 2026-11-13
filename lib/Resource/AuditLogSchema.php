@@ -49,10 +49,11 @@ readonly class AuditLogSchema implements \JsonSerializable
         return [
             'object' => $this->object,
             'version' => $this->version,
-            'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
+            'targets' => array_map(fn ($item) => $item->jsonSerialize(), $this->targets),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
-            'actor' => $this->actor?->toArray(),
+        ] + array_filter([
+            'actor' => $this->actor?->jsonSerialize(),
             'metadata' => $this->metadata,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

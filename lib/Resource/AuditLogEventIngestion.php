@@ -30,7 +30,7 @@ readonly class AuditLogEventIngestion implements \JsonSerializable
     {
         return [
             'organization_id' => $this->organizationId,
-            'event' => $this->event->toArray(),
+            'event' => $this->event->jsonSerialize(),
         ];
     }
 }

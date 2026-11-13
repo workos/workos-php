@@ -28,9 +28,9 @@ readonly class ErrorBodyWithConstraintsPropertyError implements \JsonSerializabl
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'property' => $this->property,
             'constraints' => $this->constraints,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

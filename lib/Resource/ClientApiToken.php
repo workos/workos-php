@@ -11,9 +11,9 @@ readonly class ClientApiToken implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The ID of the organization to scope the Client API token to. */
+        /** The ID of the organization to scope the Widgets API token to. */
         public string $organizationId,
-        /** The ID of the user to issue the Client API token for. */
+        /** The ID of the user to issue the Widgets API token for. */
         public string $userId,
     ) {
     }

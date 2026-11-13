@@ -41,8 +41,9 @@ readonly class SendRadarSmsChallenge implements \JsonSerializable
             'user_id' => $this->userId,
             'pending_authentication_token' => $this->pendingAuthenticationToken,
             'phone_number' => $this->phoneNumber,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

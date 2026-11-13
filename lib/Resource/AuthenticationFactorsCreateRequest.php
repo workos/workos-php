@@ -39,10 +39,11 @@ readonly class AuthenticationFactorsCreateRequest implements \JsonSerializable
     {
         return [
             'type' => $this->type->value,
+        ] + array_filter([
             'phone_number' => $this->phoneNumber,
             'totp_issuer' => $this->totpIssuer,
             'totp_user' => $this->totpUser,
             'user_id' => $this->userId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

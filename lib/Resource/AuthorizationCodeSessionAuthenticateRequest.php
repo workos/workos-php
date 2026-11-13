@@ -55,6 +55,7 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             'client_id' => $this->clientId,
             'grant_type' => $this->grantType,
             'code' => $this->code,
+        ] + array_filter([
             'client_secret' => $this->clientSecret,
             'code_verifier' => $this->codeVerifier,
             'invitation_token' => $this->invitationToken,
@@ -62,6 +63,6 @@ readonly class AuthorizationCodeSessionAuthenticateRequest implements \JsonSeria
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
             'signals_id' => $this->signalsId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -43,9 +43,10 @@ readonly class DeviceCodeSessionAuthenticateRequest implements \JsonSerializable
             'client_id' => $this->clientId,
             'grant_type' => $this->grantType,
             'device_code' => $this->deviceCode,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

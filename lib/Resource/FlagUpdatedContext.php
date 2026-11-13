@@ -34,8 +34,9 @@ readonly class FlagUpdatedContext implements \JsonSerializable
     {
         return [
             'client_id' => $this->clientId,
-            'actor' => $this->actor->toArray(),
-            'previous_attributes' => $this->previousAttributes?->toArray(),
-        ];
+            'actor' => $this->actor->jsonSerialize(),
+        ] + array_filter([
+            'previous_attributes' => $this->previousAttributes?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

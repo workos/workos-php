@@ -58,7 +58,7 @@ readonly class FlagTarget implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'object' => $this->object,
             'id' => $this->id,
             'flag_id' => $this->flagId,
@@ -71,6 +71,6 @@ readonly class FlagTarget implements \JsonSerializable
             'rule_id' => $this->ruleId,
             'value_type' => $this->valueType,
             'value' => $this->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -40,8 +40,9 @@ readonly class CreateUserOrganizationMembership implements \JsonSerializable
         return [
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
+        ] + array_filter([
             'role_slug' => $this->roleSlug,
             'role_slugs' => $this->roleSlugs,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

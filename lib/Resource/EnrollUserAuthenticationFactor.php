@@ -36,9 +36,10 @@ readonly class EnrollUserAuthenticationFactor implements \JsonSerializable
     {
         return [
             'type' => $this->type,
+        ] + array_filter([
             'totp_issuer' => $this->totpIssuer,
             'totp_user' => $this->totpUser,
             'totp_secret' => $this->totpSecret,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

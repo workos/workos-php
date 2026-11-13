@@ -29,7 +29,7 @@ readonly class ReplaceGroupRoleAssignments implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'role_assignments' => array_map(fn ($item) => $item->toArray(), $this->roleAssignments),
+            'role_assignments' => array_map(fn ($item) => $item->jsonSerialize(), $this->roleAssignments),
         ];
     }
 }

@@ -110,14 +110,15 @@ readonly class ConnectedAccount implements \JsonSerializable
             'state' => $this->state->value,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-            'auth_method' => $this->authMethod?->value,
             'api_key_last_4' => $this->apiKeyLast4,
             'client_id' => $this->clientId,
             'client_secret_last_4' => $this->clientSecretLast4,
-            'config' => $this->config,
             'established_by_user_id' => $this->establishedByUserId,
             'state_reason' => $this->stateReason,
-            'warnings' => $this->warnings !== null ? array_map(fn ($item) => $item->toArray(), $this->warnings) : null,
-        ];
+        ] + array_filter([
+            'auth_method' => $this->authMethod?->value,
+            'config' => $this->config,
+            'warnings' => $this->warnings !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->warnings) : null,
+        ], fn ($v) => $v !== null);
     }
 }

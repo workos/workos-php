@@ -31,7 +31,7 @@ readonly class OrganizationDomainVerificationFailedData implements \JsonSerializ
     {
         return [
             'reason' => $this->reason->value,
-            'organization_domain' => $this->organizationDomain->toArray(),
+            'organization_domain' => $this->organizationDomain->jsonSerialize(),
         ];
     }
 }

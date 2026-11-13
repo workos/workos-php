@@ -43,11 +43,12 @@ readonly class AgentBlueprintsTokenMintTokenRequest implements \JsonSerializable
     {
         return [
             'type' => $this->type->value,
+        ] + array_filter([
             'user_access_token' => $this->userAccessToken,
             'intent' => $this->intent,
             'organization_id' => $this->organizationId,
             'agent_access_token' => $this->agentAccessToken,
             'refresh_token' => $this->refreshToken,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

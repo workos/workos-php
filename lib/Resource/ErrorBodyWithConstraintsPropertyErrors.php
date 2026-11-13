@@ -31,9 +31,9 @@ readonly class ErrorBodyWithConstraintsPropertyErrors implements \JsonSerializab
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'message' => $this->message,
-            'errors' => $this->errors !== null ? array_map(fn ($item) => $item->toArray(), $this->errors) : null,
-        ];
+            'errors' => $this->errors !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->errors) : null,
+        ], fn ($v) => $v !== null);
     }
 }

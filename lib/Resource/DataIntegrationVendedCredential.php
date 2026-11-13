@@ -14,20 +14,12 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
         /** Distinguishes the credential object. */
         public ?string $object = null,
         /** The authentication method for this credential. Additional values may be added in the future; handle unknown values gracefully. */
-        public ?string $authMethod = null,
-        /** The vended secret. An OAuth access token when `auth_method` is `oauth`, the API key when `api_key`, or the client-credentials access token when `client_credentials`. */
+        public ?DataIntegrationAuthMethods $authMethod = null,
         public ?string $value = null,
-        /** The ISO-8601 formatted timestamp indicating when the credential expires, or `null` if it does not expire. Present for `oauth` and `client_credentials` credentials; absent for `api_key`. */
         public ?string $expiresAt = null,
-        /**
-         * The scopes granted to the access token. Present for `oauth` and `client_credentials` credentials; absent for `api_key`.
-         * @var array<string>|null
-         */
+        /** @var array<string>|null */
         public ?array $scopes = null,
-        /**
-         * If the integration has requested scopes that aren't present on the access token, they're listed here. Present for `oauth` and `client_credentials` credentials; absent for `api_key`.
-         * @var array<string>|null
-         */
+        /** @var array<string>|null */
         public ?array $missingScopes = null,
         /**
          * Non-sensitive fields captured from the provider token response (e.g. Salesforce `instance_url`), as configured for the provider. Captured on OAuth code exchange and refresh, and on each `client_credentials` mint. A field a later OAuth refresh omits keeps its stored value. Present for `oauth` and `client_credentials` credentials; absent for `api_key`.
@@ -46,7 +38,7 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
     {
         return new self(
             object: $data['object'] ?? null,
-            authMethod: $data['auth_method'] ?? null,
+            authMethod: isset($data['auth_method']) ? DataIntegrationAuthMethods::from($data['auth_method']) : null,
             value: $data['value'] ?? null,
             expiresAt: $data['expires_at'] ?? null,
             scopes: $data['scopes'] ?? null,
@@ -59,14 +51,15 @@ readonly class DataIntegrationVendedCredential implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'object' => $this->object,
-            'auth_method' => $this->authMethod,
-            'value' => $this->value,
             'expires_at' => $this->expiresAt,
+        ] + array_filter([
+            'object' => $this->object,
+            'auth_method' => $this->authMethod?->value,
+            'value' => $this->value,
             'scopes' => $this->scopes,
             'missing_scopes' => $this->missingScopes,
             'metadata' => $this->metadata,
             'config' => $this->config,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -11,7 +11,7 @@ readonly class ClientApiTokenResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** The Client API token. */
+        /** The Widgets API token. */
         public string $token,
     ) {
     }

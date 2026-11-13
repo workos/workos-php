@@ -77,11 +77,12 @@ readonly class CreateUser implements \JsonSerializable
             'external_id' => $this->externalId,
             'ip_address' => $this->ipAddress,
             'user_agent' => $this->userAgent,
-            'signals_id' => $this->signalsId,
             'password' => $this->password,
+        ] + array_filter([
+            'signals_id' => $this->signalsId,
             'password_hash' => $this->passwordHash,
             'password_hash_type' => $this->passwordHashType?->value,
             'password_salt_position' => $this->passwordSaltPosition?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

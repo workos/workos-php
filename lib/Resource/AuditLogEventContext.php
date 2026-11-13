@@ -30,7 +30,8 @@ readonly class AuditLogEventContext implements \JsonSerializable
     {
         return [
             'location' => $this->location,
+        ] + array_filter([
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -42,11 +42,12 @@ readonly class CreateUserInviteOptions implements \JsonSerializable
     {
         return [
             'email' => $this->email,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'role_slug' => $this->roleSlug,
             'expires_in_days' => $this->expiresInDays,
             'inviter_user_id' => $this->inviterUserId,
             'locale' => $this->locale?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

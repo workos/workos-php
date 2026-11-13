@@ -33,7 +33,8 @@ readonly class AuditLogSchemaTargetInput implements \JsonSerializable
     {
         return [
             'type' => $this->type,
+        ] + array_filter([
             'metadata' => $this->metadata,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

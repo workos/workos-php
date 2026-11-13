@@ -40,10 +40,10 @@ readonly class FlagRuleUpdatedContext implements \JsonSerializable
     {
         return [
             'client_id' => $this->clientId,
-            'actor' => $this->actor->toArray(),
+            'actor' => $this->actor->jsonSerialize(),
             'access_type' => $this->accessType->value,
-            'configured_targets' => $this->configuredTargets->toArray(),
-            'previous_attributes' => $this->previousAttributes->toArray(),
+            'configured_targets' => $this->configuredTargets->jsonSerialize(),
+            'previous_attributes' => $this->previousAttributes->jsonSerialize(),
         ];
     }
 }

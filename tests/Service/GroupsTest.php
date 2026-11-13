@@ -118,7 +118,7 @@ class GroupsTest extends TestCase
     public function testUpdateGroupOrganizationMemberships(): void
     {
         $client = $this->createMockClient([['status' => 200, 'body' => []]]);
-        $client->groups()->updateGroupOrganizationMemberships('test_organizationId', 'test_groupId');
+        $client->groups()->updateGroupOrganizationMemberships(organizationId: 'test_organizationId', groupId: 'test_groupId');
         $request = $this->getLastRequest();
         $this->assertSame('PATCH', $request->getMethod());
         $this->assertStringEndsWith('organizations/test_organizationId/groups/test_groupId/organization-memberships', $request->getUri()->getPath());

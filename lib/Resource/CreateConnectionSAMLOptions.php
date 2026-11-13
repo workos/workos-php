@@ -52,15 +52,15 @@ readonly class CreateConnectionSAMLOptions implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'idp_metadata_url' => $this->idpMetadataUrl,
             'acs_url' => $this->acsUrl,
             'sp_entity_id' => $this->spEntityId,
             'idp_entity_id' => $this->idpEntityId,
             'idp_sso_url' => $this->idpSSOUrl,
             'idp_signing_certs' => $this->idpSigningCerts,
-            'sp_signing_key_pair' => $this->spSigningKeyPair?->toArray(),
-            'sp_encryption_key_pairs' => $this->spEncryptionKeyPairs !== null ? array_map(fn ($item) => $item->toArray(), $this->spEncryptionKeyPairs) : null,
-        ];
+            'sp_signing_key_pair' => $this->spSigningKeyPair?->jsonSerialize(),
+            'sp_encryption_key_pairs' => $this->spEncryptionKeyPairs !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->spEncryptionKeyPairs) : null,
+        ], fn ($v) => $v !== null);
     }
 }

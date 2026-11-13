@@ -35,9 +35,9 @@ readonly class AgentBlueprintsCreateRequestInvocableBy implements \JsonSerializa
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'role_slugs' => $this->roleSlugs,
             'organization_ids' => $this->organizationIds,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

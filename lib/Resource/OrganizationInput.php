@@ -52,11 +52,12 @@ readonly class OrganizationInput implements \JsonSerializable
     {
         return [
             'name' => $this->name,
-            'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
-            'domains' => $this->domains,
-            'domain_data' => $this->domainData !== null ? array_map(fn ($item) => $item->toArray(), $this->domainData) : null,
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
-        ];
+        ] + array_filter([
+            'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
+            'domains' => $this->domains,
+            'domain_data' => $this->domainData !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->domainData) : null,
+        ], fn ($v) => $v !== null);
     }
 }

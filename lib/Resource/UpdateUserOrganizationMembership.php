@@ -31,9 +31,9 @@ readonly class UpdateUserOrganizationMembership implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'role_slug' => $this->roleSlug,
             'role_slugs' => $this->roleSlugs,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

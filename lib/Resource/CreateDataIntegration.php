@@ -63,15 +63,16 @@ readonly class CreateDataIntegration implements \JsonSerializable
     {
         return [
             'provider' => $this->provider,
-            'ownership' => $this->ownership?->value,
             'description' => $this->description,
-            'enabled' => $this->enabled,
             'scopes' => $this->scopes,
+        ] + array_filter([
+            'ownership' => $this->ownership?->value,
+            'enabled' => $this->enabled,
             'auth_methods' => $this->authMethods !== null ? array_map(fn ($item) => $item->value, $this->authMethods) : null,
             'config' => $this->config,
-            'credentials' => $this->credentials?->toArray(),
-            'api_key' => $this->apiKey?->toArray(),
-            'custom_provider' => $this->customProvider?->toArray(),
-        ];
+            'credentials' => $this->credentials?->jsonSerialize(),
+            'api_key' => $this->apiKey?->jsonSerialize(),
+            'custom_provider' => $this->customProvider?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

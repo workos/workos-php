@@ -35,7 +35,7 @@ readonly class ErrorBodyWithCodeInstancePathErrors implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'errors' => array_map(fn ($item) => $item->toArray(), $this->errors),
+            'errors' => array_map(fn ($item) => $item->jsonSerialize(), $this->errors),
             'message' => $this->message,
             'code' => $this->code,
         ];

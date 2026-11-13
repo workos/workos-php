@@ -17,6 +17,11 @@ readonly class CreateOrganizationConnectedAccount implements \JsonSerializable
         public ?string $accountDisplayName = null,
         /** A developer-attested account identifier; null clears it. */
         public ?string $accountIdentifier = null,
+        /**
+         * Installation-scoped provider configuration for this connection, such as Salesforce salesforce_host. Imports apply supplied values over installation-scoped integration pins and inherit other config from the credential source. Credential-bearing imports must satisfy required configuration even when config is omitted or {}. On update, a supplied object replaces installation-scoped values; omitted config preserves the stored snapshot. Stored integration-scoped values remain bound to the OAuth client and cannot be overridden or replaced with current integration pins. Replacements must satisfy required configuration; {} and empty-string values clear installation-scoped values only when the result is valid. Provider defaults count toward completeness but are resolved at read time, not stored. Only tokenless needs_reauthorization placeholders may remain incomplete; attaching their first tokens validates configuration even when config is omitted. Unrelated updates do not revalidate unchanged configuration. Clearing salesforce_host falls back to login.salesforce.com, which may not work for sandbox or My Domain-only connections.
+         * @var array<string, string>|null
+         */
+        public ?array $config = null,
         /** The OAuth access token for the connected account. */
         public ?string $accessToken = null,
         /** The OAuth refresh token for the connected account. */
@@ -30,6 +35,11 @@ readonly class CreateOrganizationConnectedAccount implements \JsonSerializable
         public ?array $scopes = null,
         /** Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided. */
         public ?PipeConnectedAccountState $state = null,
+        /**
+         * Provider token-response metadata to preserve during import, such as Salesforce instance_url. Only allowlisted, non-sensitive scalar fields from this provider are accepted, including nested fields. Provider refresh responses can update these values. Not accepted on update.
+         * @var array<string, mixed>|null
+         */
+        public ?array $metadata = null,
         /** Set to `add` to create another connected account. Omit this field for permanent compatibility behavior. */
         public ?string $connectionIntent = null,
     ) {
@@ -41,11 +51,13 @@ readonly class CreateOrganizationConnectedAccount implements \JsonSerializable
             userId: $data['user_id'],
             accountDisplayName: $data['account_display_name'] ?? null,
             accountIdentifier: $data['account_identifier'] ?? null,
+            config: $data['config'] ?? null,
             accessToken: $data['access_token'] ?? null,
             refreshToken: $data['refresh_token'] ?? null,
             expiresAt: isset($data['expires_at']) ? new \DateTimeImmutable($data['expires_at']) : null,
             scopes: $data['scopes'] ?? null,
             state: isset($data['state']) ? PipeConnectedAccountState::from($data['state']) : null,
+            metadata: $data['metadata'] ?? null,
             connectionIntent: $data['connection_intent'] ?? null,
         );
     }
@@ -56,12 +68,15 @@ readonly class CreateOrganizationConnectedAccount implements \JsonSerializable
             'user_id' => $this->userId,
             'account_display_name' => $this->accountDisplayName,
             'account_identifier' => $this->accountIdentifier,
+        ] + array_filter([
+            'config' => $this->config,
             'access_token' => $this->accessToken,
             'refresh_token' => $this->refreshToken,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'scopes' => $this->scopes,
             'state' => $this->state?->value,
+            'metadata' => $this->metadata,
             'connection_intent' => $this->connectionIntent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

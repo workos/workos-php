@@ -59,9 +59,10 @@ readonly class DataIntegrationsCreateClientCredentialsConnectionRequest implemen
             'connection_intent' => $this->connectionIntent,
             'account_display_name' => $this->accountDisplayName,
             'account_identifier' => $this->accountIdentifier,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'config' => $this->config,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

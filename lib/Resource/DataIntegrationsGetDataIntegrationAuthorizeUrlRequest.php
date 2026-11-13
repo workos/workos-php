@@ -58,6 +58,7 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
         return [
             'user_id' => $this->userId,
             'account_display_name' => $this->accountDisplayName,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'return_to' => $this->returnTo,
@@ -66,6 +67,6 @@ readonly class DataIntegrationsGetDataIntegrationAuthorizeUrlRequest implements 
             'config' => $this->config,
             'connection_intent' => $this->connectionIntent?->value,
             'connected_account_id' => $this->connectedAccountId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

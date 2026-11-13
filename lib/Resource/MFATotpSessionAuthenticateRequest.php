@@ -55,9 +55,10 @@ readonly class MFATotpSessionAuthenticateRequest implements \JsonSerializable
             'code' => $this->code,
             'pending_authentication_token' => $this->pendingAuthenticationToken,
             'authentication_challenge_id' => $this->authenticationChallengeId,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

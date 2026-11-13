@@ -50,9 +50,9 @@ readonly class UserRoleAssignment implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'organization_membership_id' => $this->organizationMembershipId,
-            'role' => $this->role->toArray(),
-            'resource' => $this->resource->toArray(),
-            'source' => $this->source->toArray(),
+            'role' => $this->role->jsonSerialize(),
+            'resource' => $this->resource->jsonSerialize(),
+            'source' => $this->source->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];

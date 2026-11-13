@@ -40,7 +40,7 @@ readonly class AuditLogAction implements \JsonSerializable
         return [
             'object' => $this->object,
             'name' => $this->name,
-            'schema' => $this->schema->toArray(),
+            'schema' => $this->schema->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];

@@ -33,8 +33,8 @@ readonly class ConnectionSAMLCertificateRenewalRequiredData implements \JsonSeri
     public function toArray(): array
     {
         return [
-            'connection' => $this->connection->toArray(),
-            'certificate' => $this->certificate->toArray(),
+            'connection' => $this->connection->jsonSerialize(),
+            'certificate' => $this->certificate->jsonSerialize(),
             'days_until_expiry' => $this->daysUntilExpiry,
         ];
     }

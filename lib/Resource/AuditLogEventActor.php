@@ -40,8 +40,9 @@ readonly class AuditLogEventActor implements \JsonSerializable
         return [
             'id' => $this->id,
             'type' => $this->type,
+        ] + array_filter([
             'name' => $this->name,
             'metadata' => $this->metadata,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

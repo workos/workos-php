@@ -42,9 +42,10 @@ readonly class AuthenticationMFAFailed implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'event' => $this->event,
-            'data' => $this->data->toArray(),
+            'data' => $this->data->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
-            'context' => $this->context?->toArray(),
-        ];
+        ] + array_filter([
+            'context' => $this->context?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

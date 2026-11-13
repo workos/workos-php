@@ -60,10 +60,11 @@ readonly class OrganizationDomainVerifiedData implements \JsonSerializable
             'domain' => $this->domain,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'state' => $this->state?->value,
             'verification_prefix' => $this->verificationPrefix,
             'verification_token' => $this->verificationToken,
             'verification_strategy' => $this->verificationStrategy?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -40,9 +40,10 @@ readonly class DataIntegrationsGetUserTokenRequest implements \JsonSerializable
         return [
             'user_id' => $this->userId,
             'organization_id' => $this->organizationId,
+        ] + array_filter([
             'connected_account_id' => $this->connectedAccountId,
             'connection_owner' => $this->connectionOwner?->value,
             'supports_multiple_connections' => $this->supportsMultipleConnections,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -40,7 +40,7 @@ readonly class AgentRegistrationClaim implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'claim_completion' => $this->claimCompletion?->toArray(),
+            'claim_completion' => $this->claimCompletion?->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),

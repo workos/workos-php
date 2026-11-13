@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-readonly class SSORequiredOAuthErrorBodyWithConnectionIdsListEmailPendingAuthenticationToken implements \JsonSerializable
+readonly class SSORequiredOAuthErrorBodyWithConnectionIdsListEmail implements \JsonSerializable
 {
     use JsonSerializableTrait;
 
@@ -45,7 +45,8 @@ readonly class SSORequiredOAuthErrorBodyWithConnectionIdsListEmailPendingAuthent
             'error_description' => $this->errorDescription,
             'connection_ids' => $this->connectionIds,
             'email' => $this->email,
+        ] + array_filter([
             'pending_authentication_token' => $this->pendingAuthenticationToken,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

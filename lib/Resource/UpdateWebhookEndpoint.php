@@ -34,10 +34,10 @@ readonly class UpdateWebhookEndpoint implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'endpoint_url' => $this->endpointUrl,
             'status' => $this->status?->value,
             'events' => $this->events !== null ? array_map(fn ($item) => $item->value, $this->events) : null,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

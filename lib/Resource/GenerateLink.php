@@ -55,11 +55,12 @@ readonly class GenerateLink implements \JsonSerializable
     {
         return [
             'organization' => $this->organization,
+        ] + array_filter([
             'return_url' => $this->returnUrl,
             'success_url' => $this->successUrl,
             'external_user_id' => $this->externalUserId,
             'intent' => $this->intent?->value,
             'it_contact_emails' => $this->itContactEmails,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -53,7 +53,8 @@ readonly class EventSchema implements \JsonSerializable
             'event' => $this->event,
             'data' => $this->data,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
+        ] + array_filter([
             'context' => $this->context,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }
