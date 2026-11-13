@@ -1,5 +1,18 @@
 # Changelog
 
+## [9.7.0](https://github.com/workos/workos-php/compare/v9.6.0...v9.7.0) (2026-11-13)
+
+
+### Features
+
+* **pipes:** Update Pipes API surface ([#466](https://github.com/workos/workos-php/issues/466)) ([4732807](https://github.com/workos/workos-php/commit/47328079b7d7ca5f8f8fe9ffc1d9c55213fffa3b))
+* **sso:** Update SSO API surface ([#467](https://github.com/workos/workos-php/issues/467)) ([7de2fc0](https://github.com/workos/workos-php/commit/7de2fc0f83a1af6e2d154f026507138a4124ccbd))
+
+
+### Bug Fixes
+
+* **session:** Reject non-user access tokens in session cookies ([#463](https://github.com/workos/workos-php/issues/463)) ([07a6a12](https://github.com/workos/workos-php/commit/07a6a125bdd5002f9c04b4512a853a7715facdce))
+
 ## [9.6.0](https://github.com/workos/workos-php/compare/v9.5.0...v9.6.0) (2026-11-04)
 
 ### Bug Fixes
