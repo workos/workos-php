@@ -30,7 +30,7 @@ readonly class DataIntegrationAccessTokenResponseWithAccessToken implements \Jso
     {
         return [
             'active' => $this->active,
-            'access_token' => $this->accessToken->toArray(),
+            'access_token' => $this->accessToken->jsonSerialize(),
         ];
     }
 }
