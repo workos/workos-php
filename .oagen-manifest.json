@@ -265,6 +265,7 @@
     "lib/Resource/ConnectionType.php",
     "lib/Resource/ConnectionTypeNotUpdatableErrorBody.php",
     "lib/Resource/ConnectionsConnectionType.php",
+    "lib/Resource/ConnectionsState.php",
     "lib/Resource/CreateApplicationSecret.php",
     "lib/Resource/CreateAuthkitOAuthResource.php",
     "lib/Resource/CreateAuthorizationPermission.php",
