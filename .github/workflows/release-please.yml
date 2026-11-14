@@ -243,6 +243,10 @@ jobs:
   # split-package.yml. The providers require the SDK, but nothing installs it
   # here and the SDK has no publish job to wait for: Packagist reads the SDK's
   # tag, which the release-please job has already pushed.
+  #
+  # Before a provider's first release PR is merged, confirm the lower bound of
+  # its constraint on workos/workos-php. script/check-provider-pins says what
+  # the bound must be; no check enforces it.
   publish-workload-identity-github-actions:
     needs: release-please
     if: needs.release-please.outputs.github_actions_release_created == 'true'

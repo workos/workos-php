@@ -12,11 +12,18 @@ declare(strict_types=1);
 //
 // This fails when a pin is on neither the SDK's current major nor the next
 // one. Before an SDK major is released, widen each package's constraint on
-// workos/workos-php (`^9.7 || ^10.0`) and move its pin (`10.999.0`) on main;
+// workos/workos-php (`^9.8 || ^10.0`) and move its pin (`10.999.0`) on main;
 // release-please then rebuilds the SDK's release PR on top of that change.
 // The next major is accepted so that change can land before the release PR
 // does. A pin left on the old major fails on the release PR, which is the
 // reminder.
+//
+// Nothing checks a constraint's lower bound, because the pin satisfies any
+// bound on its own major. The bound must be the first SDK release that
+// contains lib/WorkloadIdentity/IdentityTokenProvider.php, and `^9.8` expects
+// that release to be 9.8.0. Before a package's first release, confirm the
+// bound against the SDK's release tags. If another SDK minor was released
+// first, raise the bound in every packages/*/composer.json.
 
 $root = dirname(__DIR__);
 $sdk = 'workos/workos-php';

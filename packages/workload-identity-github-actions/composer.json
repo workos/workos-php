@@ -24,7 +24,7 @@
   "require": {
     "php": "^8.2",
     "ext-curl": "*",
-    "workos/workos-php": "^9.7"
+    "workos/workos-php": "^9.8"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
