@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace WorkOS\WorkloadIdentity;
 
 /**
- * Reads the identity token from a file, such as a projected service account
- * token. The file is read again on every call, so a rotated token is picked
- * up without a restart.
+ * Reads the identity token from a file that another process writes, such as
+ * a sidecar or an earlier CI step that fetches a new token. The file is read
+ * again on every call, so a new token is picked up without a restart.
  */
 final class TokenFile implements IdentityTokenProvider
 {

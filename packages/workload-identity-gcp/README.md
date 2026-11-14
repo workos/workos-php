@@ -26,7 +26,7 @@ $workos = Client::create($credentials);
 
 The argument to `GcpMetadata::create()` is the audience the token is requested for. It must match the audience of the application's trust rule.
 
-`Credentials` reads the client ID, token URL and environment ID from `WORKOS_CLIENT_ID`, `WORKOS_WIF_TOKEN_URL` and `WORKOS_ENVIRONMENT_ID` when they are not passed. See [Workload identity](https://github.com/workos/workos-php#workload-identity) in the SDK's README for every setting.
+`Credentials` reads the client ID and the token URL from `WORKOS_CLIENT_ID` and `WORKOS_WIF_TOKEN_URL` when they are not passed. See [Workload identity](https://github.com/workos/workos-php#workload-identity) in the SDK's README for every setting.
 
 ## How it works
 

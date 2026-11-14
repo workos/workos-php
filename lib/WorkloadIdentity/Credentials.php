@@ -84,7 +84,7 @@ final class Credentials implements CredentialsContract
      * @param IdentityTokenProvider|callable(): string $identityTokenProvider Returns the workload's JWT. Called for every exchange attempt.
      * @param string|null                              $clientId              The M2M application's client ID. Defaults to `WORKOS_CLIENT_ID`.
      * @param string|null                              $tokenUrl              The token exchange endpoint, an `https` URL. Defaults to `WORKOS_WIF_TOKEN_URL`; there is no built-in default.
-     * @param string|null                              $environmentId         Optional. Defaults to `WORKOS_ENVIRONMENT_ID`. When set, it is sent as the `x-url-environment-id` header on every API request; when not set, or empty, the header is not sent. The server binds a workload identity client to exactly one environment, so the header selects nothing: it is a safety check, and a value that names a different environment gets `403 environment_mismatch`.
+     * @param string|null                              $environmentId         Optional, and set only here: no environment variable is read for it. When set, it is sent as the `x-url-environment-id` header on every API request; when left out, null or empty, the header is not sent. The server binds a workload identity client to exactly one environment, so the header selects nothing: it is a safety check, and a value that names a different environment gets `403 environment_mismatch`.
      * @param string|null                              $resource              The `resource` form field. Defaults to `https://api.workos.com`.
      * @param string|null                              $scope                 The `scope` form field. Defaults to `WORKOS_WIF_SCOPE`; left out of the form when empty.
      * @param (callable(): float)|null                 $clock                 Seconds on a monotonic clock. Leave unset outside tests.
@@ -109,7 +109,6 @@ final class Credentials implements CredentialsContract
 
         $this->clientId = self::required($clientId, 'clientId', 'WORKOS_CLIENT_ID');
         $this->tokenUrl = self::httpsUrl(self::required($tokenUrl, 'tokenUrl', 'WORKOS_WIF_TOKEN_URL'));
-        $environmentId ??= self::env('WORKOS_ENVIRONMENT_ID');
         $this->environmentId = $environmentId !== '' ? $environmentId : null;
         $this->resource = $resource !== null && $resource !== '' ? $resource : self::DEFAULT_RESOURCE;
 

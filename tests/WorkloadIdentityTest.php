@@ -143,13 +143,19 @@ class WorkloadIdentityTest extends TestCase
 
     public function testWIF_02_b_WithNoEnvironmentIdTheEnvironmentHeaderIsNotSent(): void
     {
-        // Unset here as well as in setUp(), which also saves the value that tearDown() restores.
-        putenv('WORKOS_ENVIRONMENT_ID');
+        // Set, and never read: the environment ID comes only from the caller's code.
+        // setUp() saved the variable's own value and tearDown() restores it.
+        putenv('WORKOS_ENVIRONMENT_ID=environment_env');
 
         // Constructing the credentials with no environment ID is not an error.
-        $credentials = $this->credentials(
+        $credentials = $this->exchangingWith(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
-            environmentId: null,
+            new Credentials(
+                $this->provider('assertion-1'),
+                ...$this->seams(),
+                clientId: 'client_wif_test',
+                tokenUrl: self::TOKEN_URL,
+            ),
         );
         $this->assertNull($credentials->environmentId);
 
@@ -159,20 +165,20 @@ class WorkloadIdentityTest extends TestCase
         $this->assertFalse($this->apiRequest(0)->hasHeader('x-url-environment-id'));
     }
 
-    public function testAnEmptyEnvironmentIdCountsAsNotSet(): void
+    public function testANullOrEmptyEnvironmentIdCountsAsNotSet(): void
     {
-        // An empty variable, then an empty argument.
-        putenv('WORKOS_ENVIRONMENT_ID=');
-        $fromEnvironment = $this->credentials(
+        // The variable is set, to show that neither value falls back to it.
+        putenv('WORKOS_ENVIRONMENT_ID=environment_env');
+        $null = $this->credentials(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
             environmentId: null,
         );
-        $explicit = $this->credentials(
+        $empty = $this->credentials(
             $this->tokenEndpoint([self::tokenResponse('access-2')]),
             environmentId: '',
         );
 
-        foreach ([$fromEnvironment, $explicit] as $index => $credentials) {
+        foreach ([$null, $empty] as $index => $credentials) {
             $this->assertNull($credentials->environmentId);
             $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
             $this->assertFalse($this->apiRequest($index)->hasHeader('x-url-environment-id'));
@@ -735,7 +741,6 @@ class WorkloadIdentityTest extends TestCase
         putenv('WORKOS_CLIENT_ID=client_env');
         putenv('WORKOS_WIF_TOKEN_URL=https://env.workos.test/oauth2/token');
         putenv('WORKOS_WIF_SCOPE=scope_env');
-        putenv('WORKOS_ENVIRONMENT_ID=environment_env');
 
         $credentials = $this->exchangingWith(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
@@ -747,7 +752,6 @@ class WorkloadIdentityTest extends TestCase
         $form = self::form($this->tokenRequests[0]);
         $this->assertSame('client_env', $form['client_id']);
         $this->assertSame('scope_env', $form['scope']);
-        $this->assertSame('environment_env', $this->apiRequest(0)->getHeaderLine('x-url-environment-id'));
     }
 
     public function testWIF_22_d_ExplicitValuesWinOverTheEnvironment(): void
@@ -755,7 +759,6 @@ class WorkloadIdentityTest extends TestCase
         putenv('WORKOS_CLIENT_ID=client_env');
         putenv('WORKOS_WIF_TOKEN_URL=https://env.workos.test/oauth2/token');
         putenv('WORKOS_WIF_SCOPE=scope_env');
-        putenv('WORKOS_ENVIRONMENT_ID=environment_env');
 
         $credentials = $this->exchangingWith(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
@@ -764,7 +767,6 @@ class WorkloadIdentityTest extends TestCase
                 ...$this->seams(),
                 clientId: 'client_explicit',
                 scope: 'scope_explicit',
-                environmentId: 'environment_explicit',
             ),
         );
         $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
@@ -772,7 +774,6 @@ class WorkloadIdentityTest extends TestCase
         $form = self::form($this->tokenRequests[0]);
         $this->assertSame('client_explicit', $form['client_id']);
         $this->assertSame('scope_explicit', $form['scope']);
-        $this->assertSame('environment_explicit', $this->apiRequest(0)->getHeaderLine('x-url-environment-id'));
     }
 
     /**
