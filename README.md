@@ -64,12 +64,12 @@ $organizations = $workos->organizations()->listOrganizations();
 | --- | --- | --- |
 | `identityTokenProvider` | Returns the workload's identity token | Required |
 | `clientId` | The M2M application's client ID | `WORKOS_CLIENT_ID` |
-| `tokenUrl` | The token exchange endpoint. It must be an `https` URL | `WORKOS_WIF_TOKEN_URL` |
+| `tokenUrl` | The token exchange endpoint. It must be an `https` URL | Required |
 | `environmentId` | Optional. The environment the application is bound to, sent as a safety check | None. Set it in code, or it is not sent |
 | `resource` | The API the access token is for | `https://api.workos.com` |
-| `scope` | The scopes to request | `WORKOS_WIF_SCOPE`, otherwise none |
+| `scope` | Optional. The scopes to request | None. Set it in code, or none is requested |
 
-`clientId` and `tokenUrl` are required: constructing the credentials throws when one is missing from both the arguments and the environment.
+`clientId` and `tokenUrl` are required: constructing the credentials throws when one is missing. `WORKOS_CLIENT_ID` is the only environment variable the credentials read: it fills in `clientId` when that argument is left out. Every other setting is passed in code.
 
 `environmentId` is optional, and it is set only in code: the SDK reads no environment variable for it. WorkOS binds a workload identity client to exactly one environment and takes the environment from that binding, so the ID selects nothing. When it is set, the SDK sends it as the `x-url-environment-id` header on every API request, as a safety check: a value that names a different environment gets `403 environment_mismatch`. When it is not set, or is empty, the header is not sent.
 

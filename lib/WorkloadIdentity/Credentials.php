@@ -83,14 +83,14 @@ final class Credentials implements CredentialsContract
     /**
      * @param IdentityTokenProvider|callable(): string $identityTokenProvider Returns the workload's JWT. Called for every exchange attempt.
      * @param string|null                              $clientId              The M2M application's client ID. Defaults to `WORKOS_CLIENT_ID`.
-     * @param string|null                              $tokenUrl              The token exchange endpoint, an `https` URL. Defaults to `WORKOS_WIF_TOKEN_URL`; there is no built-in default.
+     * @param string|null                              $tokenUrl              The token exchange endpoint, an `https` URL. Required: there is no built-in default, and no environment variable is read for it.
      * @param string|null                              $environmentId         Optional, and set only here: no environment variable is read for it. When set, it is sent as the `x-url-environment-id` header on every API request; when left out, null or empty, the header is not sent. The server binds a workload identity client to exactly one environment, so the header selects nothing: it is a safety check, and a value that names a different environment gets `403 environment_mismatch`.
      * @param string|null                              $resource              The `resource` form field. Defaults to `https://api.workos.com`.
-     * @param string|null                              $scope                 The `scope` form field. Defaults to `WORKOS_WIF_SCOPE`; left out of the form when empty.
+     * @param string|null                              $scope                 The `scope` form field. Optional, and set only here: no environment variable is read for it. Left out of the form when not set or empty.
      * @param (callable(): float)|null                 $clock                 Seconds on a monotonic clock. Leave unset outside tests.
      * @param (callable(int): void)|null               $sleeper               Waits the given number of microseconds between exchange attempts. Leave unset outside tests.
      *
-     * @throws WorkloadIdentityException with `invalid_configuration` when a required setting is missing after the environment is consulted, or when the token URL is not an absolute `https` URL.
+     * @throws WorkloadIdentityException with `invalid_configuration` when the client ID is missing from both the argument and `WORKOS_CLIENT_ID`, when the token URL is missing, or when the token URL is not an absolute `https` URL.
      */
     public function __construct(
         IdentityTokenProvider|callable $identityTokenProvider,
@@ -108,11 +108,9 @@ final class Credentials implements CredentialsContract
             : static fn (): string => $identityTokenProvider();
 
         $this->clientId = self::required($clientId, 'clientId', 'WORKOS_CLIENT_ID');
-        $this->tokenUrl = self::httpsUrl(self::required($tokenUrl, 'tokenUrl', 'WORKOS_WIF_TOKEN_URL'));
+        $this->tokenUrl = self::httpsUrl(self::required($tokenUrl, 'tokenUrl'));
         $this->environmentId = $environmentId !== '' ? $environmentId : null;
         $this->resource = $resource !== null && $resource !== '' ? $resource : self::DEFAULT_RESOURCE;
-
-        $scope ??= self::env('WORKOS_WIF_SCOPE');
         $this->scope = $scope !== '' ? $scope : null;
 
         $this->http = new GuzzleClient();
@@ -347,13 +345,21 @@ final class Credentials implements CredentialsContract
         return is_string($description) ? $description : '';
     }
 
-    private static function required(?string $value, string $field, string $variable): string
+    /**
+     * A required setting. Only a setting that names a variable falls back to
+     * the environment; the client ID is the one that does.
+     */
+    private static function required(?string $value, string $field, ?string $variable = null): string
     {
-        $value ??= self::env($variable);
+        if ($variable !== null) {
+            $value ??= self::env($variable);
+        }
         if ($value === null || $value === '') {
             throw new WorkloadIdentityException(
                 WorkloadIdentityException::INVALID_CONFIGURATION,
-                sprintf('%s is required (or set %s)', $field, $variable),
+                $variable !== null
+                    ? sprintf('%s is required (or set %s)', $field, $variable)
+                    : sprintf('%s is required', $field),
             );
         }
 
@@ -373,7 +379,7 @@ final class Credentials implements CredentialsContract
         if ($scheme !== 'https' || ($parts['host'] ?? '') === '') {
             throw new WorkloadIdentityException(
                 WorkloadIdentityException::INVALID_CONFIGURATION,
-                'tokenUrl must be an absolute https URL (check WORKOS_WIF_TOKEN_URL)',
+                'tokenUrl must be an absolute https URL',
             );
         }
 

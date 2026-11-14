@@ -658,7 +658,7 @@ class WorkloadIdentityTest extends TestCase
         $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
         $this->assertSame(['Bearer access-1'], $this->apiAuthorizations());
 
-        // (b) No token URL, explicitly or in the environment.
+        // (b) No token URL.
         try {
             new Credentials(
                 identityTokenProvider: $this->provider('assertion-1'),
@@ -668,7 +668,7 @@ class WorkloadIdentityTest extends TestCase
             $this->fail('Expected WorkloadIdentityException');
         } catch (WorkloadIdentityException $e) {
             $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
-            $this->assertSame('tokenUrl is required (or set WORKOS_WIF_TOKEN_URL)', $e->description);
+            $this->assertSame('tokenUrl is required', $e->description);
         }
 
         // (c) An exchange that fails.
@@ -736,28 +736,29 @@ class WorkloadIdentityTest extends TestCase
         $this->assertSame('assertion-cb', self::form($this->tokenRequests[0])['assertion']);
     }
 
-    public function testWIF_22_c_OmittedFieldsDefaultFromTheEnvironment(): void
+    public function testWIF_22_c_OnlyTheClientIdDefaultsFromTheEnvironment(): void
     {
         putenv('WORKOS_CLIENT_ID=client_env');
-        putenv('WORKOS_WIF_TOKEN_URL=https://env.workos.test/oauth2/token');
+        // Set, and never read: the token URL and the scope come only from the caller's code.
+        putenv('WORKOS_WIF_TOKEN_URL=https://ignored.example.test/oauth2/token');
         putenv('WORKOS_WIF_SCOPE=scope_env');
 
         $credentials = $this->exchangingWith(
             $this->tokenEndpoint([self::tokenResponse('access-1')]),
-            new Credentials($this->provider('assertion-1'), ...$this->seams()),
+            new Credentials($this->provider('assertion-1'), ...$this->seams(), tokenUrl: self::TOKEN_URL),
         );
         $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
 
-        $this->assertSame('https://env.workos.test/oauth2/token', (string) $this->tokenRequests[0]->getUri());
+        $this->assertSame(self::TOKEN_URL, (string) $this->tokenRequests[0]->getUri());
         $form = self::form($this->tokenRequests[0]);
         $this->assertSame('client_env', $form['client_id']);
-        $this->assertSame('scope_env', $form['scope']);
+        $this->assertArrayNotHasKey('scope', $form);
     }
 
-    public function testWIF_22_d_ExplicitValuesWinOverTheEnvironment(): void
+    public function testWIF_22_d_AnExplicitClientIdWinsOverTheEnvironment(): void
     {
         putenv('WORKOS_CLIENT_ID=client_env');
-        putenv('WORKOS_WIF_TOKEN_URL=https://env.workos.test/oauth2/token');
+        putenv('WORKOS_WIF_TOKEN_URL=https://ignored.example.test/oauth2/token');
         putenv('WORKOS_WIF_SCOPE=scope_env');
 
         $credentials = $this->exchangingWith(
@@ -766,14 +767,47 @@ class WorkloadIdentityTest extends TestCase
                 $this->provider('assertion-1'),
                 ...$this->seams(),
                 clientId: 'client_explicit',
-                scope: 'scope_explicit',
+                tokenUrl: self::TOKEN_URL,
             ),
         );
         $this->client($credentials, [self::organization()])->organizations()->getOrganization('org_01');
 
-        $form = self::form($this->tokenRequests[0]);
-        $this->assertSame('client_explicit', $form['client_id']);
-        $this->assertSame('scope_explicit', $form['scope']);
+        $this->assertSame('client_explicit', self::form($this->tokenRequests[0])['client_id']);
+    }
+
+    public function testWIF_22_e_NoTokenUrlIsAConstructionErrorWhateverTheEnvironmentHolds(): void
+    {
+        putenv('WORKOS_CLIENT_ID=client_env');
+        putenv('WORKOS_WIF_TOKEN_URL=https://ignored.example.test/oauth2/token');
+        putenv('WORKOS_WIF_SCOPE=scope_env');
+
+        // Left out, null and empty.
+        foreach ([[], ['tokenUrl' => null], ['tokenUrl' => '']] as $arguments) {
+            try {
+                new Credentials($this->provider('assertion-1'), ...$this->seams(), ...$arguments);
+                $this->fail('Expected WorkloadIdentityException');
+            } catch (WorkloadIdentityException $e) {
+                $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
+                $this->assertSame('tokenUrl is required', $e->description);
+            }
+        }
+    }
+
+    public function testANullOrEmptyScopeIsLeftOutOfTheForm(): void
+    {
+        // The variable is set, to show that neither value falls back to it.
+        putenv('WORKOS_WIF_SCOPE=scope_env');
+
+        foreach ([null, ''] as $index => $scope) {
+            $credentials = $this->credentials(
+                $this->tokenEndpoint([self::tokenResponse('access-1')]),
+                scope: $scope,
+            );
+            $this->assertNull($credentials->scope);
+
+            $credentials->resolve();
+            $this->assertArrayNotHasKey('scope', self::form($this->tokenRequests[$index]));
+        }
     }
 
     /**
@@ -1103,7 +1137,7 @@ class WorkloadIdentityTest extends TestCase
                 $this->fail(sprintf('Expected WorkloadIdentityException for %s', $tokenUrl));
             } catch (WorkloadIdentityException $e) {
                 $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
-                $this->assertSame('tokenUrl must be an absolute https URL (check WORKOS_WIF_TOKEN_URL)', $e->description);
+                $this->assertSame('tokenUrl must be an absolute https URL', $e->description);
             }
         }
 
@@ -1115,22 +1149,6 @@ class WorkloadIdentityTest extends TestCase
             environmentId: 'environment_wif_test',
         );
         $this->assertSame('HTTPS://auth.workos.test:8443/oauth2/token', $credentials->tokenUrl);
-    }
-
-    public function testAnHttpTokenUrlFromTheEnvironmentIsRejected(): void
-    {
-        putenv('WORKOS_WIF_TOKEN_URL=http://auth.workos.test/oauth2/token');
-
-        try {
-            new Credentials(
-                $this->provider('assertion-1'),
-                clientId: 'client_wif_test',
-                environmentId: 'environment_wif_test',
-            );
-            $this->fail('Expected WorkloadIdentityException');
-        } catch (WorkloadIdentityException $e) {
-            $this->assertSame(WorkloadIdentityException::INVALID_CONFIGURATION, $e->errorCode);
-        }
     }
 
     public function testExhaustedRetriesReportTheLastFailure(): void

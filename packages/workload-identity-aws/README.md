@@ -19,6 +19,7 @@ use WorkOS\WorkloadIdentity\Credentials;
 
 $credentials = new Credentials(
     identityTokenProvider: AwsSts::create('https://api.workos.com', 'us-east-1'),
+    tokenUrl: 'https://auth.example.com/oauth2/token',
 );
 
 $workos = Client::create($credentials);
@@ -26,7 +27,7 @@ $workos = Client::create($credentials);
 
 The first argument to `AwsSts::create()` is the audience the token is requested for. It must match the audience of the application's trust rule. The second is the AWS region whose STS endpoint to call; leave it out when the AWS SDK can resolve one from `AWS_REGION` or the shared config file.
 
-`Credentials` reads the client ID and the token URL from `WORKOS_CLIENT_ID` and `WORKOS_WIF_TOKEN_URL` when they are not passed. See [Workload identity](https://github.com/workos/workos-php#workload-identity) in the SDK's README for every setting.
+`Credentials` reads the client ID from `WORKOS_CLIENT_ID` when it is not passed. That is the only environment variable it reads; the token URL is always passed in code. See [Workload identity](https://github.com/workos/workos-php#workload-identity) in the SDK's README for every setting.
 
 ## Requirements
 
