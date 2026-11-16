@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.7.1](https://github.com/workos/workos-php/compare/v9.7.0...v9.7.1) (2026-11-16)
+
+
+### Miscellaneous Chores
+
+* **deps:** update github-actions versions ([#468](https://github.com/workos/workos-php/issues/468)) ([02cfae4](https://github.com/workos/workos-php/commit/02cfae4caddbcdb882d913568c187d62d71c0514))
+
 ## [9.7.0](https://github.com/workos/workos-php/compare/v9.6.0...v9.7.0) (2026-11-13)
 
 ### Bug Fixes
