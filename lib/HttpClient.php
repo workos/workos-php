@@ -28,6 +28,7 @@ use WorkOS\Exception\RateLimitExceededException;
 use WorkOS\Exception\ServerException;
 use WorkOS\Exception\TimeoutException;
 use WorkOS\Exception\UnprocessableEntityException;
+use WorkOS\Internal\Utf8;
 use WorkOS\WorkloadIdentity\RecoveryState;
 
 class HttpClient
@@ -357,7 +358,7 @@ class HttpClient
         if (!is_array($decoded)) {
             $statusCode = $response->getStatusCode();
             $requestId = $response->getHeaderLine('X-Request-ID') ?: null;
-            $preview = mb_substr($contents, 0, 200);
+            $preview = Utf8::truncate($contents, 200);
 
             throw new Exception\ApiException(
                 sprintf('Expected JSON response but received non-JSON body (HTTP %d): %s', $statusCode, $preview),

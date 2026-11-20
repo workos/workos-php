@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace WorkOS\Exception;
 
+use WorkOS\Internal\Utf8;
+
 /**
  * Thrown when workload identity credentials cannot produce an access token:
  * a missing setting, a failing identity token provider, or a token endpoint
@@ -65,7 +67,7 @@ class WorkloadIdentityException extends \Exception implements WorkOSException
     public function __construct(string $errorCode, string $description = '', ?\Throwable $previous = null)
     {
         $this->errorCode = $errorCode;
-        $this->description = mb_substr($description, 0, self::DESCRIPTION_LIMIT);
+        $this->description = Utf8::truncate($description, self::DESCRIPTION_LIMIT);
         $this->hint = self::HINTS[$errorCode] ?? self::DEFAULT_HINT;
 
         $message = sprintf('%s: %s', $this->errorCode, $this->hint);
