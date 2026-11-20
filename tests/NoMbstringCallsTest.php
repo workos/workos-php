@@ -7,6 +7,7 @@ namespace Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use WorkOS\SourceScanner;
 
 /**
  * composer.json does not require ext-mbstring, so the SDK and the provider
@@ -16,26 +17,21 @@ use PHPUnit\Framework\TestCase;
  * This test reads the source that ships and fails on any such call. It reads
  * PHP tokens, not text, so a comment or a sentence in a string that names
  * `mb_substr()` is not a call.
+ *
+ * Every other extension is covered by ExtensionRequirementsTest, which asks
+ * PHP which extension a function belongs to. This rule goes by the function's
+ * name, so it holds on any PHP build, and requiring the extension does not
+ * satisfy it.
  */
 class NoMbstringCallsTest extends TestCase
 {
-    private const NAME_TOKENS = [T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED, T_NAME_RELATIVE];
-
-    /** A name after one of these is a method or a declaration, not a function call. */
-    private const NOT_A_FUNCTION_CALL = [
-        T_OBJECT_OPERATOR,
-        T_NULLSAFE_OBJECT_OPERATOR,
-        T_DOUBLE_COLON,
-        T_FUNCTION,
-        T_NEW,
-    ];
-
     public function testNoSourceFileCallsAMultibyteStringFunction(): void
     {
         $found = [];
-        foreach (self::sourceFiles() as $path) {
-            foreach (self::multibyteCalls((string) file_get_contents($path)) as $call) {
-                $found[] = self::relative($path) . ': ' . $call;
+        foreach (self::sourceFiles() as $file) {
+            $source = (string) file_get_contents(SourceScanner::root() . '/' . $file);
+            foreach (self::multibyteCalls($source) as $call) {
+                $found[] = $file . ': ' . $call;
             }
         }
 
@@ -48,17 +44,35 @@ class NoMbstringCallsTest extends TestCase
         );
     }
 
+    public function testNoComposerJsonRequiresMbstring(): void
+    {
+        $composerFiles = ['composer.json'];
+        foreach (SourceScanner::packageDirectories() as $package) {
+            $composerFiles[] = $package . '/composer.json';
+        }
+
+        foreach ($composerFiles as $composerFile) {
+            $this->assertArrayNotHasKey(
+                'ext-mbstring',
+                SourceScanner::requirements($composerFile),
+                $composerFile . ' must not require ext-mbstring. Composer checks a required extension against '
+                . 'the PHP that runs Composer, so installing the package would fail on a build without it. '
+                . 'The code calls no mb_* function, so it has no need for the extension.',
+            );
+        }
+    }
+
     public function testTheScanReadsTheSdkAndEveryProviderPackage(): void
     {
-        $files = array_map(self::relative(...), self::sourceFiles());
+        $files = self::sourceFiles();
 
         $this->assertContains('lib/HttpClient.php', $files);
         $this->assertContains('lib/Exception/WorkloadIdentityException.php', $files);
 
-        $packages = self::packageDirectories();
+        $packages = SourceScanner::packageDirectories();
         $this->assertNotEmpty($packages, 'No provider package was found under packages/.');
         foreach ($packages as $package) {
-            $prefix = self::relative($package) . '/';
+            $prefix = $package . '/';
             $this->assertNotEmpty(
                 array_filter($files, static fn (string $file): bool => str_starts_with($file, $prefix)),
                 "No source file was read from {$prefix}",
@@ -98,6 +112,7 @@ class NoMbstringCallsTest extends TestCase
             'a nullsafe method call' => ['$a = $b?->mb_substr(1);', []],
             'a static method call' => ['$a = Text::mb_substr(1);', []],
             'a method declaration' => ['class Text { public function mb_substr() {} }', []],
+            'an attribute' => ['#[mb_substr(1)] function cut() {}', []],
             'another prefix' => ['$a = dumb_substr($b); $c = substr($b, 0, 5);', []],
         ];
     }
@@ -116,33 +131,21 @@ class NoMbstringCallsTest extends TestCase
             return [];
         }
 
-        $tokens = array_values(array_filter(
-            \PhpToken::tokenize($source),
-            static fn (\PhpToken $token): bool => !$token->isIgnorable(),
-        ));
-
         $calls = [];
-        foreach ($tokens as $index => $token) {
-            if ($token->is(T_CONSTANT_ENCAPSED_STRING)) {
-                $name = ltrim(substr($token->text, 1, -1), '\\');
+        foreach (SourceScanner::functionCalls($source) as $call) {
+            if ($call['quoted']) {
+                $name = ltrim($call['name'], '\\');
                 if (stripos($name, 'mb_') === 0 && function_exists($name)) {
-                    $calls[] = sprintf('%s on line %d', $token->text, $token->line);
+                    $calls[] = sprintf("'%s' on line %d", $call['name'], $call['line']);
                 }
 
                 continue;
             }
 
-            if (!$token->is(self::NAME_TOKENS)) {
-                continue;
-            }
-
-            $separator = strrpos($token->text, '\\');
-            $name = $separator === false ? $token->text : substr($token->text, $separator + 1);
-            $isCalled = ($tokens[$index + 1] ?? null)?->text === '(';
-            $isFunction = $index === 0 || !$tokens[$index - 1]->is(self::NOT_A_FUNCTION_CALL);
-
-            if (stripos($name, 'mb_') === 0 && $isCalled && $isFunction) {
-                $calls[] = sprintf('%s() on line %d', $name, $token->line);
+            $separator = strrpos($call['name'], '\\');
+            $name = $separator === false ? $call['name'] : substr($call['name'], $separator + 1);
+            if (stripos($name, 'mb_') === 0) {
+                $calls[] = sprintf('%s() on line %d', $name, $call['line']);
             }
         }
 
@@ -150,47 +153,17 @@ class NoMbstringCallsTest extends TestCase
     }
 
     /**
-     * The PHP files that ship: `lib/` and each provider package, without the
-     * packages' `vendor/` and `tests/` directories.
+     * The PHP files that ship: `lib/` and each provider package.
      *
-     * @return list<string> Absolute paths.
+     * @return list<string> Paths from the repository root.
      */
     private static function sourceFiles(): array
     {
-        $files = [];
-        foreach ([self::root() . '/lib', ...self::packageDirectories()] as $directory) {
-            $tree = new \RecursiveCallbackFilterIterator(
-                new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
-                static fn (\SplFileInfo $entry): bool => $entry->isDir()
-                    ? !in_array($entry->getFilename(), ['vendor', 'tests'], true)
-                    : $entry->getExtension() === 'php',
-            );
-
-            foreach (new \RecursiveIteratorIterator($tree) as $entry) {
-                if ($entry->isFile()) {
-                    $files[] = $entry->getPathname();
-                }
-            }
+        $files = SourceScanner::files('lib');
+        foreach (SourceScanner::packageDirectories() as $package) {
+            $files = [...$files, ...SourceScanner::files($package)];
         }
 
-        sort($files);
-
         return $files;
-    }
-
-    /** @return list<string> Absolute paths. */
-    private static function packageDirectories(): array
-    {
-        return glob(self::root() . '/packages/*', GLOB_ONLYDIR) ?: [];
-    }
-
-    private static function root(): string
-    {
-        return dirname(__DIR__);
-    }
-
-    private static function relative(string $path): string
-    {
-        return substr($path, strlen(self::root()) + 1);
     }
 }
