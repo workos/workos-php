@@ -29,6 +29,7 @@ use WorkOS\Exception\ServerException;
 use WorkOS\Exception\TimeoutException;
 use WorkOS\Exception\UnprocessableEntityException;
 use WorkOS\Internal\Utf8;
+use WorkOS\WorkloadIdentity\CredentialsMiddleware;
 use WorkOS\WorkloadIdentity\RecoveryState;
 
 class HttpClient
@@ -53,6 +54,12 @@ class HttpClient
      */
     private readonly Credentials $credentials;
 
+    /**
+     * True for a client built by {@see WorkloadIdentity\Client::create()}: it
+     * authenticates with workload identity and has no API key.
+     */
+    private readonly bool $workloadIdentity;
+
     public function __construct(
         private readonly string $apiKey,
         private readonly ?string $clientId,
@@ -66,6 +73,7 @@ class HttpClient
             'handler' => $handler,
         ]);
         $this->credentials = new StaticKeyCredentials($apiKey);
+        $this->workloadIdentity = $handler !== null && CredentialsMiddleware::isInstalledOn($handler);
     }
 
     public function getApiKey(): ?string
@@ -73,12 +81,22 @@ class HttpClient
         return $this->apiKey !== '' ? $this->apiKey : null;
     }
 
+    /**
+     * The API key, for a request that sends it as the client secret: the
+     * sign-in calls, the SSO token exchange and the session refresh. It has
+     * no other caller, which is why the message for a workload identity
+     * client can say what the request does with the key.
+     *
+     * @throws ConfigurationException when the client has no API key. Nothing has been sent at that point.
+     */
     public function requireApiKey(): string
     {
         $apiKey = $this->getApiKey();
         if ($apiKey === null) {
             throw new ConfigurationException(
-                'This operation requires a WorkOS API key. Provide apiKey when instantiating WorkOS or via WORKOS_API_KEY.',
+                $this->workloadIdentity
+                    ? 'This method needs an API key: this request sends it as the client secret. A client that authenticates with workload identity has no API key, so use a client built with one for this call.'
+                    : 'This operation requires a WorkOS API key. Provide apiKey when instantiating WorkOS or via WORKOS_API_KEY.',
             );
         }
 

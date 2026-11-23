@@ -26,8 +26,6 @@ use WorkOS\WorkOS;
  */
 final class Client
 {
-    private const MIDDLEWARE_NAME = 'workos_credentials';
-
     private const REDIRECT_GUARD_NAME = 'workos_credentials_redirect_guard';
 
     /**
@@ -49,7 +47,7 @@ final class Client
 
         // Outermost, so it sees the response after Guzzle's own middleware and
         // so Guzzle still strips `Authorization` from a cross-origin redirect.
-        $stack->unshift(new CredentialsMiddleware($credentials), self::MIDDLEWARE_NAME);
+        $stack->unshift(new CredentialsMiddleware($credentials), CredentialsMiddleware::NAME);
 
         // Innermost, so no header the credentials add reaches another origin
         // when a redirect is followed. Guzzle leaves all but `Authorization`.

@@ -131,7 +131,7 @@ WorkOS accepts an identity token for one exchange. A long-running process exchan
 - When the API answers `401`, the SDK exchanges for a new access token and retries the request once.
 - The access token and the environment ID go only to the origin the request is addressed to. When a redirect leads to another origin, the SDK follows it without them.
 - A failure to get an access token throws `WorkOS\Exception\WorkloadIdentityException`. Its `errorCode` is the OAuth error code from the token endpoint (such as `invalid_grant`), `hint` says what to check, and `description` is the server's own text. A failing exchange never falls back to an API key.
-- Operations that send the API key itself, such as `userManagement()->authenticateWithCode()`, are not available on a client built from credentials. They throw `WorkOS\Exception\ConfigurationException`.
+- Calls that send the API key as the client secret still need a client built with an API key: every `userManagement()->authenticateWith...()` method except `authenticateWithDeviceCode()`, `sso()->getProfileAndToken()` and `sessionManager()->refresh()`. On a client built from credentials they send nothing and throw `WorkOS\Exception\ConfigurationException`; `sessionManager()->refresh()` returns the same message as the `reason` of an unauthenticated result.
 
 ## SDK Versioning
 

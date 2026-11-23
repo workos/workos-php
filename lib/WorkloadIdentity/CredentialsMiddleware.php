@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\WorkloadIdentity;
 
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -24,6 +25,9 @@ use WorkOS\CredentialSnapshot;
  */
 final class CredentialsMiddleware
 {
+    /** The name {@see Client::create()} gives this middleware on the handler stack. */
+    public const NAME = 'workos_credentials';
+
     /**
      * Request option that tells the redirect guard which URL the credential
      * headers were added for, and what those headers are called.
@@ -74,6 +78,26 @@ final class CredentialsMiddleware
                 },
             );
         };
+    }
+
+    /**
+     * Whether a handler stack carries this middleware under {@see self::NAME}.
+     * That is what tells a client built by {@see Client::create()} from one
+     * that has no API key for another reason, such as a public client.
+     */
+    public static function isInstalledOn(HandlerStack $stack): bool
+    {
+        // A handler stack cannot be asked what it holds. `before()` throws
+        // when the name it is given is not on the stack, and it is called on
+        // a copy, so the stack itself is not changed.
+        $copy = clone $stack;
+        try {
+            $copy->before(self::NAME, static fn (callable $handler): callable => $handler);
+        } catch (\InvalidArgumentException) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

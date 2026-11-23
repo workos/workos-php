@@ -19,8 +19,11 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use WorkOS\Credentials as CredentialsContract;
 use WorkOS\Exception\AuthenticationException;
+use WorkOS\Exception\ConfigurationException;
 use WorkOS\Exception\WorkloadIdentityException;
 use WorkOS\HttpClient;
+use WorkOS\PKCEHelper;
+use WorkOS\SessionManager;
 use WorkOS\WorkloadIdentity\Client;
 use WorkOS\WorkloadIdentity\Credentials;
 use WorkOS\WorkloadIdentity\CredentialsMiddleware;
@@ -40,6 +43,13 @@ use WorkOS\WorkOS;
 class WorkloadIdentityTest extends TestCase
 {
     private const TOKEN_URL = 'https://auth.workos.test/oauth2/token';
+
+    /** What a call that sends the API key as the client secret says on a workload identity client. */
+    private const NEEDS_AN_API_KEY = 'This method needs an API key: this request sends it as the client secret. '
+        . 'A client that authenticates with workload identity has no API key, so use a client built with one for this call.';
+
+    /** What the same call says on a client that has neither an API key nor credentials. */
+    private const NO_API_KEY = 'This operation requires a WorkOS API key. Provide apiKey when instantiating WorkOS or via WORKOS_API_KEY.';
 
     private const ENV_VARS = [
         'WORKOS_API_KEY',
@@ -1327,6 +1337,189 @@ class WorkloadIdentityTest extends TestCase
     }
 
     /**
+     * @param \Closure(WorkOS): mixed $call
+     */
+    #[DataProvider('clientSecretCalls')]
+    public function testACallThatSendsTheApiKeyAsTheClientSecretIsRefusedOnAWorkloadIdentityClient(\Closure $call): void
+    {
+        $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
+        $workos = $this->client($credentials, [new Response(200, ['Content-Type' => 'application/json'], '{}')]);
+
+        $error = $this->failureOf(static fn () => $call($workos));
+
+        $this->assertInstanceOf(ConfigurationException::class, $error);
+        // Refused before anything is sent: no API request, no exchange and no
+        // call to the identity token provider.
+        $this->assertCount(0, $this->apiHistory);
+        $this->assertCount(0, $this->tokenRequests);
+        $this->assertSame(0, $this->providerCalls);
+        $this->assertSame(self::NEEDS_AN_API_KEY, $error->getMessage());
+    }
+
+    /**
+     * Every generated method that sends the API key as `client_secret`.
+     *
+     * @return array<string, array{\Closure(WorkOS): mixed}>
+     */
+    public static function clientSecretCalls(): array
+    {
+        return [
+            'authenticateWithPassword' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithPassword('user@example.com', 'password')],
+            'authenticateWithCode' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithCode('code_01')],
+            'authenticateWithRefreshToken' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithRefreshToken('refresh_01')],
+            'authenticateWithMagicAuth' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithMagicAuth('123456', 'user@example.com')],
+            'authenticateWithEmailVerification' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithEmailVerification('123456', 'pending_01')],
+            'authenticateWithTotp' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithTotp('123456', 'pending_01', 'challenge_01')],
+            'authenticateWithOrganizationSelection' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithOrganizationSelection('pending_01', 'org_01')],
+            'authenticateWithRadarEmailChallenge' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithRadarEmailChallenge('123456', 'radar_01', 'pending_01')],
+            'authenticateWithRadarSmsChallenge' => [static fn (WorkOS $workos) => $workos->userManagement()->authenticateWithRadarSmsChallenge('123456', 'pending_01')],
+            'getProfileAndToken' => [static fn (WorkOS $workos) => $workos->sso()->getProfileAndToken('code_01')],
+        ];
+    }
+
+    public function testSessionRefreshOnAWorkloadIdentityClientReportsTheRefusalAndSendsNothing(): void
+    {
+        $cookiePassword = base64_encode(random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
+        $sealed = SessionManager::sealSessionFromAuthResponse(
+            accessToken: 'session-access',
+            refreshToken: 'session-refresh',
+            cookiePassword: $cookiePassword,
+            user: ['id' => 'user_01'],
+        );
+        $credentials = $this->credentials($this->tokenEndpoint([self::tokenResponse('access-1')]));
+        $workos = $this->client($credentials, [new Response(200, ['Content-Type' => 'application/json'], '{}')]);
+
+        $result = $workos->sessionManager()->refresh($sealed, $cookiePassword, 'client_test');
+
+        // refresh() reports every failure as a result and does not throw.
+        $this->assertFalse($result['authenticated']);
+        $this->assertCount(0, $this->apiHistory);
+        $this->assertCount(0, $this->tokenRequests);
+        $this->assertSame(0, $this->providerCalls);
+        $this->assertSame(self::NEEDS_AN_API_KEY, $result['reason']);
+    }
+
+    public function testAnApiKeyClientSendsItsKeyAsTheClientSecret(): void
+    {
+        $mock = new MockHandler([new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            (string) file_get_contents(__DIR__ . '/Fixtures/sso_token_response.json'),
+        )]);
+        $workos = new WorkOS(
+            apiKey: 'sk_test_static',
+            clientId: 'client_test',
+            handler: HandlerStack::create($this->recording($mock)),
+        );
+
+        $this->assertSame('sk_test_static', self::httpClient($workos)->requireApiKey());
+
+        $workos->sso()->getProfileAndToken('code_01');
+
+        $body = json_decode((string) $this->apiRequest(0)->getBody(), true);
+        $this->assertSame('sk_test_static', $body['client_secret']);
+        $this->assertCount(0, $this->tokenRequests);
+    }
+
+    public function testAClientWithNoApiKeyAndNoCredentialsIsRefusedWithTheApiKeyMessage(): void
+    {
+        $mock = new MockHandler([new Response(200, ['Content-Type' => 'application/json'], '{}')]);
+        $clients = [
+            'a handler stack of the caller' => new WorkOS(
+                apiKey: '',
+                clientId: 'client_public',
+                handler: HandlerStack::create($this->recording($mock)),
+            ),
+            'the public client factory' => PKCEHelper::createPublicClient('client_public'),
+        ];
+
+        foreach ($clients as $label => $workos) {
+            $error = $this->failureOf(static fn () => $workos->userManagement()->authenticateWithCode('code_01'));
+
+            $this->assertInstanceOf(ConfigurationException::class, $error, $label);
+            $this->assertSame(self::NO_API_KEY, $error->getMessage(), $label);
+        }
+        $this->assertCount(0, $this->apiHistory);
+    }
+
+    public function testAPublicClientsPkceCodeExchangeIsUnchanged(): void
+    {
+        $json = ['Content-Type' => 'application/json'];
+        $mock = new MockHandler([
+            new Response(200, $json, '{"access_token":"at_authkit"}'),
+            new Response(200, $json, '{"access_token":"at_sso"}'),
+        ]);
+        $workos = new WorkOS(
+            apiKey: '',
+            clientId: 'client_public',
+            handler: HandlerStack::create($this->recording($mock)),
+        );
+
+        $authKit = $workos->pkce()->authKitCodeExchange(code: 'code_01', codeVerifier: 'verifier_01');
+        $sso = $workos->pkce()->ssoCodeExchange(code: 'code_02', codeVerifier: 'verifier_02');
+
+        $this->assertSame('at_authkit', $authKit['access_token']);
+        $this->assertSame('at_sso', $sso['access_token']);
+        $this->assertCount(2, $this->apiHistory);
+        $this->assertSame('/user_management/authenticate', $this->apiRequest(0)->getUri()->getPath());
+        $this->assertSame('/sso/token', $this->apiRequest(1)->getUri()->getPath());
+        $this->assertEquals(
+            ['grant_type' => 'authorization_code', 'client_id' => 'client_public', 'code' => 'code_01', 'code_verifier' => 'verifier_01'],
+            json_decode((string) $this->apiRequest(0)->getBody(), true),
+        );
+        $this->assertEquals(
+            ['grant_type' => 'authorization_code', 'client_id' => 'client_public', 'code' => 'code_02', 'code_verifier' => 'verifier_02'],
+            json_decode((string) $this->apiRequest(1)->getBody(), true),
+        );
+        // No client secret, no API key and no exchange.
+        $this->assertSame(['', ''], $this->apiAuthorizations());
+        $this->assertCount(0, $this->tokenRequests);
+    }
+
+    public function testOnlyAStackThatCarriesTheMiddlewareCountsAsInstalled(): void
+    {
+        $credentials = $this->credentials($this->tokenEndpoint([]));
+        $plain = HandlerStack::create(new MockHandler([]));
+        $installed = HandlerStack::create(new MockHandler([]));
+        $installed->unshift(new CredentialsMiddleware($credentials), CredentialsMiddleware::NAME);
+
+        $this->assertFalse(CredentialsMiddleware::isInstalledOn($plain));
+        $this->assertTrue(CredentialsMiddleware::isInstalledOn($installed));
+    }
+
+    /**
+     * The message of {@see HttpClient::requireApiKey()} says the request
+     * sends the key as the client secret. That holds only while every caller
+     * does so; a caller that uses the key for anything else needs its own
+     * accessor.
+     */
+    public function testEveryCallerOfRequireApiKeySendsTheKeyAsTheClientSecret(): void
+    {
+        $lib = dirname(__DIR__) . '/lib';
+        $callers = [];
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($lib, \FilesystemIterator::SKIP_DOTS));
+        foreach ($files as $file) {
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+            foreach (file($file->getPathname(), FILE_IGNORE_NEW_LINES) ?: [] as $index => $line) {
+                if (!str_contains($line, '->requireApiKey()')) {
+                    continue;
+                }
+                $where = sprintf('%s:%d', substr($file->getPathname(), strlen($lib) + 1), $index + 1);
+                $callers[] = $where;
+                $this->assertMatchesRegularExpression(
+                    '/\'client_secret\'\]? =>? .*->requireApiKey\(\)/',
+                    $line,
+                    sprintf('%s calls requireApiKey() for something other than the client secret.', $where),
+                );
+            }
+        }
+
+        $this->assertNotEmpty($callers);
+    }
+
+    /**
      * A mock token endpoint: answers from the queue and records every POST.
      *
      * @param array<int, Response|\Throwable|callable> $queue
@@ -1425,6 +1618,11 @@ class WorkloadIdentityTest extends TestCase
 
             return $mock($request, $options);
         };
+    }
+
+    private static function httpClient(WorkOS $workos): HttpClient
+    {
+        return (new \ReflectionProperty(WorkOS::class, 'httpClient'))->getValue($workos);
     }
 
     private function apiRequest(int $index): RequestInterface
