@@ -588,6 +588,23 @@ class WorkloadIdentityTest extends TestCase
                     $workos = $this->client($credentials, [self::unauthorized(), self::unauthorized()]);
                     $workos->organizations()->getOrganization('org_01');
                 }),
+                // The token endpoint repeats the assertion in its own error text.
+                '400 that repeats the assertion' => $this->failureOf(function () use ($provider, $assertion): void {
+                    $credentials = $this->credentials(
+                        $this->tokenEndpoint([self::oauthError('invalid_grant', sprintf('JWT %s failed validation', $assertion))]),
+                        identityTokenProvider: $provider,
+                    );
+                    $this->client($credentials, [])->organizations()->getOrganization('org_01');
+                }),
+                '503 that repeats the assertion until retries run out' => $this->failureOf(function () use ($provider, $assertion): void {
+                    $responses = array_fill(
+                        0,
+                        HttpClient::DEFAULT_MAX_RETRIES + 1,
+                        self::oauthError('invalid_grant', sprintf('JWT %s failed validation', $assertion), 503),
+                    );
+                    $credentials = $this->credentials($this->tokenEndpoint($responses), identityTokenProvider: $provider);
+                    $this->client($credentials, [])->organizations()->getOrganization('org_01');
+                }),
             ];
         } finally {
             $output = (string) ob_get_clean();
@@ -605,6 +622,11 @@ class WorkloadIdentityTest extends TestCase
         $this->assertInstanceOf(ConnectException::class, $errors['exchange cannot connect']->getPrevious());
         $this->assertInstanceOf(WorkloadIdentityException::class, $errors['provider raises']);
         $this->assertInstanceOf(AuthenticationException::class, $errors['second 401 from the API']);
+        foreach (['400 that repeats the assertion', '503 that repeats the assertion until retries run out'] as $label) {
+            $this->assertInstanceOf(WorkloadIdentityException::class, $errors[$label], $label);
+            $this->assertSame('invalid_grant', $errors[$label]->errorCode, $label);
+            $this->assertSame('JWT [redacted] failed validation', $errors[$label]->description, $label);
+        }
 
         $written = $output . (string) file_get_contents($logFile);
         foreach ([$assertion, $access] as $secret) {
@@ -613,6 +635,60 @@ class WorkloadIdentityTest extends TestCase
                 $this->assertNoSecret($secret, $error, $label);
             }
         }
+    }
+
+    public function testAnErrorCodeThatRepeatsTheAssertionDoesNotCarryIt(): void
+    {
+        $credentials = $this->credentials(
+            $this->tokenEndpoint([self::oauthError('rejected SECRET-ASSERTION-VALUE', 'SECRET-ASSERTION-VALUE twice SECRET-ASSERTION-VALUE')]),
+            identityTokenProvider: static fn (): string => 'SECRET-ASSERTION-VALUE',
+        );
+
+        $error = $this->failureOf(static fn () => $credentials->resolve());
+
+        $this->assertInstanceOf(WorkloadIdentityException::class, $error);
+        $this->assertSame('rejected [redacted]', $error->errorCode);
+        $this->assertSame('[redacted] twice [redacted]', $error->description);
+        $this->assertNoSecret('SECRET-ASSERTION-VALUE', $error, 'an error code that repeats the assertion');
+    }
+
+    public function testTheAssertionIsTakenOutBeforeTheDescriptionIsCut(): void
+    {
+        // The assertion starts ten characters before the 500-character limit.
+        // Cutting first would leave its first ten characters in the description.
+        $padding = str_repeat('x', 490);
+        $credentials = $this->credentials(
+            $this->tokenEndpoint([self::oauthError('invalid_grant', $padding . 'SECRET-ASSERTION-VALUE')]),
+            identityTokenProvider: static fn (): string => 'SECRET-ASSERTION-VALUE',
+        );
+
+        $error = $this->failureOf(static fn () => $credentials->resolve());
+
+        $this->assertInstanceOf(WorkloadIdentityException::class, $error);
+        $this->assertSame($padding . '[redacted]', $error->description);
+        $this->assertStringNotContainsString('SECRET', $error->getMessage());
+    }
+
+    public function testEachAttemptsOwnAssertionIsTakenOutOfItsResponse(): void
+    {
+        // The provider returns a new token for every attempt, and the token
+        // endpoint repeats the one it was just sent.
+        $repeat = static function (RequestInterface $request): Response {
+            return self::oauthError('invalid_grant', sprintf('JWT %s failed validation', self::form($request)['assertion']), 503);
+        };
+        $credentials = $this->credentials(
+            $this->tokenEndpoint(array_fill(0, HttpClient::DEFAULT_MAX_RETRIES + 1, $repeat)),
+            identityTokenProvider: function (): string {
+                return sprintf('SECRET-ASSERTION-%d', ++$this->providerCalls);
+            },
+        );
+
+        $error = $this->failureOf(static fn () => $credentials->resolve());
+
+        $this->assertInstanceOf(WorkloadIdentityException::class, $error);
+        $this->assertSame(HttpClient::DEFAULT_MAX_RETRIES + 1, $this->providerCalls);
+        $this->assertSame('JWT [redacted] failed validation', $error->description);
+        $this->assertNoSecret('SECRET-ASSERTION', $error, 'the last retried failure');
     }
 
     public function testWIF_18_TheExchangeDoesNotFollowRedirects(): void

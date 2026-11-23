@@ -47,6 +47,9 @@ final class Credentials implements CredentialsContract
     /** Bounds one whole exchange, including its retries and backoff. */
     private const EXCHANGE_DEADLINE_SECONDS = 30.0;
 
+    /** Stands in for the identity token where the token endpoint's error text repeats it. */
+    private const REDACTED = '[redacted]';
+
     public readonly string $clientId;
 
     public readonly string $tokenUrl;
@@ -215,11 +218,11 @@ final class Credentials implements CredentialsContract
             $status = $response->getStatusCode();
             if ($status === 429 || $status >= 500) {
                 $retryAfter = $response->getHeaderLine('Retry-After');
-                $failure = self::retryableFailure($response);
+                $failure = self::retryableFailure($response, $assertion);
                 continue;
             }
 
-            return self::parse($response);
+            return self::parse($response, $assertion);
         }
 
         throw $failure ?? new WorkloadIdentityException(
@@ -273,13 +276,17 @@ final class Credentials implements CredentialsContract
      *
      * @return array{string, float}
      */
-    private static function parse(ResponseInterface $response): array
-    {
+    private static function parse(
+        ResponseInterface $response,
+        #[\SensitiveParameter]
+        string $assertion,
+    ): array {
         $status = $response->getStatusCode();
         $body = json_decode((string) $response->getBody(), true);
 
-        if (is_array($body) && isset($body['error']) && is_string($body['error']) && $body['error'] !== '') {
-            throw new WorkloadIdentityException($body['error'], self::errorDescription($body));
+        $error = self::oauthError($body, $assertion);
+        if ($error !== null) {
+            throw $error;
         }
 
         if ($status >= 300 && $status < 400) {
@@ -322,27 +329,60 @@ final class Credentials implements CredentialsContract
     /**
      * What to report if this 429 or 5xx turns out to be the last attempt.
      */
-    private static function retryableFailure(ResponseInterface $response): WorkloadIdentityException
-    {
+    private static function retryableFailure(
+        ResponseInterface $response,
+        #[\SensitiveParameter]
+        string $assertion,
+    ): WorkloadIdentityException {
         $body = json_decode((string) $response->getBody(), true);
-        if (is_array($body) && isset($body['error']) && is_string($body['error']) && $body['error'] !== '') {
-            return new WorkloadIdentityException($body['error'], self::errorDescription($body));
-        }
 
-        return new WorkloadIdentityException(
+        return self::oauthError($body, $assertion) ?? new WorkloadIdentityException(
             WorkloadIdentityException::EXCHANGE_FAILED,
             sprintf('The token endpoint returned HTTP %d.', $response->getStatusCode()),
         );
     }
 
     /**
-     * @param array<array-key, mixed> $body
+     * The error a decoded body with a string `error` field describes, or null
+     * when it has none.
+     *
+     * The code and the description are the token endpoint's own text, and an
+     * endpoint may repeat the identity token it was sent. The token is taken
+     * out here, so no error carries it into a message or a log. The body is
+     * marked sensitive for the same reason: it would otherwise be an argument
+     * in the error's stack trace.
      */
-    private static function errorDescription(array $body): string
-    {
+    private static function oauthError(
+        #[\SensitiveParameter]
+        mixed $body,
+        #[\SensitiveParameter]
+        string $assertion,
+    ): ?WorkloadIdentityException {
+        if (!is_array($body) || !isset($body['error']) || !is_string($body['error']) || $body['error'] === '') {
+            return null;
+        }
+
         $description = $body['error_description'] ?? null;
 
-        return is_string($description) ? $description : '';
+        // Taken out here, before the exception cuts the description to its
+        // limit, so a cut cannot leave the start of a token behind.
+        return new WorkloadIdentityException(
+            self::withoutAssertion($body['error'], $assertion),
+            is_string($description) ? self::withoutAssertion($description, $assertion) : '',
+        );
+    }
+
+    /**
+     * The token endpoint's text with every occurrence of the identity token
+     * that this attempt sent replaced.
+     */
+    private static function withoutAssertion(
+        #[\SensitiveParameter]
+        string $text,
+        #[\SensitiveParameter]
+        string $assertion,
+    ): string {
+        return $assertion === '' ? $text : str_replace($assertion, self::REDACTED, $text);
     }
 
     /**

@@ -58,7 +58,11 @@ class WorkloadIdentityException extends \Exception implements WorkOSException
      */
     public readonly string $errorCode;
 
-    /** The token endpoint's `error_description`, cut to 500 characters; empty when there is none. */
+    /**
+     * The token endpoint's `error_description`, cut to 500 characters; empty
+     * when there is none. Where the endpoint repeats the identity token it
+     * was sent, the token reads `[redacted]`.
+     */
     public readonly string $description;
 
     /** One sentence on what to check. Never empty. */
