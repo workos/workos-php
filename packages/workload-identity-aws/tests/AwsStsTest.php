@@ -11,6 +11,8 @@ use Aws\MockHandler;
 use Aws\Result;
 use Aws\Sts\Exception\StsException;
 use Aws\Sts\StsClient;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use WorkOS\WorkloadIdentity\Aws\AwsSts;
 use WorkOS\WorkloadIdentity\IdentityTokenProvider;
@@ -33,6 +35,8 @@ final class AwsStsTest extends TestCase
         'AWS_SECRET_ACCESS_KEY',
         'AWS_SESSION_TOKEN',
         'AWS_EC2_METADATA_DISABLED',
+        'AWS_MAX_ATTEMPTS',
+        'AWS_RETRY_MODE',
     ];
 
     /** @var array<string, string|false> */
@@ -142,6 +146,62 @@ final class AwsStsTest extends TestCase
         $this->assertSame('aws-jwt-2', $provider->getIdentityToken());
         $this->assertSame(0, $sts->count());
         $this->assertSame($client, self::client($provider));
+    }
+
+    /**
+     * The AWS SDK retries a throttled or failed request inside the client
+     * unless it is told not to. The provider must not: the SDK calls the
+     * provider again for every exchange attempt.
+     */
+    #[DataProvider('retryableStsFailures')]
+    public function testOneProviderCallIsOneStsRequest(string $code, int $status): void
+    {
+        // What the AWS SDK would follow if the provider left retries to it.
+        putenv('AWS_MAX_ATTEMPTS=5');
+        putenv('AWS_RETRY_MODE=standard');
+        $provider = AwsSts::create('https://api.workos.com', 'us-east-1');
+        $requests = 0;
+        $fail = static function (CommandInterface $command) use (&$requests, $code, $status): StsException {
+            $requests++;
+
+            return new StsException($code, $command, ['code' => $code, 'response' => new Response($status)]);
+        };
+        $this->stub($provider, array_fill(0, 6, $fail));
+
+        try {
+            $provider->getIdentityToken();
+            $this->fail('Expected RuntimeException');
+        } catch (\RuntimeException $e) {
+            $this->assertSame(sprintf('sts:GetWebIdentityToken failed with %s.', $code), $e->getMessage());
+        }
+
+        $this->assertSame(1, $requests);
+    }
+
+    /**
+     * @return array<string, array{string, int}>
+     */
+    public static function retryableStsFailures(): array
+    {
+        return [
+            'throttling' => ['Throttling', 400],
+            'a 500' => ['InternalFailure', 500],
+            'a 503' => ['ServiceUnavailable', 503],
+        ];
+    }
+
+    public function testEveryStsRequestHasAConnectAndARequestTimeout(): void
+    {
+        $provider = AwsSts::create('https://api.workos.com', 'us-east-1');
+        $sts = $this->stub($provider, [new Result(['WebIdentityToken' => 'aws-jwt'])]);
+
+        $provider->getIdentityToken();
+
+        // The AWS SDK sets neither by itself, and a request without them can
+        // wait on a stalled endpoint for as long as the endpoint likes.
+        $http = $sts->getLastCommand()['@http'];
+        $this->assertSame(10, $http['connect_timeout'] ?? null);
+        $this->assertSame(10, $http['timeout'] ?? null);
     }
 
     public function testAResponseWithoutATokenIsAnError(): void

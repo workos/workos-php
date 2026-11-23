@@ -33,6 +33,9 @@ final class AwsSts implements IdentityTokenProvider
     /** The pseudo-region that selects the global STS endpoint, which does not serve this call. */
     private const GLOBAL_REGION = 'aws-global';
 
+    /** For connecting and for the whole request, as in the other providers. */
+    private const TIMEOUT_SECONDS = 10;
+
     private function __construct(
         private readonly string $audience,
         private readonly StsClient $client,
@@ -52,7 +55,20 @@ final class AwsSts implements IdentityTokenProvider
         }
 
         // Regional, never the global endpoint. Built once, not per call.
-        $config = ['sts_regional_endpoints' => 'regional'];
+        $config = [
+            'sts_regional_endpoints' => 'regional',
+            // One provider call is one STS request. The AWS SDK would retry a
+            // throttled or failed request inside the client; the WorkOS SDK
+            // already calls the provider again for every exchange attempt.
+            'retries' => 0,
+            // The AWS SDK sets no timeout of its own, and PHP cannot interrupt
+            // a call, so without these a stalled STS holds the caller for as
+            // long as it likes, well past the SDK's deadline for the exchange.
+            'http' => [
+                'connect_timeout' => self::TIMEOUT_SECONDS,
+                'timeout' => self::TIMEOUT_SECONDS,
+            ],
+        ];
         if ($region !== null && $region !== '') {
             $config['region'] = $region;
         }
