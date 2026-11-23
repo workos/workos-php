@@ -76,11 +76,12 @@ readonly class OrganizationMembership implements \JsonSerializable
             'directory_managed' => $this->directoryManaged,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
-            'role' => $this->role->toArray(),
-            'roles' => array_map(fn ($item) => $item->toArray(), $this->roles),
-            'user' => $this->user->toArray(),
+            'role' => $this->role->jsonSerialize(),
+            'roles' => array_map(fn ($item) => $item->jsonSerialize(), $this->roles),
+            'user' => $this->user->jsonSerialize(),
+        ] + array_filter([
             'organization_name' => $this->organizationName,
             'custom_attributes' => $this->customAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

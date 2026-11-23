@@ -46,9 +46,10 @@ readonly class OrganizationAuthorizedConnectApplicationListData implements \Json
             'object' => $this->object,
             'id' => $this->id,
             'granted_scopes' => $this->grantedScopes,
-            'application' => $this->application->toArray(),
+            'application' => $this->application->jsonSerialize(),
             'user_id' => $this->userId,
+        ] + array_filter([
             'oauth_resource' => $this->oauthResource,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -26,7 +26,7 @@ readonly class DataIntegrationFinishConnectionResponse implements \JsonSerializa
     public function toArray(): array
     {
         return [
-            'connected_account' => $this->connectedAccount->toArray(),
+            'connected_account' => $this->connectedAccount->jsonSerialize(),
         ];
     }
 }

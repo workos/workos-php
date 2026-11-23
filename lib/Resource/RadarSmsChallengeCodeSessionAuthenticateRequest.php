@@ -57,11 +57,12 @@ readonly class RadarSmsChallengeCodeSessionAuthenticateRequest implements \JsonS
             'grant_type' => $this->grantType,
             'code' => $this->code,
             'pending_authentication_token' => $this->pendingAuthenticationToken,
+        ] + array_filter([
             'verification_id' => $this->verificationId,
             'phone_number' => $this->phoneNumber,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

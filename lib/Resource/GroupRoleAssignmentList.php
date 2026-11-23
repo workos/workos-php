@@ -35,8 +35,8 @@ readonly class GroupRoleAssignmentList implements \JsonSerializable
     {
         return [
             'object' => $this->object,
-            'data' => array_map(fn ($item) => $item->toArray(), $this->data),
-            'list_metadata' => $this->listMetadata->toArray(),
+            'data' => array_map(fn ($item) => $item->jsonSerialize(), $this->data),
+            'list_metadata' => $this->listMetadata->jsonSerialize(),
         ];
     }
 }

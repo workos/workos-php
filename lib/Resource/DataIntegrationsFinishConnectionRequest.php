@@ -34,7 +34,8 @@ readonly class DataIntegrationsFinishConnectionRequest implements \JsonSerializa
         return [
             'connect_code' => $this->connectCode,
             'code_verifier' => $this->codeVerifier,
+        ] + array_filter([
             'state' => $this->state,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

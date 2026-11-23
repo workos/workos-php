@@ -81,8 +81,9 @@ readonly class EmailChangeConfirmationUser implements \JsonSerializable
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'name' => $this->name,
-            'metadata' => $this->metadata,
             'locale' => $this->locale,
-        ];
+        ] + array_filter([
+            'metadata' => $this->metadata,
+        ], fn ($v) => $v !== null);
     }
 }

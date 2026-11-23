@@ -31,8 +31,8 @@ readonly class VersionListResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'data' => array_map(fn ($item) => $item->toArray(), $this->data),
-            'list_metadata' => $this->listMetadata->toArray(),
+            'data' => array_map(fn ($item) => $item->jsonSerialize(), $this->data),
+            'list_metadata' => $this->listMetadata->jsonSerialize(),
         ];
     }
 }

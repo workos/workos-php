@@ -16,6 +16,8 @@ readonly class AuthenticationSSOFailedDataError implements \JsonSerializable
         public string $code,
         /** A human-readable error message. */
         public string $message,
+        /** The ID of the Radar detection that blocked the authentication. Only set on `policy_denied` errors. */
+        public ?string $radarDetectionId = null,
     ) {
     }
 
@@ -24,6 +26,7 @@ readonly class AuthenticationSSOFailedDataError implements \JsonSerializable
         return new self(
             code: $data['code'],
             message: $data['message'],
+            radarDetectionId: $data['radar_detection_id'] ?? null,
         );
     }
 
@@ -32,6 +35,8 @@ readonly class AuthenticationSSOFailedDataError implements \JsonSerializable
         return [
             'code' => $this->code,
             'message' => $this->message,
-        ];
+        ] + array_filter([
+            'radar_detection_id' => $this->radarDetectionId,
+        ], fn ($v) => $v !== null);
     }
 }

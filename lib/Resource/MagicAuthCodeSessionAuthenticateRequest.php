@@ -57,11 +57,12 @@ readonly class MagicAuthCodeSessionAuthenticateRequest implements \JsonSerializa
             'grant_type' => $this->grantType,
             'code' => $this->code,
             'email' => $this->email,
+        ] + array_filter([
             'invitation_token' => $this->invitationToken,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

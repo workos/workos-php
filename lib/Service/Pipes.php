@@ -660,12 +660,14 @@ class Pipes
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $accountDisplayName A mutable, non-unique connection label; null clears it. Not an account identifier.
      * @param string|null $accountIdentifier A developer-attested account identifier; null clears it.
+     * @param array<string, string>|null $config Installation-scoped provider configuration for this connection, such as Salesforce salesforce_host. Imports apply supplied values over installation-scoped integration pins and inherit other config from the credential source. Credential-bearing imports must satisfy required configuration even when config is omitted or {}. On update, a supplied object replaces installation-scoped values; omitted config preserves the stored snapshot. Stored integration-scoped values remain bound to the OAuth client and cannot be overridden or replaced with current integration pins. Replacements must satisfy required configuration; {} and empty-string values clear installation-scoped values only when the result is valid. Provider defaults count toward completeness but are resolved at read time, not stored. Only tokenless needs_reauthorization placeholders may remain incomplete; attaching their first tokens validates configuration even when config is omitted. Unrelated updates do not revalidate unchanged configuration. Clearing salesforce_host falls back to login.salesforce.com, which may not work for sandbox or My Domain-only connections.
      * @param string|null $accessToken The OAuth access token for the connected account.
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
      * @param string $userId The [User](https://workos.com/docs/reference/authkit/user) identifier of the organization member on whose behalf the connected account is being imported or updated. The user must be an active member of the organization.
+     * @param array<string, mixed>|null $metadata Provider token-response metadata to preserve during import, such as Salesforce instance_url. Only allowlisted, non-sensitive scalar fields from this provider are accepted, including nested fields. Provider refresh responses can update these values. Not accepted on update.
      * @param string|null $connectionIntent Set to `add` to create another connected account. Omit this field for permanent compatibility behavior.
      * @return \WorkOS\Resource\ConnectedAccount
      * @throws \WorkOS\Exception\WorkOSException
@@ -683,16 +685,20 @@ class Pipes
         ?\WorkOS\Resource\PipeConnectedAccountState $state = null,
         ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?array $config = null,
+        ?array $metadata = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'account_display_name' => $accountDisplayName,
             'account_identifier' => $accountIdentifier,
+            'config' => $config,
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($expiresAt),
             'scopes' => $scopes,
             'state' => $state?->value,
             'user_id' => $userId,
+            'metadata' => $metadata,
             'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
         $response = $this->client->request(
@@ -707,11 +713,12 @@ class Pipes
     /**
      * Update an organization connected account
      *
-     * Updates an organization's [connected account](https://workos.com/docs/reference/pipes/connected-account) tokens, scopes, or state for a specific provider.
+     * Updates an organization's [connected account](https://workos.com/docs/reference/pipes/connected-account) tokens, scopes, state, or provider configuration for a specific provider.
      * @param string $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $accountDisplayName A mutable, non-unique connection label; null clears it. Not an account identifier.
      * @param string|null $accountIdentifier A developer-attested account identifier; null clears it.
+     * @param array<string, string>|null $config Installation-scoped provider configuration for this connection, such as Salesforce salesforce_host. Imports apply supplied values over installation-scoped integration pins and inherit other config from the credential source. Credential-bearing imports must satisfy required configuration even when config is omitted or {}. On update, a supplied object replaces installation-scoped values; omitted config preserves the stored snapshot. Stored integration-scoped values remain bound to the OAuth client and cannot be overridden or replaced with current integration pins. Replacements must satisfy required configuration; {} and empty-string values clear installation-scoped values only when the result is valid. Provider defaults count toward completeness but are resolved at read time, not stored. Only tokenless needs_reauthorization placeholders may remain incomplete; attaching their first tokens validates configuration even when config is omitted. Unrelated updates do not revalidate unchanged configuration. Clearing salesforce_host falls back to login.salesforce.com, which may not work for sandbox or My Domain-only connections.
      * @param string|null $accessToken The OAuth access token for the connected account.
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
@@ -739,10 +746,12 @@ class Pipes
         ?string $connectedAccountId = null,
         ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?array $config = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'account_display_name' => $accountDisplayName,
             'account_identifier' => $accountIdentifier,
+            'config' => $config,
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($expiresAt),
@@ -863,11 +872,13 @@ class Pipes
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $accountDisplayName A mutable, non-unique connection label; null clears it. Not an account identifier.
      * @param string|null $accountIdentifier A developer-attested account identifier; null clears it.
+     * @param array<string, string>|null $config Installation-scoped provider configuration for this connection, such as Salesforce salesforce_host. Imports apply supplied values over installation-scoped integration pins and inherit other config from the credential source. Credential-bearing imports must satisfy required configuration even when config is omitted or {}. On update, a supplied object replaces installation-scoped values; omitted config preserves the stored snapshot. Stored integration-scoped values remain bound to the OAuth client and cannot be overridden or replaced with current integration pins. Replacements must satisfy required configuration; {} and empty-string values clear installation-scoped values only when the result is valid. Provider defaults count toward completeness but are resolved at read time, not stored. Only tokenless needs_reauthorization placeholders may remain incomplete; attaching their first tokens validates configuration even when config is omitted. Unrelated updates do not revalidate unchanged configuration. Clearing salesforce_host falls back to login.salesforce.com, which may not work for sandbox or My Domain-only connections.
      * @param string|null $accessToken The OAuth access token for the connected account.
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
      * @param array<string>|null $scopes The OAuth scopes granted for this connection.
      * @param \WorkOS\Resource\PipeConnectedAccountState|null $state Explicitly set the state of the connected account. When omitted, the state is derived from the token combination provided.
+     * @param array<string, mixed>|null $metadata Provider token-response metadata to preserve during import, such as Salesforce instance_url. Only allowlisted, non-sensitive scalar fields from this provider are accepted, including nested fields. Provider refresh responses can update these values. Not accepted on update.
      * @param string|null $connectionIntent Set to `add` to create another connected account. Omit this field for permanent compatibility behavior.
      * @param string|null $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier. Optional parameter if the connection is scoped to an organization.
      * @return \WorkOS\Resource\ConnectedAccount
@@ -886,15 +897,19 @@ class Pipes
         ?string $connectionIntent = null,
         ?string $organizationId = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?array $config = null,
+        ?array $metadata = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'account_display_name' => $accountDisplayName,
             'account_identifier' => $accountIdentifier,
+            'config' => $config,
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($expiresAt),
             'scopes' => $scopes,
             'state' => $state?->value,
+            'metadata' => $metadata,
             'connection_intent' => $connectionIntent,
         ], fn ($v) => $v !== null);
         $query = array_filter([
@@ -913,11 +928,12 @@ class Pipes
     /**
      * Update a connected account
      *
-     * Updates a user's [connected account](https://workos.com/docs/reference/pipes/connected-account) tokens, scopes, or state for a specific provider.
+     * Updates a user's [connected account](https://workos.com/docs/reference/pipes/connected-account) tokens, scopes, state, or provider configuration for a specific provider.
      * @param string $userId A [User](https://workos.com/docs/reference/authkit/user) identifier.
      * @param string $slug The slug identifier of the provider (e.g., `github`, `slack`, `notion`).
      * @param string|null $accountDisplayName A mutable, non-unique connection label; null clears it. Not an account identifier.
      * @param string|null $accountIdentifier A developer-attested account identifier; null clears it.
+     * @param array<string, string>|null $config Installation-scoped provider configuration for this connection, such as Salesforce salesforce_host. Imports apply supplied values over installation-scoped integration pins and inherit other config from the credential source. Credential-bearing imports must satisfy required configuration even when config is omitted or {}. On update, a supplied object replaces installation-scoped values; omitted config preserves the stored snapshot. Stored integration-scoped values remain bound to the OAuth client and cannot be overridden or replaced with current integration pins. Replacements must satisfy required configuration; {} and empty-string values clear installation-scoped values only when the result is valid. Provider defaults count toward completeness but are resolved at read time, not stored. Only tokenless needs_reauthorization placeholders may remain incomplete; attaching their first tokens validates configuration even when config is omitted. Unrelated updates do not revalidate unchanged configuration. Clearing salesforce_host falls back to login.salesforce.com, which may not work for sandbox or My Domain-only connections.
      * @param string|null $accessToken The OAuth access token for the connected account.
      * @param string|null $refreshToken The OAuth refresh token for the connected account.
      * @param \DateTimeImmutable|null $expiresAt The ISO-8601 timestamp when the access token expires. Required when `access_token` is provided for tokens that expire.
@@ -945,10 +961,12 @@ class Pipes
         ?string $connectedAccountId = null,
         ?string $connectionIntent = null,
         ?\WorkOS\RequestOptions $options = null,
+        ?array $config = null,
     ): \WorkOS\Resource\ConnectedAccount {
         $body = array_filter([
             'account_display_name' => $accountDisplayName,
             'account_identifier' => $accountIdentifier,
+            'config' => $config,
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($expiresAt),

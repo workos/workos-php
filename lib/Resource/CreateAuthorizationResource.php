@@ -53,8 +53,9 @@ readonly class CreateAuthorizationResource implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'description' => $this->description,
             'parent_resource_id' => $this->parentResourceId,
+        ] + array_filter([
             'parent_resource_external_id' => $this->parentResourceExternalId,
             'parent_resource_type_slug' => $this->parentResourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

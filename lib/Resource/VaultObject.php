@@ -36,7 +36,7 @@ readonly class VaultObject implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'metadata' => $this->metadata->toArray(),
+            'metadata' => $this->metadata->jsonSerialize(),
             'name' => $this->name,
             'value' => $this->value,
         ];

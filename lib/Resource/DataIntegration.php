@@ -94,10 +94,10 @@ readonly class DataIntegration implements \JsonSerializable
             'scopes' => $this->scopes,
             'redirect_uri' => $this->redirectUri,
             'auth_methods' => array_map(fn ($item) => $item->value, $this->authMethods),
-            'credentials' => $this->credentials?->toArray(),
-            'installation' => $this->installation?->toArray(),
+            'credentials' => $this->credentials?->jsonSerialize(),
+            'installation' => $this->installation?->jsonSerialize(),
             'config' => $this->config,
-            'custom_provider' => $this->customProvider?->toArray(),
+            'custom_provider' => $this->customProvider?->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];

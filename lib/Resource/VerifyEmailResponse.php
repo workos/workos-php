@@ -26,7 +26,7 @@ readonly class VerifyEmailResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
         ];
     }
 }

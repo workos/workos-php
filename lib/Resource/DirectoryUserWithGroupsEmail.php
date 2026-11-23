@@ -32,9 +32,10 @@ readonly class DirectoryUserWithGroupsEmail implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'value' => $this->value,
+        ] + array_filter([
             'primary' => $this->primary,
             'type' => $this->type,
-            'value' => $this->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

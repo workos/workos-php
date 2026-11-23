@@ -61,11 +61,12 @@ readonly class DataIntegrationsUpsertClientCredentialsRequest implements \JsonSe
             'client_secret' => $this->clientSecret,
             'account_display_name' => $this->accountDisplayName,
             'account_identifier' => $this->accountIdentifier,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'connection_owner' => $this->connectionOwner?->value,
             'config' => $this->config,
             'connection_intent' => $this->connectionIntent,
             'connected_account_id' => $this->connectedAccountId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

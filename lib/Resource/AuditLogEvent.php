@@ -52,11 +52,12 @@ readonly class AuditLogEvent implements \JsonSerializable
         return [
             'action' => $this->action,
             'occurred_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->occurredAt),
-            'actor' => $this->actor->toArray(),
-            'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
-            'context' => $this->context->toArray(),
+            'actor' => $this->actor->jsonSerialize(),
+            'targets' => array_map(fn ($item) => $item->jsonSerialize(), $this->targets),
+            'context' => $this->context->jsonSerialize(),
+        ] + array_filter([
             'metadata' => $this->metadata,
             'version' => $this->version,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -61,9 +61,9 @@ readonly class AgentBlueprint implements \JsonSerializable
             'name' => $this->name,
             'description' => $this->description,
             'permissions' => $this->permissions,
-            'invocable_by' => $this->invocableBy->toArray(),
-            'invocable_as' => $this->invocableAs->toArray(),
-            'session_settings' => $this->sessionSettings->toArray(),
+            'invocable_by' => $this->invocableBy->jsonSerialize(),
+            'invocable_as' => $this->invocableAs->jsonSerialize(),
+            'session_settings' => $this->sessionSettings->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
         ];

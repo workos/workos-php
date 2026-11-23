@@ -62,18 +62,19 @@ readonly class UpdateUser implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'metadata' => $this->metadata,
+            'external_id' => $this->externalId,
+            'locale' => $this->locale,
+        ] + array_filter([
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'name' => $this->name,
             'email_verified' => $this->emailVerified,
-            'metadata' => $this->metadata,
-            'external_id' => $this->externalId,
-            'locale' => $this->locale,
             'password' => $this->password,
             'password_hash' => $this->passwordHash,
             'password_hash_type' => $this->passwordHashType?->value,
             'password_salt_position' => $this->passwordSaltPosition?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

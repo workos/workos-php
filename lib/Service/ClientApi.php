@@ -16,11 +16,11 @@ class ClientApi
     }
 
     /**
-     * Generate a Client API token
+     * Generate a Widgets API token
      *
-     * Generate a short-lived, session-bound token for the Client GraphQL API, scoped to an organization and user.
-     * @param string $organizationId The ID of the organization to scope the Client API token to.
-     * @param string $userId The ID of the user to issue the Client API token for.
+     * Generate a short-lived, session-bound token for the Widgets API, scoped to an organization and user.
+     * @param string $organizationId The ID of the organization to scope the Widgets API token to.
+     * @param string $userId The ID of the user to issue the Widgets API token for.
      * @return \WorkOS\Resource\ClientApiTokenResponse
      * @throws \WorkOS\Exception\WorkOSException
      */

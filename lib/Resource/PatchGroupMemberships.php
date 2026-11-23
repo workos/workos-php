@@ -34,9 +34,9 @@ readonly class PatchGroupMemberships implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'add' => $this->add,
             'remove' => $this->remove,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

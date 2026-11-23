@@ -26,8 +26,8 @@ readonly class FeatureFlagsFlagRuleUpdatedContextPreviousAttribute implements \J
 
     public function toArray(): array
     {
-        return [
-            'data' => $this->data?->toArray(),
-        ];
+        return array_filter([
+            'data' => $this->data?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

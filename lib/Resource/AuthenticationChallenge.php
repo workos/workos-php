@@ -49,8 +49,9 @@ readonly class AuthenticationChallenge implements \JsonSerializable
             'authentication_factor_id' => $this->authenticationFactorId,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
             'code' => $this->code,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

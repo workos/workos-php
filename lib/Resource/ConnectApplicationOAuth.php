@@ -86,12 +86,13 @@ readonly class ConnectApplicationOAuth implements \JsonSerializable
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'application_type' => $this->applicationType,
-            'redirect_uris' => array_map(fn ($item) => $item->toArray(), $this->redirectUris),
+            'redirect_uris' => array_map(fn ($item) => $item->jsonSerialize(), $this->redirectUris),
             'cors_origins' => $this->corsOrigins,
             'uses_pkce' => $this->usesPkce,
             'is_first_party' => $this->isFirstParty,
+        ] + array_filter([
             'was_dynamically_registered' => $this->wasDynamicallyRegistered,
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

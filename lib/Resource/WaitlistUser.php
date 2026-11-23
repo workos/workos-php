@@ -60,8 +60,9 @@ readonly class WaitlistUser implements \JsonSerializable
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'object' => $this->object,
-            'additional_fields' => $this->additionalFields,
             'waitlist_id' => $this->waitlistId,
-        ];
+        ] + array_filter([
+            'additional_fields' => $this->additionalFields,
+        ], fn ($v) => $v !== null);
     }
 }

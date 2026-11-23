@@ -61,7 +61,8 @@ readonly class DirectoryGroup implements \JsonSerializable
             'name' => $this->name,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'raw_attributes' => $this->rawAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -38,11 +38,12 @@ readonly class UpdateAuthorizationResource implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'description' => $this->description,
+        ] + array_filter([
+            'name' => $this->name,
             'parent_resource_id' => $this->parentResourceId,
             'parent_resource_external_id' => $this->parentResourceExternalId,
             'parent_resource_type_slug' => $this->parentResourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

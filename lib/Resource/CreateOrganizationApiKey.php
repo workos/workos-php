@@ -36,8 +36,9 @@ readonly class CreateOrganizationApiKey implements \JsonSerializable
     {
         return [
             'name' => $this->name,
+        ] + array_filter([
             'permissions' => $this->permissions,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

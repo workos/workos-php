@@ -49,7 +49,7 @@ readonly class AuthenticationSSOStartedData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
-            'sso' => $this->sso->toArray(),
+            'sso' => $this->sso->jsonSerialize(),
         ];
     }
 }

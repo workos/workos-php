@@ -36,9 +36,10 @@ readonly class RemoveRole implements \JsonSerializable
     {
         return [
             'role_slug' => $this->roleSlug,
+        ] + array_filter([
             'resource_id' => $this->resourceId,
             'resource_external_id' => $this->resourceExternalId,
             'resource_type_slug' => $this->resourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

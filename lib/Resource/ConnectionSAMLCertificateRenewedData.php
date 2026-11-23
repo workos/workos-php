@@ -33,8 +33,8 @@ readonly class ConnectionSAMLCertificateRenewedData implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'connection' => $this->connection->toArray(),
-            'certificate' => $this->certificate->toArray(),
+            'connection' => $this->connection->jsonSerialize(),
+            'certificate' => $this->certificate->jsonSerialize(),
             'renewed_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->renewedAt),
         ];
     }

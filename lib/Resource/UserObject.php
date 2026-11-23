@@ -46,10 +46,11 @@ readonly class UserObject implements \JsonSerializable
         return [
             'id' => $this->id,
             'email' => $this->email,
+        ] + array_filter([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'name' => $this->name,
             'metadata' => $this->metadata,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

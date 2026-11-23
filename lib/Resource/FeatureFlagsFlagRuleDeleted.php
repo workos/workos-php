@@ -43,9 +43,9 @@ readonly class FeatureFlagsFlagRuleDeleted implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'event' => $this->event,
-            'data' => $this->data->toArray(),
+            'data' => $this->data->jsonSerialize(),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
-            'context' => $this->context->toArray(),
+            'context' => $this->context->jsonSerialize(),
         ];
     }
 }

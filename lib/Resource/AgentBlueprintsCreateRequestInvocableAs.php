@@ -29,8 +29,8 @@ readonly class AgentBlueprintsCreateRequestInvocableAs implements \JsonSerializa
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'instance_types' => $this->instanceTypes !== null ? array_map(fn ($item) => $item->value, $this->instanceTypes) : null,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

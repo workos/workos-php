@@ -45,12 +45,13 @@ readonly class CreateMagicCodeAndReturn implements \JsonSerializable
     {
         return [
             'email' => $this->email,
+        ] + array_filter([
             'invitation_token' => $this->invitationToken,
             'ip_address' => $this->ipAddress,
             'user_agent' => $this->userAgent,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
             'signals_id' => $this->signalsId,
             'locale' => $this->locale?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -41,12 +41,13 @@ readonly class PatchConnectionStandardAttributes implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'groups' => $this->groups,
+            'name' => $this->name,
+        ] + array_filter([
             'idp_id' => $this->idpId,
             'email' => $this->email,
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
-            'groups' => $this->groups,
-            'name' => $this->name,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

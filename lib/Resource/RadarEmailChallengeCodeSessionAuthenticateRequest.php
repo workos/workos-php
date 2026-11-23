@@ -55,9 +55,10 @@ readonly class RadarEmailChallengeCodeSessionAuthenticateRequest implements \Jso
             'code' => $this->code,
             'radar_challenge_id' => $this->radarChallengeId,
             'pending_authentication_token' => $this->pendingAuthenticationToken,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

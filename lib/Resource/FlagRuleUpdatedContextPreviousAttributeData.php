@@ -29,9 +29,9 @@ readonly class FlagRuleUpdatedContextPreviousAttributeData implements \JsonSeria
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'enabled' => $this->enabled,
             'default_value' => $this->defaultValue,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

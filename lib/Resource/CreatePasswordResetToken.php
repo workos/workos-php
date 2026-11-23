@@ -30,7 +30,8 @@ readonly class CreatePasswordResetToken implements \JsonSerializable
     {
         return [
             'email' => $this->email,
+        ] + array_filter([
             'locale' => $this->locale?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

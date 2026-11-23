@@ -30,7 +30,7 @@ readonly class DataIntegrationCredentialsResponseWithCredential implements \Json
     {
         return [
             'active' => $this->active,
-            'credential' => $this->credential->toArray(),
+            'credential' => $this->credential->jsonSerialize(),
         ];
     }
 }

@@ -45,11 +45,12 @@ readonly class UpdateDataIntegration implements \JsonSerializable
     {
         return [
             'description' => $this->description,
-            'enabled' => $this->enabled,
             'scopes' => $this->scopes,
-            'credentials' => $this->credentials?->toArray(),
-            'api_key' => $this->apiKey?->toArray(),
-            'custom_provider' => $this->customProvider?->toArray(),
-        ];
+        ] + array_filter([
+            'enabled' => $this->enabled,
+            'credentials' => $this->credentials?->jsonSerialize(),
+            'api_key' => $this->apiKey?->jsonSerialize(),
+            'custom_provider' => $this->customProvider?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

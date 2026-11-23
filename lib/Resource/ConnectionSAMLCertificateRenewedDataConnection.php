@@ -31,7 +31,8 @@ readonly class ConnectionSAMLCertificateRenewedDataConnection implements \JsonSe
     {
         return [
             'id' => $this->id,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

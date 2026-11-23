@@ -65,10 +65,11 @@ readonly class Connection implements \JsonSerializable
             'name' => $this->name,
             'state' => $this->state->value,
             'status' => $this->status->value,
-            'domains' => array_map(fn ($item) => $item->toArray(), $this->domains),
+            'domains' => array_map(fn ($item) => $item->jsonSerialize(), $this->domains),
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

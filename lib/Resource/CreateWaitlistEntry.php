@@ -36,8 +36,9 @@ readonly class CreateWaitlistEntry implements \JsonSerializable
     {
         return [
             'email' => $this->email,
+        ] + array_filter([
             'additional_fields' => $this->additionalFields,
             'send_confirmation_email' => $this->sendConfirmationEmail,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

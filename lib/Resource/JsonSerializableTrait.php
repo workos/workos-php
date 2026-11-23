@@ -8,8 +8,10 @@ namespace WorkOS\Resource;
 
 trait JsonSerializableTrait
 {
-    public function jsonSerialize(): array
+    public function jsonSerialize(): array|\stdClass
     {
-        return $this->toArray();
+        $data = $this->toArray();
+        // json_encode writes a list (`[]` or sequential int keys) as a JSON array; the API expects an object.
+        return array_is_list($data) ? (object) $data : $data;
     }
 }

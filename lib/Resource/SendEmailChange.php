@@ -30,7 +30,8 @@ readonly class SendEmailChange implements \JsonSerializable
     {
         return [
             'new_email' => $this->newEmail,
+        ] + array_filter([
             'locale' => $this->locale?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

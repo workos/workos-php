@@ -83,9 +83,10 @@ readonly class UserCreateResponse implements \JsonSerializable
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
             'name' => $this->name,
-            'metadata' => $this->metadata,
             'locale' => $this->locale,
+        ] + array_filter([
+            'metadata' => $this->metadata,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

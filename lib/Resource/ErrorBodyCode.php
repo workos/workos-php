@@ -142,7 +142,6 @@ enum ErrorBodyCode: string
     case PermissionNotFound = 'permission_not_found';
     case PermissionSlugConflict = 'permission_slug_conflict';
     case PhoneNumberRequired = 'phone_number_required';
-    case PolicyDenied = 'policy_denied';
     case ProductionFeatureRequiresBilling = 'production_feature_requires_billing';
     case RadarChallenge = 'radar_challenge';
     case RadarSignUpChallenge = 'radar_sign_up_challenge';

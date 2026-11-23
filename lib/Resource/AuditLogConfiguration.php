@@ -38,7 +38,8 @@ readonly class AuditLogConfiguration implements \JsonSerializable
             'organization_id' => $this->organizationId,
             'retention_period_in_days' => $this->retentionPeriodInDays,
             'state' => $this->state->value,
-            'log_stream' => $this->logStream?->toArray(),
-        ];
+        ] + array_filter([
+            'log_stream' => $this->logStream?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

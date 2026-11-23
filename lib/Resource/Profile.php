@@ -91,10 +91,11 @@ readonly class Profile implements \JsonSerializable
             'last_name' => $this->lastName,
             'name' => $this->name,
             'raw_attributes' => $this->rawAttributes,
-            'role' => $this->role?->toArray(),
-            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->toArray(), $this->roles) : null,
+            'role' => $this->role?->jsonSerialize(),
+            'roles' => $this->roles !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->roles) : null,
+        ] + array_filter([
             'groups' => $this->groups,
             'custom_attributes' => $this->customAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

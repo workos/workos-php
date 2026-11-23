@@ -33,8 +33,9 @@ readonly class DataIntegrationCredentialsInput implements \JsonSerializable
     {
         return [
             'type' => $this->type->value,
+        ] + array_filter([
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

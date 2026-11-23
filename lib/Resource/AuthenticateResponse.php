@@ -47,14 +47,15 @@ readonly class AuthenticateResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
             'access_token' => $this->accessToken,
             'refresh_token' => $this->refreshToken,
+        ] + array_filter([
             'organization_id' => $this->organizationId,
             'authkit_authorization_code' => $this->authkitAuthorizationCode,
             'authentication_method' => $this->authenticationMethod?->value,
-            'impersonator' => $this->impersonator?->toArray(),
-            'oauth_tokens' => $this->oauthTokens?->toArray(),
-        ];
+            'impersonator' => $this->impersonator?->jsonSerialize(),
+            'oauth_tokens' => $this->oauthTokens?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

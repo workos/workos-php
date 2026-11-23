@@ -71,7 +71,8 @@ readonly class DataIntegrationConfigurationResponse implements \JsonSerializable
             'config' => $this->config,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-            'credentials' => $this->credentials?->toArray(),
-        ];
+        ] + array_filter([
+            'credentials' => $this->credentials?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

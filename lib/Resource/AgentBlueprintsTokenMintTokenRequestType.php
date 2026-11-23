@@ -8,8 +8,12 @@ namespace WorkOS\Resource;
 
 enum AgentBlueprintsTokenMintTokenRequestType: string
 {
+    /** How the session is minted: `user_delegated`, `autonomous`, `agent_delegated`, or `refresh`. */
     case UserDelegated = 'user_delegated';
+    /** How the session is minted: `user_delegated`, `autonomous`, `agent_delegated`, or `refresh`. */
     case Autonomous = 'autonomous';
+    /** How the session is minted: `user_delegated`, `autonomous`, `agent_delegated`, or `refresh`. */
     case AgentDelegated = 'agent_delegated';
+    /** How the session is minted: `user_delegated`, `autonomous`, `agent_delegated`, or `refresh`. */
     case Refresh = 'refresh';
 }

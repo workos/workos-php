@@ -46,13 +46,13 @@ readonly class EventContext implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'google_analytics_client_id' => $this->googleAnalyticsClientId,
-            'google_analytics_sessions' => $this->googleAnalyticsSessions !== null ? array_map(fn ($item) => $item->toArray(), $this->googleAnalyticsSessions) : null,
+            'google_analytics_sessions' => $this->googleAnalyticsSessions !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->googleAnalyticsSessions) : null,
             'ajs_anonymous_id' => $this->ajsAnonymousId,
             'client_id' => $this->clientId,
-            'actor' => $this->actor?->toArray(),
+            'actor' => $this->actor?->jsonSerialize(),
             'previous_attributes' => $this->previousAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

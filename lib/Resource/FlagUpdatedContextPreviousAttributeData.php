@@ -45,12 +45,13 @@ readonly class FlagUpdatedContextPreviousAttributeData implements \JsonSerializa
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'description' => $this->description,
+            'owner' => $this->owner?->jsonSerialize(),
+        ] + array_filter([
+            'name' => $this->name,
             'tags' => $this->tags,
-            'owner' => $this->owner?->toArray(),
             'enabled' => $this->enabled,
             'default_value' => $this->defaultValue,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

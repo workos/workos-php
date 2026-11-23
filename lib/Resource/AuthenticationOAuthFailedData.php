@@ -52,8 +52,9 @@ readonly class AuthenticationOAuthFailedData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
-            'error' => $this->error->toArray(),
+            'error' => $this->error->jsonSerialize(),
+        ] + array_filter([
             'provider' => $this->provider,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

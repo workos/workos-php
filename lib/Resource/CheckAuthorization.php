@@ -36,9 +36,10 @@ readonly class CheckAuthorization implements \JsonSerializable
     {
         return [
             'permission_slug' => $this->permissionSlug,
+        ] + array_filter([
             'resource_id' => $this->resourceId,
             'resource_external_id' => $this->resourceExternalId,
             'resource_type_slug' => $this->resourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

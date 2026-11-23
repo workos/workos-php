@@ -47,14 +47,15 @@ readonly class PatchConnectionOIDCOptions implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'redirect_uri' => $this->redirectUri,
+        ] + array_filter([
             'discovery_endpoint' => $this->discoveryEndpoint,
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'redirect_uri' => $this->redirectUri,
             'pkce' => $this->pkce,
             'token_authentication_method' => $this->tokenAuthenticationMethod?->value,
             'id_token_signature_algorithm' => $this->idTokenSignatureAlgorithm?->value,
             'fetch_user_info' => $this->fetchUserInfo,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

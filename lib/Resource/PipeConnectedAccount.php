@@ -87,13 +87,14 @@ readonly class PipeConnectedAccount implements \JsonSerializable
             'state' => $this->state->value,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
-            'connection_role' => $this->connectionRole?->value,
             'account_identifier' => $this->accountIdentifier,
             'account_display_name' => $this->accountDisplayName,
-            'auth_method' => $this->authMethod?->value,
             'api_key_last_4' => $this->apiKeyLast4,
             'established_by_user_id' => $this->establishedByUserId,
             'state_reason' => $this->stateReason,
-        ];
+        ] + array_filter([
+            'connection_role' => $this->connectionRole?->value,
+            'auth_method' => $this->authMethod?->value,
+        ], fn ($v) => $v !== null);
     }
 }

@@ -34,7 +34,8 @@ readonly class DataIntegrationAuthorizeUrlResponse implements \JsonSerializable
         return [
             'url' => $this->url,
             'state' => $this->state,
+        ] + array_filter([
             'completion' => $this->completion,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

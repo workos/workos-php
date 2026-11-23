@@ -44,11 +44,12 @@ readonly class ConfigureDataIntegrationBody implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'enabled' => $this->enabled,
             'scopes' => $this->scopes,
+        ] + array_filter([
+            'enabled' => $this->enabled,
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'config' => $this->config,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

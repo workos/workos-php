@@ -29,9 +29,9 @@ readonly class FlagRuleUpdatedContextPreviousAttributeContext implements \JsonSe
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'access_type' => $this->accessType?->value,
-            'configured_targets' => $this->configuredTargets?->toArray(),
-        ];
+            'configured_targets' => $this->configuredTargets?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

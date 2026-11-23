@@ -45,8 +45,9 @@ readonly class DeviceAuthorizationResponse implements \JsonSerializable
             'user_code' => $this->userCode,
             'verification_uri' => $this->verificationUri,
             'expires_in' => $this->expiresIn,
+        ] + array_filter([
             'verification_uri_complete' => $this->verificationUriComplete,
             'interval' => $this->interval,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

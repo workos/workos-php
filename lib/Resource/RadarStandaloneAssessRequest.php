@@ -46,7 +46,8 @@ readonly class RadarStandaloneAssessRequest implements \JsonSerializable
             'email' => $this->email,
             'auth_method' => $this->authMethod->value,
             'action' => $this->action->value,
+        ] + array_filter([
             'signals_id' => $this->signalsId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -38,7 +38,8 @@ readonly class CreateAuthorizationPermission implements \JsonSerializable
             'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
+        ] + array_filter([
             'resource_type_slug' => $this->resourceTypeSlug,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

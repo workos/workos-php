@@ -64,7 +64,7 @@ readonly class FeatureFlag implements \JsonSerializable
             'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
-            'owner' => $this->owner?->toArray(),
+            'owner' => $this->owner?->jsonSerialize(),
             'tags' => $this->tags,
             'enabled' => $this->enabled,
             'default_value' => $this->defaultValue,

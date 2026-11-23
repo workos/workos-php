@@ -45,12 +45,13 @@ readonly class CreateConnection implements \JsonSerializable
     {
         return [
             'organization_id' => $this->organizationId,
+        ] + array_filter([
             'name' => $this->name,
             'external_id' => $this->externalId,
             'connection_type' => $this->connectionType,
-            'attribute_maps' => $this->attributeMaps?->toArray(),
-            'saml_options' => $this->samlOptions?->toArray(),
-            'oidc_options' => $this->oidcOptions?->toArray(),
-        ];
+            'attribute_maps' => $this->attributeMaps?->jsonSerialize(),
+            'saml_options' => $this->samlOptions?->jsonSerialize(),
+            'oidc_options' => $this->oidcOptions?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

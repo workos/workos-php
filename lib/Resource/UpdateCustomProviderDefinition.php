@@ -59,10 +59,11 @@ readonly class UpdateCustomProviderDefinition implements \JsonSerializable
     public function toArray(): array
     {
         return [
+            'refresh_token_url' => $this->refreshTokenUrl,
+        ] + array_filter([
             'name' => $this->name,
             'authorization_url' => $this->authorizationUrl,
             'token_url' => $this->tokenUrl,
-            'refresh_token_url' => $this->refreshTokenUrl,
             'pkce_enabled' => $this->pkceEnabled,
             'request_scope_separator' => $this->requestScopeSeparator,
             'scopes_required' => $this->scopesRequired,
@@ -70,6 +71,6 @@ readonly class UpdateCustomProviderDefinition implements \JsonSerializable
             'additional_authorization_parameters' => $this->additionalAuthorizationParameters,
             'token_body_content_type' => $this->tokenBodyContentType,
             'authenticate_via' => $this->authenticateVia?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

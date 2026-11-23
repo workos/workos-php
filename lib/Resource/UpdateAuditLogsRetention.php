@@ -31,9 +31,9 @@ readonly class UpdateAuditLogsRetention implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'retention_period' => $this->retentionPeriod?->value,
             'retention_period_in_days' => $this->retentionPeriodInDays,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

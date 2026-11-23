@@ -60,12 +60,13 @@ readonly class PasswordSessionAuthenticateRequest implements \JsonSerializable
             'grant_type' => $this->grantType,
             'email' => $this->email,
             'password' => $this->password,
+        ] + array_filter([
             'invitation_token' => $this->invitationToken,
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
             'signals_id' => $this->signalsId,
             'radar_auth_attempt_id' => $this->radarAuthAttemptId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

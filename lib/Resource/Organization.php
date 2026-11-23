@@ -65,13 +65,14 @@ readonly class Organization implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'name' => $this->name,
-            'domains' => array_map(fn ($item) => $item->toArray(), $this->domains),
+            'domains' => array_map(fn ($item) => $item->jsonSerialize(), $this->domains),
             'metadata' => $this->metadata,
             'external_id' => $this->externalId,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'stripe_customer_id' => $this->stripeCustomerId,
             'allow_profiles_outside_organization' => $this->allowProfilesOutsideOrganization,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

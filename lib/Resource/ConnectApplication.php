@@ -85,13 +85,14 @@ readonly class ConnectApplication implements \JsonSerializable
             'scopes' => $this->scopes,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'application_type' => $this->applicationType,
-            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->redirectUris) : null,
             'cors_origins' => $this->corsOrigins,
             'uses_pkce' => $this->usesPkce,
             'is_first_party' => $this->isFirstParty,
             'was_dynamically_registered' => $this->wasDynamicallyRegistered,
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -52,8 +52,8 @@ readonly class AuthenticationSSOTimedOutData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
-            'sso' => $this->sso->toArray(),
-            'error' => $this->error->toArray(),
+            'sso' => $this->sso->jsonSerialize(),
+            'error' => $this->error->jsonSerialize(),
         ];
     }
 }

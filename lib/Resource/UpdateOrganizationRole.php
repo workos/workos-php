@@ -29,8 +29,9 @@ readonly class UpdateOrganizationRole implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'description' => $this->description,
-        ];
+        ] + array_filter([
+            'name' => $this->name,
+        ], fn ($v) => $v !== null);
     }
 }

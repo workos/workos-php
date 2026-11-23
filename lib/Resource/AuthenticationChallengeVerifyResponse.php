@@ -29,7 +29,7 @@ readonly class AuthenticationChallengeVerifyResponse implements \JsonSerializabl
     public function toArray(): array
     {
         return [
-            'challenge' => $this->challenge->toArray(),
+            'challenge' => $this->challenge->jsonSerialize(),
             'valid' => $this->valid,
         ];
     }

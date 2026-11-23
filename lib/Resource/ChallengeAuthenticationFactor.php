@@ -25,8 +25,8 @@ readonly class ChallengeAuthenticationFactor implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'sms_template' => $this->smsTemplate,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

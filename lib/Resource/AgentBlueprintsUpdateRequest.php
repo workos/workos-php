@@ -45,12 +45,13 @@ readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'description' => $this->description,
+        ] + array_filter([
+            'name' => $this->name,
             'permissions' => $this->permissions,
-            'invocable_by' => $this->invocableBy?->toArray(),
-            'invocable_as' => $this->invocableAs?->toArray(),
-            'session_settings' => $this->sessionSettings?->toArray(),
-        ];
+            'invocable_by' => $this->invocableBy?->jsonSerialize(),
+            'invocable_as' => $this->invocableAs?->jsonSerialize(),
+            'session_settings' => $this->sessionSettings?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

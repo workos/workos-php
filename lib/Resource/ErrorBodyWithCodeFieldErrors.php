@@ -33,7 +33,7 @@ readonly class ErrorBodyWithCodeFieldErrors implements \JsonSerializable
     {
         return [
             'message' => $this->message,
-            'errors' => array_map(fn ($item) => $item->toArray(), $this->errors),
+            'errors' => array_map(fn ($item) => $item->jsonSerialize(), $this->errors),
         ];
     }
 }

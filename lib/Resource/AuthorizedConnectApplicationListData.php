@@ -43,8 +43,9 @@ readonly class AuthorizedConnectApplicationListData implements \JsonSerializable
             'object' => $this->object,
             'id' => $this->id,
             'granted_scopes' => $this->grantedScopes,
-            'application' => $this->application->toArray(),
+            'application' => $this->application->jsonSerialize(),
+        ] + array_filter([
             'oauth_resource' => $this->oauthResource,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -47,11 +47,12 @@ readonly class UpdateOAuthApplication implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'description' => $this->description,
             'scopes' => $this->scopes,
-            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->toArray(), $this->redirectUris) : null,
+            'redirect_uris' => $this->redirectUris !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->redirectUris) : null,
             'cors_origins' => $this->corsOrigins,
-        ];
+        ] + array_filter([
+            'name' => $this->name,
+        ], fn ($v) => $v !== null);
     }
 }

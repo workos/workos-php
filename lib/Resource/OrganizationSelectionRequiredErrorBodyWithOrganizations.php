@@ -37,7 +37,7 @@ readonly class OrganizationSelectionRequiredErrorBodyWithOrganizations implement
         return [
             'code' => $this->code,
             'message' => $this->message,
-            'organizations' => array_map(fn ($item) => $item->toArray(), $this->organizations),
+            'organizations' => array_map(fn ($item) => $item->jsonSerialize(), $this->organizations),
         ];
     }
 }

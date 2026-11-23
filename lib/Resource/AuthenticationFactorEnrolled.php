@@ -52,9 +52,10 @@ readonly class AuthenticationFactorEnrolled implements \JsonSerializable
             'type' => $this->type->value,
             'created_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->createdAt),
             'updated_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->updatedAt),
+        ] + array_filter([
             'user_id' => $this->userId,
-            'sms' => $this->sms?->toArray(),
-            'totp' => $this->totp?->toArray(),
-        ];
+            'sms' => $this->sms?->jsonSerialize(),
+            'totp' => $this->totp?->jsonSerialize(),
+        ], fn ($v) => $v !== null);
     }
 }

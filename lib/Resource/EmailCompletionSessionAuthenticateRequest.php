@@ -54,10 +54,11 @@ readonly class EmailCompletionSessionAuthenticateRequest implements \JsonSeriali
             'grant_type' => $this->grantType,
             'email_completion_token' => $this->emailCompletionToken,
             'email' => $this->email,
+        ] + array_filter([
             'ip_address' => $this->ipAddress,
             'device_id' => $this->deviceId,
             'user_agent' => $this->userAgent,
             'signals_id' => $this->signalsId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

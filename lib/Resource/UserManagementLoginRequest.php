@@ -36,8 +36,9 @@ readonly class UserManagementLoginRequest implements \JsonSerializable
     {
         return [
             'external_auth_id' => $this->externalAuthId,
-            'user' => $this->user->toArray(),
-            'user_consent_options' => $this->userConsentOptions !== null ? array_map(fn ($item) => $item->toArray(), $this->userConsentOptions) : null,
-        ];
+            'user' => $this->user->jsonSerialize(),
+        ] + array_filter([
+            'user_consent_options' => $this->userConsentOptions !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->userConsentOptions) : null,
+        ], fn ($v) => $v !== null);
     }
 }

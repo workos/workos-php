@@ -36,8 +36,8 @@ readonly class FlagRuleUpdatedContextConfiguredTarget implements \JsonSerializab
     public function toArray(): array
     {
         return [
-            'organizations' => array_map(fn ($item) => $item->toArray(), $this->organizations),
-            'users' => array_map(fn ($item) => $item->toArray(), $this->users),
+            'organizations' => array_map(fn ($item) => $item->jsonSerialize(), $this->organizations),
+            'users' => array_map(fn ($item) => $item->jsonSerialize(), $this->users),
         ];
     }
 }

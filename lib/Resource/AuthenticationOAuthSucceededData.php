@@ -49,7 +49,8 @@ readonly class AuthenticationOAuthSucceededData implements \JsonSerializable
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
+        ] + array_filter([
             'provider' => $this->provider,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

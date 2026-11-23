@@ -30,7 +30,7 @@ readonly class EmailChangeConfirmation implements \JsonSerializable
     {
         return [
             'object' => $this->object,
-            'user' => $this->user->toArray(),
+            'user' => $this->user->jsonSerialize(),
         ];
     }
 }

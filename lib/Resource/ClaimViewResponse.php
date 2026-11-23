@@ -41,7 +41,7 @@ readonly class ClaimViewResponse implements \JsonSerializable
             'id' => $this->id,
             'status' => $this->status->value,
             'user_code' => $this->userCode,
-            'organizations' => array_map(fn ($item) => $item->toArray(), $this->organizations),
+            'organizations' => array_map(fn ($item) => $item->jsonSerialize(), $this->organizations),
         ];
     }
 }

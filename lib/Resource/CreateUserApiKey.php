@@ -40,8 +40,9 @@ readonly class CreateUserApiKey implements \JsonSerializable
         return [
             'name' => $this->name,
             'organization_id' => $this->organizationId,
+        ] + array_filter([
             'permissions' => $this->permissions,
             'expires_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->expiresAt),
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -28,8 +28,9 @@ readonly class ApiKeyValidationResponse implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'api_key' => $this->apiKey?->toArray(),
+            'api_key' => $this->apiKey?->jsonSerialize(),
+        ] + array_filter([
             'agent_registration_id' => $this->agentRegistrationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

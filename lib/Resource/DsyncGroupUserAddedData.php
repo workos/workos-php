@@ -34,8 +34,8 @@ readonly class DsyncGroupUserAddedData implements \JsonSerializable
     {
         return [
             'directory_id' => $this->directoryId,
-            'user' => $this->user->toArray(),
-            'group' => $this->group->toArray(),
+            'user' => $this->user->jsonSerialize(),
+            'group' => $this->group->jsonSerialize(),
         ];
     }
 }

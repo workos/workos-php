@@ -49,7 +49,7 @@ readonly class AuthenticationEmailVerificationFailedData implements \JsonSeriali
             'user_agent' => $this->userAgent,
             'user_id' => $this->userId,
             'email' => $this->email,
-            'error' => $this->error->toArray(),
+            'error' => $this->error->jsonSerialize(),
         ];
     }
 }

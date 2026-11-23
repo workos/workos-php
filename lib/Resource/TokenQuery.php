@@ -50,11 +50,12 @@ readonly class TokenQuery implements \JsonSerializable
             'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
             'grant_type' => $this->grantType->value,
+        ] + array_filter([
             'code' => $this->code,
             'code_verifier' => $this->codeVerifier,
             'subject_token' => $this->subjectToken,
             'subject_token_type' => $this->subjectTokenType,
             'organization_id' => $this->organizationId,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -34,10 +34,10 @@ readonly class WidgetSessionToken implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'organization_id' => $this->organizationId,
             'user_id' => $this->userId,
             'scopes' => $this->scopes !== null ? array_map(fn ($item) => $item->value, $this->scopes) : null,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

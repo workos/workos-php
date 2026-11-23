@@ -41,7 +41,7 @@ readonly class UserConsentOption implements \JsonSerializable
             'claim' => $this->claim,
             'type' => $this->type,
             'label' => $this->label,
-            'choices' => array_map(fn ($item) => $item->toArray(), $this->choices),
+            'choices' => array_map(fn ($item) => $item->jsonSerialize(), $this->choices),
         ];
     }
 }

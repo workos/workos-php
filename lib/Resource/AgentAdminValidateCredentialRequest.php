@@ -35,7 +35,8 @@ readonly class AgentAdminValidateCredentialRequest implements \JsonSerializable
         return [
             'type' => $this->type->value,
             'credential' => $this->credential,
+        ] + array_filter([
             'audience' => $this->audience,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

@@ -11,7 +11,6 @@ readonly class DataIntegrationCredentialsResponse implements \JsonSerializable
     use JsonSerializableTrait;
 
     public function __construct(
-        /** Indicates credentials are available. */
         public ?bool $active = null,
         /** The credential object containing the vended secret. */
         public ?DataIntegrationVendedCredential $credential = null,
@@ -35,10 +34,10 @@ readonly class DataIntegrationCredentialsResponse implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'active' => $this->active,
-            'credential' => $this->credential?->toArray(),
+            'credential' => $this->credential?->jsonSerialize(),
             'error' => $this->error?->value,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

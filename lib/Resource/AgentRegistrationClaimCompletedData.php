@@ -28,6 +28,8 @@ readonly class AgentRegistrationClaimCompletedData implements \JsonSerializable
         public string $createdAt,
         /** The timestamp when the claim was last updated. */
         public string $updatedAt,
+        /** The ID of the organization the registration belongs to. */
+        public ?string $organizationId = null,
     ) {
     }
 
@@ -42,6 +44,7 @@ readonly class AgentRegistrationClaimCompletedData implements \JsonSerializable
             completedAt: $data['completed_at'],
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
+            organizationId: $data['organization_id'] ?? null,
         );
     }
 
@@ -52,10 +55,12 @@ readonly class AgentRegistrationClaimCompletedData implements \JsonSerializable
             'id' => $this->id,
             'agent_registration_id' => $this->agentRegistrationId,
             'completed_by_attempt_id' => $this->completedByAttemptId,
-            'claimed_by' => $this->claimedBy->toArray(),
+            'claimed_by' => $this->claimedBy->jsonSerialize(),
             'completed_at' => $this->completedAt,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-        ];
+        ] + array_filter([
+            'organization_id' => $this->organizationId,
+        ], fn ($v) => $v !== null);
     }
 }

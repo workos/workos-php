@@ -31,9 +31,9 @@ readonly class CreateConnectionAttributeMaps implements \JsonSerializable
 
     public function toArray(): array
     {
-        return [
-            'standard_attributes' => $this->standardAttributes?->toArray(),
+        return array_filter([
+            'standard_attributes' => $this->standardAttributes?->jsonSerialize(),
             'custom_attributes' => $this->customAttributes,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

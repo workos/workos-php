@@ -38,9 +38,10 @@ readonly class AuditLogSchemaInput implements \JsonSerializable
     public function toArray(): array
     {
         return [
-            'targets' => array_map(fn ($item) => $item->toArray(), $this->targets),
-            'actor' => $this->actor?->toArray(),
+            'targets' => array_map(fn ($item) => $item->jsonSerialize(), $this->targets),
+        ] + array_filter([
+            'actor' => $this->actor?->jsonSerialize(),
             'metadata' => $this->metadata,
-        ];
+        ], fn ($v) => $v !== null);
     }
 }

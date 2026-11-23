@@ -21,16 +21,22 @@ class PipesProvider
      *
      * Returns a list of all providers available to the specified organization, along with any configured custom OAuth scopes, enabled state, and organization-managed credentials where applicable.
      * @param string $organizationId An [Organization](https://workos.com/docs/reference/organization) identifier to list provider configurations for.
+     * @param \WorkOS\Resource\PipesOwnership $ownership Select the provider configuration for `user` connections or `organization` shared connections. Defaults to `user`; never falls back to the other ownership. Defaults to "user".
      * @return \WorkOS\Resource\DataIntegrationConfigurationListResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
     public function listOrganizationDataIntegrationConfigurations(
         string $organizationId,
         ?\WorkOS\RequestOptions $options = null,
+        \WorkOS\Resource\PipesOwnership $ownership = \WorkOS\Resource\PipesOwnership::User,
     ): \WorkOS\Resource\DataIntegrationConfigurationListResponse {
+        $query = [
+            'ownership' => $ownership->value,
+        ];
         $response = $this->client->request(
             method: 'GET',
             path: 'organizations/' . rawurlencode($organizationId) . '/data_integration_configurations',
+            query: $query,
             options: $options,
         );
         return DataIntegrationConfigurationListResponse::fromArray($response);
@@ -47,6 +53,7 @@ class PipesProvider
      * @param string|null $clientId The OAuth client ID of the organization's own application. Must be provided together with `client_secret`, and only for providers whose credentials are supplied by the organization.
      * @param string|null $clientSecret The OAuth client secret of the organization's own application. Must be provided together with `client_id`.
      * @param array<string, string>|null $config Provider-specific config values to set for the organization, keyed by config field. Only fields the provider declares are accepted, and each value must match that field's pattern. Accepted only for providers whose credentials are organization-managed; for shared or custom credential providers, config belongs on the integration itself (via the data-integrations API) and supplying it here is rejected.
+     * @param \WorkOS\Resource\PipesOwnership $ownership Select the provider configuration for `user` connections or `organization` shared connections. Defaults to `user`; never falls back to the other ownership. Defaults to "user".
      * @return \WorkOS\Resource\DataIntegrationConfigurationResponse
      * @throws \WorkOS\Exception\WorkOSException
      */
@@ -59,6 +66,7 @@ class PipesProvider
         ?string $clientSecret = null,
         ?array $config = null,
         ?\WorkOS\RequestOptions $options = null,
+        \WorkOS\Resource\PipesOwnership $ownership = \WorkOS\Resource\PipesOwnership::User,
     ): \WorkOS\Resource\DataIntegrationConfigurationResponse {
         $body = array_filter([
             'enabled' => $enabled,
@@ -67,10 +75,14 @@ class PipesProvider
             'client_secret' => $clientSecret,
             'config' => $config,
         ], fn ($v) => $v !== null);
+        $query = [
+            'ownership' => $ownership->value,
+        ];
         $response = $this->client->request(
             method: 'PUT',
             path: 'organizations/' . rawurlencode($organizationId) . '/data_integration_configurations/' . rawurlencode($slug),
             body: $body,
+            query: $query,
             options: $options,
         );
         return DataIntegrationConfigurationResponse::fromArray($response);
