@@ -133,7 +133,7 @@ class DirectorySync
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryGroup>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listDirectoryGroups(
+    public function listGroupsForDirectory(
         string $directoryId,
         ?string $before = null,
         ?string $after = null,
@@ -167,7 +167,7 @@ class DirectorySync
      * @return \WorkOS\Resource\DirectoryGroup
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function getDirectoryGroup(
+    public function getGroupForDirectory(
         string $directoryId,
         string $groupId,
         ?\WorkOS\RequestOptions $options = null,
@@ -195,7 +195,7 @@ class DirectorySync
      * @return \WorkOS\PaginatedResponse<\WorkOS\Resource\DirectoryUser>
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function listDirectoryUsers(
+    public function listUsersForDirectory(
         string $directoryId,
         ?string $before = null,
         ?string $after = null,
@@ -233,7 +233,7 @@ class DirectorySync
      * @return \WorkOS\Resource\DirectoryUser
      * @throws \WorkOS\Exception\WorkOSException
      */
-    public function getDirectoryUser(
+    public function getUserForDirectory(
         string $directoryId,
         string $userId,
         ?\WorkOS\RequestOptions $options = null,
