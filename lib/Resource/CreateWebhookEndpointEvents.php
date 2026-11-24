@@ -44,10 +44,13 @@ enum CreateWebhookEndpointEvents: string
     case ApiKeyCreated = 'api_key.created';
     case ApiKeyRevoked = 'api_key.revoked';
     case ApiKeyUpdated = 'api_key.updated';
+    case ApplicationTokenExchangeFailed = 'application.token_exchange_failed';
+    case ApplicationTokenExchangeSucceeded = 'application.token_exchange_succeeded';
     case ConnectionActivated = 'connection.activated';
     case ConnectionDeactivated = 'connection.deactivated';
     case ConnectionSAMLCertificateRenewalRequired = 'connection.saml_certificate_renewal_required';
     case ConnectionSAMLCertificateRenewed = 'connection.saml_certificate_renewed';
+    case ConnectionSAMLCertificateReplaced = 'connection.saml_certificate_replaced';
     case ConnectionDeleted = 'connection.deleted';
     case DsyncActivated = 'dsync.activated';
     case DsyncDeleted = 'dsync.deleted';
@@ -81,6 +84,9 @@ enum CreateWebhookEndpointEvents: string
     case InvitationCreated = 'invitation.created';
     case InvitationResent = 'invitation.resent';
     case InvitationRevoked = 'invitation.revoked';
+    case IssuerTrustCreated = 'issuer_trust.created';
+    case IssuerTrustDeleted = 'issuer_trust.deleted';
+    case IssuerTrustUpdated = 'issuer_trust.updated';
     case MagicAuthCreated = 'magic_auth.created';
     case OrganizationCreated = 'organization.created';
     case OrganizationDeleted = 'organization.deleted';

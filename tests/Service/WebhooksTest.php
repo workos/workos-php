@@ -45,6 +45,20 @@ class WebhooksTest extends TestCase
         $this->assertSame('test_value', $body['endpoint_url']);
     }
 
+    public function testGetWebhookEndpoint(): void
+    {
+        $fixture = $this->loadFixture('webhook_endpoint');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->webhooks()->getWebhookEndpoint('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\WebhookEndpoint::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['endpoint_url'], $result->endpointUrl);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('webhook_endpoints/test_id', $request->getUri()->getPath());
+    }
+
     public function testUpdateWebhookEndpoint(): void
     {
         $fixture = $this->loadFixture('webhook_endpoint');
