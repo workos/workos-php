@@ -14,8 +14,8 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
     public function __construct(
         /** The authentication method used. */
         public string $authMethod,
-        public AuthenticationRadarRiskDetectedDataAction $action,
-        /** The control action taken for the detected risk. */
+        public RadarDetectionAction $action,
+        /** The Radar control that detected the risk. */
         public ?string $control,
         /** The type of blocklist that triggered the risk detection. */
         public ?string $blocklistType,
@@ -27,7 +27,7 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
         public string $userId,
         /** The email address of the user. */
         public string $email,
-        /** The ID of the Radar detection that challenged the authentication. */
+        /** The ID of the Radar detection that challenged the authentication. Retrieve the detection with `GET /radar/detections/:id` to see why Radar acted. */
         public ?string $radarDetectionId = null,
     ) {
     }
@@ -36,7 +36,7 @@ readonly class AuthenticationRadarRiskDetectedData implements \JsonSerializable
     {
         return new self(
             authMethod: $data['auth_method'],
-            action: AuthenticationRadarRiskDetectedDataAction::from($data['action']),
+            action: RadarDetectionAction::from($data['action']),
             control: $data['control'] ?? null,
             blocklistType: $data['blocklist_type'] ?? null,
             ipAddress: $data['ip_address'] ?? null,

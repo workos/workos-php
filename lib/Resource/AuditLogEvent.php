@@ -13,8 +13,6 @@ readonly class AuditLogEvent implements \JsonSerializable
     public function __construct(
         /** Identifier of what happened. */
         public string $action,
-        /** ISO-8601 value of when the action occurred. */
-        public \DateTimeImmutable $occurredAt,
         /** The entity that performed the action. */
         public AuditLogEventActor $actor,
         /**
@@ -24,6 +22,8 @@ readonly class AuditLogEvent implements \JsonSerializable
         public array $targets,
         /** Additional context about where and how the action occurred. */
         public AuditLogEventContext $context,
+        /** ISO-8601 timestamp of when the action occurred. When omitted, defaults to the time WorkOS receives the event. Explicit JSON null is rejected. */
+        public ?\DateTimeImmutable $occurredAt = null,
         /**
          * Additional data associated with the event or entity.
          * @var array<string, string|float|bool>|null
@@ -38,10 +38,10 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return new self(
             action: $data['action'],
-            occurredAt: new \DateTimeImmutable($data['occurred_at']),
             actor: AuditLogEventActor::fromArray($data['actor']),
             targets: array_map(fn ($item) => AuditLogEventTarget::fromArray($item), $data['targets']),
             context: AuditLogEventContext::fromArray($data['context']),
+            occurredAt: isset($data['occurred_at']) ? new \DateTimeImmutable($data['occurred_at']) : null,
             metadata: $data['metadata'] ?? null,
             version: $data['version'] ?? null,
         );
@@ -51,11 +51,11 @@ readonly class AuditLogEvent implements \JsonSerializable
     {
         return [
             'action' => $this->action,
-            'occurred_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->occurredAt),
             'actor' => $this->actor->jsonSerialize(),
             'targets' => array_map(fn ($item) => $item->jsonSerialize(), $this->targets),
             'context' => $this->context->jsonSerialize(),
         ] + array_filter([
+            'occurred_at' => \WorkOS\Internal\DateTimeFormat::iso8601($this->occurredAt),
             'metadata' => $this->metadata,
             'version' => $this->version,
         ], fn ($v) => $v !== null);

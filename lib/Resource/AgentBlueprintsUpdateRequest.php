@@ -17,8 +17,8 @@ readonly class AgentBlueprintsUpdateRequest implements \JsonSerializable
         /** Human-readable description of the agent blueprint. Pass `null` to clear it. */
         public ?string $description = null,
         /**
-         * Permission slugs forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment.
-         * @var array<string>|null
+         * Permissions forming the ceiling on what sessions minted from this blueprint may do. Each slug must exist in the environment and may appear once.
+         * @var array<\WorkOS\Resource\AgentBlueprintsUpdateRequestPermission|string>|null
          */
         public ?array $permissions = null,
         /** Who may mint sessions from this blueprint. Omitted lists are left unchanged. */

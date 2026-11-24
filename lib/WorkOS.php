@@ -21,6 +21,7 @@ use WorkOS\Service\MultiFactorAuth;
 use WorkOS\Service\OrganizationDomains;
 use WorkOS\Service\OrganizationMembershipService;
 use WorkOS\Service\Organizations;
+use WorkOS\Service\OrganizationsIssuerTrusts;
 use WorkOS\Service\Pipes;
 use WorkOS\Service\PipesProvider;
 use WorkOS\Service\PlatformTeams;
@@ -71,6 +72,7 @@ class WorkOS
     private ?Service\ApiKeys $apiKeys = null;
     private ?Service\PipesProvider $pipesProvider = null;
     private ?Service\Groups $groups = null;
+    private ?Service\OrganizationsIssuerTrusts $organizationsIssuerTrusts = null;
     private ?Service\PlatformTeams $platformTeams = null;
     private ?Service\AdminPortal $adminPortal = null;
     private ?Service\Radar $radar = null;
@@ -168,6 +170,11 @@ class WorkOS
     public function groups(): Groups
     {
         return $this->groups ??= new Service\Groups($this->httpClient);
+    }
+
+    public function organizationsIssuerTrusts(): OrganizationsIssuerTrusts
+    {
+        return $this->organizationsIssuerTrusts ??= new Service\OrganizationsIssuerTrusts($this->httpClient);
     }
 
     public function platformTeams(): PlatformTeams

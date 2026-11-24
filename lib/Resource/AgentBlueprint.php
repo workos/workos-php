@@ -20,10 +20,16 @@ readonly class AgentBlueprint implements \JsonSerializable
         /** Human-readable description of the agent blueprint. */
         public ?string $description,
         /**
-         * Permission slugs forming the ceiling on what sessions minted from this blueprint may do.
+         * Deprecated: use `scoped_permissions`. Slugs of every permission in the ceiling, across all instance types.
          * @var array<string>
+         * @deprecated
          */
         public array $permissions,
+        /**
+         * Permissions forming the ceiling on what sessions minted from this blueprint may do, with the instance types that receive each one.
+         * @var array<\WorkOS\Resource\AgentBlueprintScopedPermission>
+         */
+        public array $scopedPermissions,
         /** Who may mint sessions from this blueprint. */
         public AgentBlueprintInvocableBy $invocableBy,
         /** How sessions may be minted from this blueprint. */
@@ -45,6 +51,7 @@ readonly class AgentBlueprint implements \JsonSerializable
             name: $data['name'],
             description: $data['description'] ?? null,
             permissions: $data['permissions'],
+            scopedPermissions: array_map(fn ($item) => AgentBlueprintScopedPermission::fromArray($item), $data['scoped_permissions']),
             invocableBy: AgentBlueprintInvocableBy::fromArray($data['invocable_by']),
             invocableAs: AgentBlueprintInvocableAs::fromArray($data['invocable_as']),
             sessionSettings: AgentBlueprintSessionSetting::fromArray($data['session_settings']),
@@ -61,6 +68,7 @@ readonly class AgentBlueprint implements \JsonSerializable
             'name' => $this->name,
             'description' => $this->description,
             'permissions' => $this->permissions,
+            'scoped_permissions' => array_map(fn ($item) => $item->jsonSerialize(), $this->scopedPermissions),
             'invocable_by' => $this->invocableBy->jsonSerialize(),
             'invocable_as' => $this->invocableAs->jsonSerialize(),
             'session_settings' => $this->sessionSettings->jsonSerialize(),

@@ -186,6 +186,15 @@ class UserManagementTest extends TestCase
         $this->assertSame('test_value', $body['origin']);
     }
 
+    public function testDeleteCorsOrigin(): void
+    {
+        $client = $this->createMockClient([['status' => 204]]);
+        $client->userManagement()->deleteCorsOrigin('test_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('DELETE', $request->getMethod());
+        $this->assertStringEndsWith('user_management/cors_origins/test_id', $request->getUri()->getPath());
+    }
+
     public function testGetEmailVerification(): void
     {
         $fixture = $this->loadFixture('email_verification');
