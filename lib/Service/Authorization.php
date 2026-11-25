@@ -431,7 +431,7 @@ class Authorization
     /**
      * Assign a role
      *
-     * Assign a role to an organization membership on a specific resource.
+     * Assign a role to an organization membership on a specific resource. If the role is already assigned to the membership on that resource, the existing role assignment is returned and no changes are made.
      * @param string $organizationMembershipId The ID of the organization membership.
      * @param string $roleSlug The slug of the role to assign.
      * @param ResourceTargetById|ResourceTargetByExternalId $resourceTarget
@@ -460,6 +460,35 @@ class Authorization
             options: $options,
         );
         return UserRoleAssignment::fromArray($response);
+    }
+
+    /**
+     * Update role assignments for an organization membership
+     *
+     * Add and remove role assignments for an organization membership in a single atomic operation. Each entry identifies a role and a resource, either by `resource_id` or by `resource_type_slug` and `resource_external_id`; to change an organization-level role, target the organization resource. Additions that already exist and removals that match no assignment are skipped. An assignment in both lists is rejected, as is a removal of a role granted only through a group. `add` and `remove` must contain between 1 and 100 entries combined.
+     * @param string $organizationMembershipId The ID of the organization membership.
+     * @param array<\WorkOS\Resource\PatchRoleAssignmentEntry>|null $add Role assignments to add to the organization membership. Assignments that already exist are skipped.
+     * @param array<\WorkOS\Resource\PatchRoleAssignmentEntry>|null $remove Role assignments to remove from the organization membership. Entries that match no assignment are skipped. Roles granted through a group cannot be removed.
+     * @return mixed
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function updateRoleAssignments(
+        string $organizationMembershipId,
+        ?array $add = null,
+        ?array $remove = null,
+        ?\WorkOS\RequestOptions $options = null,
+    ): mixed {
+        $body = array_filter([
+            'add' => $add,
+            'remove' => $remove,
+        ], fn ($v) => $v !== null);
+        $response = $this->client->request(
+            method: 'PATCH',
+            path: 'authorization/organization_memberships/' . rawurlencode($organizationMembershipId) . '/role_assignments',
+            body: $body,
+            options: $options,
+        );
+        return $response;
     }
 
     /**

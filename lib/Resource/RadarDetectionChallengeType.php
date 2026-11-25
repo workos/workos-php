@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace WorkOS\Resource;
 
-enum AuthenticationRadarRiskDetectedDataAction: string
+enum RadarDetectionChallengeType: string
 {
-    case Signup = 'signup';
-    case Login = 'login';
+    case Email = 'email';
+    case Sms = 'sms';
 }

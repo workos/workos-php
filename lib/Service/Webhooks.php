@@ -76,6 +76,26 @@ class Webhooks
     }
 
     /**
+     * Get a Webhook Endpoint
+     *
+     * Get the details of an existing webhook endpoint.
+     * @param string $id Unique identifier of the Webhook Endpoint.
+     * @return \WorkOS\Resource\WebhookEndpoint
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getWebhookEndpoint(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\WebhookEndpoint {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'webhook_endpoints/' . rawurlencode($id),
+            options: $options,
+        );
+        return WebhookEndpoint::fromArray($response);
+    }
+
+    /**
      * Update a Webhook Endpoint
      *
      * Update the properties of an existing webhook endpoint.

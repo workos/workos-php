@@ -21,8 +21,9 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
         /** Human-readable description of the agent blueprint. */
         public ?string $description,
         /**
-         * Permission slugs forming the ceiling on what sessions minted from this blueprint may do.
+         * Deprecated: use `scoped_permissions`. Slugs of every permission in the ceiling, across all instance types.
          * @var array<string>
+         * @deprecated
          */
         public array $permissions,
         /** Who may mint sessions from this blueprint. */
@@ -35,6 +36,11 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
         public string $createdAt,
         /** The timestamp when the agent blueprint was last updated. */
         public string $updatedAt,
+        /**
+         * Permissions forming the ceiling on what sessions minted from this blueprint may do, with the instance types that receive each one. Absent from events emitted before this field was added.
+         * @var array<\WorkOS\Resource\AgentBlueprintUpdatedDataScopedPermission>|null
+         */
+        public ?array $scopedPermissions = null,
     ) {
     }
 
@@ -51,6 +57,7 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
             sessionSettings: AgentBlueprintUpdatedDataSessionSetting::fromArray($data['session_settings']),
             createdAt: $data['created_at'],
             updatedAt: $data['updated_at'],
+            scopedPermissions: isset($data['scoped_permissions']) ? array_map(fn ($item) => AgentBlueprintUpdatedDataScopedPermission::fromArray($item), $data['scoped_permissions']) : null,
         );
     }
 
@@ -67,6 +74,8 @@ readonly class AgentBlueprintUpdatedData implements \JsonSerializable
             'session_settings' => $this->sessionSettings->jsonSerialize(),
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
-        ];
+        ] + array_filter([
+            'scoped_permissions' => $this->scopedPermissions !== null ? array_map(fn ($item) => $item->jsonSerialize(), $this->scopedPermissions) : null,
+        ], fn ($v) => $v !== null);
     }
 }

@@ -786,6 +786,25 @@ class UserManagement
     }
 
     /**
+     * Delete a CORS origin
+     *
+     * Deletes a CORS origin from the API key's application.
+     * @param string $id The ID of the CORS origin to delete.
+     * @return void
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function deleteCorsOrigin(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): void {
+        $this->client->request(
+            method: 'DELETE',
+            path: 'user_management/cors_origins/' . rawurlencode($id),
+            options: $options,
+        );
+    }
+
+    /**
      * Get an email verification code
      *
      * Get the details of an existing email verification code that can be used to send an email to a user for verification.

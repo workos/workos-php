@@ -23,6 +23,7 @@ enum ErrorBodyCode: string
     case CannotDeactivatePendingOrganizationMembership = 'cannot_deactivate_pending_organization_membership';
     case CannotDeleteLastCertificate = 'cannot_delete_last_certificate';
     case CannotReactivatePendingOrganizationMembership = 'cannot_reactivate_pending_organization_membership';
+    case CannotRemoveGroupSourcedRole = 'cannot_remove_group_sourced_role';
     case CertificateExpired = 'certificate_expired';
     case ChainDepthExceeded = 'chain_depth_exceeded';
     case ClaimDenied = 'claim_denied';
@@ -46,6 +47,7 @@ enum ErrorBodyCode: string
     case DirectorySyncRateLimited = 'directory_sync_rate_limited';
     case DirectorySyncUnsupported = 'directory_sync_unsupported';
     case DiscoveryEndpointMustUseHttps = 'discovery_endpoint_must_use_https';
+    case DiscoveryEndpointTenantNotAllowed = 'discovery_endpoint_tenant_not_allowed';
     case DomainAlreadyExists = 'domain_already_exists';
     case DomainAlreadyVerified = 'domain_already_verified';
     case DuplicateEndpoint = 'duplicate_endpoint';
@@ -70,6 +72,7 @@ enum ErrorBodyCode: string
     case EmailVerificationCodeIncorrect = 'email_verification_code_incorrect';
     case EmailVerificationCodePreviouslyUsed = 'email_verification_code_previously_used';
     case EmailVerificationRequired = 'email_verification_required';
+    case EntitiesNotFound = 'entities_not_found';
     case EntityNotFound = 'entity_not_found';
     case ExpiresInDaysTooLong = 'expires_in_days_too_long';
     case ExpiresInDaysTooShort = 'expires_in_days_too_short';
@@ -89,6 +92,8 @@ enum ErrorBodyCode: string
     case InvalidEmail = 'invalid_email';
     case InvalidIdpSSOUrl = 'invalid_idp_sso_url';
     case InvalidInvite = 'invalid_invite';
+    case InvalidIssuerMetadata = 'invalid_issuer_metadata';
+    case InvalidIssuerUrl = 'invalid_issuer_url';
     case InvalidLocale = 'invalid_locale';
     case InvalidMetadata = 'invalid_metadata';
     case InvalidOneTimeCode = 'invalid_one_time_code';
@@ -110,6 +115,7 @@ enum ErrorBodyCode: string
     case InviteNotPending = 'invite_not_pending';
     case InviteRevoked = 'invite_revoked';
     case IpAddressRequired = 'ip_address_required';
+    case IssuerAlreadyTrusted = 'issuer_already_trusted';
     case ItContactAlreadyExists = 'it_contact_already_exists';
     case ItContactInvitationAlreadyActive = 'it_contact_invitation_already_active';
     case KeyPairNotAccepted = 'key_pair_not_accepted';
@@ -122,16 +128,20 @@ enum ErrorBodyCode: string
     case MultipleRolesNotEnabled = 'multiple_roles_not_enabled';
     case NameAlreadyInUse = 'name_already_in_use';
     case NoPendingEmailChange = 'no_pending_email_change';
+    case NotClaudeIssuer = 'not_claude_issuer';
     case OidcOptionsRequired = 'oidc_options_required';
     case OneTimeCodeExpired = 'one_time_code_expired';
     case OneTimeCodePreviouslyUsed = 'one_time_code_previously_used';
     case OneTimeCodeTooManyAttempts = 'one_time_code_too_many_attempts';
+    case OrganizationAlreadyHasTrust = 'organization_already_has_trust';
     case OrganizationBlockedFromSendingInvites = 'organization_blocked_from_sending_invites';
+    case OrganizationHasIdpManagedEma = 'organization_has_idp_managed_ema';
     case OrganizationMembershipDirectoryManaged = 'organization_membership_directory_managed';
     case OrganizationNotFound = 'organization_not_found';
     case OrganizationNotInvocable = 'organization_not_invocable';
     case OrganizationRoleSlugConflict = 'organization_role_slug_conflict';
     case OrganizationSelectionRequired = 'organization_selection_required';
+    case OrganizationWithoutVerifiedDomain = 'organization_without_verified_domain';
     case PasskeyProgressiveEnrollment = 'passkey_progressive_enrollment';
     case PasswordAndPasswordHashProvided = 'password_and_password_hash_provided';
     case PasswordAndPasswordHashTypeProvided = 'password_and_password_hash_type_provided';
@@ -145,11 +155,13 @@ enum ErrorBodyCode: string
     case ProductionFeatureRequiresBilling = 'production_feature_requires_billing';
     case RadarChallenge = 'radar_challenge';
     case RadarSignUpChallenge = 'radar_sign_up_challenge';
+    case RadarSmsChallenge = 'radar_sms_challenge';
     case RadarSmsSignInChallenge = 'radar_sms_sign_in_challenge';
     case RateLimitExceeded = 'rate_limit_exceeded';
     case ResourceHasDependents = 'resource_has_dependents';
     case ResourceLimitExceeded = 'resource_limit_exceeded';
     case ResourceTypeUpdateInProgress = 'resource_type_update_in_progress';
+    case RoleAssignmentUpdateOverlap = 'role_assignment_update_overlap';
     case RoleHasAssignments = 'role_has_assignments';
     case RoleHasGroupRoleMappings = 'role_has_group_role_mappings';
     case RoleNotFound = 'role_not_found';

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace WorkOS\Service;
 
+use WorkOS\Resource\RadarDetection;
 use WorkOS\Resource\RadarListEntryAlreadyPresentResponse;
 use WorkOS\Resource\RadarStandaloneResponse;
 
@@ -82,6 +83,26 @@ class Radar
             options: $options,
         );
         return $response;
+    }
+
+    /**
+     * Get a Radar detection
+     *
+     * Get a Radar detection from the last 30 days, including the evidence for why Radar fired.
+     * @param string $id The unique ID of the Radar detection.
+     * @return \WorkOS\Resource\RadarDetection
+     * @throws \WorkOS\Exception\WorkOSException
+     */
+    public function getDetection(
+        string $id,
+        ?\WorkOS\RequestOptions $options = null,
+    ): \WorkOS\Resource\RadarDetection {
+        $response = $this->client->request(
+            method: 'GET',
+            path: 'radar/detections/' . rawurlencode($id),
+            options: $options,
+        );
+        return RadarDetection::fromArray($response);
     }
 
     /**

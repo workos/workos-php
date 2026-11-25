@@ -39,6 +39,20 @@ class RadarTest extends TestCase
         $this->assertStringEndsWith('radar/attempts/test_id', $request->getUri()->getPath());
     }
 
+    public function testGetDetection(): void
+    {
+        $fixture = $this->loadFixture('radar_detection');
+        $client = $this->createMockClient([['status' => 200, 'body' => $fixture]]);
+        $result = $client->radar()->getDetection('test_id');
+        $this->assertInstanceOf(\WorkOS\Resource\RadarDetection::class, $result);
+        $this->assertSame($fixture['id'], $result->id);
+        $this->assertSame($fixture['attempt_id'], $result->attemptId);
+        $this->assertIsArray($result->toArray());
+        $request = $this->getLastRequest();
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertStringEndsWith('radar/detections/test_id', $request->getUri()->getPath());
+    }
+
     public function testAddListEntry(): void
     {
         $fixture = $this->loadFixture('radar_list_entry_already_present_response');

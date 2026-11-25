@@ -199,6 +199,15 @@ class AuthorizationTest extends TestCase
         $this->assertSame('test_value', $body['role_slug']);
     }
 
+    public function testUpdateRoleAssignments(): void
+    {
+        $client = $this->createMockClient([['status' => 200, 'body' => []]]);
+        $client->authorization()->updateRoleAssignments('test_organization_membership_id');
+        $request = $this->getLastRequest();
+        $this->assertSame('PATCH', $request->getMethod());
+        $this->assertStringEndsWith('authorization/organization_memberships/test_organization_membership_id/role_assignments', $request->getUri()->getPath());
+    }
+
     public function testRemoveRole(): void
     {
         $client = $this->createMockClient([['status' => 204]]);
