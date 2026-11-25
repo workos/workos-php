@@ -1,5 +1,24 @@
 # Changelog
 
+## [9.8.0](https://github.com/workos/workos-php/compare/v9.7.0...v9.8.0) (2026-11-25)
+
+
+### Features
+
+* **directory_sync:** Change directory sync API surface ([#471](https://github.com/workos/workos-php/issues/471)) ([269cf56](https://github.com/workos/workos-php/commit/269cf564394c4d568f61803a2a647523877d3cfe))
+* **sso:** Add SSO API surface ([#471](https://github.com/workos/workos-php/issues/471)) ([269cf56](https://github.com/workos/workos-php/commit/269cf564394c4d568f61803a2a647523877d3cfe))
+* **webhooks:** Add webhook API surface ([#471](https://github.com/workos/workos-php/issues/471)) ([269cf56](https://github.com/workos/workos-php/commit/269cf564394c4d568f61803a2a647523877d3cfe))
+
+
+### Bug Fixes
+
+* **events:** Updated model `EventSchema` ([#471](https://github.com/workos/workos-php/issues/471)) ([269cf56](https://github.com/workos/workos-php/commit/269cf564394c4d568f61803a2a647523877d3cfe))
+
+
+### Miscellaneous Chores
+
+* **deps:** update github-actions versions ([#468](https://github.com/workos/workos-php/issues/468)) ([02cfae4](https://github.com/workos/workos-php/commit/02cfae4caddbcdb882d913568c187d62d71c0514))
+
 ## [9.7.0](https://github.com/workos/workos-php/compare/v9.6.0...v9.7.0) (2026-11-13)
 
 ### Bug Fixes
