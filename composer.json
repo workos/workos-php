@@ -12,6 +12,7 @@
   "require": {
     "php": "^8.2",
     "ext-curl": "^8.2",
+    "ext-openssl": "*",
     "guzzlehttp/guzzle": "^7.0 || ^8.0",
     "paragonie/halite": "^5.1"
   },
